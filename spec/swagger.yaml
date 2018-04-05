@@ -1,0 +1,454 @@
+openapi: "3.0.1"
+info:
+  version: 1.0.0
+  title: Velo Payments APIs
+  description: |
+    ## Terms and Definitions
+    Throughout this document and the Velo platform the following terms are used:
+    
+    * **Payor.** An entity (typically a corporation) which wishes to pay funds to one or more payees via a payout.
+    * **Payee.** The recipient of funds paid out by a payor.
+    * **Payment.** A single transfer of funds from a payor to a payee.
+    * **Payout.** A batch of Payments, typically used by a payor to logically group payments (e.g. by business day). Technically there need be no relationship between the payments in a payout - a single payout can contain payments to multiple payees and/or multiple payments to a single payee.
+    * **Sandbox.** An integration environment provided by Velo Payments which offers a similar API experience to the production environment, but all funding and payment events are simulated, along with many other services such as OFAC sanctions list checking.
+    
+    ## Overview
+    The Velo Payments API allows a payor to perform a number of operations. The following is a list of the main capabilities in a natural order of execution:
+    
+    * Authenticate with the Velo platform
+    * Maintain a collection of payees
+    * Query the payor’s current balance of funds within the platform and perform additional funding
+    * Issue payments to payees
+    * Query the platform for a history of those payments
+    
+    This document describes the main concepts and APIs required to get up and running with the Velo Payments platform. It is not an exhaustive API reference. For that, please see the separate Velo Payments API Reference.
+    
+    ## API Considerations
+    The Velo Payments API is REST based and uses the JSON format for requests and responses.
+    
+    Most calls are secured using OAuth 2 security and require a valid authentication access token for successful operation. See the Authentication section for details.
+    
+    Where a dynamic value is required in the examples below, the {token} format is used, suggesting that the caller needs to supply the appropriate value of the token in question (without including the { or } characters).
+    
+    Where curl examples are given, the –d @filename.json approach is used, indicating that the request body should be placed into a file named filename.json in the current directory. Each of the curl examples in this document should be considered a single line on the command-line, regardless of how they appear in print.
+    
+    ## Authenticating with the Velo Platform
+    Once Velo backoffice staff have added your organization as a payor within the Velo platform sandbox, they will create you a payor Id, an API key and an API secret and share these with you in a secure manner.
+    
+    You will need to use these values to authenticate with the Velo platform in order to gain access to the APIs. The steps to take are explained in the following:
+
+    create a string comprising the API key (e.g. **abcdef**) and API secret (e.g. 123456) with a colon between them. E.g. **abcdef:123456**
+
+    base64 encode this string. E.g.: **YWJjZGVmOjEyMzQ1Ngo=**
+
+    create an HTTP **Authorization** header with the value set to e.g. Basic **YWJjZGVmOjEyMzQ1Ngo=**
+
+    perform the Velo authentication REST call using the HTTP header created above e.g. via curl:
+
+    ```bash
+      curl -X POST \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Basic YWJjZGVmOjEyMzQ1Ngo=" \
+      'https://api.sandbox.velopayments.com/oauth/token?grant_type=client_credentials'
+    ```
+
+    If successful, this call will result in a **200** HTTP status code and a response body such as:
+    
+    ```json
+      {
+        "access_token":"19f6bafd-93fd-4747-b229-00507bbc991f",
+        "token_type":"bearer",
+        "expires_in":1799,
+        "scope":"..."
+      }
+    ```
+    ## API access following authentication
+    Following successful authentication, the value of the access_token field in the response (indicated in green above) should then be presented with all subsequent API calls to allow the Velo platform to validate that the caller is authenticated.
+
+    This is achieved by setting the HTTP Authorization header with the value set to e.g. Bearer 19f6bafd-93fd-4747-b229-00507bbc991f such as the curl example below:
+    
+    ```
+      -H "Authorization: Bearer 19f6bafd-93fd-4747-b229-00507bbc991f "
+    ``` 
+    
+    If you make other Velo API calls which require authorization but the Authorization header is missing or invalid then you will get a **401** HTTP status response.
+  license:
+    name: Apache License 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers: 
+  - url: https://api.sandbox.velopayments.com/
+    description: Velo Payments Sandbox for testing
+security: 
+  - oAuthVelo: []
+paths:
+  /v1/payees:
+    summary: Payee Service APIs
+    description: API Operations available to view and work with **Payee** information.
+    get:
+      summary: Get List of Payees
+      tags:
+        - Payee
+      operationId: listPayees
+      description: Get a paginated response listing the payees for a payor.
+      parameters:
+        - name: payorId
+          in: query
+          description: Payor id (only mandatory if the payor is making the request).
+          required: false
+          schema:
+            type: string
+        - name: ofacStatus
+          in: query
+          description: The ofacStatus of the payees.
+          required: false
+          schema: 
+            type: string
+        - name: sort
+          in: query
+          description: > 
+              List of sort fields (e.g. ?sort=onboardedStatus:asc,name:asc) 
+              Default is name:asc 'name' is treated as company name for companies - 
+              last name + ',' + firstName for individuals The supported sort fields are - payeeId, displayName, payoutStatus, onboardedStatus.
+          required: false
+          schema: 
+            type: string         
+        - $ref: '#/components/parameters/pageParam'
+        - $ref: "#/components/parameters/pageSizeParam"
+      responses:
+        '200':
+          description: Details of Payee
+          content:
+            application/json:
+              schema:
+                properties:
+                  page:
+                    $ref: '#/components/schemas/Page'
+                  links:
+                    $ref: '#/components/schemas/Links'
+                  content:
+                    $ref: '#/components/schemas/PayeeDetails'
+      x-code-samples:
+        - lang: 'bash'
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/payees?pageSize=2&page=8&payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b' -i \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: Bearer 8a243e84-4bc5-4177-9bd0-0afe03870195'
+    post:
+      summary: Create Payees
+      description: Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query for status.
+      operationId: createPayees
+      tags:
+        - Payee
+      requestBody:
+        description: Submit list of Payees to add to velo
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePayeesRequest'
+      responses:
+        '201':
+          description: Created 
+          headers:
+            location:
+              schema:
+                type: string
+              description: Batch Create URI Location  
+  /v1/payors/{payorId}:
+    get:
+      summary: Get Payor Details by ID - TODO - complete
+      operationId: getPayor
+      tags:
+        - Payors
+      parameters:
+        - name: payorId
+          in: path
+          description: How many items to return at one time (max 100)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Details of payor
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+components:
+  securitySchemes:
+    oAuthVelo:    
+      type: oauth2
+      description: This API uses OAuth 2 with the implicit grant flow. [More info](https://api.example.com/docs/auth)
+      flows:
+        clientCredentials:
+          tokenUrl: https://api.sandbox.velopayments.com/oauth/token
+          scopes: {}
+  schemas:
+    Address:
+      type: object
+      required:
+        - line1
+        - city
+        - zipOrPostcode
+        - country
+      properties:
+        line1:
+          type: string
+          minLength: 1
+          maxLength: 100
+        line2:
+          type: string
+          minLength: 1
+          maxLength: 100
+        line3:
+          type: string
+          minLength: 1
+          maxLength: 100
+        line4:
+          type: string
+          minLength: 1
+          maxLength: 100
+        city:
+          type: string
+          minLength: 1
+          maxLength: 50          
+        countyOrProvince:
+          type: string
+          minLength: 1
+          maxLength: 50
+        zipOrPostcode:
+          type: string
+          minLength: 1
+          maxLength: 12   
+        country:
+          type: string
+          minLength: 1
+          maxLength: 60    
+    Challenge:
+      type: object
+      required:
+        - value
+        - description
+      properties:
+        value:
+          type: string
+          minLength: 3
+          maxLength: 20
+        description:
+          type: string
+          minLength: 1
+          maxLength: 255
+    Company:
+      type: object
+      required:
+        - taxId
+      properties:
+        name:
+          type: string
+        taxId:
+          type: string
+          pattern: '[\\d]{9}'
+          description: Company Tax Id (EIN) must be 9 numeric characters
+    CreatePayeesRequest:
+      type: object
+      required:
+        - payorId
+        - payees
+      properties:
+        payorId:
+          type: string
+        payees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payee'
+    Individual:
+      type: object
+      properties:
+        name: 
+          $ref: '#/components/schemas/Name'
+        nationalIdentification:
+          type: string
+        dateOfBirth:
+          type: string
+          description: example - 1970-05-20
+    Links:
+      type: array
+      items:
+        $ref: '#/components/schemas/Link'
+    Link:
+      type: object
+      properties:
+        rel:
+          type: string
+        href:
+          type:
+            string          
+    Name:
+      type: object
+      required:
+        - firstName
+        - lastName
+      properties:
+        title: 
+          type: string
+          minLength: 1
+          maxLength: 10
+        firstName:
+          type: string
+          minLength: 1
+          maxLength: 40          
+        otherNames:
+          type: string
+          minLength: 1
+          maxLength: 40          
+        lastName:
+          type: string
+          minLength: 1
+          maxLength: 40          
+    Page:
+      type: object
+      properties:
+        numberOfElements:
+          type: integer 
+          format: int32        
+        totalElements:
+          type: integer 
+          format: int32
+        totalPages:
+          type: integer 
+          format: int32   
+        page:
+          type: integer 
+          format: int32  
+        pageSize:
+          type: integer 
+          format: int32            
+    Payee:
+      type: object
+      required:
+        - remoteId
+        - email
+        - address
+        - company
+        - ofacOverride
+        - locale
+      properties:
+        type:
+          type: string
+          enum: [Individual, Company] 
+        remoteId:
+          type: string
+          minLength: 1
+          maxLength: 100
+        email:
+          type: string
+          format: email
+        address:
+          $ref: '#/components/schemas/Address'
+        paymentChannel:
+          $ref: '#/components/schemas/PaymentChannel'
+        individual:
+          $ref: '#/components/schemas/Individual'
+        social:
+          $ref: '#/components/schemas/Social'
+        challenge:
+          $ref: '#/components/schemas/Challenge'
+        ofacOverride:
+          type: boolean
+        locale: 
+          type: string
+          enum: [EN, FR]
+    PayeeDetails:
+      description: List of detailed Payee information
+      type: array
+      items:
+        $ref: '#/components/schemas/PayeeDetail'
+    PayeeDetail:
+      description: Payee Detail Information returned by API
+      type: object
+      properties:
+        payeeId:
+          type: string
+          format: uuid
+        payorRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PayorRef'
+        displayName:
+          type: string
+        email:
+          type: string
+        onboardedStatus:
+          type: string
+        ofacStatus: 
+          type: string
+    PaymentChannel:
+      type: object
+      required:
+        - type
+        - accountNumber
+        - routingNo
+        - countryCode
+        - currency
+        - accountName
+      properties:
+        type:
+          type: string
+          enum: [CHANNEL_BANK]
+        accountNumber:
+          type: string
+          minLength: 6
+          maxLength: 17
+        routingNo: 
+          type: string
+        countryCode:
+          type: string
+        currency:
+          type: string
+          enum: [USD]
+        accountName:
+          type: string
+    PayorRefs:
+      type: array
+      items:
+        $ref: '#/components/schemas/PayorRef'
+    PayorRef:
+      type: object
+      properties:
+        payorId:
+          type: string
+        remoteId:
+          type: string
+    Social:
+      type: object
+      properties:
+        twitterId:
+          type: string
+          minLength: 1
+          maxLength: 256
+        facebookId:
+          type: string
+          minLength: 1
+          maxLength: 256
+        linkedInId:
+          type: string
+          minLength: 1
+          maxLength: 256  
+  parameters:
+    pageSizeParam:
+      name: pageSize
+      in: query
+      description: Page size. Default is 25. Max allowable is 100.
+      required: false
+      schema:
+        type: integer
+        format: int32
+    pageParam:
+      name: page
+      in: query
+      description: Page number. Default is 1.
+      required: false
+      schema:
+        type: integer
+        format: int32
