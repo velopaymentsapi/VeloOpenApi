@@ -80,6 +80,12 @@ servers:
     description: Velo Payments Sandbox for testing
 security: 
   - oAuthVelo: []
+tags:
+  - name: Payee
+    description: |
+      A payee is a person you wish to transfer money to. In this section you will find API opertions for working with Payees.
+  - name: Payor
+    description: A Payor is the entity which is sending moeny. Here you will find the available APIs for working with Payors.
 paths:
   /v1/payees:
     summary: Payee Service APIs
@@ -97,6 +103,7 @@ paths:
           required: false
           schema:
             type: string
+            format: uuid
         - name: ofacStatus
           in: query
           description: The ofacStatus of the payees.
@@ -127,12 +134,115 @@ paths:
                     $ref: '#/components/schemas/Links'
                   content:
                     $ref: '#/components/schemas/PayeeDetails'
+              example: |
+                  {
+                    "page" : {
+                      "numberOfElements" : 2,
+                      "totalElements" : 45,
+                      "totalPages" : 23,
+                      "page" : 9,
+                      "pageSize" : 2
+                    },
+                    "links" : [ {
+                      "rel" : "first",
+                      "href" : "https://api.sandbox.velopayments.com/v1/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=1&pageSize=2&sort=displayName:asc"
+                    }, {
+                      "rel" : "last",
+                      "href" : "https://api.sandbox.velopayments.com/v1/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=23&pageSize=2&sort=displayName:asc"
+                    }, {
+                      "rel" : "self",
+                      "href" : "https://api.sandbox.velopayments.com/v1/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=9&pageSize=2&sort=displayName:asc"
+                    }, {
+                      "rel" : "prev",
+                      "href" : "https://api.sandbox.velopayments.com/v1/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=8&pageSize=2&sort=displayName:asc"
+                    }, {
+                      "rel" : "next",
+                      "href" : "https://api.sandbox.velopayments.com/v1/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=10&pageSize=2&sort=displayName:asc"
+                    } ],
+                    "content" : [ {
+                      "payeeId" : "ee2cc9a1-34dd-4ab6-91e3-db111d08d995",
+                      "payorRefs" : [ {
+                        "payorId" : "13322f2a-8edb-41ef-aab4-9b070317a51a",
+                        "remoteId" : "remoteId"
+                      } ],
+                      "displayName" : null,
+                      "email" : "bob@example.com",
+                      "individual" : {
+                        "name" : {
+                          "title" : "Mr",
+                          "firstName" : "Barney",
+                          "otherNames" : "Grubb",
+                          "lastName" : "Cuthbert"
+                        }
+                      },
+                      "onboardedStatus" : "CREATED",
+                      "ofacStatus" : "PENDING"
+                    }, {
+                      "payeeId" : "e904966e-ae6a-4ddd-879c-fd1167c21849",
+                      "payorRefs" : [ {
+                        "payorId" : "13322f2a-8edb-41ef-aab4-9b070317a51a",
+                        "remoteId" : "remoteId"
+                      } ],
+                      "displayName" : null,
+                      "email" : "bob@example.com",
+                      "individual" : {
+                        "name" : {
+                          "title" : "Mr",
+                          "firstName" : "Barney",
+                          "otherNames" : "Grubb",
+                          "lastName" : "Cuthbert"
+                        }
+                      },
+                      "onboardedStatus" : "CREATED",
+                      "ofacStatus" : "PENDING"
+                    } ]
+                  }
       x-code-samples:
-        - lang: 'bash'
+        - lang: 'shell'
           source: |
             $ curl 'https://api.sandbox.velopayments.com/v1/payees?pageSize=2&page=8&payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b' -i \
             -H 'Content-Type: application/json' \
             -H 'Authorization: Bearer 8a243e84-4bc5-4177-9bd0-0afe03870195'
+        - lang: 'java'
+          source: |
+              public static void main(String[] args) throws IOException {
+                  String apiUrl = "https://api.sandbox.velopayments.com/v1/payees";
+
+                  //Payor ID - Unique to your account
+                  String payorId = "61e0690e-7d3f-4f87-8740-cf87565369d0";
+
+                  //Get API Access Token
+                  String apiAccessToken = AuthorizationExample.getApiToken();
+
+                  // Query parameters
+                  UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(apiUrl)
+                          // Add query parameter
+                          .queryParam("payorId", payorId);
+
+                  String apiUrlWithQueryParams = builder.toUriString();
+
+                  System.out.println("API URL with query Parameters: " + apiUrlWithQueryParams);
+
+                  //Set auth header
+                  HttpHeaders httpHeaders = new HttpHeaders();
+                  httpHeaders.add("Authorization", "Bearer " + apiAccessToken);
+                  httpHeaders.add("Content-Type", "application/json");
+
+                  //add request body and http headers
+                  HttpEntity<String> httpEntity = new HttpEntity<>(null, httpHeaders);
+
+                  //Create Spring RestTemplate
+                  RestTemplate restTemplate = new RestTemplate();
+
+                  //Using Apache HTTPClient for clear debug logging (this step is optional)
+                  restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+
+                  //Call Velo API, capature JSON response as String
+                  String apiResponse = restTemplate.exchange(apiUrlWithQueryParams, HttpMethod.GET,
+                          httpEntity, String.class).getBody();
+
+                  System.out.println(apiResponse);
+              }
     post:
       summary: Create Payees
       description: Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query for status.
@@ -155,26 +265,7 @@ paths:
                 type: string
               description: Batch Create URI Location  
   /v1/payors/{payorId}:
-    get:
-      summary: Get Payor Details by ID - TODO - complete
-      operationId: getPayor
-      tags:
-        - Payors
-      parameters:
-        - name: payorId
-          in: path
-          description: How many items to return at one time (max 100)
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Details of payor
-          headers:
-            x-next:
-              description: A link to the next page of responses
-              schema:
-                type: string
+        $ref: 'paths/payors.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
@@ -186,269 +277,39 @@ components:
           scopes: {}
   schemas:
     Address:
-      type: object
-      required:
-        - line1
-        - city
-        - zipOrPostcode
-        - country
-      properties:
-        line1:
-          type: string
-          minLength: 1
-          maxLength: 100
-        line2:
-          type: string
-          minLength: 1
-          maxLength: 100
-        line3:
-          type: string
-          minLength: 1
-          maxLength: 100
-        line4:
-          type: string
-          minLength: 1
-          maxLength: 100
-        city:
-          type: string
-          minLength: 1
-          maxLength: 50          
-        countyOrProvince:
-          type: string
-          minLength: 1
-          maxLength: 50
-        zipOrPostcode:
-          type: string
-          minLength: 1
-          maxLength: 12   
-        country:
-          type: string
-          minLength: 1
-          maxLength: 60    
+        $ref: 'definitions/model/Address.yaml'
     Challenge:
-      type: object
-      required:
-        - value
-        - description
-      properties:
-        value:
-          type: string
-          minLength: 3
-          maxLength: 20
-        description:
-          type: string
-          minLength: 1
-          maxLength: 255
+        $ref: 'definitions/model/Challenge.yaml'
     Company:
-      type: object
-      required:
-        - taxId
-      properties:
-        name:
-          type: string
-        taxId:
-          type: string
-          pattern: '[\\d]{9}'
-          description: Company Tax Id (EIN) must be 9 numeric characters
+        $ref: 'definitions/model/Company.yaml'
     CreatePayeesRequest:
-      type: object
-      required:
-        - payorId
-        - payees
-      properties:
-        payorId:
-          type: string
-        payees:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payee'
+        $ref: 'definitions/model/CreatePayeesRequest.yaml'
     Individual:
-      type: object
-      properties:
-        name: 
-          $ref: '#/components/schemas/Name'
-        nationalIdentification:
-          type: string
-        dateOfBirth:
-          type: string
-          description: example - 1970-05-20
+        $ref: 'definitions/model/Individual.yaml'
     Links:
-      type: array
-      items:
-        $ref: '#/components/schemas/Link'
+        $ref: 'definitions/model/Links.yaml'
     Link:
-      type: object
-      properties:
-        rel:
-          type: string
-        href:
-          type:
-            string          
+        $ref: 'definitions/model/Link.yaml'
     Name:
-      type: object
-      required:
-        - firstName
-        - lastName
-      properties:
-        title: 
-          type: string
-          minLength: 1
-          maxLength: 10
-        firstName:
-          type: string
-          minLength: 1
-          maxLength: 40          
-        otherNames:
-          type: string
-          minLength: 1
-          maxLength: 40          
-        lastName:
-          type: string
-          minLength: 1
-          maxLength: 40          
+        $ref: 'definitions/model/Name.yaml'
     Page:
-      type: object
-      properties:
-        numberOfElements:
-          type: integer 
-          format: int32        
-        totalElements:
-          type: integer 
-          format: int32
-        totalPages:
-          type: integer 
-          format: int32   
-        page:
-          type: integer 
-          format: int32  
-        pageSize:
-          type: integer 
-          format: int32            
+        $ref: 'definitions/model/Page.yaml'
     Payee:
-      type: object
-      required:
-        - remoteId
-        - email
-        - address
-        - company
-        - ofacOverride
-        - locale
-      properties:
-        type:
-          type: string
-          enum: [Individual, Company] 
-        remoteId:
-          type: string
-          minLength: 1
-          maxLength: 100
-        email:
-          type: string
-          format: email
-        address:
-          $ref: '#/components/schemas/Address'
-        paymentChannel:
-          $ref: '#/components/schemas/PaymentChannel'
-        individual:
-          $ref: '#/components/schemas/Individual'
-        social:
-          $ref: '#/components/schemas/Social'
-        challenge:
-          $ref: '#/components/schemas/Challenge'
-        ofacOverride:
-          type: boolean
-        locale: 
-          type: string
-          enum: [EN, FR]
+        $ref: 'definitions/model/Payee.yaml'
     PayeeDetails:
-      description: List of detailed Payee information
-      type: array
-      items:
-        $ref: '#/components/schemas/PayeeDetail'
+        $ref: 'definitions/model/PayeeDetails.yaml'
     PayeeDetail:
-      description: Payee Detail Information returned by API
-      type: object
-      properties:
-        payeeId:
-          type: string
-          format: uuid
-        payorRefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/PayorRef'
-        displayName:
-          type: string
-        email:
-          type: string
-        onboardedStatus:
-          type: string
-        ofacStatus: 
-          type: string
+        $ref: 'definitions/model/PayeeDetail.yaml'
     PaymentChannel:
-      type: object
-      required:
-        - type
-        - accountNumber
-        - routingNo
-        - countryCode
-        - currency
-        - accountName
-      properties:
-        type:
-          type: string
-          enum: [CHANNEL_BANK]
-        accountNumber:
-          type: string
-          minLength: 6
-          maxLength: 17
-        routingNo: 
-          type: string
-        countryCode:
-          type: string
-        currency:
-          type: string
-          enum: [USD]
-        accountName:
-          type: string
+        $ref: 'definitions/model/PaymentChannel.yaml'
     PayorRefs:
-      type: array
-      items:
-        $ref: '#/components/schemas/PayorRef'
+        $ref: 'definitions/model/PayorRefs.yaml'
     PayorRef:
-      type: object
-      properties:
-        payorId:
-          type: string
-        remoteId:
-          type: string
+        $ref: 'definitions/model/PayorRef.yaml'
     Social:
-      type: object
-      properties:
-        twitterId:
-          type: string
-          minLength: 1
-          maxLength: 256
-        facebookId:
-          type: string
-          minLength: 1
-          maxLength: 256
-        linkedInId:
-          type: string
-          minLength: 1
-          maxLength: 256  
+        $ref: 'definitions/model/Social.yaml'
   parameters:
     pageSizeParam:
-      name: pageSize
-      in: query
-      description: Page size. Default is 25. Max allowable is 100.
-      required: false
-      schema:
-        type: integer
-        format: int32
+        $ref: 'definitions/parameters/pageSizeParam.yaml'
     pageParam:
-      name: page
-      in: query
-      description: Page number. Default is 1.
-      required: false
-      schema:
-        type: integer
-        format: int32
+        $ref: 'definitions/parameters/pageParam.yaml'

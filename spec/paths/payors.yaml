@@ -1,0 +1,26 @@
+get:
+  summary: Get Payor Details by ID
+  description: |
+    This API operation will allow you to query the system by Payor ID. The system will return a JSON response object
+    with details about the given Payor.
+  operationId: getPayor
+  tags:
+    - Payors
+  parameters:
+    - name: payorId
+      in: path
+      description: How many items to return at one time (max 100)
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Details of payor
+      headers:
+        x-next:
+          description: A link to the next page of responses
+          schema:
+            type: string
+            format: uuid
+    '404':
+        description: Payor Id Not Found
