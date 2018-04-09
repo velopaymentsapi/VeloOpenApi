@@ -97,6 +97,8 @@ paths:
     $ref: 'paths/payorSetFundingBankDetails.yaml'
   /v1/payors/{payorId}/achFundingRequest:
     $ref: 'paths/payorAchFundingRequest.yaml'
+  /v1/payors/{payorId}/applications:
+    $ref: 'paths/payorCreateApplication.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
