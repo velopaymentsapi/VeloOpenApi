@@ -14,6 +14,12 @@ get:
       schema:
         type: string
         format: uuid
+  x-code-samples:
+    - lang: 'shell'
+      source: |
+        $ curl 'https://api.sandbox.velopayments.com/v1/payors/cd34b0ce-cb18-4b98-b5b4-71c8bc03b829/balance' -i \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: Bearer bd18d4dc-870e-46f0-bb2b-5c5166e8d1ec'
   responses:
     '200':
       description: Details of payor
