@@ -3,7 +3,7 @@ post:
     description: Create an an API key for the given payor Id and application Id
     operationId: payorCreateKeyRequest
     tags:
-        - Payor
+        - Payor Service
     parameters:
         - name: payorId
           in: path

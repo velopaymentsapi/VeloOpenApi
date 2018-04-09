@@ -3,7 +3,7 @@
     get:
       summary: Get List of Payees
       tags:
-        - Payee
+        - Payee Service
       operationId: listPayees
       description: Get a paginated response listing the payees for a payor.
       parameters:
@@ -158,7 +158,7 @@
       description: Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query for status.
       operationId: createPayees
       tags:
-        - Payee
+        - Payee Service
       requestBody:
         description: Submit list of Payees to add to velo
         required: true

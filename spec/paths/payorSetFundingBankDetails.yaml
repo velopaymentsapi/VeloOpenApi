@@ -4,7 +4,7 @@ post:
         This API allows you to set or update the funding deteils for the given Payor ID.
     operationId: setPayorFundingBankDetails
     tags:
-        - Payor
+        - Payor Service
     parameters:
         - name: payorId
           in: path

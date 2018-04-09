@@ -5,7 +5,7 @@ get:
     with details about the given Payor.
   operationId: getPayorBalance
   tags:
-    - Payor
+    - Payor Service
   parameters:
     - name: payorId
       in: path

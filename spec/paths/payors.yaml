@@ -4,7 +4,7 @@ get:
     This API operation provide you the account balance of the given payor id.
   operationId: getPayor
   tags:
-    - Payor
+    - Payor Service
   parameters:
     - name: payorId
       in: path

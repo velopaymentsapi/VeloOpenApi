@@ -3,7 +3,7 @@ post:
     description: Instruct an ACH funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo.
     operationId: payorAchFundingRequest
     tags:
-        - Payor
+        - Payor Service
     parameters:
         - name: payorId
           in: path

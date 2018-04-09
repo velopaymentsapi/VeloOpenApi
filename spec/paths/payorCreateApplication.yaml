@@ -3,7 +3,7 @@ post:
     description: Create an application for the given Payor ID
     operationId: payorCreateApplicationRequest
     tags:
-        - Payor
+        - Payor Service
     parameters:
         - name: payorId
           in: path

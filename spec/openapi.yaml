@@ -81,10 +81,10 @@ servers:
 security: 
   - oAuthVelo: []
 tags:
-  - name: Payee
+  - name: Payee Service
     description: |
       A payee is a person you wish to transfer money to. In this section you will find API opertions for working with Payees.
-  - name: Payor
+  - name: Payor Service
     description: A Payor is the entity which is sending moeny. Here you will find the available APIs for working with Payors.
 paths:
   /v1/payees:
