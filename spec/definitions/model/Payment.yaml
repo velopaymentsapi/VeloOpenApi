@@ -1,0 +1,23 @@
+type: object
+required:
+    - remoteId
+    - currency
+    - amount
+properties:
+    remoteId:
+        type: string
+        minLength: 1
+        maxLength: 2000
+        description: Your identifier for payee
+    currency:
+        type: string
+        enum: [USD]
+        description: Payee's currency
+    amount:
+        type: double
+        minimum: 0.01
+        description: Amount to send to Payee
+    reference:
+        type: string
+        minLength: 0
+        maxLength: 15

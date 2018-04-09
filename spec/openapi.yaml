@@ -85,7 +85,9 @@ tags:
     description: |
       A payee is a person you wish to transfer money to. In this section you will find API opertions for working with Payees.
   - name: Payor Service
-    description: A Payor is the entity which is sending moeny. Here you will find the available APIs for working with Payors.
+    description: A Payor is the entity which is sending money. Here you will find the available APIs for working with Payors.
+  - name: Payout Service
+    description: Payout Service APIs allow you to create and instruct payouts to payees.
 paths:
   /v1/payees:
     $ref: 'paths/payees.yaml'
@@ -101,6 +103,8 @@ paths:
     $ref: 'paths/payorCreateApplication.yaml'
   /v1/payors/{payorId}/applications/{applicationId}/keys:
     $ref: 'paths/payorCreateKey.yaml'
+  /v1/payouts:
+    $ref: 'paths/payout.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
