@@ -1,26 +1,21 @@
 get:
   summary: Get Payor Details by ID
   description: |
-    This API operation will allow you to query the system by Payor ID. The system will return a JSON response object
-    with details about the given Payor.
+    This API operation provide you the account balance of the given payor id.
   operationId: getPayor
   tags:
-    - Payors
+    - Payor
   parameters:
     - name: payorId
       in: path
-      description: How many items to return at one time (max 100)
+      description: The account owner Payor ID
       required: true
       schema:
         type: string
+        format: uuid
   responses:
     '200':
-      description: Details of payor
-      headers:
-        x-next:
-          description: A link to the next page of responses
-          schema:
-            type: string
-            format: uuid
+      description: Payor Account Balance
+
     '404':
         description: Payor Id Not Found

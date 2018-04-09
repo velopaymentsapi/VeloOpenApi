@@ -1,0 +1,36 @@
+get:
+  summary: Get the balance for the specified payor id.
+  description: |
+    This API operation will allow you to query the system by Payor ID. The system will return a JSON response object
+    with details about the given Payor.
+  operationId: getPayor
+  tags:
+    - Payor
+  parameters:
+    - name: payorId
+      in: path
+      description: How many items to return at one time (max 100)
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '200':
+      description: Details of payor
+      content:
+        application/json:
+            schema:
+                properties:
+                  content:
+                    $ref: '../definitions/model/PayorBalance.yaml'
+            example: |
+                HTTP/1.1 200 OK
+                Content-Type: application/json;charset=UTF-8
+                Content-Length: 53
+
+                {
+                  "currentBalance" : 123.45,
+                  "currency" : "USD"
+                }
+    '404':
+        description: Payor Id Not Found

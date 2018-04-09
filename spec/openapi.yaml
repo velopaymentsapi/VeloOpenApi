@@ -88,9 +88,11 @@ tags:
     description: A Payor is the entity which is sending moeny. Here you will find the available APIs for working with Payors.
 paths:
   /v1/payees:
-        $ref: 'paths/payees.yaml'
+    $ref: 'paths/payees.yaml'
   /v1/payors/{payorId}:
-        $ref: 'paths/payors.yaml'
+    $ref: 'paths/payors.yaml'
+  /v1/payors/{payorId}/balance:
+    $ref: 'paths/payorsGetBalance.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
@@ -102,39 +104,39 @@ components:
           scopes: {}
   schemas:
     Address:
-        $ref: 'definitions/model/Address.yaml'
+        $ref: './definitions/model/Address.yaml'
     Challenge:
-        $ref: 'definitions/model/Challenge.yaml'
+        $ref: './definitions/model/Challenge.yaml'
     Company:
-        $ref: 'definitions/model/Company.yaml'
+        $ref: './definitions/model/Company.yaml'
     CreatePayeesRequest:
-        $ref: 'definitions/model/CreatePayeesRequest.yaml'
+        $ref: './definitions/model/CreatePayeesRequest.yaml'
     Individual:
-        $ref: 'definitions/model/Individual.yaml'
+        $ref: './definitions/model/Individual.yaml'
     Links:
-        $ref: 'definitions/model/Links.yaml'
+        $ref: './definitions/model/Links.yaml'
     Link:
-        $ref: 'definitions/model/Link.yaml'
+        $ref: './definitions/model/Link.yaml'
     Name:
-        $ref: 'definitions/model/Name.yaml'
+        $ref: './definitions/model/Name.yaml'
     Page:
-        $ref: 'definitions/model/Page.yaml'
+        $ref: './definitions/model/Page.yaml'
     Payee:
-        $ref: 'definitions/model/Payee.yaml'
+        $ref: './definitions/model/Payee.yaml'
     PayeeDetails:
-        $ref: 'definitions/model/PayeeDetails.yaml'
+        $ref: './definitions/model/PayeeDetails.yaml'
     PayeeDetail:
-        $ref: 'definitions/model/PayeeDetail.yaml'
+        $ref: './definitions/model/PayeeDetail.yaml'
     PaymentChannel:
-        $ref: 'definitions/model/PaymentChannel.yaml'
+        $ref: './definitions/model/PaymentChannel.yaml'
     PayorRefs:
-        $ref: 'definitions/model/PayorRefs.yaml'
+        $ref: './definitions/model/PayorRefs.yaml'
     PayorRef:
-        $ref: 'definitions/model/PayorRef.yaml'
+        $ref: './definitions/model/PayorRef.yaml'
     Social:
-        $ref: 'definitions/model/Social.yaml'
+        $ref: './definitions/model/Social.yaml'
   parameters:
     pageSizeParam:
-        $ref: 'definitions/parameters/pageSizeParam.yaml'
+        $ref: './definitions/parameters/pageSizeParam.yaml'
     pageParam:
-        $ref: 'definitions/parameters/pageParam.yaml'
+        $ref: './definitions/parameters/pageParam.yaml'
