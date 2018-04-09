@@ -93,6 +93,8 @@ paths:
     $ref: 'paths/payors.yaml'
   /v1/payors/{payorId}/balance:
     $ref: 'paths/payorsGetBalance.yaml'
+  /v1/payors/{payorId}/payorFundingBankDetailsUpdate:
+    $ref: 'paths/payorSetFundingBankDetails.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
