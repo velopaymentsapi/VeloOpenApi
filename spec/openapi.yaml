@@ -2,6 +2,8 @@ openapi: "3.0.1"
 info:
   version: 1.0.0
   title: Velo Payments APIs
+  x-logo:
+    url: 'https://velopayments.com/images/velo-logo.svg'
   description: |
     ## Terms and Definitions
     Throughout this document and the Velo platform the following terms are used:
