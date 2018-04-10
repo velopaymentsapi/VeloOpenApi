@@ -1,27 +1,67 @@
 get:
-  summary: Validate Invite
-  description: |
-    Check if the link is still valid.
-  operationId: validateInvite
-  tags:
-    - Invite Service
-  parameters:
-    - name: inviteId
-      in: path
-      description: The UUID of the invite.
-      required: true
-      schema:
-        type: string
-        format: uuid
-  x-code-samples:
-    - lang: 'shell'
-      source: |
-        $ curl 'https://api.sandbox.velopayments.com/v1/invites/370cff6e-403a-4ab5-98f0-fcd99c0492e3' -i \
-            -H 'Content-Type: application/json'
-  responses:
-    '204':
-        description: Invite Id found
-        example: |
-            HTTP/1.1 204 No Content
-    '404':
-        description: Invite Id Not Found
+    summary: Validate Invite
+    description: |
+        Check if the link is still valid.
+    operationId: validateInvite
+    tags:
+        - Invite Service
+    parameters:
+        - name: inviteId
+          in: path
+          description: The UUID of the invite.
+          required: true
+          schema:
+              type: string
+              format: uuid
+    x-code-samples:
+         - lang: 'shell'
+           source: |
+                $ curl 'https://api.sandbox.velopayments.com/v1/invites/370cff6e-403a-4ab5-98f0-fcd99c0492e3' -i \
+                    -H 'Content-Type: application/json'
+    responses:
+        '204':
+            description: Invite Id found
+            example: |
+                HTTP/1.1 204 No Content
+        '404':
+            description: Invite Id Not Found
+post:
+    summary: Update Invite
+    description: Update the invite with credentials needed for login.
+    tags:
+        - Invite Service
+    parameters:
+        - name: inviteId
+          in: path
+          description: The UUID of the invite.
+          required: true
+          schema:
+              type: string
+              format: uuid
+    x-code-samples:
+         - lang: 'shell'
+           source: |
+                $ curl 'https://api.sandbox.velopayments.com/v1/invites/326a7453-b97b-4772-a24c-f8dd2b36ed2a' -i -X POST \
+                    -H 'Content-Type: application/json' \
+                    -d '{"password": "myPassword"}'
+    requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    type: object
+                    required:
+                        - password
+                    properties:
+                      password:
+                        type: string
+                        format: password
+                        minLength: 8
+                        maxLength: 128
+    responses:
+        '204':
+            description: Invite Id found & updated
+            example: |
+                HTTP/1.1 204 No Content
+        '404':
+            description: Invite Id Not Found
