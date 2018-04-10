@@ -88,6 +88,8 @@ tags:
     description: A Payor is the entity which is sending money. Here you will find the available APIs for working with Payors.
   - name: Payout Service
     description: Payout Service APIs allow you to create and instruct payouts to payees.
+  - name: Payment Audit Service
+    description: Payment Audit Service APIs allow you to see payment history to payees.
 paths:
   /v1/payees:
     $ref: 'paths/payees.yaml'
@@ -109,6 +111,8 @@ paths:
     $ref: 'paths/payoutInstruct.yaml'
   /v1/payouts/?:
       $ref: 'paths/payoutCSV.yaml'
+  /v1/paymentaudit/payouts:
+      $ref: 'paths/paymentAuditPayouts.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
