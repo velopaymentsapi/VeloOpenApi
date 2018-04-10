@@ -125,6 +125,8 @@ paths:
       $ref: 'paths/inviteValidate.yaml'
   /v1/invites/{inviteId}/smsTokens:
       $ref: 'paths/inviteValidateSMS.yaml'
+  /v1/invites/{inviteId}/smsTokens/validate:
+      $ref: 'paths/inviteValidateSMSToken.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
