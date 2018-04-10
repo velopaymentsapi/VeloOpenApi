@@ -114,7 +114,9 @@ paths:
   /v1/paymentaudit/payouts:
       $ref: 'paths/paymentAuditPayouts.yaml'
   /v2/paymentaudit/payouts/{payoutId}:
-      $ref: 'paths/paymentAuditPayoutsForPayout.yaml'
+      $ref: 'paths/paymentAuditPaymentsForPayout.yaml'
+  /v1/paymentaudit/payments/{paymentId}:
+      $ref: 'paths/paymentAuditGetPayment.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
