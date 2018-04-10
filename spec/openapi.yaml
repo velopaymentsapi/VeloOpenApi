@@ -123,6 +123,8 @@ paths:
       $ref: 'paths/paymentAuditGetFundings.yaml'
   /v1/invites/{inviteId}:
       $ref: 'paths/inviteValidate.yaml'
+  /v1/invites/{inviteId}/smsTokens:
+      $ref: 'paths/inviteValidateSMS.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
