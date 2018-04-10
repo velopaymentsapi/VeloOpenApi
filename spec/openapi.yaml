@@ -107,6 +107,8 @@ paths:
     $ref: 'paths/payout.yaml'
   /v1/payouts/{payoutId}:
     $ref: 'paths/payoutInstruct.yaml'
+  /v1/payouts/?:
+      $ref: 'paths/payoutCSV.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
