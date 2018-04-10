@@ -2,7 +2,7 @@ get:
     summary: Get Payouts for Payor
     description: |
         Get a list of Payouts for a payor Supported fields for sorting are: sourceTotalAmount, dateTime, status.
-    operationId: getPayorBalance
+    operationId: getPayouts
     tags:
         - Payment Audit Service
     parameters:
@@ -27,7 +27,6 @@ get:
                 -H 'Authorization: Bearer 92b0fa60-fd1e-428b-b308-54ed425dff07'
     responses:
         '200':
-            description: Details of payor
             content:
                 application/json:
                     schema:

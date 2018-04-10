@@ -113,6 +113,8 @@ paths:
       $ref: 'paths/payoutCSV.yaml'
   /v1/paymentaudit/payouts:
       $ref: 'paths/paymentAuditPayouts.yaml'
+  /v2/paymentaudit/payouts/{payoutId}:
+      $ref: 'paths/paymentAuditPayoutsForPayout.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
