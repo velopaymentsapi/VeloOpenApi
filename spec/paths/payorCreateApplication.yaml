@@ -37,5 +37,5 @@ post:
             example: |
                 HTTP/1.1 202 Accepted
 
-    '404':
-        description: Payor Id Not Found
+        '404':
+            description: Payor Id Not Found
