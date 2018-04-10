@@ -1,0 +1,27 @@
+get:
+  summary: Validate Invite
+  description: |
+    Check if the link is still valid.
+  operationId: validateInvite
+  tags:
+    - Invite Service
+  parameters:
+    - name: inviteId
+      in: path
+      description: The UUID of the invite.
+      required: true
+      schema:
+        type: string
+        format: uuid
+  x-code-samples:
+    - lang: 'shell'
+      source: |
+        $ curl 'https://api.sandbox.velopayments.com/v1/invites/370cff6e-403a-4ab5-98f0-fcd99c0492e3' -i \
+            -H 'Content-Type: application/json'
+  responses:
+    '204':
+        description: Invite Id found
+        example: |
+            HTTP/1.1 204 No Content
+    '404':
+        description: Invite Id Not Found

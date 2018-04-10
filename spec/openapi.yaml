@@ -90,6 +90,8 @@ tags:
     description: Payout Service APIs allow you to create and instruct payouts to payees.
   - name: Payment Audit Service
     description: Payment Audit Service APIs allow you to see payment history to payees.
+  - name: Invite Service
+    description: APIs which allows you to work with payees invited to the Velo Platform.
 paths:
   /v1/payees:
     $ref: 'paths/payees.yaml'
@@ -119,6 +121,8 @@ paths:
       $ref: 'paths/paymentAuditGetPayment.yaml'
   /v1/paymentaudit/fundings:
       $ref: 'paths/paymentAuditGetFundings.yaml'
+  /v1/invites/{inviteId}:
+      $ref: 'paths/inviteValidate.yaml'
 components:
   securitySchemes:
     oAuthVelo:    
