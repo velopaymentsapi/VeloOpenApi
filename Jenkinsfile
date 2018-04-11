@@ -13,6 +13,8 @@ pipeline {
     }
     stage('deploy') {
       steps {
+        sh "git add index.html"
+        sh "git add version"
         sh "git commit -am 'Jenkins build $BUILD_NUMBER - $BUILD_URL'"
         sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git push origin gh-pages"
       }
