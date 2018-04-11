@@ -7,7 +7,7 @@ pipeline {
         sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git pull"
         sh "git merge origin/master"
         sh "make"
-        sh "sed -i 's/^index.html$//g' .gitignore"
+        sh "sed -i 's/^index.html$$//g' .gitignore"
       }
     }
     stage('deploy') {
