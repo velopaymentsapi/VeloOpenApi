@@ -3,14 +3,16 @@ pipeline {
   stages {
     stage('build') {
       steps {
-        sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git pull git@github.com:velopaymentsapi/VeloOpenApi.git master"
+        sh "git checkout gh-pages"
+        sh "git pull gh-pages"
+        sh "git merge master"
         sh "make"
       }
     }
     stage('deploy') {
       steps {
         sh "git commit -am 'Jenkins build $BUILD_NUMBER - $BUILD_URL'"
-        sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git push git@github.com:velopaymentsapi/VeloOpenApi.git ${env.BRANCH_NAME}"
+        sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git push"
       }
     }
   }
