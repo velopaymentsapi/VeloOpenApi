@@ -6,7 +6,7 @@ pipeline {
         sh "git checkout gh-pages"
         sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git pull"
         sh "git merge origin/master"
-        sh "BRANCH=$BRANCH_NAME make branch"
+        sh "BRANCH=${env.BRANCH_NAME} make branch"
         sh '''sed -i "s/^index.html$//g" .gitignore'''
       }
     }
