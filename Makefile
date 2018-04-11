@@ -16,3 +16,8 @@ yarn:
 
 docs: yarn
 	docker run --user ${UID} -v ${PWD}:/usr/src/app velopayments/apidocs-builder yarn run redoc-cli bundle ./spec/openapi.yaml -t ./spec/custom-template.hbs -o index.html
+
+branch: clean node
+	mkdir -p version/${BRANCH}
+	docker run --user ${UID} -e BRANCH=$BRANCH -v ${PWD}:/usr/src/app velopayments/apidocs-builder yarn run redoc-cli bundle ./spec/openapi.yaml -t ./spec/custom-template.hbs -o ./version/${BRANCH}/index.html
+	if [ "${BRANCH}" = "master" ]; then ln -sf ./version/${BRANCH}/index.html index.html; fi;
