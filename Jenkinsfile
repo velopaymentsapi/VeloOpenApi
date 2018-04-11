@@ -4,7 +4,7 @@ pipeline {
     stage('build') {
       steps {
         sh "git checkout gh-pages"
-        sh "git pull gh-pages"
+        sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git pull"
         sh "git merge master"
         sh "make"
       }
