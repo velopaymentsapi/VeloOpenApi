@@ -23,8 +23,8 @@ pipeline {
     }
     stage('stage gh-pages') {
       steps {
-        sh "rm -rf version/${env.BRANCH_NAME}"
-        sh "rm -rf swagger"
+        sh "rm -rf version/${env.BRANCH_NAME}/*"
+        sh "rm -rf swagger/*"
         sh "mkdir -p version/${env.BRANCH_NAME}"
         sh "mkdir -p swagger"
         sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git fetch git@github.com:velopaymentsapi/VeloOpenApi.git gh-pages"
