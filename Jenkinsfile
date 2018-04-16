@@ -10,6 +10,7 @@ pipeline {
       steps {
         sh "BRANCH=${env.BRANCH_NAME} make branch"
         sh "cp -R ./version/${env.BRANCH_NAME} tmp/redoc/"
+        sh "rm -rf ./version/${env.BRANCH_NAME}"
       }
     }
     stage('build swagger') {
@@ -17,6 +18,7 @@ pipeline {
         dir("swagger") {
           sh "BRANCH=${env.BRANCH_NAME} make swagger"
           sh "cp -R dist/ ../tmp/swagger"
+          sh "rm -rf swagger"
         }
       }
     }
