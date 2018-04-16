@@ -1,7 +1,0 @@
-  name: pageSize
-  in: query
-  description: Page size. Default is 25. Max allowable is 100.
-  required: false
-  schema:
-    type: integer
-    format: int32
