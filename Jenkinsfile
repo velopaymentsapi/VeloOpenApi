@@ -9,7 +9,6 @@ pipeline {
     stage('build redoc') {
       steps {
         sh "BRANCH=${env.BRANCH_NAME} make branch"
-        sh '''sed -i "s/^index.html$//g" .gitignore'''
         sh "cp -R ./version/${env.BRANCH_NAME} tmp/redoc/"
       }
     }
@@ -32,6 +31,7 @@ pipeline {
         sh "cp spec/openapi.yaml ./version/${env.BRANCH_NAME}/"
         sh "git add swagger"
         sh "git add version"
+        sh '''sed -i "s/^index.html$//g" .gitignore'''
       }
     }
     stage('deploy') {
