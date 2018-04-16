@@ -10,7 +10,7 @@ pipeline {
     stage('build redoc') {
       steps {
         sh "BRANCH=${env.BRANCH_NAME} make branch"
-        sh "cp -R ./version/${env.BRANCH_NAME} tmp/redoc/"
+        sh "cp -R ./version/${env.BRANCH_NAME} tmp/redoc"
         sh "rm -rf ./version/${env.BRANCH_NAME}"
       }
     }
