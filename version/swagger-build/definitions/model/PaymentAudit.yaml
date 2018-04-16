@@ -1,0 +1,62 @@
+type: object
+required:
+    - paymentId
+    - payeeId
+    - payorId
+    - logicalAccountId
+    - sourceCurrency
+    - destinationCurrency
+    - destinationAmount
+    - status
+    - events
+properties:
+    paymentId:
+        type: string
+        format: uuid
+    payeeId:
+        type: string
+        format: uuid
+    payorId:
+        type: string
+        format: uuid
+    logicalAccountId:
+        type: string
+        format: uuid
+        description: The id (UUID) of the logical account from which the payment was taken.
+    remoteId:
+        type: string
+        description: The remote id by which the payor refers to the payee. Only populated once payment is confirmed.
+    sourceCurrency:
+        type: string
+        description: The source currency for the payment (currency debited to make the payment).
+    sourceAmount:
+        type: decimal
+        description: The source amount for the payment (amount debited to make the payment). Only populated once transfer has been triggered.
+    destinationCurrency:
+        type: string
+        description: The currency in which the payee will receive the payment.
+    destinationAmount:
+        type: decimal
+        description: The amount which the payee will receive.
+    status:
+        type: string
+        enum: [FUNDS_REQUESTED, FUNDS_GRANTED, BANK_PAYMENT_REQUESTED, CONFIRMED, HELD, FAILED]
+        description: The current status of the payment.
+    events:
+        type: array
+        description: The events so far in the payment’s lifecycle.
+        items:
+            $ref: 'PaymentAuditEvent.yaml'
+    dateTime:
+        type: string
+        format: date-time
+        description: The date and time at which the payment was instructed.
+    routingNumber:
+        type: string
+        description: The routing number for the payment.
+    accountNumber:
+        type: string
+        description: The account number for the account which will receive the payment.
+    reference:
+        type: string
+        description: The payment reference set by the payor.

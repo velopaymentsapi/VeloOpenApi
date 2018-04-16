@@ -1,0 +1,14 @@
+  type: object
+  properties:
+    twitterId:
+      type: string
+      minLength: 1
+      maxLength: 256
+    facebookId:
+      type: string
+      minLength: 1
+      maxLength: 256
+    linkedInId:
+      type: string
+      minLength: 1
+      maxLength: 256

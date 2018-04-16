@@ -1,0 +1,58 @@
+get:
+  summary: Get Payor Details by ID
+  description: |
+    This API operation provide you the account balance of the given payor id.
+  operationId: getPayor
+  tags:
+    - Payor Service
+  parameters:
+    - name: payorId
+      in: path
+      description: The account owner Payor ID
+      required: true
+      schema:
+        type: string
+        format: uuid
+  x-code-samples:
+    - lang: 'shell'
+      source: |
+        $ curl 'https://api.sandbox.velopayments.com/v1/payors/a3c35f60-c94e-418d-bb5b-00174d93a6eb' -i \
+            -H 'Content-Type: application/json' \
+            -H 'Authorization: Bearer 40a61fcb-2a1a-454b-b049-01487986873e'
+  responses:
+    '200':
+        description: Get Payor Details
+        content:
+            application/json:
+                schema:
+                    $ref: '../definitions/model/Payor.yaml'
+        example: |
+            HTTP/1.1 200 OK
+            Content-Type: application/json;charset=UTF-8
+            Content-Length: 647
+
+            {
+              "payorId" : "a3c35f60-c94e-418d-bb5b-00174d93a6eb",
+              "payorName" : "FooBar",
+              "address" : {
+                "line1" : "101 California Street",
+                "line2" : null,
+                "line3" : null,
+                "line4" : null,
+                "city" : "San Francisco",
+                "countyOrProvince" : "California",
+                "zipOrPostcode" : "94111",
+                "country" : "US"
+              },
+              "primaryContactName" : "Foo Bar",
+              "primaryContactPhone" : "+1234567890",
+              "primaryContactEmail" : "foo@example.com",
+              "fundingRef" : "myFundingRef",
+              "kycState" : "REQUIRES_KYC",
+              "manualLockout" : false,
+              "payeeGracePeriodProcessingEnabled" : true,
+              "payeeGracePeriodDays" : 90,
+              "allowsLanguageChoice" : false
+            }
+    '404':
+        description: Payor Id Not Found

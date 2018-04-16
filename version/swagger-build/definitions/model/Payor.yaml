@@ -1,0 +1,60 @@
+type: object
+properties:
+    payorId:
+        type: string
+        format: uuid
+        required: true
+        descirption: The Payor Id.
+    payorName:
+        type: string
+        required: true
+        description: The name of the payor.
+    address:
+        required: true
+        $ref: 'Address.yaml'
+    primaryContactname:
+        type: string
+        description: Name of primary contact for the payor.
+        required: true
+    primaryContactPhone:
+        type: string
+        description: Primary contact phone number for the payor.
+        required: true
+    primaryContactEmail:
+        type: string
+        format: email
+        description: Primary contact email for the payor.
+        required: true
+    logicalAccountId:
+        type: string
+        format: uuid
+        description: The logical account id (UUID) for the payor.
+        required: false
+    fundingRef:
+        type: string
+        description: The funding reference to be used for the payor.
+    kycState:
+        type: string
+        description: The kyc state of the payor.
+        enum: [FALIED_KYC, PASSED_KYC, REQUIRES-KYC]
+    manualLockout:
+        type: boolean
+        description: Whether or not the payor has been manually locked by the backoffice.
+    payeeGracePeriodProcessingEnabled:
+        type: boolean
+        description: Whether grace period processing is enabled.
+    payeeGracePeriodDays:
+        type: integer
+        description: The grace period for paying payees in days.
+    collectiveAlias:
+        type: string
+        description: How the payor has chosen to refer to payees.
+    supportContact:
+        type: string
+        description: The payor’s support contact address.
+    dbaName:
+        type: string
+        description: The payor’s 'Doing Business As' name.
+    allowsLanguageChoice:
+        type: boolean
+        description: Whether or not the payor allows language choice in the UI.

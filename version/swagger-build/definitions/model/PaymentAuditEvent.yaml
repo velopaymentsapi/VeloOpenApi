@@ -1,0 +1,38 @@
+type: object
+required:
+    - eventId
+    - eventDateTime
+    - eventType
+properties:
+    eventId:
+        type: string
+        format: uuid
+        description: The id of the event.
+    eventDateTime:
+        type: string
+        format: date-time
+        description: The date/time at which the event occurred.
+    eventType:
+        type: string
+        enum: [PAYOUT_INSTRUCTED, BANK_PAYMENT_REQUESTED, PAYMENT_CONFIRMED, PAYMENT_FUNDS_REQUESTED, PAYMENT_FUNDS_GRANTED, PAYMENT_FAILED, PAYMENT_HELD, ACH_SUBMITTED_TO_ODFI, ACH_ENTRY_DETAIL_RECEIVED, ACH_RETURN_RECEIVED, RETURN_PAYMENT_FUNDING_REQUESTED]
+        description: The type of the event.
+    sourceCurrency:
+        type: string
+        description: The source currency exposed by the event.
+    sourceAmount:
+        type: decimal
+        description: The source amount exposed by the event.
+    destinationCurrency:
+        type: string
+        description: The destination currency exposed by the event
+    destinationAmount:
+        type: decimal
+        description: The destination amount exposed by the event.
+    accountNumber:
+        type: string
+        description: The account number attached to the event.
+    routingNumber:
+        type: string
+        description: The routing number attached to the event.
+    principle:
+        type: string

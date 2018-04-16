@@ -1,0 +1,17 @@
+type: object
+properties:
+    payoutId:
+        type: string
+        format: uuid
+    payorId:
+        type: string
+        format: uuid
+    sourceTotalAmount:
+        type: double
+    sourceCurrency:
+        type: string
+    status:
+        type: string
+    dateTime:
+        type: string
+        format: date-time

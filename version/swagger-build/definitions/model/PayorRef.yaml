@@ -1,0 +1,6 @@
+  type: object
+  properties:
+    payorId:
+      type: string
+    remoteId:
+      type: string
