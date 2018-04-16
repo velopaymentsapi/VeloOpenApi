@@ -11,7 +11,6 @@ pipeline {
       steps {
         sh "BRANCH=${env.BRANCH_NAME} make branch"
         sh "cp -R ./version/${env.BRANCH_NAME} tmp/redoc"
-        sh "rm -rf ./version/${env.BRANCH_NAME}"
       }
     }
     stage('build swagger') {
@@ -24,6 +23,7 @@ pipeline {
     }
     stage('stage gh-pages') {
       steps {
+        sh "rm -rf ./version/${env.BRANCH_NAME}"
         sh "rm -rf swagger"
         sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git fetch git@github.com:velopaymentsapi/VeloOpenApi.git gh-pages"
         sh "git checkout gh-pages"
