@@ -18,12 +18,12 @@ pipeline {
         dir("swagger") {
           sh "BRANCH=${env.BRANCH_NAME} make swagger"
           sh "cp -R dist/ ../tmp/swagger"
-          sh "rm -rf swagger"
         }
       }
     }
     stage('stage gh-pages') {
       steps {
+        sh "rm -rf swagger"
         sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git fetch git@github.com:velopaymentsapi/VeloOpenApi.git gh-pages"
         sh "git checkout gh-pages"
         sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git pull"
