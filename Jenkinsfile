@@ -22,15 +22,17 @@ pipeline {
       }
     }
     stage('stage gh-pages') {
-      sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git fetch git@github.com:velopaymentsapi/VeloOpenApi.git gh-pages"
-      sh "git checkout gh-pages"
-      sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git pull"
-      sh "cp tmp/redoc ./version/${env.BRANCH_NAME}"
-      sh "cp -R tmp/swagger swagger"
-      sh "if [ '${env.BRANCH_NAME}' = 'master' ]; then ln -sf ./version/${env.BRANCH_NAME}/index.html index.html; git add index.html; fi;"
-      sh "cp spec/openapi.yaml ./version/${env.BRANCH_NAME}/"
-      sh "git add swagger"
-      sh "git add version"
+      steps {
+        sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git fetch git@github.com:velopaymentsapi/VeloOpenApi.git gh-pages"
+        sh "git checkout gh-pages"
+        sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git pull"
+        sh "cp tmp/redoc ./version/${env.BRANCH_NAME}"
+        sh "cp -R tmp/swagger swagger"
+        sh "if [ '${env.BRANCH_NAME}' = 'master' ]; then ln -sf ./version/${env.BRANCH_NAME}/index.html index.html; git add index.html; fi;"
+        sh "cp spec/openapi.yaml ./version/${env.BRANCH_NAME}/"
+        sh "git add swagger"
+        sh "git add version"
+      }
     }
     stage('deploy') {
       steps {
