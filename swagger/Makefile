@@ -12,7 +12,7 @@ clean:
 	rm -f dist/bundle.js
 
 yarn:
-	docker run -v ${PWD}:/usr/src/app velopayments/apidocs-builder yarn
+	docker run --user ${UID} -v ${PWD}:/usr/src/app velopayments/apidocs-builder yarn
 
 swagger: clean yarn
 	docker run --user ${UID} -v ${PWD}:/usr/src/app velopayments/apidocs-builder yarn run webpack
