@@ -141,6 +141,6 @@ Desktop.ini
 # ESLint
 ######################
 .eslintcache
-index.html
+./index.html
 
 swagger/dist/bundle.js
