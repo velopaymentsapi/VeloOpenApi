@@ -3,7 +3,8 @@ pipeline {
   stages {
     stage('prep env') {
       steps {
-        sh "mkdir -p tmp"
+        sh "rm -rf tmp"
+        sh "mkdir tmp"
       }
     }
     stage('build redoc') {
