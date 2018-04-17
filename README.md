@@ -25,7 +25,7 @@ interact with the Velo Payments Open API.
 
 ## CI Build & Deploy
 
-The API docs are built for each branch and published via [GitHub pages](https://velopaymentsapi.github.io/VeloOpenApi/). You can view a particular branch's docs using the path format: `version/<branch_name>`.
+The [API](https://velopaymentsapi.github.io/VeloOpenApi/) and [Swagger UI]((https://velopaymentsapi.github.io/VeloOpenApi/swagger) docs are built for each branch and published via GitHub pages. You can view a particular branch's docs using the path format: `version/<branch_name>`.
 
 Swagger UI is available for each branch under the `/swagger` directory. Browsing other branch's API specs are possible using a `?branch=<branch_name>` query parameter. The reason `version` isn't used to switch branches (like with API docs) is because `version` parameter is reserved by GitHub.
 
