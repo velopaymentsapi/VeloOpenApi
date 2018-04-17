@@ -4,15 +4,13 @@ set -ue
 
 BRANCH=$1
 
-GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi'
-
 rm -rf version/$BRANCH
 rm -rf swagger
 mkdir -p version/$BRANCH
 mkdir -p swagger
-git fetch git@github.com:velopaymentsapi/VeloOpenApi.git gh-pages
+GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git fetch git@github.com:velopaymentsapi/VeloOpenApi.git gh-pages
 git checkout gh-pages
-git pull
+git pull git@github.com:velopaymentsapi/VeloOpenApi.git
 cp -R tmp/redoc/* version/$BRANCH/
 cp -R tmp/swagger/* swagger/
 
