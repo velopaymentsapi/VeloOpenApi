@@ -14,7 +14,7 @@ To help you get started using the Velo Payments Open API, please see the example
 
 ## velo-java-examples
 
-This [repository](https://github.com/velopaymentsapi/velo-java-examples) contains simple code examples you can see how to use the Velo Payments API.
+This [repository](https://github.com/velopaymentsapi/velo-java-examples) contains simple code examples you can see how to use the Velo Payments API. 
 
 These are simple step by step examples which show you common use cases.
 
