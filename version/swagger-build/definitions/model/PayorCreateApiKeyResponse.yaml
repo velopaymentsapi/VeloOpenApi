@@ -1,0 +1,10 @@
+type: object
+properties:
+    apiKey:
+        type: string
+        description: API Key
+        format: uuid
+    apiSecret:
+        type: string
+        description: API Secret
+        format: uuid

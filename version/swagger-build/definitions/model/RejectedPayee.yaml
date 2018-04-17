@@ -1,0 +1,18 @@
+type: object
+properties:
+    email:
+        type: string
+        format: email
+    payeeId:
+        type: string
+        format: uuid
+        description: Velo Payee Id value.
+    reason:
+        type: string
+        enum: [UNKNOWN_REMOTE_ID, OFAC_FAILED, CURRENCY_MISMATCH, OTHER]
+        description: Reason code payment was rejected
+    remoteId:
+        type: string
+        description: Payee Id value set by payor
+    desciption:
+        type: string

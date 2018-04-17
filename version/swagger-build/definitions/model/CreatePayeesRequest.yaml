@@ -1,0 +1,11 @@
+type: object
+required:
+    - payorId
+    - payees
+properties:
+    payorId:
+        type: string
+    payees:
+        type: array
+        items:
+            $ref: 'Payee.yaml'

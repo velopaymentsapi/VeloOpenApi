@@ -1,0 +1,25 @@
+  type: object
+  required:
+    - type
+    - accountNumber
+    - routingNo
+    - countryCode
+    - currency
+    - accountName
+  properties:
+    type:
+      type: string
+      enum: [CHANNEL_BANK]
+    accountNumber:
+      type: string
+      minLength: 6
+      maxLength: 17
+    routingNo:
+      type: string
+    countryCode:
+      type: string
+    currency:
+      type: string
+      enum: [USD]
+    accountName:
+      type: string

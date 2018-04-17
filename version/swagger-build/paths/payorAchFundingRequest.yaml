@@ -1,0 +1,35 @@
+post:
+    summary: ACH Transfer to Velo
+    description: Instruct an ACH funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo.
+    operationId: payorAchFundingRequest
+    tags:
+        - Payor Service
+    parameters:
+        - name: payorId
+          in: path
+          description: Payor ID
+          required: true
+          schema:
+              type: string
+              format: uuid
+    x-code-samples:
+        - lang: 'shell'
+          source: |
+                $ curl 'https://api.sandbox.velopayments.com/v1/payors/ad49ca5e-4144-45d4-9cfa-ac63c2128cb8/achFundingRequest' -i -X POST \
+                    -H 'Content-Type: application/json' \
+                    -H 'Authorization: Bearer 58dc2c2d-8462-4e66-827e-f9e39a670ac1' \
+                    -d '{"amount":150.67}'
+    requestBody:
+        description: Post ammount to transfer via ACH using stored funding account details.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../definitions/model/PayorAchFundingRequest.yaml"
+    responses:
+        '202':
+            description: HTTP Accepted
+            example: |
+                HTTP/1.1 202 Accepted
+        '404':
+            description: Payor Id Not Found

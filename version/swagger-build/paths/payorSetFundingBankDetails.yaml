@@ -1,0 +1,36 @@
+post:
+    summary: Update the Funding bank details of the Payor.
+    description: |
+        This API allows you to set or update the funding deteils for the given Payor ID.
+    operationId: setPayorFundingBankDetails
+    tags:
+        - Payor Service
+    parameters:
+        - name: payorId
+          in: path
+          description: Payor ID
+          required: true
+          schema:
+              type: string
+              format: uuid
+    x-code-samples:
+        - lang: 'shell'
+          source: |
+                $ curl 'https://api.sandbox.velopayments.com/v1/payors/c64b31d1-d553-4205-ac22-b57020a9c7db/payorFundingBankDetailsUpdate' -i -X POST \
+                    -H 'Content-Type: application/json' \
+                    -H 'Authorization: Bearer 1d1e3d28-0d6a-4d45-b250-9962a2c545db' \
+                 -d '{"routingNumber":"123456789","accountNumber":"12345","accountName":"Bob"}'
+    requestBody:
+        description: Update Funding bank details of given Payor Id
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "../definitions/model/PayorFundingBankDetailsUpdate.yaml"
+    responses:
+        '202':
+            description: HTTP Accepted
+            example: |
+                HTTP/1.1 202 Accepted
+        '404':
+            description: Payor Id Not Found

@@ -1,0 +1,27 @@
+post:
+    summary: Instruct Payout
+    description: Instruct Velo to execute perviously created payout.
+    operationId: payoutInstruct
+    tags:
+        - Payout Service
+    parameters:
+        - name: payoutId
+          in: path
+          description: Payout ID
+          required: true
+          schema:
+              type: string
+              format: uuid
+    x-code-samples:
+        - lang: 'shell'
+          source: |
+                $ curl 'https://api.sandbox.velopayments.com/v1/payouts/b6d2405e-bb53-4db3-878f-e4d07b941f85' -i -X POST \
+                    -H 'Content-Type: application/json' \
+                    -H 'Authorization: Bearer a0626110-8abe-433c-873f-66047809295c'
+    responses:
+        '200':
+            description: HTTP Accepted
+            example: |
+                HTTP/1.1 200 OK
+        '404':
+            description: Payout Id Not Found
