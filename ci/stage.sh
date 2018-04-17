@@ -10,7 +10,7 @@ rm -rf version/$BRANCH
 rm -rf swagger
 mkdir -p version/$BRANCH
 mkdir -p swagger
-git fetch github.com:velopaymentsapi/VeloOpenApi.git gh-pages
+git fetch git@github.com:velopaymentsapi/VeloOpenApi.git gh-pages
 git checkout gh-pages
 git pull
 cp -R tmp/redoc/* version/$BRANCH/
