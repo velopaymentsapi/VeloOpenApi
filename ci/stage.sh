@@ -10,7 +10,7 @@ mkdir -p version/$BRANCH
 mkdir -p swagger
 GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git fetch git@github.com:velopaymentsapi/VeloOpenApi.git gh-pages
 git checkout gh-pages
-git pull git@github.com:velopaymentsapi/VeloOpenApi.git
+GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git pull
 cp -R tmp/redoc/* version/$BRANCH/
 cp -R tmp/swagger/* swagger/
 
