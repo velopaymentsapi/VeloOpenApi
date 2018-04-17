@@ -25,8 +25,8 @@ pipeline {
       steps {
         sh "rm -rf version/${env.BRANCH_NAME}"
         sh "rm -rf swagger"
-        sh "mkdir -p version/${env.BRANCH_NAME}"
-        sh "mkdir -p swagger"
+        sh "mkdir -p ${WORKSPACE}/version/${env.BRANCH_NAME}"
+        sh "mkdir -p ${WORKSPACE}/swagger"
         sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git fetch git@github.com:velopaymentsapi/VeloOpenApi.git gh-pages"
         sh "git checkout gh-pages"
         sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git pull"
