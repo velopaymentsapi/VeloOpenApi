@@ -22,3 +22,5 @@ These are simple step by step examples which show you common use cases.
 
 [Here you can find an open source, production ready library](https://github.com/velopaymentsapi/velo-java-sdk) you can in corporate in your enterprise Java application to
 interact with the Velo Payments Open API.
+
+
