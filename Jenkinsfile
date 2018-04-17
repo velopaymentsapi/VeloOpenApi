@@ -30,10 +30,10 @@ pipeline {
         sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git fetch git@github.com:velopaymentsapi/VeloOpenApi.git gh-pages"
         sh "git checkout gh-pages"
         sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git pull"
-        sh "cp -R tmp/redoc/* ./version/${env.BRANCH_NAME}/"
-        sh "cp -R tmp/swagger/* swagger/"
+        sh "cp -R tmp/redoc/* ${WORKSPACE}/version/${env.BRANCH_NAME}/"
+        sh "cp -R tmp/swagger/* ${WORKSPACE}/swagger/"
         sh "if [ '${env.BRANCH_NAME}' = 'master' ]; then ln -sf ./version/${env.BRANCH_NAME}/index.html index.html; git add index.html; fi;"
-        sh "cp -R spec/* version/${env.BRANCH_NAME}/"
+        sh "cp -R spec/* ${WORKSPACE}/version/${env.BRANCH_NAME}/"
         sh "git add swagger"
         sh "git add version"
         sh '''sed -i "s/^index.html$//g" .gitignore'''
