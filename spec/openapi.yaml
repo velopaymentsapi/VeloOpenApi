@@ -94,6 +94,12 @@ tags:
     description: Payment Audit Service APIs allow you to see payment history to payees.
   - name: Invite Service
     description: APIs which allows you to work with payees invited to the Velo Platform.
+  - name: Legal
+    description: |
+      <p>This document, including all counts herein, and the Velo Payments API are the intellectual property
+      of Velo Payments. The Velo Payment API and your use of the Velo Payment API, is goverend by and subject to the
+      Velo Payments Terms of Use</p>
+      <p>&copy; Velo Payments, Inc.</p>
 paths:
   /v1/payees:
     $ref: 'paths/payees.yaml'
