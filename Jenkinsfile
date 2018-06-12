@@ -16,7 +16,7 @@ pipeline {
         sh "if [ '${env.BRANCH_NAME}' = 'master' ]; then ln -sf ./version/${env.BRANCH_NAME}/index.html index.html; git add index.html; fi;"
         sh "git add version"
         sh "git commit -am 'Jenkins build $BUILD_NUMBER - $BUILD_URL'"
-        sh "GIT_SSH_COMMAND='ssh -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git push origin gh-pages"
+        sh "GIT_SSH_COMMAND='ssh -vvv -i /var/lib/jenkins/.ssh/velopaymentsopenapi' git push origin gh-pages"
       }
     }
   }
