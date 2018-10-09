@@ -1,9 +1,10 @@
 type: object
 required:
-    - amount
+  - amount
 properties:
-    amount:
-        type: double
-        description: Amount to be transferred.
-        minimum: 0.01
-        maximum: 99999999.99
+  amount:
+    type: number
+    format: double
+    description: Amount to be transferred.
+    minimum: 0.01
+    maximum: 99999999.99

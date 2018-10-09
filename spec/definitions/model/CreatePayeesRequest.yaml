@@ -8,4 +8,4 @@ properties:
     payees:
         type: array
         items:
-            $ref: 'Payee.yaml'
+            $ref: Payee.yaml

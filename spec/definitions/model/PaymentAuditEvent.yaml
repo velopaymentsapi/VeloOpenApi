@@ -20,13 +20,15 @@ properties:
         type: string
         description: The source currency exposed by the event.
     sourceAmount:
-        type: decimal
+        type: number
+        format: double
         description: The source amount exposed by the event.
     destinationCurrency:
         type: string
         description: The destination currency exposed by the event
     destinationAmount:
-        type: decimal
+        type: number
+        format: double
         description: The destination amount exposed by the event.
     accountNumber:
         type: string

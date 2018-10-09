@@ -7,4 +7,4 @@ properties:
     rejectedPayees:
         type: array
         items:
-            $ref: 'RejectedPayee.yaml'
+            $ref: RejectedPayee.yaml

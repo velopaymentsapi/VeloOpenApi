@@ -1,7 +1,7 @@
   type: object
   properties:
     name:
-      $ref: 'Name.yaml'
+      $ref: Name.yaml
     nationalIdentification:
       type: string
     dateOfBirth:

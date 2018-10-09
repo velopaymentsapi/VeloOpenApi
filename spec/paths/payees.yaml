@@ -29,8 +29,8 @@
           required: false
           schema:
             type: string
-        - $ref: '../definitions/parameters/pageParam.yaml'
-        - $ref: "../definitions/parameters/pageSizeParam.yaml"
+        - $ref: ../definitions/parameters/pageParam.yaml
+        - $ref: ../definitions/parameters/pageSizeParam.yaml
       responses:
         '200':
           description: Details of Payee
@@ -39,11 +39,11 @@
               schema:
                 properties:
                   page:
-                    $ref: '../definitions/model/Page.yaml'
+                    $ref: ../definitions/model/Page.yaml
                   links:
-                    $ref: '../definitions/model/Links.yaml'
+                    $ref: ../definitions/model/Links.yaml
                   content:
-                    $ref: '../definitions/model/PayeeDetails.yaml'
+                    $ref: ../definitions/model/PayeeDetails.yaml
               example: |
                   {
                     "page" : {
@@ -165,7 +165,7 @@
         content:
           application/json:
             schema:
-              $ref: "../definitions/model/CreatePayeesRequest.yaml"
+              $ref: ../definitions/model/CreatePayeesRequest.yaml
       responses:
         '201':
           description: Created

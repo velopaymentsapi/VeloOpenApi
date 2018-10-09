@@ -1,7 +1,6 @@
-  type: object
-  properties:
+type: object
+properties:
     rel:
-      type: string
+       type: string
     href:
-      type:
-        string
+        type: string

@@ -1,21 +1,21 @@
-  type: object
-  required:
+type: object
+required:
     - firstName
     - lastName
-  properties:
+properties:
     title:
-      type: string
-      minLength: 1
-      maxLength: 10
+        type: string
+        minLength: 1
+        maxLength: 10
     firstName:
-      type: string
-      minLength: 1
-      maxLength: 40
+        type: string
+        minLength: 1
+        maxLength: 40
     otherNames:
-      type: string
-      minLength: 1
-      maxLength: 40
+        type: string
+        minLength: 1
+        maxLength: 40
     lastName:
-      type: string
-      minLength: 1
-      maxLength: 40
+        type: string
+        minLength: 1
+        maxLength: 40

@@ -1,35 +1,35 @@
 type: object
+required:
+    - payorId
+    - payorName
+    - primaryContactname
+    - primaryContactPhone
+    - primaryContactEmail
 properties:
     payorId:
         type: string
         format: uuid
-        required: true
         descirption: The Payor Id.
     payorName:
         type: string
-        required: true
         description: The name of the payor.
     address:
         required: true
-        $ref: 'Address.yaml'
+        $ref: Address.yaml
     primaryContactname:
         type: string
         description: Name of primary contact for the payor.
-        required: true
     primaryContactPhone:
         type: string
         description: Primary contact phone number for the payor.
-        required: true
     primaryContactEmail:
         type: string
         format: email
         description: Primary contact email for the payor.
-        required: true
     logicalAccountId:
         type: string
         format: uuid
         description: The logical account id (UUID) for the payor.
-        required: false
     fundingRef:
         type: string
         description: The funding reference to be used for the payor.

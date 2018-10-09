@@ -1,13 +1,13 @@
-  type: object
-  required:
+type: object
+required:
     - value
     - description
-  properties:
+properties:
     value:
-      type: string
-      minLength: 3
-      maxLength: 20
+        type: string
+        minLength: 3
+        maxLength: 20
     description:
-      type: string
-      minLength: 1
-      maxLength: 255
+        type: string
+        minLength: 1
+        maxLength: 255

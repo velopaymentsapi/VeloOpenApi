@@ -3,8 +3,8 @@ properties:
     links:
         type: array
         items:
-            $ref: 'Link.yaml'
+            $ref: Link.yaml
     page:
-        $ref: 'Page.yaml'
+        $ref: Page.yaml
     content:
-        $ref: 'PaymentAuditList.yaml'
+        $ref: PaymentAuditList.yaml

@@ -1,8 +1,8 @@
 type: object
-required:
-    - payorId
-    - payments
-    - sourceCurrency
+#required:
+#    - payorId
+#    - payments
+#    - sourceCurrency
 properties:
     payorId:
         type: string
@@ -10,7 +10,7 @@ properties:
     payments:
         type: array
         items:
-            $ref: 'Payment.yaml'
+            $ref: Payment.yaml
     sourceCurrency:
         type: string
         enum: [USD]
