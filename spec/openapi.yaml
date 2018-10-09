@@ -102,7 +102,9 @@ tags:
       <p>&copy; Velo Payments, Inc.</p>
 paths:
   /v1/payees:
-    $ref: ./paths/payees.yaml
+    $ref: ./paths/v1GetPayees.yaml
+  /v2/payees:
+    $ref: ./paths/v2Payees.yaml
   /v1/payors/{payorId}:
     $ref: ./paths/v1Payors_id.yaml
   /v1/payors/{payorId}/balance:

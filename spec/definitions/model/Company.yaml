@@ -1,10 +1,12 @@
 type: object
 required:
-    - taxId
+    - name
 properties:
     name:
         type: string
+        minLength: 1
+        maxLength: 40
     taxId:
         type: string
         pattern: '[\\d]{9}'
-        description: Company Tax Id (EIN) must be 9 numeric characters
+        description: Company Tax Id (EIN) must be 9 numeric characters. Must match the regular expression ```[\d]{9}```.

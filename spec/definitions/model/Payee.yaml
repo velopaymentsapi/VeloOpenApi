@@ -31,4 +31,4 @@ properties:
     type: boolean
   locale:
     type: string
-    enum: [EN, FR]
+    enum: [AR, EN, ES, FR, HE, HI, JA, PT, RU, UR, ZH]
