@@ -29,11 +29,11 @@ get:
         example: |
             HTTP/1.1 200 OK
             Content-Type: application/json;charset=UTF-8
-            Content-Length: 647
+            Content-Length: 727
 
             {
-              "payorId" : "a3c35f60-c94e-418d-bb5b-00174d93a6eb",
-              "payorName" : "FooBar",
+              "payorId" : "4b48e159-dc4d-467e-a837-db0426a57584",
+              "payorName" : "Payor1",
               "address" : {
                 "line1" : "101 California Street",
                 "line2" : null,
@@ -44,15 +44,18 @@ get:
                 "zipOrPostcode" : "94111",
                 "country" : "US"
               },
-              "primaryContactName" : "Foo Bar",
+              "primaryContactName" : "Foo Name",
               "primaryContactPhone" : "+1234567890",
               "primaryContactEmail" : "foo@example.com",
-              "fundingRef" : "myFundingRef",
               "kycState" : "REQUIRES_KYC",
               "manualLockout" : false,
               "payeeGracePeriodProcessingEnabled" : true,
               "payeeGracePeriodDays" : 90,
-              "allowsLanguageChoice" : false
+              "dbaName" : "Payor1 DBA",
+              "allowsLanguageChoice" : false,
+              "reminderEmailsOptOut" : false,
+              "language" : "FR",
+              "includesReports" : false
             }
     '404':
         description: Payor Id Not Found
