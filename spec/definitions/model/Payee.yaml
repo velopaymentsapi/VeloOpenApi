@@ -1,34 +1,34 @@
-      type: object
-      required:
-        - remoteId
-        - email
-        - address
-        - company
-        - ofacOverride
-        - locale
-      properties:
-        type:
-          type: string
-          enum: [Individual, Company]
-        remoteId:
-          type: string
-          minLength: 1
-          maxLength: 100
-        email:
-          type: string
-          format: email
-        address:
-          $ref: 'Address.yaml'
-        paymentChannel:
-          $ref: 'PaymentChannel.yaml'
-        individual:
-          $ref: 'Individual.yaml'
-        social:
-          $ref: 'Social.yaml'
-        challenge:
-          $ref: 'Challenge.yaml'
-        ofacOverride:
-          type: boolean
-        locale:
-          type: string
-          enum: [EN, FR]
+type: object
+required:
+  - remoteId
+  - email
+  - address
+  - company
+  - ofacOverride
+  - locale
+properties:
+  type:
+      type: string
+      enum: [Individual, Company]
+  remoteId:
+      type: string
+      minLength: 1
+      maxLength: 100
+  email:
+    type: string
+    format: email
+  address:
+     $ref: Address.yaml
+  paymentChannel:
+    $ref: PaymentChannel.yaml
+  individual:
+    $ref: Individual.yaml
+  social:
+    $ref: Social.yaml
+  challenge:
+    $ref: Challenge.yaml
+  ofacOverride:
+    type: boolean
+  locale:
+    type: string
+    enum: [EN, FR]

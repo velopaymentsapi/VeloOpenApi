@@ -25,7 +25,7 @@ get:
         content:
             application/json:
                 schema:
-                    $ref: '../definitions/model/Payor.yaml'
+                  $ref: ../definitions/model/Payor.yaml
         example: |
             HTTP/1.1 200 OK
             Content-Type: application/json;charset=UTF-8

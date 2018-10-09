@@ -32,7 +32,7 @@ post:
         content:
           application/json:
             schema:
-              $ref: "../definitions/model/PayorCreateApiKeyRequest.yaml"
+              $ref: ../definitions/model/PayorCreateApiKeyRequest.yaml
     responses:
         '200':
             description: HTTP Ok, key created
@@ -41,7 +41,7 @@ post:
                     schema:
                         properties:
                             content:
-                                $ref: '../definitions/model/PayorCreateApiKeyResponse.yaml'
+                                $ref: ../definitions/model/PayorCreateApiKeyResponse.yaml
                     example: |
                         HTTP/1.1 200 OK
                         Content-Type: application/json;charset=UTF-8

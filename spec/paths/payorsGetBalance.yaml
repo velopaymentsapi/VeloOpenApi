@@ -26,9 +26,7 @@ get:
       content:
         application/json:
             schema:
-                properties:
-                  content:
-                    $ref: '../definitions/model/PayorBalance.yaml'
+              $ref: ../definitions/model/PayorBalance.yaml
             example: |
                 HTTP/1.1 200 OK
                 Content-Type: application/json;charset=UTF-8

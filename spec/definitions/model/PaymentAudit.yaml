@@ -30,13 +30,15 @@ properties:
         type: string
         description: The source currency for the payment (currency debited to make the payment).
     sourceAmount:
-        type: decimal
+        type: number
+        format: double
         description: The source amount for the payment (amount debited to make the payment). Only populated once transfer has been triggered.
     destinationCurrency:
         type: string
         description: The currency in which the payee will receive the payment.
     destinationAmount:
-        type: decimal
+        type: number
+        format: double
         description: The amount which the payee will receive.
     status:
         type: string
@@ -46,7 +48,7 @@ properties:
         type: array
         description: The events so far in the payment’s lifecycle.
         items:
-            $ref: 'PaymentAuditEvent.yaml'
+            $ref: PaymentAuditEvent.yaml
     dateTime:
         type: string
         format: date-time

@@ -7,7 +7,8 @@ properties:
         type: string
         format: uuid
     sourceTotalAmount:
-        type: double
+        type: number
+        format: double
     sourceCurrency:
         type: string
     status:
