@@ -29,6 +29,12 @@
           required: false
           schema:
             type: string
+        - name: requestParams
+          in: query
+          required: false
+          schema:
+              type: string
+              description: Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```.
         - $ref: ../definitions/parameters/pageParam.yaml
         - $ref: ../definitions/parameters/pageSizeParam.yaml
       responses:
