@@ -92,7 +92,7 @@ post:
           content:
             application/json:
                 schema:
-                  $ref: ../definitions/model/CreatePayoutResponse.yaml
+                  $ref: ./definitions/model/CreatePayoutResponse.yaml
                 example: |
                     HTTP/1.1 201 Created
                     Location: https://api.sandbox.velopayments.com/v1/payouts/20bc1d70-4771-472a-9dce-92af1eef0ad0
