@@ -25,7 +25,7 @@ post:
         content:
           application/json:
             schema:
-              $ref: ./definitions/model/PayorAchFundingRequest.yaml
+              $ref: ../definitions/model/PayorAchFundingRequest.yaml
     responses:
         '202':
             description: HTTP Accepted
