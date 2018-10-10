@@ -13,8 +13,8 @@ get:
           schema:
             type: string
             format: uuid
-        - $ref: ./definitions/parameters/pageParam.yaml
-        - $ref: ./definitions/parameters/pageSizeParam.yaml
+        - $ref: ../definitions/parameters/pageParam.yaml
+        - $ref: ../definitions/parameters/pageSizeParam.yaml
         - name: sort
           in: query
           required: false
@@ -33,7 +33,7 @@ get:
             content:
                 application/json:
                     schema:
-                        $ref: ./definitions/model/GetPayoutsResponse.yaml
+                        $ref: ../definitions/model/GetPayoutsResponse.yaml
             example: |
                 HTTP/1.1 200 OK
                 Content-Type: application/json;charset=UTF-8

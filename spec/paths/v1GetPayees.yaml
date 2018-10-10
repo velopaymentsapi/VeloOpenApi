@@ -45,11 +45,11 @@
               schema:
                 properties:
                   page:
-                    $ref: ./definitions/model/Page.yaml
+                    $ref: ../definitions/model/Page.yaml
                   links:
-                    $ref: ./definitions/model/Links.yaml
+                    $ref: ../definitions/model/Links.yaml
                   content:
-                    $ref: ./definitions/model/PayeeDetails.yaml
+                    $ref: ../definitions/model/PayeeDetails.yaml
               example: |
                   {
                     "page" : {
