@@ -1,6 +1,6 @@
 openapi: "3.0.1"
 info:
-  version: 2.6
+  version: 2.6.MASTER
   title: Velo Payments APIs
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
