@@ -17,10 +17,3 @@ To help you get started using the Velo Payments Open API, please see the example
 This [repository](https://github.com/velopaymentsapi/velo-java-examples) contains simple code examples you can see how to use the Velo Payments API. 
 
 These are simple step by step examples which show you common use cases.
-
-## velo-java-sdk
-
-[Here you can find an open source, production ready library](https://github.com/velopaymentsapi/velo-java-sdk) you can in corporate in your enterprise Java application to
-interact with the Velo Payments Open API.
-
-
