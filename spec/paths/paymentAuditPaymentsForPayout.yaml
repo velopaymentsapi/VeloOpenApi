@@ -14,10 +14,12 @@ get:
           schema:
             type: string
             format: uuid
-        - $ref: '../definitions/parameters/pageParam.yaml'
-        - $ref: '../definitions/parameters/pageSizeParam.yaml'
+        - $ref: ../definitions/parameters/pageParam.yaml
+        - $ref: ../definitions/parameters/pageSizeParam.yaml
         - name: sort
           in: query
+          schema:
+            type: string
           description: |
             List of sort fields Example: ```?sort=dateTime:asc,status:asc```
             Default is sort by remoteId
@@ -33,7 +35,7 @@ get:
             content:
                 application/json:
                     schema:
-                        $ref: '../definitions/model/GetPaymentsForPayoutResponse.yaml'
+                      $ref: ../definitions/model/GetPaymentsForPayoutResponse.yaml
             example: |
                 HTTP/1.1 200 OK
                 Content-Type: application/json;charset=UTF-8

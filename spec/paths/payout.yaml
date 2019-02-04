@@ -15,19 +15,17 @@ post:
         description: Post ammount to transfer via ACH using stored funding account details.
         required: true
         content:
-          application/json:
-            schema:
-              $ref: "../definitions/model/CreatePayoutRequest.yaml"
-    responses:
-        '200':
-          description: Detailed response of payout instructions
-          content:
             application/json:
                 schema:
-                    properties:
-                      content:
-                        $ref: '../definitions/model/CreatePayoutResponse.yaml'
-                example: |
+                  $ref: ../definitions/model/CreatePayoutRequest.yaml
+    responses:
+        '200':
+            description: Detailed response of payout instructions
+            content:
+                application/json:
+                    schema:
+                      $ref: ../definitions/model/CreatePayoutResponse.yaml
+            example: |
                     HTTP/1.1 201 Created
                     Location: https://api.sandbox.velopayments.com/v1/payouts/20bc1d70-4771-472a-9dce-92af1eef0ad0
                     Content-Type: application/json;charset=UTF-8

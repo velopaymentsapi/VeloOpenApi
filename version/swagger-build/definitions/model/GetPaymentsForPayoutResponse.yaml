@@ -1,0 +1,10 @@
+type: object
+properties:
+    links:
+        type: array
+        items:
+            $ref: 'Link.yaml'
+    page:
+        $ref: 'Page.yaml'
+    content:
+        $ref: 'PaymentAuditList.yaml'

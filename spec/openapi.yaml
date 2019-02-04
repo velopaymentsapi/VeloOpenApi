@@ -1,6 +1,6 @@
 openapi: "3.0.1"
 info:
-  version: 1.0.0
+  version: 2.6.MASTER
   title: Velo Payments APIs
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
@@ -94,41 +94,49 @@ tags:
     description: Payment Audit Service APIs allow you to see payment history to payees.
   - name: Invite Service
     description: APIs which allows you to work with payees invited to the Velo Platform.
+  - name: Legal
+    description: |
+      <p>This document, including all counts herein, and the Velo Payments API are the intellectual property
+      of Velo Payments. The Velo Payment API and your use of the Velo Payment API, is goverend by and subject to the
+      Velo Payments Terms of Use</p>
+      <p>&copy; Velo Payments, Inc.</p>
 paths:
   /v1/payees:
-    $ref: 'paths/payees.yaml'
+    $ref: ./paths/v1GetPayees.yaml
+  /v2/payees:
+    $ref: ./paths/v2Payees.yaml
   /v1/payors/{payorId}:
-    $ref: 'paths/payors.yaml'
+    $ref: ./paths/v1Payors_id.yaml
   /v1/payors/{payorId}/balance:
-    $ref: 'paths/payorsGetBalance.yaml'
+    $ref: ./paths/payorsGetBalance.yaml
   /v1/payors/{payorId}/payorFundingBankDetailsUpdate:
-    $ref: 'paths/payorSetFundingBankDetails.yaml'
+    $ref: ./paths/payorSetFundingBankDetails.yaml
   /v1/payors/{payorId}/achFundingRequest:
-    $ref: 'paths/payorAchFundingRequest.yaml'
+    $ref: ./paths/payorAchFundingRequest.yaml
   /v1/payors/{payorId}/applications:
-    $ref: 'paths/payorCreateApplication.yaml'
+    $ref: ./paths/payorCreateApplication.yaml
   /v1/payors/{payorId}/applications/{applicationId}/keys:
-    $ref: 'paths/payorCreateKey.yaml'
+    $ref: ./paths/payorCreateKey.yaml
   /v1/payouts:
-    $ref: 'paths/payout.yaml'
+    $ref: ./paths/payout.yaml
   /v1/payouts/{payoutId}:
-    $ref: 'paths/payoutInstruct.yaml'
+    $ref: ./paths/payoutInstruct.yaml
   /v1/payouts/?:
-      $ref: 'paths/payoutCSV.yaml'
+      $ref: ./paths/payoutCSV.yaml
   /v1/paymentaudit/payouts:
-      $ref: 'paths/paymentAuditPayouts.yaml'
+      $ref: ./paths/paymentAuditPayouts.yaml
   /v2/paymentaudit/payouts/{payoutId}:
-      $ref: 'paths/paymentAuditPaymentsForPayout.yaml'
+      $ref: ./paths/paymentAuditPaymentsForPayout.yaml
   /v1/paymentaudit/payments/{paymentId}:
-      $ref: 'paths/paymentAuditGetPayment.yaml'
+      $ref: ./paths/paymentAuditGetPayment.yaml
   /v1/paymentaudit/fundings:
-      $ref: 'paths/paymentAuditGetFundings.yaml'
+      $ref: ./paths/paymentAuditGetFundings.yaml
   /v1/invites/{inviteId}:
-      $ref: 'paths/inviteValidate.yaml'
+      $ref: ./paths/inviteValidate.yaml
   /v1/invites/{inviteId}/smsTokens:
-      $ref: 'paths/inviteValidateSMS.yaml'
+      $ref: ./paths/inviteValidateSMS.yaml
   /v1/invites/{inviteId}/smsTokens/validate:
-      $ref: 'paths/inviteValidateSMSToken.yaml'
+      $ref: ./paths/inviteValidateSMSToken.yaml
 components:
   securitySchemes:
     oAuthVelo:    
@@ -138,41 +146,43 @@ components:
         clientCredentials:
           tokenUrl: https://api.sandbox.velopayments.com/oauth/token
           scopes: {}
-  schemas:
-    Address:
-        $ref: './definitions/model/Address.yaml'
-    Challenge:
-        $ref: './definitions/model/Challenge.yaml'
-    Company:
-        $ref: './definitions/model/Company.yaml'
-    CreatePayeesRequest:
-        $ref: './definitions/model/CreatePayeesRequest.yaml'
-    Individual:
-        $ref: './definitions/model/Individual.yaml'
-    Links:
-        $ref: './definitions/model/Links.yaml'
-    Link:
-        $ref: './definitions/model/Link.yaml'
-    Name:
-        $ref: './definitions/model/Name.yaml'
-    Page:
-        $ref: './definitions/model/Page.yaml'
-    Payee:
-        $ref: './definitions/model/Payee.yaml'
-    PayeeDetails:
-        $ref: './definitions/model/PayeeDetails.yaml'
-    PayeeDetail:
-        $ref: './definitions/model/PayeeDetail.yaml'
-    PaymentChannel:
-        $ref: './definitions/model/PaymentChannel.yaml'
-    PayorRefs:
-        $ref: './definitions/model/PayorRefs.yaml'
-    PayorRef:
-        $ref: './definitions/model/PayorRef.yaml'
-    Social:
-        $ref: './definitions/model/Social.yaml'
-  parameters:
-    pageSizeParam:
-        $ref: './definitions/parameters/pageSizeParam.yaml'
-    pageParam:
-        $ref: './definitions/parameters/pageParam.yaml'
+#  schemas:
+#    Address:
+#        $ref: ./definitions/model/Address.yaml
+#    Challenge:
+#        $ref: ./definitions/model/Challenge.yaml
+#    Company:
+#        $ref: ./definitions/model/Company.yaml
+#    CreatePayeesRequest:
+#        $ref: ./definitions/model/CreatePayeesRequest.yaml
+#    Individual:
+#        $ref: ./definitions/model/Individual.yaml
+#    Links:
+#        $ref: ./definitions/model/Links.yaml
+#    Link:
+#        $ref: ./definitions/model/Link.yaml
+#    Name:
+#        $ref: ./definitions/model/Name.yaml
+#    Page:
+#        $ref: ./definitions/model/Page.yaml
+#    Payee:
+#        $ref: ./definitions/model/Payee.yaml
+#    PayeeDetails:
+#        $ref: ./definitions/model/PayeeDetails.yaml
+#    PayeeDetail:
+#        $ref: ./definitions/model/PayeeDetail.yaml
+#    PayorAchFundingRequest:
+#        $ref: ./definitions/model/PayorAchFundingRequest.yaml
+#    PaymentChannel:
+#        $ref: ./definitions/model/PaymentChannel.yaml
+#    PayorRefs:
+#        $ref: ./definitions/model/PayorRefs.yaml
+#    PayorRef:
+#        $ref: ./definitions/model/PayorRef.yaml
+#    Social:
+#        $ref: ./definitions/model/Social.yaml
+#  parameters:
+#    pageSizeParam:
+#        $ref: ./definitions/parameters/pageSizeParam.yaml
+#    pageParam:
+#        $ref: ./definitions/parameters/pageParam.yaml

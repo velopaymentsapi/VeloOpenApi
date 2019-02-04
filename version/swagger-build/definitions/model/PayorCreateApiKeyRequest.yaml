@@ -1,0 +1,21 @@
+type: object
+required:
+    - name
+properties:
+    name:
+        type: string
+        description: A name for the key.
+        minLength: 2
+        maxLength: 100
+    description:
+        type: string
+        description: Description of the key.
+        minLength: 2
+        maxLength: 1024
+    roles:
+        type: array
+        description: A list of roles to assign to the key.
+        minItems: 1
+        maxItems: 2147483647
+        items:
+            type: string

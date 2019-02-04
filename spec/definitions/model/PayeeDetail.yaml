@@ -1,18 +1,18 @@
-  description: Payee Detail Information returned by API
-  type: object
-  properties:
+description: Payee Detail Information returned by API
+type: object
+properties:
     payeeId:
-      type: string
-      format: uuid
+        type: string
+        format: uuid
     payorRefs:
-      type: array
-      items:
-        $ref: 'PayorRef.yaml'
+        type: array
+        items:
+           $ref: PayorRef.yaml
     displayName:
-      type: string
+        type: string
     email:
-      type: string
+        type: string
     onboardedStatus:
-      type: string
+        type: string
     ofacStatus:
-      type: string
+        type: string

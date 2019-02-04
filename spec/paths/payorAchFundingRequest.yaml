@@ -1,7 +1,7 @@
 post:
     summary: ACH Transfer to Velo
     description: Instruct an ACH funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo.
-    operationId: payorAchFundingRequest
+    operationId: payorAchFundingRequestApi
     tags:
         - Payor Service
     parameters:
@@ -25,7 +25,7 @@ post:
         content:
           application/json:
             schema:
-              $ref: "../definitions/model/PayorAchFundingRequest.yaml"
+              $ref: ../definitions/model/PayorAchFundingRequest.yaml
     responses:
         '202':
             description: HTTP Accepted

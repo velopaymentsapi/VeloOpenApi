@@ -13,10 +13,12 @@ get:
           schema:
             type: string
             format: uuid
-        - $ref: '../definitions/parameters/pageParam.yaml'
-        - $ref: '../definitions/parameters/pageSizeParam.yaml'
+        - $ref: ../definitions/parameters/pageParam.yaml
+        - $ref: ../definitions/parameters/pageSizeParam.yaml
         - name: sort
           in: query
+          schema:
+              type: string
           description: |
             List of sort fields. Example: ```?sort=destinationCurrency:asc,destinationAmount:asc```
             Default is no sort. The supported sort fields are: dateTime and amount.
@@ -30,8 +32,7 @@ get:
             content:
                 application/json:
                     schema:
-
-                            $ref: '../definitions/model/GetFundingsResponse.yaml'
+                       $ref: ../definitions/model/GetFundingsResponse.yaml
             example: |
                 HTTP/1.1 200 OK
                 Content-Type: application/json;charset=UTF-8

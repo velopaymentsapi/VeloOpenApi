@@ -1,7 +1,8 @@
 type: object
 properties:
     amount:
-        type: decimal
+        type: number
+        format: double
     dateTime:
         type: string
         format: date-time
@@ -11,4 +12,4 @@ properties:
     events:
         type: array
         items:
-            $ref: 'FundingEvent.yaml'
+            $ref: FundingEvent.yaml

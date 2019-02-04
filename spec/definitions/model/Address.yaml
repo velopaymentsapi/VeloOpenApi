@@ -1,39 +1,39 @@
-  type: object
-  required:
-    - line1
-    - city
-    - zipOrPostcode
-    - country
-  properties:
-    line1:
-      type: string
-      minLength: 1
-      maxLength: 100
-    line2:
-      type: string
-      minLength: 1
-      maxLength: 100
-    line3:
-      type: string
-      minLength: 1
-      maxLength: 100
-    line4:
-      type: string
-      minLength: 1
-      maxLength: 100
-    city:
-      type: string
-      minLength: 1
-      maxLength: 50
-    countyOrProvince:
-      type: string
-      minLength: 1
-      maxLength: 50
-    zipOrPostcode:
-      type: string
-      minLength: 1
-      maxLength: 12
-    country:
-      type: string
-      minLength: 1
-      maxLength: 60
+type: object
+required:
+  - line1
+  - city
+  - zipOrPostcode
+  - country
+properties:
+  line1:
+    type: string
+    minLength: 2
+    maxLength: 255
+  line2:
+    type: string
+    minLength: 0
+    maxLength: 255
+  line3:
+    type: string
+    minLength: 0
+    maxLength: 255
+  line4:
+    type: string
+    minLength: 0
+    maxLength: 255
+  city:
+    type: string
+    minLength: 2
+    maxLength: 100
+  countyOrProvince:
+    type: string
+    minLength: 2
+    maxLength: 100
+  zipOrPostcode:
+    type: string
+    minLength: 2
+    maxLength: 30
+  country:
+    type: string
+    minLength: 2
+    maxLength: 50

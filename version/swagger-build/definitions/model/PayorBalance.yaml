@@ -1,0 +1,10 @@
+type: object
+properties:
+    currentBalance:
+      type: number
+      format: double
+      description: Payor’s current balance.
+    currency:
+      type: string
+      enum: [USD]
+      description: Currency of payor’s current balance.

@@ -14,7 +14,8 @@ properties:
         enum: [USD]
         description: Payee's currency
     amount:
-        type: double
+        type: number
+        format: double
         minimum: 0.01
         description: Amount to send to Payee
     reference:
