@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.10.48
+  version: 2.10.49
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
@@ -8372,25 +8372,6 @@ components:
       - payoutStatus
       - submittedDateTime
       type: object
-    Individual_2:
-      example:
-        name:
-          firstName: firstName
-          lastName: lastName
-          otherNames: otherNames
-          title: title
-        nationalIdentification: nationalIdentification
-        dateOfBirth: 2000-01-23
-      properties:
-        name:
-          $ref: '#/components/schemas/Name_2'
-        nationalIdentification:
-          type: string
-        dateOfBirth:
-          description: example - 1970-05-20
-          format: date
-          type: string
-      type: object
     InvitationStatusResponse:
       example:
         payeeInvitationStatuses:
@@ -8483,21 +8464,13 @@ components:
           line2: line2
           line1: line1
           zipOrPostcode: zipOrPostcode
-        individual:
-          name:
-            firstName: firstName
-            lastName: lastName
-            otherNames: otherNames
-            title: title
-          nationalIdentification: nationalIdentification
-          dateOfBirth: 2000-01-23
-        social:
-          facebookId: facebookId
-          twitterId: twitterId
-          linkedInId: linkedInId
         created: 2000-01-23T04:56:07.000+00:00
         ofacOverride: true
-        locale: AR
+        challenge:
+          description: description
+          value: value
+        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        email: email
         paymentChannel:
           paymentChannelName: paymentChannelName
           routingNo: routingNo
@@ -8506,21 +8479,35 @@ components:
           iban: iban
           currency: USD
           accountNumber: accountNumber
-        challenge:
-          description: description
-          value: value
-        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        email: email
+      oneOf:
+      - properties:
+          type:
+            enum:
+            - Individual
+            type: object
+          individual:
+            $ref: '#/components/schemas/Individual'
+        type: object
+      - properties:
+          type:
+            enum:
+            - Company
+            type: object
+          company:
+            $ref: '#/components/schemas/Company'
+        type: object
       properties:
         payeeId:
           format: uuid
+          readOnly: true
           type: string
         payorRefs:
           items:
             $ref: '#/components/schemas/PayorRef'
+          readOnly: true
           type: array
-        type:
-          $ref: '#/components/schemas/PayeeType'
+        remoteId:
+          $ref: '#/components/schemas/RemoteId'
         email:
           format: email
           type: string
@@ -8537,34 +8524,15 @@ components:
           $ref: '#/components/schemas/Address'
         paymentChannel:
           $ref: '#/components/schemas/PaymentChannel'
-        individual:
-          $ref: '#/components/schemas/Individual_2'
-        social:
-          $ref: '#/components/schemas/Social'
         challenge:
           $ref: '#/components/schemas/Challenge'
         ofacOverride:
           type: boolean
-        locale:
-          enum:
-          - AR
-          - EN
-          - ES
-          - FR
-          - HE
-          - HI
-          - JA
-          - PT
-          - RU
-          - UR
-          - ZH
-          type: string
       required:
       - address
-      - company
       - email
-      - locale
-      - ofacOverride
+      - remoteId
+      - type
       type: object
     QuoteFxSummary:
       example:
@@ -8772,7 +8740,7 @@ components:
     PayeeType:
       enum:
       - Individual
-      - CompanyD
+      - Company
       type: string
     PaymentAuditCurrency:
       description: ISO 3 character currency code
@@ -9411,33 +9379,6 @@ components:
       - locale
       - ofacOverride
       type: object
-    Name_2:
-      example:
-        firstName: firstName
-        lastName: lastName
-        otherNames: otherNames
-        title: title
-      properties:
-        title:
-          maxLength: 10
-          minLength: 1
-          type: string
-        firstName:
-          maxLength: 40
-          minLength: 1
-          type: string
-        otherNames:
-          maxLength: 40
-          minLength: 1
-          type: string
-        lastName:
-          maxLength: 40
-          minLength: 1
-          type: string
-      required:
-      - firstName
-      - lastName
-      type: object
     CreatePayeesCSVResponse:
       example:
         batchId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -9978,25 +9919,6 @@ components:
         pageSize:
           format: int32
           type: integer
-    Social:
-      example:
-        facebookId: facebookId
-        twitterId: twitterId
-        linkedInId: linkedInId
-      properties:
-        twitterId:
-          maxLength: 256
-          minLength: 1
-          type: string
-        facebookId:
-          maxLength: 256
-          minLength: 1
-          type: string
-        linkedInId:
-          maxLength: 256
-          minLength: 1
-          type: string
-      type: object
     GetPayoutsResponse:
       allOf:
       - $ref: '#/components/schemas/PagedResponse'
@@ -10075,6 +9997,10 @@ components:
       - logoUrl
       - payorName
       type: object
+    RemoteId:
+      maxLength: 100
+      minLength: 1
+      type: string
     PayeeResponse:
       allOf:
       - $ref: '#/components/schemas/PagedResponse'
@@ -10114,21 +10040,13 @@ components:
             line2: line2
             line1: line1
             zipOrPostcode: zipOrPostcode
-          individual:
-            name:
-              firstName: firstName
-              lastName: lastName
-              otherNames: otherNames
-              title: title
-            nationalIdentification: nationalIdentification
-            dateOfBirth: 2000-01-23
-          social:
-            facebookId: facebookId
-            twitterId: twitterId
-            linkedInId: linkedInId
           created: 2000-01-23T04:56:07.000+00:00
           ofacOverride: true
-          locale: AR
+          challenge:
+            description: description
+            value: value
+          payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          email: email
           paymentChannel:
             paymentChannelName: paymentChannelName
             routingNo: routingNo
@@ -10137,11 +10055,6 @@ components:
             iban: iban
             currency: USD
             accountNumber: accountNumber
-          challenge:
-            description: description
-            value: value
-          payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          email: email
         - payorRefs:
           - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             invitationStatus: invitationStatus
@@ -10158,21 +10071,13 @@ components:
             line2: line2
             line1: line1
             zipOrPostcode: zipOrPostcode
-          individual:
-            name:
-              firstName: firstName
-              lastName: lastName
-              otherNames: otherNames
-              title: title
-            nationalIdentification: nationalIdentification
-            dateOfBirth: 2000-01-23
-          social:
-            facebookId: facebookId
-            twitterId: twitterId
-            linkedInId: linkedInId
           created: 2000-01-23T04:56:07.000+00:00
           ofacOverride: true
-          locale: AR
+          challenge:
+            description: description
+            value: value
+          payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          email: email
           paymentChannel:
             paymentChannelName: paymentChannelName
             routingNo: routingNo
@@ -10181,11 +10086,6 @@ components:
             iban: iban
             currency: USD
             accountNumber: accountNumber
-          challenge:
-            description: description
-            value: value
-          payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          email: email
         payorId: payorId
       properties:
         payorId:
