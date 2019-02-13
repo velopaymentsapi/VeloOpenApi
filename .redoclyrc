@@ -1,0 +1,8 @@
+specFileName: ./spec/openapi.yaml
+apiTitle: Velo Payments OpenAPI
+splitSpec: false
+codeSamples: true
+swaggerUI: true
+travis: true
+repo: velopaymentsapi/VeloOpenApi
+oasVersion: 3.0.1

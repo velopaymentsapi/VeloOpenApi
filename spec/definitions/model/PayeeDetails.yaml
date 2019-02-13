@@ -1,4 +1,0 @@
-description: List of detailed Payee information
-type: array
-items:
-      $ref: PayeeDetail.yaml

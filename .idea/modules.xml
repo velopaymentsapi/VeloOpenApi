@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../java-api-model/java-api-model.iml" filepath="$PROJECT_DIR$/../java-api-model/java-api-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../oa3-scc-tests/oa3-scc-tests.iml" filepath="$PROJECT_DIR$/../oa3-scc-tests/oa3-scc-tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/openapi.iml" filepath="$PROJECT_DIR$/openapi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../velo-java-examples/velo-java-examples.iml" filepath="$PROJECT_DIR$/../velo-java-examples/velo-java-examples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../velo-java-sdk/velo-java-sdk.iml" filepath="$PROJECT_DIR$/../velo-java-sdk/velo-java-sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../velo-sandbox-ui/velo-sandbox-ui.iml" filepath="$PROJECT_DIR$/../velo-sandbox-ui/velo-sandbox-ui.iml" />
+    </modules>
+  </component>
+</project>
