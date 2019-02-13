@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.10.50
+  version: 2.10.51
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
@@ -9329,8 +9329,6 @@ components:
           $ref: '#/components/schemas/OnboardedStatus'
         ofacStatus:
           $ref: '#/components/schemas/OfacStatus'
-        language:
-          $ref: '#/components/schemas/Language'
         created:
           format: date-time
           type: string
@@ -9342,6 +9340,8 @@ components:
           $ref: '#/components/schemas/Challenge'
         ofacOverride:
           type: boolean
+        language:
+          $ref: '#/components/schemas/Language'
       required:
       - address
       - email
