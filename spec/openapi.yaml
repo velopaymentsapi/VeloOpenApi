@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.10.51
+  version: 2.10.52
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
@@ -8505,8 +8505,6 @@ components:
               line2: line2
               line1: line1
               zipOrPostcode: zipOrPostcode
-            created: 2000-01-23T04:56:07.000+00:00
-            ofacOverride: true
             challenge:
               description: description
               value: value
@@ -8538,8 +8536,6 @@ components:
               line2: line2
               line1: line1
               zipOrPostcode: zipOrPostcode
-            created: 2000-01-23T04:56:07.000+00:00
-            ofacOverride: true
             challenge:
               description: description
               value: value
@@ -8895,8 +8891,6 @@ components:
             line2: line2
             line1: line1
             zipOrPostcode: zipOrPostcode
-          created: 2000-01-23T04:56:07.000+00:00
-          ofacOverride: true
           challenge:
             description: description
             value: value
@@ -9234,8 +9228,6 @@ components:
           line2: line2
           line1: line1
           zipOrPostcode: zipOrPostcode
-        created: 2000-01-23T04:56:07.000+00:00
-        ofacOverride: true
         challenge:
           description: description
           value: value
@@ -9280,6 +9272,7 @@ components:
                 - lastName
                 type: object
               nationalIdentification:
+                pattern: '[\\d]{9}'
                 type: string
               dateOfBirth:
                 description: example - 1970-05-20
@@ -9325,21 +9318,12 @@ components:
         email:
           format: email
           type: string
-        onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus'
-        ofacStatus:
-          $ref: '#/components/schemas/OfacStatus'
-        created:
-          format: date-time
-          type: string
         address:
           $ref: '#/components/schemas/Address'
         paymentChannel:
           $ref: '#/components/schemas/PaymentChannel'
         challenge:
           $ref: '#/components/schemas/Challenge'
-        ofacOverride:
-          type: boolean
         language:
           $ref: '#/components/schemas/Language'
       required:
@@ -9727,12 +9711,6 @@ components:
       - status
       - submittedDateTime
       type: object
-    OfacStatus:
-      enum:
-      - PENDING
-      - PASSED
-      - FAILED
-      type: string
     FxSummaries:
       example:
         rate: 5.962133916683182377482808078639209270477294921875
@@ -10010,8 +9988,6 @@ components:
             line2: line2
             line1: line1
             zipOrPostcode: zipOrPostcode
-          created: 2000-01-23T04:56:07.000+00:00
-          ofacOverride: true
           challenge:
             description: description
             value: value
@@ -10041,8 +10017,6 @@ components:
             line2: line2
             line1: line1
             zipOrPostcode: zipOrPostcode
-          created: 2000-01-23T04:56:07.000+00:00
-          ofacOverride: true
           challenge:
             description: description
             value: value
