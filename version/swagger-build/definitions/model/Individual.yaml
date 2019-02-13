@@ -1,9 +1,0 @@
-  type: object
-  properties:
-    name:
-      $ref: 'Name.yaml'
-    nationalIdentification:
-      type: string
-    dateOfBirth:
-      type: string
-      description: example - 1970-05-20

@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "redoc": "^2.0.0-alpha.24",
-    "redoc-cli": "^0.4.0",
-    "prismjs": "1.14.0"
-  }
-}
