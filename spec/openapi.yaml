@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.10.52
+  version: 2.10.53
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
@@ -506,13 +506,6 @@ paths:
           default: displayName:asc
           pattern: '[a-zA-Z]+[:desc|:asc]'
           type: string
-      - in: query
-        name: requestParams
-        required: false
-        schema:
-          description: Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```
-          pattern: '[a-zA-Z]+[:desc|:asc]'
-          type: string
       responses:
         200:
           content:
@@ -585,7 +578,7 @@ paths:
           description: Details of Payee
       summary: List Payees
       tags:
-      - Payee Service
+      - Payees
       x-code-samples:
       - lang: shell
         source: |
@@ -619,7 +612,7 @@ paths:
       - Payee Service
     get:
       description: Get Payee by Id
-      operationId: deletePayeeById
+      operationId: getPayeeById
       parameters:
       - description: The UUID of the payee.
         in: path
@@ -645,7 +638,7 @@ paths:
           description: 200 response, request completed okay
       summary: Get Payee by Id
       tags:
-      - Payee Service
+      - Payees
   /v2/payees:
     post:
       description: |
@@ -681,7 +674,7 @@ paths:
           description: HTTP Created. Body created only on CSV requests
       summary: Intiate Payee Creation
       tags:
-      - Payee Invitation
+      - Payee Batch Creation
       x-code-samples:
       - lang: shell
         source: |
@@ -722,7 +715,7 @@ paths:
           description: Get Batch Status
       summary: Query Batch Status
       tags:
-      - Payee Invitation
+      - Payee Batch Creation
       x-code-samples:
       - lang: shell
         source: |
@@ -833,13 +826,6 @@ paths:
         name: sort
         required: false
         schema:
-          type: string
-      - in: query
-        name: requestParams
-        required: false
-        schema:
-          description: Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```
-          pattern: '[a-zA-Z]+[:desc|:asc]'
           type: string
       responses:
         200:
@@ -1039,13 +1025,6 @@ paths:
         name: sort
         schema:
           type: string
-      - in: query
-        name: requestParams
-        required: false
-        schema:
-          description: Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```
-          pattern: '[a-zA-Z]+[:desc|:asc]'
-          type: string
       responses:
         200:
           content:
@@ -1136,13 +1115,6 @@ paths:
         name: sort
         required: false
         schema:
-          type: string
-      - in: query
-        name: requestParams
-        required: false
-        schema:
-          description: Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```
-          pattern: '[a-zA-Z]+[:desc|:asc]'
           type: string
       responses:
         200:
@@ -1278,13 +1250,6 @@ paths:
         required: false
         schema:
           type: boolean
-      - in: query
-        name: requestParams
-        required: false
-        schema:
-          description: Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```
-          pattern: '[a-zA-Z]+[:desc|:asc]'
-          type: string
       responses:
         200:
           content:
@@ -1461,13 +1426,6 @@ paths:
         required: false
         schema:
           type: boolean
-      - in: query
-        name: requestParams
-        required: false
-        schema:
-          description: Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```
-          pattern: '[a-zA-Z]+[:desc|:asc]'
-          type: string
       responses:
         200:
           content:
@@ -10346,7 +10304,7 @@ x-tagGroups:
 - name: Payee
   tags:
   - Payees
-  - Payee Invitation
+  - Payee Batch Creation
 - name: Payments
   tags:
   - Payouts
