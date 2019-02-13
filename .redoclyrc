@@ -1,7 +1,7 @@
-specFileName: ./spec/openapi.yaml
+specFileName: spec/openapi.yaml
 apiTitle: Velo Payments OpenAPI
 splitSpec: false
-codeSamples: true
+codeSamples: false
 swaggerUI: true
 travis: true
 repo: velopaymentsapi/VeloOpenApi

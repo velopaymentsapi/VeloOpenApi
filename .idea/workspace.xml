@@ -2,81 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="036ab29e-ada3-44fa-993d-98de4a342856" name="Default" comment="cleaning up">
-      <change afterPath="$PROJECT_DIR$/../velo-sandbox-ui/spec/openapi.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Jenkinsfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.redoclyrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.travis.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/VeloOpenApi.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/custom-template.hbs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Address.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Challenge.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Company.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/CreatePayeesRequest.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/CreatePayoutRequest.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/CreatePayoutResponse.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/FundingAudit.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/FundingEvent.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/GetFundingsResponse.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/GetPaymentsForPayoutResponse.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/GetPayoutsResponse.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Individual.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Link.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Links.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Name.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Page.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Payee.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayeeDetail.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayeeDetails.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Payment.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PaymentAudit.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PaymentAuditEvent.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PaymentAuditList.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PaymentChannel.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Payor.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayorAchFundingRequest.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayorBalance.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayorCreateApiKeyRequest.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayorCreateApiKeyResponse.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayorCreateApplicationRequest.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayorFundingBankDetailsUpdate.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayorRef.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayorRefs.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayoutAudit.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/PayoutAuditList.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/RejectedPayee.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/model/Social.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/parameters/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/parameters/pageParam.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/definitions/parameters/pageSizeParam.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/openapi.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/inviteValidate.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/inviteValidateSMS.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/inviteValidateSMSToken.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/paymentAuditGetFundings.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/paymentAuditGetPayment.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/paymentAuditPaymentsForPayout.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/paymentAuditPayouts.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/payorAchFundingRequest.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/payorCreateApplication.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/payorCreateKey.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/payorSetFundingBankDetails.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/payorsGetBalance.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/payout.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/payoutCSV.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/payoutInstruct.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/v1GetPayees.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/v1Payors_id.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/spec/paths/v2Payees.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/velo-openapi.iml" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/../velo-java-examples/target/" />
@@ -106,7 +39,17 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/../velo-sandbox-ui/spec/openapi.yaml">
+        <entry file="file://$PROJECT_DIR$/spec/openapi.yaml">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/redoc-config.yaml">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web/index.html">
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
@@ -175,7 +118,7 @@
   </component>
   <component name="Git.Settings">
     <option name="ROOT_SYNC" value="SYNC" />
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../velo-sandbox-ui" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="gh-pages" />
@@ -185,7 +128,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/spec/definitions/model/payee/CreatePayee.yaml" />
         <option value="$PROJECT_DIR$/spec/definitions/model/payee/PayeeResponse.yaml" />
         <option value="$PROJECT_DIR$/spec/definitions/model/payee/QueryBatchResponse.yaml" />
         <option value="$PROJECT_DIR$/spec/definitions/model/payee/v2/QueryBatchResponse.yaml" />
@@ -236,6 +178,7 @@
         <option value="$PROJECT_DIR$/../velo-sandbox-ui/src/main/java/com/velopayments/ui/config/RestTemplateConfig.java" />
         <option value="$PROJECT_DIR$/../velo-sandbox-ui/src/main/java/com/velopayments/ui/VeloSandboxUiApplication.java" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/.redoclyrc" />
       </list>
     </option>
   </component>
@@ -270,9 +213,9 @@
     <servers />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="378" />
+    <option name="x" value="183" />
     <option name="y" value="40" />
-    <option name="width" value="1931" />
+    <option name="width" value="2126" />
     <option name="height" value="1375" />
   </component>
   <component name="ProjectLevelVcsManager">
@@ -285,7 +228,31 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="ProjectPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="VeloOpenApi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="openapi" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="VeloOpenApi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="openapi" type="462c0819:PsiDirectoryNode" />
+              <item name="velo-sandbox-ui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="VeloOpenApi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="openapi" type="462c0819:PsiDirectoryNode" />
+              <item name="VeloOpenApi" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="VeloOpenApi" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Scratches and Consoles" type="1a2a3e82:ScratchProjectViewPane$MyProjectNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope" />
     </panes>
   </component>
@@ -927,11 +894,11 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="378" y="40" width="1931" height="1375" extended-state="0" />
+    <frame x="183" y="40" width="2126" height="1375" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.23928005" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Web" order="2" side_tool="true" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49893162" visible="true" weight="0.21689059" />
+      <window_info id="Structure" order="1" sideWeight="0.50106835" side_tool="true" visible="true" weight="0.21689059" />
+      <window_info id="Web" order="2" sideWeight="0.5008696" side_tool="true" weight="0.23928005" />
       <window_info id="Designer" order="3" />
       <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -947,7 +914,7 @@
       <window_info anchor="bottom" id="Database Changes" order="10" show_stripe_button="false" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.37020317" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5002865" side_tool="true" weight="0.40718105" />
-      <window_info anchor="bottom" id="Version Control" order="13" visible="true" weight="0.08730159" />
+      <window_info anchor="bottom" id="Version Control" order="13" visible="true" weight="0.25714287" />
       <window_info anchor="bottom" id="Java Enterprise" order="14" />
       <window_info anchor="bottom" id="TypeScript" order="15" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -958,7 +925,7 @@
       <window_info anchor="right" id="Bean Validation" order="5" weight="0.32941177" />
       <window_info anchor="right" id="Palette&#9;" order="6" />
       <window_info anchor="right" id="Maven Projects" order="7" weight="0.1889715" />
-      <window_info anchor="right" id="Maven" order="8" visible="true" weight="0.18740074" />
+      <window_info anchor="right" id="Maven" order="8" visible="true" weight="0.16986564" />
       <window_info anchor="right" id="Leiningen" order="9" />
       <window_info anchor="right" id="REPL" order="10" side_tool="true" />
     </layout>
@@ -998,11 +965,6 @@
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/spec/definitions/parameters/paymentaudit/PaymentAmountFromParam.yaml" />
-    <entry file="file://$PROJECT_DIR$/spec/definitions/parameters/paymentaudit/SensitiveParam.yaml" />
-    <entry file="file://$PROJECT_DIR$/spec/paths/v3/paymentaudit/payments/{paymentId}.yaml" />
-    <entry file="file://$PROJECT_DIR$/spec/paths/v3/paymentaudit/payouts/{payoutId}.yaml" />
-    <entry file="file://$PROJECT_DIR$/spec/paths/v3/paymentaudit/payments.yaml" />
     <entry file="file://$PROJECT_DIR$/spec/paths/v3/paymentaudit/payouts.yaml" />
     <entry file="file://$PROJECT_DIR$/oa3-generated/api-model/pom.xml" />
     <entry file="file://$PROJECT_DIR$/Makefile">
@@ -1168,9 +1130,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/spec/definitions/model/Payor.yaml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -1203,17 +1162,39 @@
     <entry file="file://$PROJECT_DIR$/Dockerfile">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/web/favicon.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.travis.yml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/redoc-config.yaml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/index.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="285">
-            <caret line="19" selection-start-line="19" selection-end-line="19" />
+          <first_editor relative-caret-position="450">
+            <caret line="30" column="30" lean-forward="true" selection-start-line="30" selection-start-column="30" selection-end-line="30" selection-end-column="30" />
           </first_editor>
           <second_editor />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../velo-sandbox-ui/spec/openapi.yaml">
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.redoclyrc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/spec/openapi.yaml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
