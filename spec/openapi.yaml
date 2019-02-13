@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.10.54
+  version: 2.10.55
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
@@ -432,7 +432,7 @@ paths:
       operationId: listPayees
       parameters:
       - description: The account owner Payor ID
-        in: path
+        in: query
         name: payorId
         required: true
         schema:
@@ -799,7 +799,7 @@ paths:
         schema:
           type: string
       - description: The account owner Payor ID
-        in: path
+        in: query
         name: payorId
         required: true
         schema:
@@ -996,7 +996,7 @@ paths:
       operationId: getFundings
       parameters:
       - description: The account owner Payor ID
-        in: path
+        in: query
         name: payorId
         required: true
         schema:
@@ -1049,7 +1049,7 @@ paths:
       operationId: getPayoutsForPayor
       parameters:
       - description: The account owner Payor ID
-        in: path
+        in: query
         name: payorId
         required: true
         schema:
@@ -1276,14 +1276,14 @@ paths:
       operationId: listPaymentsAudit
       parameters:
       - description: The UUID of the payee.
-        in: path
+        in: query
         name: payeeId
         required: true
         schema:
           format: uuid
           type: string
       - description: The account owner Payor ID
-        in: path
+        in: query
         name: payorId
         required: true
         schema:
@@ -1508,7 +1508,7 @@ paths:
       description: Download a CSV file containing payments in a date range. Uses Transfer-Encoding
         - chunked to stream to the client. Date range is inclusive of both the start
         and end dates.
-      operationId: getPayoutStats
+      operationId: exportTransactionsCSV
       parameters:
       - description: The account owner Payor ID
         in: query
@@ -1605,6 +1605,9 @@ paths:
         schema:
           format: uuid
           type: string
+      responses:
+        202:
+          description: HTTP 202 Accepted
       summary: Withdraw Payout
       tags:
       - Payout Service
@@ -1707,6 +1710,9 @@ paths:
         schema:
           format: uuid
           type: string
+      responses:
+        202:
+          description: HTTP 202 Accepted
       summary: Instruct Payout
       tags:
       - Payout Service
