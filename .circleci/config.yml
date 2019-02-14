@@ -45,17 +45,10 @@ jobs:
                 name: Deploy to gh-pages
                 command: |
                     if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        echo "Running on Master"
                         npm run build && npm run gh-pages
                     fi
                     if [ "${CIRCLE_BRANCH}" == "master" && "$CIRCLE_BRANCH" != "gh-pages"]; then
+                        echo "Running NOT on master or gh-pages"
                         npm run build && npm run gh-pages -- -p "$CIRCLE_BRANCH"
                     fi
-#            -   when:
-#                    condition: ${CIRCLE_BRANCH} = "master"
-#                    steps:
-#                        -   run: npm run build && npm run gh-pages
-#
-#            -   when:
-#                    condition: ${CIRCLE_BRANCH} != "master" && "$CIRCLE_BRANCH" != "gh-pages"'
-#                    steps:
-#                        -   run: npm run build && npm run gh-pages -- -p "$CIRCLE_BRANCH"
