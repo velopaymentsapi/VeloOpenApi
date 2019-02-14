@@ -46,7 +46,7 @@ jobs:
             - run:
                 name: Deploy to gh-pages
                 command: |
-                    export TRAVIS_REPO_SLUG = "velopaymentsapi/VeloOpenApi"
+                    TRAVIS_REPO_SLUG="velopaymentsapi/VeloOpenApi"
 
                     if [ "${CIRCLE_BRANCH}" == "master" ]
                     then
