@@ -10,7 +10,7 @@
     "build": "swagger-repo build -o web_deploy",
     "test": "swagger-repo validate",
     "gh-pages": "swagger-repo gh-pages",
-    "deploy": "func() { gh-pages -a -m \'Deployed to Github Pages\' -d \'web_deploy\' -u \'CircleCI <john@springframework.guru>\' -r \"$1\" --dest \"$2\" }; func"
+    "deploy": "func() { gh-pages -a -m \\'Deployed to Github Pages\\' -d \\'web_deploy\\' -u \\'CircleCI <john@springframework.guru>\\' -r \"$1\" --dest \"$2\" }; func"
 
   }
 }
