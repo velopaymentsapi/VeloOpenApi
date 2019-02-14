@@ -52,9 +52,7 @@ jobs:
 
                         echo "Deploying to branch $DEST_DIR on $GIT_REPO"
 
-
-
-                       NPM_CONFIG_GIT_REPO=GIT_REPO  NPM_CONFIG_DEST_DIR=DEST_DIR npm run deploy
+                       NODE_GIT_REPO=$GIT_REPO  NODE_DEST_DIR=$DEST_DIR npm run deploy
                     else
                         echo Should not get here
                     fi
