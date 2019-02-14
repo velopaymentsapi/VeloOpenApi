@@ -42,7 +42,7 @@ jobs:
                 name: Deploy to gh-pages
                 command: |
 
-                    NODE_DEBUG=gh-pages npm run deploy
+
 
                     GIT_REPO="git@github.com:velopaymentsapi/VeloOpenApi.git"
 
@@ -61,6 +61,8 @@ jobs:
                         DEST_DIR="branch/$CIRCLE_BRANCH"
 
                         echo "Deploying to branch $DEST_DIR"
+
+                        NODE_DEBUG=gh-pages npm run deploy -r $GIT_REPO -e $DEST_DIR
 
                         npm run deploy -r $GIT_REPO -e $DEST_DIR
                     fi
