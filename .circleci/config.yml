@@ -44,7 +44,7 @@ jobs:
 
                     GIT_REPO="git@github.com:velopaymentsapi/VeloOpenApi.git"
 
-                    if [ "${CIRCLE_BRANCH}" == "master" ]
+                    if [ $CIRCLE_BRANCH == "master" ]
                     then
                         exit 127
 
@@ -53,7 +53,7 @@ jobs:
 
                         echo "Deploying"
                         npm run deploy -r $GIT_REPO
-                    elif [ "${CIRCLE_BRANCH}" != "master" ] && [ "$CIRCLE_BRANCH" != "gh-pages"]
+                    elif [ $CIRCLE_BRANCH != "master" ] && [ "$CIRCLE_BRANCH" != "gh-pages"]
                     then
                         echo "Running NOT on master or gh-pages"
                         npm run build
