@@ -59,7 +59,7 @@ jobs:
                         DEST_DIR="branch/$CIRCLE_BRANCH"
 
                         echo "Deploying to branch"
-                        npm run deploy -r $GIT_REPO -b gh-pages -e $DEST_DIR
+                        npm run deploy -r $GIT_REPO -e $DEST_DIR
                     fi
 workflows:
     version: 2
