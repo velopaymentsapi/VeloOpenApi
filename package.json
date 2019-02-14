@@ -11,6 +11,5 @@
     "test": "swagger-repo validate",
     "gh-pages": "swagger-repo gh-pages",
     "deploy": "gh-pages -a -m 'Deployed to Github Pages' -d 'web_deploy' -u 'CircleCI <john@springframework.guru>' "
-
   }
 }
