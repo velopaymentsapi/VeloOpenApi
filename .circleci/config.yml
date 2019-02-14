@@ -48,9 +48,7 @@ jobs:
 
                         DEST_DIR="/branch/$CIRCLE_BRANCH"
 
-                        echo "Deploying to branch $DEST_DIR"
-
-                        NODE_DEBUG=npm run deploy
+                        echo "Deploying to branch $DEST_DIR on $GIT_REPO"
 
                         npm run deploy -r $GIT_REPO -e $DEST_DIR
                     else
