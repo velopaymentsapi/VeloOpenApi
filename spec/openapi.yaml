@@ -432,7 +432,7 @@ paths:
       operationId: listPayees
       parameters:
       - description: The account owner Payor ID
-        in: path
+        in: query
         name: payorId
         required: true
         schema:
@@ -619,7 +619,7 @@ paths:
       - Payee Service
     get:
       description: Get Payee by Id
-      operationId: deletePayeeById
+      operationId: getPayeeById
       parameters:
       - description: The UUID of the payee.
         in: path
@@ -806,7 +806,7 @@ paths:
         schema:
           type: string
       - description: The account owner Payor ID
-        in: path
+        in: query
         name: payorId
         required: true
         schema:
@@ -1010,7 +1010,7 @@ paths:
       operationId: getFundings
       parameters:
       - description: The account owner Payor ID
-        in: path
+        in: query
         name: payorId
         required: true
         schema:
@@ -1070,7 +1070,7 @@ paths:
       operationId: getPayoutsForPayor
       parameters:
       - description: The account owner Payor ID
-        in: path
+        in: query
         name: payorId
         required: true
         schema:
@@ -1311,14 +1311,14 @@ paths:
       operationId: listPaymentsAudit
       parameters:
       - description: The UUID of the payee.
-        in: path
+        in: query
         name: payeeId
         required: true
         schema:
           format: uuid
           type: string
       - description: The account owner Payor ID
-        in: path
+        in: query
         name: payorId
         required: true
         schema:
@@ -1550,7 +1550,7 @@ paths:
       description: Download a CSV file containing payments in a date range. Uses Transfer-Encoding
         - chunked to stream to the client. Date range is inclusive of both the start
         and end dates.
-      operationId: getPayoutStats
+      operationId: exportTransactionsCSV
       parameters:
       - description: The account owner Payor ID
         in: query
@@ -1647,6 +1647,9 @@ paths:
         schema:
           format: uuid
           type: string
+      responses:
+        202:
+          description: HTTP 202 Accepted
       summary: Withdraw Payout
       tags:
       - Payout Service
@@ -1749,6 +1752,9 @@ paths:
         schema:
           format: uuid
           type: string
+      responses:
+        202:
+          description: HTTP 202 Accepted
       summary: Instruct Payout
       tags:
       - Payout Service
@@ -8254,17 +8260,6 @@ components:
       - payments
       - payorId
       type: object
-    Company:
-      example:
-        name: name
-      properties:
-        name:
-          maxLength: 40
-          minLength: 1
-          type: string
-      required:
-      - name
-      type: object
     PaymentChannelCountry:
       example:
         isoCountryCode: isoCountryCode
@@ -8372,25 +8367,6 @@ components:
       - payoutStatus
       - submittedDateTime
       type: object
-    Individual_2:
-      example:
-        name:
-          firstName: firstName
-          lastName: lastName
-          otherNames: otherNames
-          title: title
-        nationalIdentification: nationalIdentification
-        dateOfBirth: 2000-01-23
-      properties:
-        name:
-          $ref: '#/components/schemas/Name_2'
-        nationalIdentification:
-          type: string
-        dateOfBirth:
-          description: example - 1970-05-20
-          format: date
-          type: string
-      type: object
     InvitationStatusResponse:
       example:
         payeeInvitationStatuses:
@@ -8465,107 +8441,6 @@ components:
       - name
       - roles
       type: object
-    Payee_2:
-      example:
-        payorRefs:
-        - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          invitationStatus: invitationStatus
-          remoteId: remoteId
-        - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          invitationStatus: invitationStatus
-          remoteId: remoteId
-        address:
-          country: country
-          countyOrProvince: countyOrProvince
-          line4: line4
-          city: city
-          line3: line3
-          line2: line2
-          line1: line1
-          zipOrPostcode: zipOrPostcode
-        individual:
-          name:
-            firstName: firstName
-            lastName: lastName
-            otherNames: otherNames
-            title: title
-          nationalIdentification: nationalIdentification
-          dateOfBirth: 2000-01-23
-        social:
-          facebookId: facebookId
-          twitterId: twitterId
-          linkedInId: linkedInId
-        created: 2000-01-23T04:56:07.000+00:00
-        ofacOverride: true
-        locale: AR
-        paymentChannel:
-          paymentChannelName: paymentChannelName
-          routingNo: routingNo
-          accountName: accountName
-          countryCode: countryCode
-          iban: iban
-          currency: USD
-          accountNumber: accountNumber
-        challenge:
-          description: description
-          value: value
-        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        email: email
-      properties:
-        payeeId:
-          format: uuid
-          type: string
-        payorRefs:
-          items:
-            $ref: '#/components/schemas/PayorRef'
-          type: array
-        type:
-          $ref: '#/components/schemas/PayeeType'
-        email:
-          format: email
-          type: string
-        onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus'
-        ofacStatus:
-          $ref: '#/components/schemas/OfacStatus'
-        language:
-          $ref: '#/components/schemas/Language'
-        created:
-          format: date-time
-          type: string
-        address:
-          $ref: '#/components/schemas/Address'
-        paymentChannel:
-          $ref: '#/components/schemas/PaymentChannel'
-        individual:
-          $ref: '#/components/schemas/Individual_2'
-        social:
-          $ref: '#/components/schemas/Social'
-        challenge:
-          $ref: '#/components/schemas/Challenge'
-        ofacOverride:
-          type: boolean
-        locale:
-          enum:
-          - AR
-          - EN
-          - ES
-          - FR
-          - HE
-          - HI
-          - JA
-          - PT
-          - RU
-          - UR
-          - ZH
-          type: string
-      required:
-      - address
-      - company
-      - email
-      - locale
-      - ofacOverride
-      type: object
     QuoteFxSummary:
       example:
         invertedRate: 6.02745618307040320615897144307382404804229736328125
@@ -8627,19 +8502,30 @@ components:
             - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               invitationStatus: invitationStatus
               remoteId: remoteId
-            country: country
-            individual:
-              name:
-                firstName: firstName
-                lastName: lastName
-                otherNames: otherNames
-                title: title
+            address:
+              country: country
+              countyOrProvince: countyOrProvince
+              line4: line4
+              city: city
+              line3: line3
+              line2: line2
+              line1: line1
+              zipOrPostcode: zipOrPostcode
             created: 2000-01-23T04:56:07.000+00:00
-            displayName: displayName
-            company:
-              name: name
+            ofacOverride: true
+            challenge:
+              description: description
+              value: value
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             email: email
+            paymentChannel:
+              paymentChannelName: paymentChannelName
+              routingNo: routingNo
+              accountName: accountName
+              countryCode: countryCode
+              iban: iban
+              currency: USD
+              accountNumber: accountNumber
           failureMessage: failureMessage
         - failedSubmission:
             payorRefs:
@@ -8649,19 +8535,30 @@ components:
             - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               invitationStatus: invitationStatus
               remoteId: remoteId
-            country: country
-            individual:
-              name:
-                firstName: firstName
-                lastName: lastName
-                otherNames: otherNames
-                title: title
+            address:
+              country: country
+              countyOrProvince: countyOrProvince
+              line4: line4
+              city: city
+              line3: line3
+              line2: line2
+              line1: line1
+              zipOrPostcode: zipOrPostcode
             created: 2000-01-23T04:56:07.000+00:00
-            displayName: displayName
-            company:
-              name: name
+            ofacOverride: true
+            challenge:
+              description: description
+              value: value
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             email: email
+            paymentChannel:
+              paymentChannelName: paymentChannelName
+              routingNo: routingNo
+              accountName: accountName
+              countryCode: countryCode
+              iban: iban
+              currency: USD
+              accountNumber: accountNumber
           failureMessage: failureMessage
         pendingCount: 6
         failureCount: 0
@@ -8725,33 +8622,6 @@ components:
             $ref: '#/components/schemas/PaymentChannelCountry'
           type: array
       type: object
-    Name:
-      example:
-        firstName: firstName
-        lastName: lastName
-        otherNames: otherNames
-        title: title
-      properties:
-        title:
-          maxLength: 10
-          minLength: 1
-          type: string
-        firstName:
-          maxLength: 40
-          minLength: 1
-          type: string
-        otherNames:
-          maxLength: 40
-          minLength: 1
-          type: string
-        lastName:
-          maxLength: 40
-          minLength: 1
-          type: string
-      required:
-      - firstName
-      - lastName
-      type: object
     PayorLogoRequest:
       properties:
         logo:
@@ -8772,7 +8642,7 @@ components:
     PayeeType:
       enum:
       - Individual
-      - CompanyD
+      - Company
       type: string
     PaymentAuditCurrency:
       description: ISO 3 character currency code
@@ -9022,19 +8892,30 @@ components:
           - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             invitationStatus: invitationStatus
             remoteId: remoteId
-          country: country
-          individual:
-            name:
-              firstName: firstName
-              lastName: lastName
-              otherNames: otherNames
-              title: title
+          address:
+            country: country
+            countyOrProvince: countyOrProvince
+            line4: line4
+            city: city
+            line3: line3
+            line2: line2
+            line1: line1
+            zipOrPostcode: zipOrPostcode
           created: 2000-01-23T04:56:07.000+00:00
-          displayName: displayName
-          company:
-            name: name
+          ofacOverride: true
+          challenge:
+            description: description
+            value: value
           payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           email: email
+          paymentChannel:
+            paymentChannelName: paymentChannelName
+            routingNo: routingNo
+            accountName: accountName
+            countryCode: countryCode
+            iban: iban
+            currency: USD
+            accountNumber: accountNumber
         failureMessage: failureMessage
       properties:
         failedSubmission:
@@ -9052,17 +8933,6 @@ components:
       - PAYOR_FUNDING_ENTRY_DETAIL_RECEIVED
       - FUNDING_DEALLOCATED
       type: string
-    Individual:
-      example:
-        name:
-          firstName: firstName
-          lastName: lastName
-          otherNames: otherNames
-          title: title
-      properties:
-        name:
-          $ref: '#/components/schemas/Name'
-      type: object
     PayoutSummaryResponse:
       example:
         rejectedPayments:
@@ -9361,27 +9231,103 @@ components:
         - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           invitationStatus: invitationStatus
           remoteId: remoteId
-        country: country
-        individual:
-          name:
-            firstName: firstName
-            lastName: lastName
-            otherNames: otherNames
-            title: title
+        address:
+          country: country
+          countyOrProvince: countyOrProvince
+          line4: line4
+          city: city
+          line3: line3
+          line2: line2
+          line1: line1
+          zipOrPostcode: zipOrPostcode
         created: 2000-01-23T04:56:07.000+00:00
-        displayName: displayName
-        company:
-          name: name
+        ofacOverride: true
+        challenge:
+          description: description
+          value: value
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         email: email
+        paymentChannel:
+          paymentChannelName: paymentChannelName
+          routingNo: routingNo
+          accountName: accountName
+          countryCode: countryCode
+          iban: iban
+          currency: USD
+          accountNumber: accountNumber
+      oneOf:
+      - properties:
+          type:
+            enum:
+            - Individual
+            type: object
+          individual:
+            properties:
+              name:
+                properties:
+                  title:
+                    maxLength: 10
+                    minLength: 1
+                    type: string
+                  firstName:
+                    maxLength: 40
+                    minLength: 1
+                    type: string
+                  otherNames:
+                    maxLength: 40
+                    minLength: 1
+                    type: string
+                  lastName:
+                    maxLength: 40
+                    minLength: 1
+                    type: string
+                required:
+                - firstName
+                - lastName
+                type: object
+              nationalIdentification:
+                type: string
+              dateOfBirth:
+                description: example - 1970-05-20
+                format: date
+                type: string
+            required:
+            - dateOfBirth
+            - name
+            type: object
+        type: object
+      - properties:
+          type:
+            enum:
+            - Company
+            type: object
+          company:
+            properties:
+              name:
+                maxLength: 40
+                minLength: 1
+                type: string
+              taxId:
+                description: Company Tax Id (EIN) must be 9 numeric characters. Must
+                  match the regular expression ```[\d]{9}```.
+                pattern: '[\\d]{9}'
+                type: string
+            required:
+            - name
+            type: object
+        type: object
       properties:
         payeeId:
           format: uuid
+          readOnly: true
           type: string
         payorRefs:
           items:
             $ref: '#/components/schemas/PayorRef'
+          readOnly: true
           type: array
+        remoteId:
+          $ref: '#/components/schemas/RemoteId'
         email:
           format: email
           type: string
@@ -9394,49 +9340,19 @@ components:
         created:
           format: date-time
           type: string
-        country:
-          type: string
-        displayName:
-          type: string
-        payeeType:
-          $ref: '#/components/schemas/PayeeType'
-        individual:
-          $ref: '#/components/schemas/Individual'
-        company:
-          $ref: '#/components/schemas/Company'
+        address:
+          $ref: '#/components/schemas/Address'
+        paymentChannel:
+          $ref: '#/components/schemas/PaymentChannel'
+        challenge:
+          $ref: '#/components/schemas/Challenge'
+        ofacOverride:
+          type: boolean
       required:
       - address
-      - company
       - email
-      - locale
-      - ofacOverride
-      type: object
-    Name_2:
-      example:
-        firstName: firstName
-        lastName: lastName
-        otherNames: otherNames
-        title: title
-      properties:
-        title:
-          maxLength: 10
-          minLength: 1
-          type: string
-        firstName:
-          maxLength: 40
-          minLength: 1
-          type: string
-        otherNames:
-          maxLength: 40
-          minLength: 1
-          type: string
-        lastName:
-          maxLength: 40
-          minLength: 1
-          type: string
-      required:
-      - firstName
-      - lastName
+      - remoteId
+      - type
       type: object
     CreatePayeesCSVResponse:
       example:
@@ -9978,25 +9894,6 @@ components:
         pageSize:
           format: int32
           type: integer
-    Social:
-      example:
-        facebookId: facebookId
-        twitterId: twitterId
-        linkedInId: linkedInId
-      properties:
-        twitterId:
-          maxLength: 256
-          minLength: 1
-          type: string
-        facebookId:
-          maxLength: 256
-          minLength: 1
-          type: string
-        linkedInId:
-          maxLength: 256
-          minLength: 1
-          type: string
-      type: object
     GetPayoutsResponse:
       allOf:
       - $ref: '#/components/schemas/PagedResponse'
@@ -10075,6 +9972,10 @@ components:
       - logoUrl
       - payorName
       type: object
+    RemoteId:
+      maxLength: 100
+      minLength: 1
+      type: string
     PayeeResponse:
       allOf:
       - $ref: '#/components/schemas/PagedResponse'
@@ -10084,6 +9985,7 @@ components:
               $ref: '#/components/schemas/Payee'
             type: array
         type: object
+      description: Backoffice User Payee Response Object
       type: object
     PayeeInviteRequest:
       example:
@@ -10114,21 +10016,13 @@ components:
             line2: line2
             line1: line1
             zipOrPostcode: zipOrPostcode
-          individual:
-            name:
-              firstName: firstName
-              lastName: lastName
-              otherNames: otherNames
-              title: title
-            nationalIdentification: nationalIdentification
-            dateOfBirth: 2000-01-23
-          social:
-            facebookId: facebookId
-            twitterId: twitterId
-            linkedInId: linkedInId
           created: 2000-01-23T04:56:07.000+00:00
           ofacOverride: true
-          locale: AR
+          challenge:
+            description: description
+            value: value
+          payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          email: email
           paymentChannel:
             paymentChannelName: paymentChannelName
             routingNo: routingNo
@@ -10137,11 +10031,6 @@ components:
             iban: iban
             currency: USD
             accountNumber: accountNumber
-          challenge:
-            description: description
-            value: value
-          payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          email: email
         - payorRefs:
           - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             invitationStatus: invitationStatus
@@ -10158,21 +10047,13 @@ components:
             line2: line2
             line1: line1
             zipOrPostcode: zipOrPostcode
-          individual:
-            name:
-              firstName: firstName
-              lastName: lastName
-              otherNames: otherNames
-              title: title
-            nationalIdentification: nationalIdentification
-            dateOfBirth: 2000-01-23
-          social:
-            facebookId: facebookId
-            twitterId: twitterId
-            linkedInId: linkedInId
           created: 2000-01-23T04:56:07.000+00:00
           ofacOverride: true
-          locale: AR
+          challenge:
+            description: description
+            value: value
+          payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          email: email
           paymentChannel:
             paymentChannelName: paymentChannelName
             routingNo: routingNo
@@ -10181,18 +10062,13 @@ components:
             iban: iban
             currency: USD
             accountNumber: accountNumber
-          challenge:
-            description: description
-            value: value
-          payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          email: email
         payorId: payorId
       properties:
         payorId:
           type: string
         payees:
           items:
-            $ref: '#/components/schemas/Payee_2'
+            $ref: '#/components/schemas/Payee'
           type: array
       required:
       - payees
