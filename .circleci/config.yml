@@ -48,12 +48,12 @@ jobs:
                 command: |
                     TRAVIS_REPO_SLUG="velopaymentsapi/VeloOpenApi"
 
-                    GIT_REPO="https://$GH_TOKEN@github.com/velopaymentsapi/VeloOpenApi.git"
+                    GIT_REPO="git@github.com:velopaymentsapi/VeloOpenApi.git"
 
                     if [ "${CIRCLE_BRANCH}" == "master" ]
                     then
                         echo "Running on Master"
-                        npm run build && npm run gh-pages
+                        npm run build
 
                         echo "Deploying"
                         npm run deploy -r $GIT_REPO
