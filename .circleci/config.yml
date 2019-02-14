@@ -61,6 +61,8 @@ jobs:
                         echo "Deploying to branch $DEST_DIR"
 
                         npm run deploy -r $GIT_REPO -e $DEST_DIR
+                    else
+                        echo Should not get here
                     fi
 workflows:
     version: 2
