@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/velopaymentsapi/VeloOpenApi.svg?style=svg)](https://circleci.com/gh/velopaymentsapi/VeloOpenApi)
+
 # Velo Payments Open API Specification
 
 This repository contains the Velo Payments [Open API 3.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md) specification.
