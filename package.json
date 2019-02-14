@@ -9,6 +9,8 @@
     "start": "swagger-repo serve",
     "build": "swagger-repo build -o web_deploy",
     "test": "swagger-repo validate",
-    "gh-pages": "swagger-repo gh-pages"
+    "gh-pages": "swagger-repo gh-pages",
+    "deploy": "gh-pages -d 'web_deploy' -u 'john@springframework.guru' "
+
   }
 }
