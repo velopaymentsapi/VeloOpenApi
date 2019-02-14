@@ -51,7 +51,7 @@ jobs:
 
                         echo "Deploying"
                         npm run deploy -r $GIT_REPO
-                    elif [ $CIRCLE_BRANCH != "master" ] && [ $CIRCLE_BRANCH != "gh-pages"]
+                    elif [ $CIRCLE_BRANCH != "master" ] && [ $CIRCLE_BRANCH != "gh-pages" ]
                     then
                         echo "Running NOT on master or gh-pages"
                         npm run build
