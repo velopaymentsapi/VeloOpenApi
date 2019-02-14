@@ -46,6 +46,7 @@ jobs:
 
                     if [ "${CIRCLE_BRANCH}" == "master" ]
                     then
+                        exit 127
                         echo "Running on Master"
                         npm run build
 
