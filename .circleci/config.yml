@@ -50,7 +50,7 @@ jobs:
 
                         echo "Deploying to branch $DEST_DIR"
 
-                        NODE_DEBUG=npm run deploy -r $GIT_REPO -e $DEST_DIR
+                        NODE_DEBUG=npm run deploy
 
                         npm run deploy -r $GIT_REPO -e $DEST_DIR
                     else
