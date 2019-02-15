@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.10.0-V1.1
+  version: 2.10.57
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -505,13 +505,6 @@ paths:
             default: 'displayName:asc'
             pattern: '[a-zA-Z]+[:desc|:asc]'
             type: string
-        - in: query
-          name: requestParams
-          required: false
-          schema:
-            description: 'Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```'
-            pattern: '[a-zA-Z]+[:desc|:asc]'
-            type: string
       responses:
         '200':
           content:
@@ -584,7 +577,7 @@ paths:
           description: Details of Payee
       summary: List Payees
       tags:
-        - Payee Service
+        - Payees
       x-code-samples:
         - lang: shell
           source: |
@@ -644,7 +637,7 @@ paths:
           description: '200 response, request completed okay'
       summary: Get Payee by Id
       tags:
-        - Payee Service
+        - Payees
   /v2/payees:
     post:
       description: |
@@ -680,7 +673,7 @@ paths:
           description: HTTP Created. Body created only on CSV requests
       summary: Intiate Payee Creation
       tags:
-        - Payee Invitation
+        - Payee Batch Creation
       x-code-samples:
         - lang: shell
           source: |
@@ -721,7 +714,7 @@ paths:
           description: Get Batch Status
       summary: Query Batch Status
       tags:
-        - Payee Invitation
+        - Payee Batch Creation
       x-code-samples:
         - lang: shell
           source: |
@@ -831,13 +824,6 @@ paths:
           name: sort
           required: false
           schema:
-            type: string
-        - in: query
-          name: requestParams
-          required: false
-          schema:
-            description: 'Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```'
-            pattern: '[a-zA-Z]+[:desc|:asc]'
             type: string
       responses:
         '200':
@@ -1035,13 +1021,6 @@ paths:
           name: sort
           schema:
             type: string
-        - in: query
-          name: requestParams
-          required: false
-          schema:
-            description: 'Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```'
-            pattern: '[a-zA-Z]+[:desc|:asc]'
-            type: string
       responses:
         '200':
           content:
@@ -1132,13 +1111,6 @@ paths:
           name: sort
           required: false
           schema:
-            type: string
-        - in: query
-          name: requestParams
-          required: false
-          schema:
-            description: 'Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```'
-            pattern: '[a-zA-Z]+[:desc|:asc]'
             type: string
       responses:
         '200':
@@ -1270,13 +1242,6 @@ paths:
           required: false
           schema:
             type: boolean
-        - in: query
-          name: requestParams
-          required: false
-          schema:
-            description: 'Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```'
-            pattern: '[a-zA-Z]+[:desc|:asc]'
-            type: string
       responses:
         '200':
           content:
@@ -1444,13 +1409,6 @@ paths:
           required: false
           schema:
             type: boolean
-        - in: query
-          name: requestParams
-          required: false
-          schema:
-            description: 'Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```'
-            pattern: '[a-zA-Z]+[:desc|:asc]'
-            type: string
       responses:
         '200':
           content:
@@ -8490,8 +8448,6 @@ components:
                 line2: line2
                 line1: line1
                 zipOrPostcode: zipOrPostcode
-              created: 2000-01-23T04:56:07.000Z
-              ofacOverride: true
               challenge:
                 description: description
                 value: value
@@ -8523,8 +8479,6 @@ components:
                 line2: line2
                 line1: line1
                 zipOrPostcode: zipOrPostcode
-              created: 2000-01-23T04:56:07.000Z
-              ofacOverride: true
               challenge:
                 description: description
                 value: value
@@ -8880,8 +8834,6 @@ components:
             line2: line2
             line1: line1
             zipOrPostcode: zipOrPostcode
-          created: 2000-01-23T04:56:07.000Z
-          ofacOverride: true
           challenge:
             description: description
             value: value
@@ -9218,8 +9170,6 @@ components:
           line2: line2
           line1: line1
           zipOrPostcode: zipOrPostcode
-        created: 2000-01-23T04:56:07.000Z
-        ofacOverride: true
         challenge:
           description: description
           value: value
@@ -9264,6 +9214,7 @@ components:
                     - lastName
                   type: object
                 nationalIdentification:
+                  pattern: '[\\d]{9}'
                   type: string
                 dateOfBirth:
                   description: example - 1970-05-20
@@ -9308,23 +9259,14 @@ components:
         email:
           format: email
           type: string
-        onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus'
-        ofacStatus:
-          $ref: '#/components/schemas/OfacStatus'
-        language:
-          $ref: '#/components/schemas/Language'
-        created:
-          format: date-time
-          type: string
         address:
           $ref: '#/components/schemas/Address'
         paymentChannel:
           $ref: '#/components/schemas/PaymentChannel'
         challenge:
           $ref: '#/components/schemas/Challenge'
-        ofacOverride:
-          type: boolean
+        language:
+          $ref: '#/components/schemas/Language'
       required:
         - address
         - email
@@ -9710,12 +9652,6 @@ components:
         - status
         - submittedDateTime
       type: object
-    OfacStatus:
-      enum:
-        - PENDING
-        - PASSED
-        - FAILED
-      type: string
     FxSummaries:
       example:
         rate: 5.962133916683182
@@ -9993,8 +9929,6 @@ components:
               line2: line2
               line1: line1
               zipOrPostcode: zipOrPostcode
-            created: 2000-01-23T04:56:07.000Z
-            ofacOverride: true
             challenge:
               description: description
               value: value
@@ -10024,8 +9958,6 @@ components:
               line2: line2
               line1: line1
               zipOrPostcode: zipOrPostcode
-            created: 2000-01-23T04:56:07.000Z
-            ofacOverride: true
             challenge:
               description: description
               value: value
@@ -10353,7 +10285,7 @@ x-tagGroups:
   - name: Payee
     tags:
       - Payees
-      - Payee Invitation
+      - Payee Batch Creation
   - name: Payments
     tags:
       - Payouts

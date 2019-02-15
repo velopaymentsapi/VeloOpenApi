@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.10.0-V1.1",
+    "version": "2.10.57",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -597,16 +597,6 @@
               "pattern": "[a-zA-Z]+[:desc|:asc]",
               "type": "string"
             }
-          },
-          {
-            "in": "query",
-            "name": "requestParams",
-            "required": false,
-            "schema": {
-              "description": "Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```",
-              "pattern": "[a-zA-Z]+[:desc|:asc]",
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -624,7 +614,7 @@
         },
         "summary": "List Payees",
         "tags": [
-          "Payee Service"
+          "Payees"
         ],
         "x-code-samples": [
           {
@@ -701,7 +691,7 @@
         },
         "summary": "Get Payee by Id",
         "tags": [
-          "Payee Service"
+          "Payees"
         ]
       }
     },
@@ -752,7 +742,7 @@
         },
         "summary": "Intiate Payee Creation",
         "tags": [
-          "Payee Invitation"
+          "Payee Batch Creation"
         ],
         "x-code-samples": [
           {
@@ -792,7 +782,7 @@
         },
         "summary": "Query Batch Status",
         "tags": [
-          "Payee Invitation"
+          "Payee Batch Creation"
         ],
         "x-code-samples": [
           {
@@ -945,16 +935,6 @@
             "name": "sort",
             "required": false,
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "requestParams",
-            "required": false,
-            "schema": {
-              "description": "Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```",
-              "pattern": "[a-zA-Z]+[:desc|:asc]",
               "type": "string"
             }
           }
@@ -1138,16 +1118,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "in": "query",
-            "name": "requestParams",
-            "required": false,
-            "schema": {
-              "description": "Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```",
-              "pattern": "[a-zA-Z]+[:desc|:asc]",
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1269,16 +1239,6 @@
             "name": "sort",
             "required": false,
             "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "requestParams",
-            "required": false,
-            "schema": {
-              "description": "Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```",
-              "pattern": "[a-zA-Z]+[:desc|:asc]",
               "type": "string"
             }
           }
@@ -1456,16 +1416,6 @@
             "required": false,
             "schema": {
               "type": "boolean"
-            }
-          },
-          {
-            "in": "query",
-            "name": "requestParams",
-            "required": false,
-            "schema": {
-              "description": "Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```",
-              "pattern": "[a-zA-Z]+[:desc|:asc]",
-              "type": "string"
             }
           }
         ],
@@ -1698,16 +1648,6 @@
             "required": false,
             "schema": {
               "type": "boolean"
-            }
-          },
-          {
-            "in": "query",
-            "name": "requestParams",
-            "required": false,
-            "schema": {
-              "description": "Must match the regular expression ```([a-zA-Z]+[:desc|:asc])```",
-              "pattern": "[a-zA-Z]+[:desc|:asc]",
-              "type": "string"
             }
           }
         ],
@@ -10805,8 +10745,6 @@
                   "line1": "line1",
                   "zipOrPostcode": "zipOrPostcode"
                 },
-                "created": "2000-01-23T04:56:07.000Z",
-                "ofacOverride": true,
                 "challenge": {
                   "description": "description",
                   "value": "value"
@@ -10849,8 +10787,6 @@
                   "line1": "line1",
                   "zipOrPostcode": "zipOrPostcode"
                 },
-                "created": "2000-01-23T04:56:07.000Z",
-                "ofacOverride": true,
                 "challenge": {
                   "description": "description",
                   "value": "value"
@@ -11345,8 +11281,6 @@
               "line1": "line1",
               "zipOrPostcode": "zipOrPostcode"
             },
-            "created": "2000-01-23T04:56:07.000Z",
-            "ofacOverride": true,
             "challenge": {
               "description": "description",
               "value": "value"
@@ -11809,8 +11743,6 @@
             "line1": "line1",
             "zipOrPostcode": "zipOrPostcode"
           },
-          "created": "2000-01-23T04:56:07.000Z",
-          "ofacOverride": true,
           "challenge": {
             "description": "description",
             "value": "value"
@@ -11868,6 +11800,7 @@
                     "type": "object"
                   },
                   "nationalIdentification": {
+                    "pattern": "[\\\\d]{9}",
                     "type": "string"
                   },
                   "dateOfBirth": {
@@ -11935,19 +11868,6 @@
             "format": "email",
             "type": "string"
           },
-          "onboardedStatus": {
-            "$ref": "#/components/schemas/OnboardedStatus"
-          },
-          "ofacStatus": {
-            "$ref": "#/components/schemas/OfacStatus"
-          },
-          "language": {
-            "$ref": "#/components/schemas/Language"
-          },
-          "created": {
-            "format": "date-time",
-            "type": "string"
-          },
           "address": {
             "$ref": "#/components/schemas/Address"
           },
@@ -11957,8 +11877,8 @@
           "challenge": {
             "$ref": "#/components/schemas/Challenge"
           },
-          "ofacOverride": {
-            "type": "boolean"
+          "language": {
+            "$ref": "#/components/schemas/Language"
           }
         },
         "required": [
@@ -12473,14 +12393,6 @@
         ],
         "type": "object"
       },
-      "OfacStatus": {
-        "enum": [
-          "PENDING",
-          "PASSED",
-          "FAILED"
-        ],
-        "type": "string"
-      },
       "FxSummaries": {
         "example": {
           "rate": 5.962133916683182,
@@ -12876,8 +12788,6 @@
                 "line1": "line1",
                 "zipOrPostcode": "zipOrPostcode"
               },
-              "created": "2000-01-23T04:56:07.000Z",
-              "ofacOverride": true,
               "challenge": {
                 "description": "description",
                 "value": "value"
@@ -12917,8 +12827,6 @@
                 "line1": "line1",
                 "zipOrPostcode": "zipOrPostcode"
               },
-              "created": "2000-01-23T04:56:07.000Z",
-              "ofacOverride": true,
               "challenge": {
                 "description": "description",
                 "value": "value"
@@ -13354,7 +13262,7 @@
       "name": "Payee",
       "tags": [
         "Payees",
-        "Payee Invitation"
+        "Payee Batch Creation"
       ]
     },
     {
