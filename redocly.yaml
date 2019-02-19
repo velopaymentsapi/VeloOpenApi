@@ -3,6 +3,6 @@ apiTitle: Velo Payments OpenAPI
 splitSpec: false
 codeSamples: false
 swaggerUI: true
-travis: true
+travis: false
 repo: velopaymentsapi/VeloOpenApi
 oasVersion: 3.0.1
