@@ -6,7 +6,17 @@ This repository contains the Velo Payments [Open API 3.0](https://github.com/OAI
 
 For the Velo Payments Open API, you can find the Open API specification under the folder `/spec`.
 
-You can view the Velo Payments Open API documentation - [here](https://velopaymentsapi.github.io/VeloOpenApi/)
+You can view the current documentation here:
+##### Velo Production
+* [API Documentation](https://velopaymentsapi.github.io/VeloOpenApi/)
+* [Swagger UI](https://velopaymentsapi.github.io/VeloOpenApi/swagger-ui)
+
+##### Pre-Production
+Pre-production releases may be viewed at `/branch/{branch_name}/` and `/branch/{branch_name}/swagger-ui`
+
+Examples:
+* `https://velopaymentsapi.github.io/VeloOpenApi/branch/v2.11/`
+* `https://velopaymentsapi.github.io/VeloOpenApi/branch/v2.11/swagger-ui/`
 
 To request your API keys [contact](mailto:info@velopayments.com) us!
 
