@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.2
+  version: 2.11.6
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -291,7 +291,7 @@ paths:
                     "apiSecret" : "f25767d9-342a-48ac-a788-0a7a38ae6fb3"
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                $ref: '#/components/schemas/PayorCreateApiKeyResponse'
           description: 'HTTP Ok, key created'
         '400':
           description: Invalid Request Body or Payor in invalid state
@@ -410,7 +410,7 @@ paths:
                   "dbaName" : "my company"
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
+                $ref: '#/components/schemas/inline_response_200'
           description: 'HTTP Ok, key created'
         '400':
           description: Invalid Request Body or Payor in invalid state
@@ -1844,7 +1844,7 @@ paths:
                   } ]
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200_2'
+                $ref: '#/components/schemas/inline_response_200_1'
           description: HTTP Okay
       summary: List Payment Channel Country Rules
       tags:
@@ -1893,7 +1893,7 @@ paths:
                   } ]
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200_3'
+                $ref: '#/components/schemas/inline_response_200_2'
           description: HTTP Okay
       summary: List Supported Countries
       tags:
@@ -1965,7 +1965,7 @@ paths:
                   } ]
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                $ref: '#/components/schemas/inline_response_200_3'
           description: HTTP Okay
       summary: List Supported Currencies
       tags:
@@ -8948,17 +8948,6 @@ components:
     inline_response_200_1:
       example:
         content:
-          supportContact: supportContact
-          collectiveAlias: collectiveAlias
-          dbaName: dbaName
-          logoUrl: 'http://example.com/aeiou'
-          payorName: payorName
-      properties:
-        content:
-          $ref: '#/components/schemas/PayorBrandingResponse'
-    inline_response_200_2:
-      example:
-        content:
           bank:
             - isoCountryCode: isoCountryCode
               rules:
@@ -8995,7 +8984,7 @@ components:
       properties:
         content:
           $ref: '#/components/schemas/PaymentChannelRulesResponse'
-    inline_response_200_3:
+    inline_response_200_2:
       example:
         content:
           countries:
@@ -9010,6 +8999,17 @@ components:
       properties:
         content:
           $ref: '#/components/schemas/SupportedCountriesResponse'
+    inline_response_200_3:
+      example:
+        content:
+          currencies:
+            - currency: currency
+              maxPaymentAmount: 0
+            - currency: currency
+              maxPaymentAmount: 0
+      properties:
+        content:
+          $ref: '#/components/schemas/SupportedCurrencyResponse'
     CreatePayeesCSVRequest:
       properties:
         type:
@@ -9141,17 +9141,6 @@ components:
         - remoteId
         - type
       type: object
-    inline_response_200_4:
-      example:
-        content:
-          currencies:
-            - currency: currency
-              maxPaymentAmount: 0
-            - currency: currency
-              maxPaymentAmount: 0
-      properties:
-        content:
-          $ref: '#/components/schemas/SupportedCurrencyResponse'
     Payee:
       example:
         payorRefs:
@@ -9777,11 +9766,14 @@ components:
     inline_response_200:
       example:
         content:
-          apiKey: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          apiSecret: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          supportContact: supportContact
+          collectiveAlias: collectiveAlias
+          dbaName: dbaName
+          logoUrl: 'http://example.com/aeiou'
+          payorName: payorName
       properties:
         content:
-          $ref: '#/components/schemas/PayorCreateApiKeyResponse'
+          $ref: '#/components/schemas/PayorBrandingResponse'
     ListPaymentsResponse:
       allOf:
         - $ref: '#/components/schemas/PagedResponse'

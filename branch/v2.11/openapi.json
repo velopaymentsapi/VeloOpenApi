@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.2",
+    "version": "2.11.6",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -314,7 +314,7 @@
               "application/json": {
                 "example": "HTTP/1.1 200 OK\nContent-Type: application/json;charset=UTF-8\nContent-Length: 111\n\n{\n    \"apiKey\" : \"385d4506-e7dd-446e-a092-5f30b98e7b26\",\n    \"apiSecret\" : \"f25767d9-342a-48ac-a788-0a7a38ae6fb3\"\n}\n",
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200"
+                  "$ref": "#/components/schemas/PayorCreateApiKeyResponse"
                 }
               }
             },
@@ -461,7 +461,7 @@
               "application/json": {
                 "example": "HTTP/1.1 200 OK\nContent-Type: application/json;charset=UTF-8\nContent-Length: 221\n\n{\n  \"payorName\" : \"Payor1\",\n  \"logoUrl\" : \"https://s3-us-west-2.amazonaws.com/velopayments-branding/test/logo.png\",\n  \"collectiveAlias\" : \"customer\",\n  \"supportContact\" : \"support@mycorp.com\",\n  \"dbaName\" : \"my company\"\n}\n",
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_1"
+                  "$ref": "#/components/schemas/inline_response_200"
                 }
               }
             },
@@ -2030,7 +2030,7 @@
               "application/json": {
                 "example": "HTTP/1.1 200 OK\nContent-Length: 2158\nContent-Type: application/json;charset=UTF-8\n\n{\n  \"bank\" : [ {\n    \"isoCountryCode\" : \"US\",\n    \"rules\" : [ {\n      \"element\" : \"accountName\",\n      \"required\" : true,\n      \"displayName\" : \"Account Holder Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 100,\n      \"validation\" : \"^.*$\",\n      \"displayOrder\" : 1\n    }, {\n      \"element\" : \"accountNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Account Number\",\n      \"minLength\" : 6,\n      \"maxLength\" : 11,\n      \"validation\" : \"^[0-9]{6,11}$\",\n      \"displayOrder\" : 3\n    }, {\n      \"element\" : \"routingNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Routing Number\",\n      \"minLength\" : 9,\n      \"maxLength\" : 9,\n      \"validation\" : \"^[0-9]{9}$\",\n      \"displayOrder\" : 2\n    }, {\n      \"element\" : \"paymentChannelName\",\n      \"required\" : false,\n      \"displayName\" : \"Payment Channel Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 20,\n      \"validation\" : \"^.*$\"\n    }, {\n      \"element\" : \"currency\",\n      \"required\" : true,\n      \"displayName\" : \"Currency\",\n      \"minLength\" : 3,\n      \"maxLength\" : 3,\n      \"validation\" : \"^[A-Z]{3}$\"\n    } ]\n  }, {\n    \"isoCountryCode\" : \"GB\",\n    \"rules\" : [ {\n      \"element\" : \"accountName\",\n      \"required\" : true,\n      \"displayName\" : \"Account Holder Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 100,\n      \"validation\" : \"^.*$\",\n      \"displayOrder\" : 1\n    }, {\n      \"element\" : \"accountNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Account Number\",\n      \"minLength\" : 8,\n      \"maxLength\" : 8,\n      \"validation\" : \"^[0-9]{8}$\",\n      \"displayOrder\" : 3\n    }, {\n      \"element\" : \"routingNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Sort Code\",\n      \"minLength\" : 6,\n      \"maxLength\" : 6,\n      \"validation\" : \"^[0-9]{6}$\",\n      \"displayOrder\" : 2\n    }, {\n      \"element\" : \"paymentChannelName\",\n      \"required\" : false,\n      \"displayName\" : \"Payment Channel Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 20,\n      \"validation\" : \"^.*$\"\n    }, {\n      \"element\" : \"currency\",\n      \"required\" : true,\n      \"displayName\" : \"Currency\",\n      \"minLength\" : 3,\n      \"maxLength\" : 3,\n      \"validation\" : \"^[A-Z]{3}$\"\n    } ]\n  } ]\n}",
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_2"
+                  "$ref": "#/components/schemas/inline_response_200_1"
                 }
               }
             },
@@ -2070,7 +2070,7 @@
               "application/json": {
                 "example": "HTTP/1.1 200 OK\nContent-Length: 347\nContent-Type: application/json;charset=UTF-8\n\n{\n  \"countries\" : [ {\n    \"isoCountryCode\" : \"US\",\n    \"currencies\" : [ \"USD\" ]\n  }, {\n    \"isoCountryCode\" : \"GB\",\n    \"currencies\" : [ \"GBP\" ]\n  }, {\n    \"isoCountryCode\" : \"FR\",\n    \"currencies\" : [ \"EUR\" ]\n  }, {\n    \"isoCountryCode\" : \"CA\",\n    \"currencies\" : [ \"CAD\" ]\n  }, {\n    \"isoCountryCode\" : \"JP\",\n    \"currencies\" : [ \"JPY\" ]\n  } ]\n}",
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_3"
+                  "$ref": "#/components/schemas/inline_response_200_2"
                 }
               }
             },
@@ -2099,7 +2099,7 @@
               "application/json": {
                 "example": "HTTP/1.1 200 OK\nContent-Length: 938\nContent-Type: application/json;charset=UTF-8\n\n{\n  \"currencies\" : [ {\n    \"currency\" : \"AUD\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"CAD\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"CHF\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"CNY\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"EUR\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"GBP\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"ILS\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"JPY\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"MXN\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"NOK\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"PHP\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"SGD\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"THB\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"USD\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"ZAR\",\n    \"maxPaymentAmount\" : 1000\n  } ]\n}",
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_200_4"
+                  "$ref": "#/components/schemas/inline_response_200_3"
                 }
               }
             },
@@ -11435,22 +11435,6 @@
       "inline_response_200_1": {
         "example": {
           "content": {
-            "supportContact": "supportContact",
-            "collectiveAlias": "collectiveAlias",
-            "dbaName": "dbaName",
-            "logoUrl": "http://example.com/aeiou",
-            "payorName": "payorName"
-          }
-        },
-        "properties": {
-          "content": {
-            "$ref": "#/components/schemas/PayorBrandingResponse"
-          }
-        }
-      },
-      "inline_response_200_2": {
-        "example": {
-          "content": {
             "bank": [
               {
                 "isoCountryCode": "isoCountryCode",
@@ -11507,7 +11491,7 @@
           }
         }
       },
-      "inline_response_200_3": {
+      "inline_response_200_2": {
         "example": {
           "content": {
             "countries": [
@@ -11531,6 +11515,27 @@
         "properties": {
           "content": {
             "$ref": "#/components/schemas/SupportedCountriesResponse"
+          }
+        }
+      },
+      "inline_response_200_3": {
+        "example": {
+          "content": {
+            "currencies": [
+              {
+                "currency": "currency",
+                "maxPaymentAmount": 0
+              },
+              {
+                "currency": "currency",
+                "maxPaymentAmount": 0
+              }
+            ]
+          }
+        },
+        "properties": {
+          "content": {
+            "$ref": "#/components/schemas/SupportedCurrencyResponse"
           }
         }
       },
@@ -11697,27 +11702,6 @@
           "type"
         ],
         "type": "object"
-      },
-      "inline_response_200_4": {
-        "example": {
-          "content": {
-            "currencies": [
-              {
-                "currency": "currency",
-                "maxPaymentAmount": 0
-              },
-              {
-                "currency": "currency",
-                "maxPaymentAmount": 0
-              }
-            ]
-          }
-        },
-        "properties": {
-          "content": {
-            "$ref": "#/components/schemas/SupportedCurrencyResponse"
-          }
-        }
       },
       "Payee": {
         "example": {
@@ -12561,13 +12545,16 @@
       "inline_response_200": {
         "example": {
           "content": {
-            "apiKey": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-            "apiSecret": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+            "supportContact": "supportContact",
+            "collectiveAlias": "collectiveAlias",
+            "dbaName": "dbaName",
+            "logoUrl": "http://example.com/aeiou",
+            "payorName": "payorName"
           }
         },
         "properties": {
           "content": {
-            "$ref": "#/components/schemas/PayorCreateApiKeyResponse"
+            "$ref": "#/components/schemas/PayorBrandingResponse"
           }
         }
       },
