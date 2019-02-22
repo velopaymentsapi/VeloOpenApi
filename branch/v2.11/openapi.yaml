@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.11
+  version: 2.11.12
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -382,7 +382,7 @@ paths:
                 -H 'Content-Type: multipart/form-data' \
                 -F 'logo=@mylogo.png;type=image/png'
   '/v1/payors/{payorId}/branding':
-    post:
+    get:
       description: Get the payor branding details.
       operationId: payorGetBranding
       parameters:
