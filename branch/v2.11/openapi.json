@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.7",
+    "version": "2.11.8",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -10486,11 +10486,13 @@
           "countyOrProvince": {
             "maxLength": 100,
             "minLength": 2,
+            "nullable": true,
             "type": "string"
           },
           "zipOrPostcode": {
             "maxLength": 30,
             "minLength": 2,
+            "nullable": true,
             "type": "string"
           },
           "country": {
@@ -13205,13 +13207,9 @@
           }
         },
         "required": [
-          "address",
           "language",
           "payorId",
-          "payorName",
-          "primaryContactEmail",
-          "primaryContactName",
-          "primaryContactPhone"
+          "payorName"
         ],
         "type": "object"
       }
