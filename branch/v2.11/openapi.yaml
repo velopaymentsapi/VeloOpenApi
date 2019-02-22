@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.13
+  version: 2.11.14
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -9395,25 +9395,25 @@ components:
       type: object
     PayorFundingBankDetailsUpdate:
       example:
-        routingNumber: '{}'
-        accountName: '{}'
-        accountNumber: '{}'
+        routingNumber: routingNumber
+        accountName: accountName
+        accountNumber: accountNumber
       properties:
         routingNumber:
           description: Routing number for the payor’s bank
           maxLength: 9
           minLength: 9
-          type: object
+          type: string
         accountNumber:
           description: Payor’s bank account number.
           maxLength: 17
           minLength: 4
-          type: object
+          type: string
         accountName:
           description: Payor’s bank account name.
           maxLength: 22
           minLength: 1
-          type: object
+          type: string
       required:
         - accountName
         - accountNumber
