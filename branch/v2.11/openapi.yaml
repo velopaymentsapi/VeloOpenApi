@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.6
+  version: 2.11.7
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -8241,14 +8241,17 @@ components:
         line2:
           maxLength: 255
           minLength: 0
+          nullable: true
           type: string
         line3:
           maxLength: 255
           minLength: 0
+          nullable: true
           type: string
         line4:
           maxLength: 255
           minLength: 0
+          nullable: true
           type: string
         city:
           maxLength: 100
