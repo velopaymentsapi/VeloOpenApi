@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.9
+  version: 2.11.11
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -139,7 +139,7 @@ paths:
             - contractId: 3
       summary: Get Payor
       tags:
-        - Payor Information
+        - Payors
       x-contracts:
         - contractId: 1
           name: Test Good Response
@@ -159,7 +159,7 @@ paths:
   '/v1/payors/{payorId}/payorFundingBankDetailsUpdate':
     post:
       description: |
-        This API allows you to set or update the funding deteils for the given Payor ID.
+        This API allows you to set or update the funding details for the given Payor ID.
       operationId: setPayorFundingBankDetails
       parameters:
         - description: The account owner Payor ID
@@ -192,7 +192,7 @@ paths:
             $ curl 'https://api.sandbox.velopayments.com/v1/payors/c64b31d1-d553-4205-ac22-b57020a9c7db/payorFundingBankDetailsUpdate' -i -X POST \
                 -H 'Content-Type: application/json' \
                 -H 'Authorization: Bearer 1d1e3d28-0d6a-4d45-b250-9962a2c545db' \
-             -d '{"routingNumber":"123456789","accountNumber":"12345","accountName":"Bob"}'
+             -d '{"routingNumber":"123456789","accountNumber":"12345","accountName":"Robert C. Smith"}'
   '/v1/payors/{payorId}/applications':
     post:
       description: Create an application for the given Payor ID
@@ -723,7 +723,7 @@ paths:
                 -H 'Authorization: Bearer f01caad1-5ae5-454d-9467-5053e459fe45'
   '/v1/payees/{payeeId}/invite':
     post:
-      description: Send an invite to the Payee The payee must have already been invited by the payor and not yet accepted or declined
+      description: Resend an invite to the Payee The payee must have already been invited by the payor and not yet accepted or declined Any previous invites to the payee by this Payor will be invalidated
       operationId: sendPayeeInvite
       parameters:
         - description: The UUID of the payee.
@@ -8354,6 +8354,14 @@ components:
         roles:
           - payor.admin
           - payor.admin
+          - payor.admin
+          - payor.admin
+          - payor.admin
+          - payor.admin
+          - payor.admin
+          - payor.admin
+          - payor.admin
+          - payor.admin
         name: name
         description: description
       properties:
@@ -8373,10 +8381,9 @@ components:
             description: Name of role
             enum:
               - payor.admin
-              - payee.user
               - payor.support
             type: string
-          maxItems: 2147483647
+          maxItems: 10
           minItems: 1
           type: array
       required:
@@ -10186,6 +10193,7 @@ components:
       properties:
         payorId:
           format: uuid
+          readOnly: true
           type: string
         payorName:
           description: The name of the payor.
@@ -10251,7 +10259,6 @@ components:
         includesReports:
           type: boolean
       required:
-        - payorId
         - payorName
       type: object
   securitySchemes:
@@ -10278,6 +10285,7 @@ x-tagGroups:
     tags:
       - Payees
       - Payee Batch Creation
+      - Payee Invitation
   - name: Payments
     tags:
       - Payouts

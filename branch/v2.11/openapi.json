@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.9",
+    "version": "2.11.11",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -104,7 +104,7 @@
         },
         "summary": "Get Payor",
         "tags": [
-          "Payor Information"
+          "Payors"
         ],
         "x-contracts": [
           {
@@ -133,7 +133,7 @@
     },
     "/v1/payors/{payorId}/payorFundingBankDetailsUpdate": {
       "post": {
-        "description": "This API allows you to set or update the funding deteils for the given Payor ID.\n",
+        "description": "This API allows you to set or update the funding details for the given Payor ID.\n",
         "operationId": "setPayorFundingBankDetails",
         "parameters": [
           {
@@ -176,7 +176,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payors/c64b31d1-d553-4205-ac22-b57020a9c7db/payorFundingBankDetailsUpdate' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 1d1e3d28-0d6a-4d45-b250-9962a2c545db' \\\n -d '{\"routingNumber\":\"123456789\",\"accountNumber\":\"12345\",\"accountName\":\"Bob\"}'\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payors/c64b31d1-d553-4205-ac22-b57020a9c7db/payorFundingBankDetailsUpdate' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 1d1e3d28-0d6a-4d45-b250-9962a2c545db' \\\n -d '{\"routingNumber\":\"123456789\",\"accountNumber\":\"12345\",\"accountName\":\"Robert C. Smith\"}'\n"
           }
         ]
       }
@@ -794,7 +794,7 @@
     },
     "/v1/payees/{payeeId}/invite": {
       "post": {
-        "description": "Send an invite to the Payee The payee must have already been invited by the payor and not yet accepted or declined",
+        "description": "Resend an invite to the Payee The payee must have already been invited by the payor and not yet accepted or declined Any previous invites to the payee by this Payor will be invalidated",
         "operationId": "sendPayeeInvite",
         "parameters": [
           {
@@ -10620,6 +10620,14 @@
         "example": {
           "roles": [
             "payor.admin",
+            "payor.admin",
+            "payor.admin",
+            "payor.admin",
+            "payor.admin",
+            "payor.admin",
+            "payor.admin",
+            "payor.admin",
+            "payor.admin",
             "payor.admin"
           ],
           "name": "name",
@@ -10644,12 +10652,11 @@
               "description": "Name of role",
               "enum": [
                 "payor.admin",
-                "payee.user",
                 "payor.support"
               ],
               "type": "string"
             },
-            "maxItems": 2147483647,
+            "maxItems": 10,
             "minItems": 1,
             "type": "array"
           }
@@ -13119,6 +13126,7 @@
         "properties": {
           "payorId": {
             "format": "uuid",
+            "readOnly": true,
             "type": "string"
           },
           "payorName": {
@@ -13207,7 +13215,6 @@
           }
         },
         "required": [
-          "payorId",
           "payorName"
         ],
         "type": "object"
@@ -13249,7 +13256,8 @@
       "name": "Payee",
       "tags": [
         "Payees",
-        "Payee Batch Creation"
+        "Payee Batch Creation",
+        "Payee Invitation"
       ]
     },
     {
