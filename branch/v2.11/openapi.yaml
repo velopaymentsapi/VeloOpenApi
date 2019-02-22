@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.12
+  version: 2.11.13
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -410,7 +410,7 @@ paths:
                   "dbaName" : "my company"
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                $ref: '#/components/schemas/PayorBrandingResponse'
           description: 'HTTP Ok, key created'
         '400':
           description: Invalid Request Body or Payor in invalid state
@@ -1844,7 +1844,7 @@ paths:
                   } ]
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
+                $ref: '#/components/schemas/inline_response_200'
           description: HTTP Okay
       summary: List Payment Channel Country Rules
       tags:
@@ -1893,7 +1893,7 @@ paths:
                   } ]
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200_2'
+                $ref: '#/components/schemas/inline_response_200_1'
           description: HTTP Okay
       summary: List Supported Countries
       tags:
@@ -1965,7 +1965,7 @@ paths:
                   } ]
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200_3'
+                $ref: '#/components/schemas/inline_response_200_2'
           description: HTTP Okay
       summary: List Supported Currencies
       tags:
@@ -8960,45 +8960,6 @@ components:
     inline_response_200_1:
       example:
         content:
-          bank:
-            - isoCountryCode: isoCountryCode
-              rules:
-                - displayName: displayName
-                  minLength: 0
-                  displayOrder: 1
-                  required: true
-                  maxLength: 6
-                  validation: validation
-                  element: element
-                - displayName: displayName
-                  minLength: 0
-                  displayOrder: 1
-                  required: true
-                  maxLength: 6
-                  validation: validation
-                  element: element
-            - isoCountryCode: isoCountryCode
-              rules:
-                - displayName: displayName
-                  minLength: 0
-                  displayOrder: 1
-                  required: true
-                  maxLength: 6
-                  validation: validation
-                  element: element
-                - displayName: displayName
-                  minLength: 0
-                  displayOrder: 1
-                  required: true
-                  maxLength: 6
-                  validation: validation
-                  element: element
-      properties:
-        content:
-          $ref: '#/components/schemas/PaymentChannelRulesResponse'
-    inline_response_200_2:
-      example:
-        content:
           countries:
             - isoCountryCOde: isoCountryCOde
               currencies:
@@ -9011,7 +8972,7 @@ components:
       properties:
         content:
           $ref: '#/components/schemas/SupportedCountriesResponse'
-    inline_response_200_3:
+    inline_response_200_2:
       example:
         content:
           currencies:
@@ -9778,14 +9739,42 @@ components:
     inline_response_200:
       example:
         content:
-          supportContact: supportContact
-          collectiveAlias: collectiveAlias
-          dbaName: dbaName
-          logoUrl: 'http://example.com/aeiou'
-          payorName: payorName
+          bank:
+            - isoCountryCode: isoCountryCode
+              rules:
+                - displayName: displayName
+                  minLength: 0
+                  displayOrder: 1
+                  required: true
+                  maxLength: 6
+                  validation: validation
+                  element: element
+                - displayName: displayName
+                  minLength: 0
+                  displayOrder: 1
+                  required: true
+                  maxLength: 6
+                  validation: validation
+                  element: element
+            - isoCountryCode: isoCountryCode
+              rules:
+                - displayName: displayName
+                  minLength: 0
+                  displayOrder: 1
+                  required: true
+                  maxLength: 6
+                  validation: validation
+                  element: element
+                - displayName: displayName
+                  minLength: 0
+                  displayOrder: 1
+                  required: true
+                  maxLength: 6
+                  validation: validation
+                  element: element
       properties:
         content:
-          $ref: '#/components/schemas/PayorBrandingResponse'
+          $ref: '#/components/schemas/PaymentChannelRulesResponse'
     ListPaymentsResponse:
       allOf:
         - $ref: '#/components/schemas/PagedResponse'
@@ -9878,12 +9867,15 @@ components:
           type: string
         collectiveAlias:
           description: How the payor has chosen to refer to payees
+          nullable: true
           type: string
         supportContact:
           description: The payor’s support contact address
+          nullable: true
           type: string
         dbaName:
           description: The payor’s 'Doing Business As' name
+          nullable: true
           type: string
       required:
         - logoUrl
