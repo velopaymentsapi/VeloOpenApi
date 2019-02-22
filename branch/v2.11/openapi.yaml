@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.14
+  version: 2.11.15
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -181,6 +181,8 @@ paths:
           description: HTTP Accepted
         '400':
           description: Invalid Request Body
+        '403':
+          description: Not Authorized
         '404':
           description: Payor Id Not Found
       summary: Set Funding Bank Details
