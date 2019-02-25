@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.15
+  version: 2.11.16
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -8199,6 +8199,19 @@ components:
         - payments
         - payorId
       type: object
+    Company:
+      properties:
+        name:
+          maxLength: 40
+          minLength: 1
+          type: string
+        taxId:
+          description: 'Company Tax Id (EIN) must be 9 numeric characters. Must match the regular expression ```[\d]{9}```.'
+          pattern: '[\\d]{9}'
+          type: string
+      required:
+        - name
+      type: object
     PaymentChannelCountry:
       example:
         isoCountryCode: isoCountryCode
@@ -8453,6 +8466,7 @@ components:
                 - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                   invitationStatus: invitationStatus
                   remoteId: remoteId
+              cellphoneNumber: cellphoneNumber
               address:
                 country: country
                 countyOrProvince: countyOrProvince
@@ -8475,6 +8489,7 @@ components:
                 iban: iban
                 currency: USD
                 accountNumber: accountNumber
+              acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
             failureMessage: failureMessage
           - failedSubmission:
               payorRefs:
@@ -8484,6 +8499,7 @@ components:
                 - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                   invitationStatus: invitationStatus
                   remoteId: remoteId
+              cellphoneNumber: cellphoneNumber
               address:
                 country: country
                 countyOrProvince: countyOrProvince
@@ -8506,6 +8522,7 @@ components:
                 iban: iban
                 currency: USD
                 accountNumber: accountNumber
+              acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
             failureMessage: failureMessage
         pendingCount: 6
         failureCount: 0
@@ -8839,6 +8856,7 @@ components:
             - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               invitationStatus: invitationStatus
               remoteId: remoteId
+          cellphoneNumber: cellphoneNumber
           address:
             country: country
             countyOrProvince: countyOrProvince
@@ -8861,6 +8879,7 @@ components:
             iban: iban
             currency: USD
             accountNumber: accountNumber
+          acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
         failureMessage: failureMessage
       properties:
         failedSubmission:
@@ -8878,6 +8897,21 @@ components:
         - PAYOR_FUNDING_ENTRY_DETAIL_RECEIVED
         - FUNDING_DEALLOCATED
       type: string
+    Individual:
+      properties:
+        name:
+          $ref: '#/components/schemas/Individual_name'
+        nationalIdentification:
+          pattern: '[\\d]{9}'
+          type: string
+        dateOfBirth:
+          description: example - 1970-05-20
+          format: date
+          type: string
+      required:
+        - dateOfBirth
+        - name
+      type: object
     PayoutSummaryResponse:
       example:
         rejectedPayments:
@@ -9125,6 +9159,7 @@ components:
           - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             invitationStatus: invitationStatus
             remoteId: remoteId
+        cellphoneNumber: cellphoneNumber
         address:
           country: country
           countyOrProvince: countyOrProvince
@@ -9147,67 +9182,10 @@ components:
           iban: iban
           currency: USD
           accountNumber: accountNumber
+        acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
       oneOf:
-        - properties:
-            type:
-              enum:
-                - Individual
-              type: object
-            individual:
-              properties:
-                name:
-                  properties:
-                    title:
-                      maxLength: 10
-                      minLength: 1
-                      type: string
-                    firstName:
-                      maxLength: 40
-                      minLength: 1
-                      type: string
-                    otherNames:
-                      maxLength: 40
-                      minLength: 1
-                      type: string
-                    lastName:
-                      maxLength: 40
-                      minLength: 1
-                      type: string
-                  required:
-                    - firstName
-                    - lastName
-                  type: object
-                nationalIdentification:
-                  pattern: '[\\d]{9}'
-                  type: string
-                dateOfBirth:
-                  description: example - 1970-05-20
-                  format: date
-                  type: string
-              required:
-                - dateOfBirth
-                - name
-              type: object
-          type: object
-        - properties:
-            type:
-              enum:
-                - Company
-              type: object
-            company:
-              properties:
-                name:
-                  maxLength: 40
-                  minLength: 1
-                  type: string
-                taxId:
-                  description: 'Company Tax Id (EIN) must be 9 numeric characters. Must match the regular expression ```[\d]{9}```.'
-                  pattern: '[\\d]{9}'
-                  type: string
-              required:
-                - name
-              type: object
-          type: object
+        - $ref: '#/components/schemas/Company'
+        - $ref: '#/components/schemas/Individual'
       properties:
         payeeId:
           format: uuid
@@ -9231,6 +9209,15 @@ components:
           $ref: '#/components/schemas/Challenge'
         language:
           $ref: '#/components/schemas/Language'
+        acceptTermsAndConditionsTimestamp:
+          description: The timestamp when the payee last accesspted T&Cs
+          format: date-time
+          readOnly: true
+          type: string
+        cellphoneNumber:
+          type: string
+        type:
+          $ref: '#/components/schemas/PayeeType'
       required:
         - address
         - email
@@ -9802,6 +9789,27 @@ components:
         pageSize:
           format: int32
           type: integer
+    Individual_name:
+      properties:
+        title:
+          maxLength: 10
+          minLength: 1
+          type: string
+        firstName:
+          maxLength: 40
+          minLength: 1
+          type: string
+        otherNames:
+          maxLength: 40
+          minLength: 1
+          type: string
+        lastName:
+          maxLength: 40
+          minLength: 1
+          type: string
+      required:
+        - firstName
+        - lastName
     GetPayoutsResponse:
       allOf:
         - $ref: '#/components/schemas/PagedResponse'
@@ -9918,6 +9926,7 @@ components:
               - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 invitationStatus: invitationStatus
                 remoteId: remoteId
+            cellphoneNumber: cellphoneNumber
             address:
               country: country
               countyOrProvince: countyOrProvince
@@ -9940,6 +9949,7 @@ components:
               iban: iban
               currency: USD
               accountNumber: accountNumber
+            acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
           - payorRefs:
               - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 invitationStatus: invitationStatus
@@ -9947,6 +9957,7 @@ components:
               - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 invitationStatus: invitationStatus
                 remoteId: remoteId
+            cellphoneNumber: cellphoneNumber
             address:
               country: country
               countyOrProvince: countyOrProvince
@@ -9969,6 +9980,7 @@ components:
               iban: iban
               currency: USD
               accountNumber: accountNumber
+            acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
         payorId: payorId
       properties:
         payorId:
