@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.16",
+    "version": "2.11.17",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -510,7 +510,7 @@
             "name": "ofacStatus",
             "required": false,
             "schema": {
-              "type": "object"
+              "$ref": "#/components/schemas/OfacStatus"
             }
           },
           {
@@ -690,6 +690,9 @@
               }
             },
             "description": "200 response, request completed okay"
+          },
+          "404": {
+            "description": "Payee Not found"
           }
         },
         "summary": "Get Payee by Id",
@@ -2117,50 +2120,6 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v2/currencies' -i -X GET \\\n    -H 'Authorization: Bearer 2f661796-3b13-467b-82c0-faf0f0721294'\n"
-          }
-        ]
-      }
-    },
-    "/v1/payors/{payorId}/balance": {
-      "get": {
-        "description": "This API operation will allow you to query the system by Payor ID. The system will return a JSON response object\nwith details about the given Payor.\n",
-        "operationId": "getPayorBalance",
-        "parameters": [
-          {
-            "description": "Payor Id",
-            "in": "path",
-            "name": "payorId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "example": "HTTP/1.1 200 OK\nContent-Type: application/json;charset=UTF-8\nContent-Length: 53\n\n{\n  \"currentBalance\" : 123.45,\n  \"currency\" : \"USD\"\n}\n",
-                "schema": {
-                  "$ref": "#/components/schemas/PayorBalance"
-                }
-              }
-            },
-            "description": "Details of payor"
-          },
-          "404": {
-            "description": "Payor Id Not Found"
-          }
-        },
-        "summary": "Get Payor Balance",
-        "tags": [
-          "Payor Service"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payors/cd34b0ce-cb18-4b98-b5b4-71c8bc03b829/balance' -i \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer bd18d4dc-870e-46f0-bb2b-5c5166e8d1ec'\n"
           }
         ]
       }
@@ -10410,6 +10369,11 @@
         "type": "object"
       },
       "Company": {
+        "example": {
+          "taxId": "taxId",
+          "name": "name"
+        },
+        "nullable": true,
         "properties": {
           "name": {
             "maxLength": 40,
@@ -10418,7 +10382,8 @@
           },
           "taxId": {
             "description": "Company Tax Id (EIN) must be 9 numeric characters. Must match the regular expression ```[\\d]{9}```.",
-            "pattern": "[\\\\d]{9}",
+            "nullable": true,
+            "pattern": "^[\\d]{9}$",
             "type": "string"
           }
         },
@@ -10779,12 +10744,24 @@
                   "line1": "line1",
                   "zipOrPostcode": "zipOrPostcode"
                 },
-                "challenge": {
-                  "description": "description",
-                  "value": "value"
+                "individual": {
+                  "name": {
+                    "firstName": "firstName",
+                    "lastName": "lastName",
+                    "otherNames": "otherNames",
+                    "title": "title"
+                  },
+                  "nationalIdentification": "nationalIdentification",
+                  "dateOfBirth": "2000-01-23T00:00:00.000Z"
                 },
-                "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                "email": "email",
+                "social": {
+                  "facebookId": "facebookId",
+                  "twitterId": "twitterId",
+                  "linkedInId": "linkedInId"
+                },
+                "created": "2000-01-23T04:56:07.000Z",
+                "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
+                "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
                 "paymentChannel": {
                   "paymentChannelName": "paymentChannelName",
                   "routingNo": "routingNo",
@@ -10794,6 +10771,26 @@
                   "currency": "USD",
                   "accountNumber": "accountNumber"
                 },
+                "marketingOptIns": [
+                  {
+                    "optedIn": true,
+                    "timestamp": "2000-01-23T04:56:07.000Z"
+                  },
+                  {
+                    "optedIn": true,
+                    "timestamp": "2000-01-23T04:56:07.000Z"
+                  }
+                ],
+                "challenge": {
+                  "description": "description",
+                  "value": "value"
+                },
+                "company": {
+                  "taxId": "taxId",
+                  "name": "name"
+                },
+                "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "email": "email",
                 "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
               },
               "failureMessage": "failureMessage"
@@ -10823,12 +10820,24 @@
                   "line1": "line1",
                   "zipOrPostcode": "zipOrPostcode"
                 },
-                "challenge": {
-                  "description": "description",
-                  "value": "value"
+                "individual": {
+                  "name": {
+                    "firstName": "firstName",
+                    "lastName": "lastName",
+                    "otherNames": "otherNames",
+                    "title": "title"
+                  },
+                  "nationalIdentification": "nationalIdentification",
+                  "dateOfBirth": "2000-01-23T00:00:00.000Z"
                 },
-                "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                "email": "email",
+                "social": {
+                  "facebookId": "facebookId",
+                  "twitterId": "twitterId",
+                  "linkedInId": "linkedInId"
+                },
+                "created": "2000-01-23T04:56:07.000Z",
+                "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
+                "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
                 "paymentChannel": {
                   "paymentChannelName": "paymentChannelName",
                   "routingNo": "routingNo",
@@ -10838,6 +10847,26 @@
                   "currency": "USD",
                   "accountNumber": "accountNumber"
                 },
+                "marketingOptIns": [
+                  {
+                    "optedIn": true,
+                    "timestamp": "2000-01-23T04:56:07.000Z"
+                  },
+                  {
+                    "optedIn": true,
+                    "timestamp": "2000-01-23T04:56:07.000Z"
+                  }
+                ],
+                "challenge": {
+                  "description": "description",
+                  "value": "value"
+                },
+                "company": {
+                  "taxId": "taxId",
+                  "name": "name"
+                },
+                "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "email": "email",
                 "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
               },
               "failureMessage": "failureMessage"
@@ -11093,27 +11122,6 @@
         ],
         "type": "object"
       },
-      "PayorBalance": {
-        "example": {
-          "currentBalance": 0.8008281904610115,
-          "currency": "USD"
-        },
-        "properties": {
-          "currentBalance": {
-            "description": "Payor’s current balance.",
-            "format": "double",
-            "type": "number"
-          },
-          "currency": {
-            "description": "Currency of payor’s current balance.",
-            "enum": [
-              "USD"
-            ],
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "PayorCreateApplicationRequest": {
         "example": {
           "name": "name",
@@ -11319,12 +11327,24 @@
               "line1": "line1",
               "zipOrPostcode": "zipOrPostcode"
             },
-            "challenge": {
-              "description": "description",
-              "value": "value"
+            "individual": {
+              "name": {
+                "firstName": "firstName",
+                "lastName": "lastName",
+                "otherNames": "otherNames",
+                "title": "title"
+              },
+              "nationalIdentification": "nationalIdentification",
+              "dateOfBirth": "2000-01-23T00:00:00.000Z"
             },
-            "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-            "email": "email",
+            "social": {
+              "facebookId": "facebookId",
+              "twitterId": "twitterId",
+              "linkedInId": "linkedInId"
+            },
+            "created": "2000-01-23T04:56:07.000Z",
+            "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
+            "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
             "paymentChannel": {
               "paymentChannelName": "paymentChannelName",
               "routingNo": "routingNo",
@@ -11334,6 +11354,26 @@
               "currency": "USD",
               "accountNumber": "accountNumber"
             },
+            "marketingOptIns": [
+              {
+                "optedIn": true,
+                "timestamp": "2000-01-23T04:56:07.000Z"
+              },
+              {
+                "optedIn": true,
+                "timestamp": "2000-01-23T04:56:07.000Z"
+              }
+            ],
+            "challenge": {
+              "description": "description",
+              "value": "value"
+            },
+            "company": {
+              "taxId": "taxId",
+              "name": "name"
+            },
+            "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "email": "email",
             "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
           },
           "failureMessage": "failureMessage"
@@ -11361,12 +11401,22 @@
         "type": "string"
       },
       "Individual": {
+        "example": {
+          "name": {
+            "firstName": "firstName",
+            "lastName": "lastName",
+            "otherNames": "otherNames",
+            "title": "title"
+          },
+          "nationalIdentification": "nationalIdentification",
+          "dateOfBirth": "2000-01-23T00:00:00.000Z"
+        },
         "properties": {
           "name": {
             "$ref": "#/components/schemas/Individual_name"
           },
           "nationalIdentification": {
-            "pattern": "[\\\\d]{9}",
+            "pattern": "^[\\d]{9}$",
             "type": "string"
           },
           "dateOfBirth": {
@@ -11729,12 +11779,24 @@
             "line1": "line1",
             "zipOrPostcode": "zipOrPostcode"
           },
-          "challenge": {
-            "description": "description",
-            "value": "value"
+          "individual": {
+            "name": {
+              "firstName": "firstName",
+              "lastName": "lastName",
+              "otherNames": "otherNames",
+              "title": "title"
+            },
+            "nationalIdentification": "nationalIdentification",
+            "dateOfBirth": "2000-01-23T00:00:00.000Z"
           },
-          "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "email": "email",
+          "social": {
+            "facebookId": "facebookId",
+            "twitterId": "twitterId",
+            "linkedInId": "linkedInId"
+          },
+          "created": "2000-01-23T04:56:07.000Z",
+          "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
+          "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
           "paymentChannel": {
             "paymentChannelName": "paymentChannelName",
             "routingNo": "routingNo",
@@ -11744,16 +11806,28 @@
             "currency": "USD",
             "accountNumber": "accountNumber"
           },
+          "marketingOptIns": [
+            {
+              "optedIn": true,
+              "timestamp": "2000-01-23T04:56:07.000Z"
+            },
+            {
+              "optedIn": true,
+              "timestamp": "2000-01-23T04:56:07.000Z"
+            }
+          ],
+          "challenge": {
+            "description": "description",
+            "value": "value"
+          },
+          "company": {
+            "taxId": "taxId",
+            "name": "name"
+          },
+          "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "email": "email",
           "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
         },
-        "oneOf": [
-          {
-            "$ref": "#/components/schemas/Company"
-          },
-          {
-            "$ref": "#/components/schemas/Individual"
-          }
-        ],
         "properties": {
           "payeeId": {
             "format": "uuid",
@@ -11764,14 +11838,13 @@
             "items": {
               "$ref": "#/components/schemas/PayorRef"
             },
+            "nullable": true,
             "readOnly": true,
             "type": "array"
           },
-          "remoteId": {
-            "$ref": "#/components/schemas/RemoteId"
-          },
           "email": {
             "format": "email",
+            "nullable": true,
             "type": "string"
           },
           "address": {
@@ -11787,23 +11860,59 @@
             "$ref": "#/components/schemas/Language"
           },
           "acceptTermsAndConditionsTimestamp": {
-            "description": "The timestamp when the payee last accesspted T&Cs",
+            "description": "The timestamp when the payee last accepted T&Cs",
             "format": "date-time",
+            "nullable": true,
             "readOnly": true,
             "type": "string"
           },
           "cellphoneNumber": {
             "type": "string"
           },
-          "type": {
+          "payeeType": {
             "$ref": "#/components/schemas/PayeeType"
+          },
+          "company": {
+            "$ref": "#/components/schemas/Company"
+          },
+          "individual": {
+            "$ref": "#/components/schemas/Individual"
+          },
+          "created": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "gracePeriodEndDate": {
+            "format": "date",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "lastOfacCheckTimestamp": {
+            "format": "date_time",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "marketingOptIns": {
+            "items": {
+              "$ref": "#/components/schemas/MarketingOptIn"
+            },
+            "type": "array"
+          },
+          "ofacStatus": {
+            "$ref": "#/components/schemas/OfacStatus"
+          },
+          "onboardedStatus": {
+            "$ref": "#/components/schemas/OnboardedStatus"
+          },
+          "social": {
+            "$ref": "#/components/schemas/Social"
           }
         },
         "required": [
-          "address",
-          "email",
-          "remoteId",
-          "type"
+          "acceptTermsAndConditionsTimestamp",
+          "cellphoneNumber"
         ],
         "type": "object"
       },
@@ -12311,6 +12420,14 @@
         ],
         "type": "object"
       },
+      "OfacStatus": {
+        "enum": [
+          "PENDING",
+          "PASSED",
+          "FAILED"
+        ],
+        "type": "string"
+      },
       "FxSummaries": {
         "example": {
           "rate": 5.962133916683182,
@@ -12576,6 +12693,12 @@
         }
       },
       "Individual_name": {
+        "example": {
+          "firstName": "firstName",
+          "lastName": "lastName",
+          "otherNames": "otherNames",
+          "title": "title"
+        },
         "properties": {
           "title": {
             "maxLength": 10,
@@ -12602,6 +12725,26 @@
           "firstName",
           "lastName"
         ]
+      },
+      "Social": {
+        "example": {
+          "facebookId": "facebookId",
+          "twitterId": "twitterId",
+          "linkedInId": "linkedInId"
+        },
+        "nullable": true,
+        "properties": {
+          "twitterId": {
+            "type": "string"
+          },
+          "facebookId": {
+            "type": "string"
+          },
+          "linkedInId": {
+            "type": "string"
+          }
+        },
+        "type": "object"
       },
       "GetPayoutsResponse": {
         "allOf": [
@@ -12677,6 +12820,32 @@
         ],
         "type": "object"
       },
+      "PayeeResponse_summary": {
+        "example": {
+          "totalOnboardedCount": 5,
+          "totalRegisteredCount": 1,
+          "totalPayeesCount": 0,
+          "totalInvitedCount": 6,
+          "totalOfacFailedCount": 5
+        },
+        "properties": {
+          "totalPayeesCount": {
+            "type": "integer"
+          },
+          "totalInvitedCount": {
+            "type": "integer"
+          },
+          "totalRegisteredCount": {
+            "type": "integer"
+          },
+          "totalOnboardedCount": {
+            "type": "integer"
+          },
+          "totalOfacFailedCount": {
+            "type": "integer"
+          }
+        }
+      },
       "PayorBrandingResponse": {
         "example": {
           "supportContact": "supportContact",
@@ -12717,29 +12886,190 @@
         ],
         "type": "object"
       },
-      "RemoteId": {
-        "maxLength": 100,
-        "minLength": 1,
-        "type": "string"
-      },
       "PayeeResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PagedResponse"
+        "description": "List Payees Response Object",
+        "example": {
+          "summary": {
+            "totalOnboardedCount": 5,
+            "totalRegisteredCount": 1,
+            "totalPayeesCount": 0,
+            "totalInvitedCount": 6,
+            "totalOfacFailedCount": 5
           },
-          {
-            "properties": {
-              "content": {
-                "items": {
-                  "$ref": "#/components/schemas/Payee"
+          "links": [
+            "{}",
+            "{}"
+          ],
+          "page": "{}",
+          "content": [
+            {
+              "payorRefs": [
+                {
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "invitationStatus": "invitationStatus",
+                  "remoteId": "remoteId"
                 },
-                "type": "array"
-              }
+                {
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "invitationStatus": "invitationStatus",
+                  "remoteId": "remoteId"
+                }
+              ],
+              "cellphoneNumber": "cellphoneNumber",
+              "address": {
+                "country": "country",
+                "countyOrProvince": "countyOrProvince",
+                "line4": "line4",
+                "city": "city",
+                "line3": "line3",
+                "line2": "line2",
+                "line1": "line1",
+                "zipOrPostcode": "zipOrPostcode"
+              },
+              "individual": {
+                "name": {
+                  "firstName": "firstName",
+                  "lastName": "lastName",
+                  "otherNames": "otherNames",
+                  "title": "title"
+                },
+                "nationalIdentification": "nationalIdentification",
+                "dateOfBirth": "2000-01-23T00:00:00.000Z"
+              },
+              "social": {
+                "facebookId": "facebookId",
+                "twitterId": "twitterId",
+                "linkedInId": "linkedInId"
+              },
+              "created": "2000-01-23T04:56:07.000Z",
+              "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
+              "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
+              "paymentChannel": {
+                "paymentChannelName": "paymentChannelName",
+                "routingNo": "routingNo",
+                "accountName": "accountName",
+                "countryCode": "countryCode",
+                "iban": "iban",
+                "currency": "USD",
+                "accountNumber": "accountNumber"
+              },
+              "marketingOptIns": [
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                },
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                }
+              ],
+              "challenge": {
+                "description": "description",
+                "value": "value"
+              },
+              "company": {
+                "taxId": "taxId",
+                "name": "name"
+              },
+              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "email": "email",
+              "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
             },
+            {
+              "payorRefs": [
+                {
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "invitationStatus": "invitationStatus",
+                  "remoteId": "remoteId"
+                },
+                {
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "invitationStatus": "invitationStatus",
+                  "remoteId": "remoteId"
+                }
+              ],
+              "cellphoneNumber": "cellphoneNumber",
+              "address": {
+                "country": "country",
+                "countyOrProvince": "countyOrProvince",
+                "line4": "line4",
+                "city": "city",
+                "line3": "line3",
+                "line2": "line2",
+                "line1": "line1",
+                "zipOrPostcode": "zipOrPostcode"
+              },
+              "individual": {
+                "name": {
+                  "firstName": "firstName",
+                  "lastName": "lastName",
+                  "otherNames": "otherNames",
+                  "title": "title"
+                },
+                "nationalIdentification": "nationalIdentification",
+                "dateOfBirth": "2000-01-23T00:00:00.000Z"
+              },
+              "social": {
+                "facebookId": "facebookId",
+                "twitterId": "twitterId",
+                "linkedInId": "linkedInId"
+              },
+              "created": "2000-01-23T04:56:07.000Z",
+              "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
+              "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
+              "paymentChannel": {
+                "paymentChannelName": "paymentChannelName",
+                "routingNo": "routingNo",
+                "accountName": "accountName",
+                "countryCode": "countryCode",
+                "iban": "iban",
+                "currency": "USD",
+                "accountNumber": "accountNumber"
+              },
+              "marketingOptIns": [
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                },
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                }
+              ],
+              "challenge": {
+                "description": "description",
+                "value": "value"
+              },
+              "company": {
+                "taxId": "taxId",
+                "name": "name"
+              },
+              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "email": "email",
+              "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
+            }
+          ]
+        },
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/PayeeResponse_summary"
+          },
+          "page": {
             "type": "object"
+          },
+          "links": {
+            "items": {
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/Payee"
+            },
+            "type": "array"
           }
-        ],
-        "description": "Backoffice User Payee Response Object",
+        },
         "type": "object"
       },
       "PayeeInviteRequest": {
@@ -12784,12 +13114,24 @@
                 "line1": "line1",
                 "zipOrPostcode": "zipOrPostcode"
               },
-              "challenge": {
-                "description": "description",
-                "value": "value"
+              "individual": {
+                "name": {
+                  "firstName": "firstName",
+                  "lastName": "lastName",
+                  "otherNames": "otherNames",
+                  "title": "title"
+                },
+                "nationalIdentification": "nationalIdentification",
+                "dateOfBirth": "2000-01-23T00:00:00.000Z"
               },
-              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "email": "email",
+              "social": {
+                "facebookId": "facebookId",
+                "twitterId": "twitterId",
+                "linkedInId": "linkedInId"
+              },
+              "created": "2000-01-23T04:56:07.000Z",
+              "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
+              "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
               "paymentChannel": {
                 "paymentChannelName": "paymentChannelName",
                 "routingNo": "routingNo",
@@ -12799,6 +13141,26 @@
                 "currency": "USD",
                 "accountNumber": "accountNumber"
               },
+              "marketingOptIns": [
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                },
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                }
+              ],
+              "challenge": {
+                "description": "description",
+                "value": "value"
+              },
+              "company": {
+                "taxId": "taxId",
+                "name": "name"
+              },
+              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "email": "email",
               "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
             },
             {
@@ -12825,12 +13187,24 @@
                 "line1": "line1",
                 "zipOrPostcode": "zipOrPostcode"
               },
-              "challenge": {
-                "description": "description",
-                "value": "value"
+              "individual": {
+                "name": {
+                  "firstName": "firstName",
+                  "lastName": "lastName",
+                  "otherNames": "otherNames",
+                  "title": "title"
+                },
+                "nationalIdentification": "nationalIdentification",
+                "dateOfBirth": "2000-01-23T00:00:00.000Z"
               },
-              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "email": "email",
+              "social": {
+                "facebookId": "facebookId",
+                "twitterId": "twitterId",
+                "linkedInId": "linkedInId"
+              },
+              "created": "2000-01-23T04:56:07.000Z",
+              "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
+              "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
               "paymentChannel": {
                 "paymentChannelName": "paymentChannelName",
                 "routingNo": "routingNo",
@@ -12840,6 +13214,26 @@
                 "currency": "USD",
                 "accountNumber": "accountNumber"
               },
+              "marketingOptIns": [
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                },
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                }
+              ],
+              "challenge": {
+                "description": "description",
+                "value": "value"
+              },
+              "company": {
+                "taxId": "taxId",
+                "name": "name"
+              },
+              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "email": "email",
               "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
             }
           ],
@@ -12879,6 +13273,22 @@
               "type": "string"
             },
             "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "MarketingOptIn": {
+        "example": {
+          "optedIn": true,
+          "timestamp": "2000-01-23T04:56:07.000Z"
+        },
+        "properties": {
+          "optedIn": {
+            "type": "boolean"
+          },
+          "timestamp": {
+            "format": "date-time",
+            "type": "string"
           }
         },
         "type": "object"
