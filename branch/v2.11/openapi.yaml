@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.17
+  version: 2.11.18
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -577,6 +577,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/PayeeResponse'
           description: Details of Payee
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
       summary: List Payees
       tags:
         - Payees
@@ -654,7 +658,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreatePayeesRequest'
-          multipart/formdata:
+          multipart/form-data:
             schema:
               properties:
                 payorId:
@@ -675,6 +679,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreatePayeesCSVResponse'
           description: HTTP Created. Body created only on CSV requests
+        '400':
+          description: Bad Request
       summary: Intiate Payee Creation
       tags:
         - Payee Batch Creation
@@ -750,6 +756,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/InvitationStatusResponse'
           description: '200 response, request completed okay'
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
       summary: Invite Payee
       tags:
         - Payee Invitation
@@ -8160,6 +8170,24 @@ components:
         - payments
         - payorId
       type: object
+    PayeeResponse_page:
+      example:
+        numberOfElements: 2
+        totalPages: 9
+        pageSize: 2
+        page: 3
+        totalElements: 7
+      properties:
+        numberOfElements:
+          type: integer
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
     Company:
       example:
         taxId: taxId
@@ -8204,6 +8232,15 @@ components:
             $ref: '#/components/schemas/PaymentChannelRule'
           type: array
       type: object
+    PayeeResponse_links:
+      example:
+        rel: rel
+        href: href
+      properties:
+        rel:
+          type: string
+        href:
+          type: string
     Address:
       example:
         country: country
@@ -8294,8 +8331,10 @@ components:
       example:
         payeeInvitationStatuses:
           - payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            gracePeriodEndDate: 2000-01-23T00:00:00.000Z
             invitationStatus: ACCEPTED
           - payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            gracePeriodEndDate: 2000-01-23T00:00:00.000Z
             invitationStatus: ACCEPTED
       properties:
         payeeInvitationStatuses:
@@ -8432,6 +8471,7 @@ components:
                 - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                   invitationStatus: invitationStatus
                   remoteId: remoteId
+              country: country
               cellphoneNumber: cellphoneNumber
               address:
                 country: country
@@ -8454,6 +8494,7 @@ components:
                 facebookId: facebookId
                 twitterId: twitterId
                 linkedInId: linkedInId
+              displayName: displayName
               created: 2000-01-23T04:56:07.000Z
               lastOfacCheckTimestamp: lastOfacCheckTimestamp
               gracePeriodEndDate: 2000-01-23T00:00:00.000Z
@@ -8488,6 +8529,7 @@ components:
                 - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                   invitationStatus: invitationStatus
                   remoteId: remoteId
+              country: country
               cellphoneNumber: cellphoneNumber
               address:
                 country: country
@@ -8510,6 +8552,7 @@ components:
                 facebookId: facebookId
                 twitterId: twitterId
                 linkedInId: linkedInId
+              displayName: displayName
               created: 2000-01-23T04:56:07.000Z
               lastOfacCheckTimestamp: lastOfacCheckTimestamp
               gracePeriodEndDate: 2000-01-23T00:00:00.000Z
@@ -8603,6 +8646,52 @@ components:
         logo:
           format: binary
           type: string
+      type: object
+    CreatePaymentChannel:
+      example:
+        paymentChannelName: paymentChannelName
+        routingNumber: routingNumber
+        accountName: accountName
+        countryCode: countryCode
+        iban: iban
+        currency: USD
+        accountNumber: accountNumber
+      properties:
+        paymentChannelName:
+          type: string
+        iban:
+          description: 'Must match the regular expression ```^[A-Za-z0-9]+$```. Either routing number and account number or only iban must be set'
+          maxLength: 34
+          minLength: 15
+          pattern: '^[A-Za-z0-9]+$'
+          type: string
+        accountNumber:
+          description: Either routing number and account number or only iban must be set
+          maxLength: 17
+          minLength: 6
+          type: string
+        routingNumber:
+          description: Either routing number and account number or only iban must be set
+          maxLength: 9
+          minLength: 9
+          type: string
+        countryCode:
+          description: Two character country code
+          maxLength: 2
+          minLength: 2
+          type: string
+        currency:
+          enum:
+            - USD
+            - GBP
+            - EUR
+          type: string
+        accountName:
+          type: string
+      required:
+        - accountName
+        - countryCode
+        - currency
       type: object
     SupportedCurrency:
       example:
@@ -8828,6 +8917,145 @@ components:
               type: array
           type: object
       type: object
+    CreatePayee:
+      example:
+        payorRefs:
+          - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            invitationStatus: invitationStatus
+            remoteId: remoteId
+          - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            invitationStatus: invitationStatus
+            remoteId: remoteId
+        country: country
+        cellphoneNumber: cellphoneNumber
+        address:
+          country: country
+          countyOrProvince: countyOrProvince
+          line4: line4
+          city: city
+          line3: line3
+          line2: line2
+          line1: line1
+          zipOrPostcode: zipOrPostcode
+        individual:
+          name:
+            firstName: firstName
+            lastName: lastName
+            otherNames: otherNames
+            title: title
+          nationalIdentification: nationalIdentification
+          dateOfBirth: 2000-01-23T00:00:00.000Z
+        social:
+          facebookId: facebookId
+          twitterId: twitterId
+          linkedInId: linkedInId
+        displayName: displayName
+        created: 2000-01-23T04:56:07.000Z
+        lastOfacCheckTimestamp: lastOfacCheckTimestamp
+        type: Individual
+        gracePeriodEndDate: 2000-01-23T00:00:00.000Z
+        remoteId: remoteId
+        paymentChannel:
+          paymentChannelName: paymentChannelName
+          routingNumber: routingNumber
+          accountName: accountName
+          countryCode: countryCode
+          iban: iban
+          currency: USD
+          accountNumber: accountNumber
+        marketingOptIns:
+          - optedIn: true
+            timestamp: 2000-01-23T04:56:07.000Z
+          - optedIn: true
+            timestamp: 2000-01-23T04:56:07.000Z
+        challenge:
+          description: description
+          value: value
+        company:
+          taxId: taxId
+          name: name
+        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        email: email
+        acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
+      properties:
+        payeeId:
+          format: uuid
+          readOnly: true
+          type: string
+        payorRefs:
+          items:
+            $ref: '#/components/schemas/PayorRef'
+          nullable: true
+          readOnly: true
+          type: array
+        email:
+          format: email
+          maxLength: 244
+          minLength: 3
+          nullable: true
+          type: string
+        remoteId:
+          maxLength: 100
+          minLength: 1
+          type: string
+        type:
+          enum:
+            - Individual
+            - Company
+          type: string
+        displayName:
+          type: string
+        country:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        paymentChannel:
+          $ref: '#/components/schemas/CreatePaymentChannel'
+        challenge:
+          $ref: '#/components/schemas/Challenge'
+        language:
+          $ref: '#/components/schemas/Language'
+        acceptTermsAndConditionsTimestamp:
+          description: The timestamp when the payee last accepted T&Cs
+          format: date-time
+          nullable: true
+          readOnly: true
+          type: string
+        cellphoneNumber:
+          type: string
+        payeeType:
+          $ref: '#/components/schemas/PayeeType'
+        company:
+          $ref: '#/components/schemas/Company'
+        individual:
+          $ref: '#/components/schemas/Individual'
+        created:
+          format: date-time
+          type: string
+        gracePeriodEndDate:
+          format: date
+          nullable: true
+          readOnly: true
+          type: string
+        lastOfacCheckTimestamp:
+          format: date_time
+          nullable: true
+          readOnly: true
+          type: string
+        marketingOptIns:
+          items:
+            $ref: '#/components/schemas/MarketingOptIn'
+          type: array
+        ofacStatus:
+          $ref: '#/components/schemas/OfacStatus'
+        onboardedStatus:
+          $ref: '#/components/schemas/OnboardedStatus'
+        social:
+          $ref: '#/components/schemas/Social'
+      required:
+        - email
+        - remoteId
+      type: object
     SourceAccountSummary:
       properties:
         sourceAccountId:
@@ -8853,6 +9081,7 @@ components:
             - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               invitationStatus: invitationStatus
               remoteId: remoteId
+          country: country
           cellphoneNumber: cellphoneNumber
           address:
             country: country
@@ -8875,6 +9104,7 @@ components:
             facebookId: facebookId
             twitterId: twitterId
             linkedInId: linkedInId
+          displayName: displayName
           created: 2000-01-23T04:56:07.000Z
           lastOfacCheckTimestamp: lastOfacCheckTimestamp
           gracePeriodEndDate: 2000-01-23T00:00:00.000Z
@@ -9187,6 +9417,7 @@ components:
           - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             invitationStatus: invitationStatus
             remoteId: remoteId
+        country: country
         cellphoneNumber: cellphoneNumber
         address:
           country: country
@@ -9209,6 +9440,7 @@ components:
           facebookId: facebookId
           twitterId: twitterId
           linkedInId: linkedInId
+        displayName: displayName
         created: 2000-01-23T04:56:07.000Z
         lastOfacCheckTimestamp: lastOfacCheckTimestamp
         gracePeriodEndDate: 2000-01-23T00:00:00.000Z
@@ -9251,6 +9483,10 @@ components:
           type: string
         address:
           $ref: '#/components/schemas/Address'
+        country:
+          type: string
+        displayName:
+          type: string
         paymentChannel:
           $ref: '#/components/schemas/PaymentChannel'
         challenge:
@@ -9294,9 +9530,6 @@ components:
           $ref: '#/components/schemas/OnboardedStatus'
         social:
           $ref: '#/components/schemas/Social'
-      required:
-        - acceptTermsAndConditionsTimestamp
-        - cellphoneNumber
       type: object
     CreatePayeesCSVResponse:
       example:
@@ -9922,6 +10155,7 @@ components:
     PayeeInvitationStatus:
       example:
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        gracePeriodEndDate: 2000-01-23T00:00:00.000Z
         invitationStatus: ACCEPTED
       properties:
         payeeId:
@@ -9932,6 +10166,9 @@ components:
             - ACCEPTED
             - PENDING
             - DECLINED
+          type: string
+        gracePeriodEndDate:
+          format: date
           type: string
       required:
         - invitationStatus
@@ -10018,9 +10255,16 @@ components:
           totalInvitedCount: 6
           totalOfacFailedCount: 5
         links:
-          - '{}'
-          - '{}'
-        page: '{}'
+          - rel: rel
+            href: href
+          - rel: rel
+            href: href
+        page:
+          numberOfElements: 2
+          totalPages: 9
+          pageSize: 2
+          page: 3
+          totalElements: 7
         content:
           - payorRefs:
               - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -10029,6 +10273,7 @@ components:
               - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 invitationStatus: invitationStatus
                 remoteId: remoteId
+            country: country
             cellphoneNumber: cellphoneNumber
             address:
               country: country
@@ -10051,6 +10296,7 @@ components:
               facebookId: facebookId
               twitterId: twitterId
               linkedInId: linkedInId
+            displayName: displayName
             created: 2000-01-23T04:56:07.000Z
             lastOfacCheckTimestamp: lastOfacCheckTimestamp
             gracePeriodEndDate: 2000-01-23T00:00:00.000Z
@@ -10083,6 +10329,7 @@ components:
               - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 invitationStatus: invitationStatus
                 remoteId: remoteId
+            country: country
             cellphoneNumber: cellphoneNumber
             address:
               country: country
@@ -10105,6 +10352,7 @@ components:
               facebookId: facebookId
               twitterId: twitterId
               linkedInId: linkedInId
+            displayName: displayName
             created: 2000-01-23T04:56:07.000Z
             lastOfacCheckTimestamp: lastOfacCheckTimestamp
             gracePeriodEndDate: 2000-01-23T00:00:00.000Z
@@ -10134,10 +10382,10 @@ components:
         summary:
           $ref: '#/components/schemas/PayeeResponse_summary'
         page:
-          type: object
+          $ref: '#/components/schemas/PayeeResponse_page'
         links:
           items:
-            type: object
+            $ref: '#/components/schemas/PayeeResponse_links'
           type: array
         content:
           items:
@@ -10152,7 +10400,7 @@ components:
           format: uuid
           type: string
       required:
-        - payeeId
+        - payorId
       type: object
     CreatePayeesRequest:
       example:
@@ -10164,6 +10412,7 @@ components:
               - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 invitationStatus: invitationStatus
                 remoteId: remoteId
+            country: country
             cellphoneNumber: cellphoneNumber
             address:
               country: country
@@ -10186,12 +10435,15 @@ components:
               facebookId: facebookId
               twitterId: twitterId
               linkedInId: linkedInId
+            displayName: displayName
             created: 2000-01-23T04:56:07.000Z
             lastOfacCheckTimestamp: lastOfacCheckTimestamp
+            type: Individual
             gracePeriodEndDate: 2000-01-23T00:00:00.000Z
+            remoteId: remoteId
             paymentChannel:
               paymentChannelName: paymentChannelName
-              routingNo: routingNo
+              routingNumber: routingNumber
               accountName: accountName
               countryCode: countryCode
               iban: iban
@@ -10218,6 +10470,7 @@ components:
               - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 invitationStatus: invitationStatus
                 remoteId: remoteId
+            country: country
             cellphoneNumber: cellphoneNumber
             address:
               country: country
@@ -10240,12 +10493,15 @@ components:
               facebookId: facebookId
               twitterId: twitterId
               linkedInId: linkedInId
+            displayName: displayName
             created: 2000-01-23T04:56:07.000Z
             lastOfacCheckTimestamp: lastOfacCheckTimestamp
+            type: Individual
             gracePeriodEndDate: 2000-01-23T00:00:00.000Z
+            remoteId: remoteId
             paymentChannel:
               paymentChannelName: paymentChannelName
-              routingNo: routingNo
+              routingNumber: routingNumber
               accountName: accountName
               countryCode: countryCode
               iban: iban
@@ -10271,7 +10527,7 @@ components:
           type: string
         payees:
           items:
-            $ref: '#/components/schemas/Payee'
+            $ref: '#/components/schemas/CreatePayee'
           type: array
       required:
         - payees
