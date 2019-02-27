@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.18",
+    "version": "2.11.19",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -10809,8 +10809,8 @@
                     "otherNames": "otherNames",
                     "title": "title"
                   },
-                  "nationalIdentification": "nationalIdentification",
-                  "dateOfBirth": "2000-01-23T00:00:00.000Z"
+                  "nationalIdentification": "",
+                  "dateOfBirth": ""
                 },
                 "social": {
                   "facebookId": "facebookId",
@@ -10887,8 +10887,8 @@
                     "otherNames": "otherNames",
                     "title": "title"
                   },
-                  "nationalIdentification": "nationalIdentification",
-                  "dateOfBirth": "2000-01-23T00:00:00.000Z"
+                  "nationalIdentification": "",
+                  "dateOfBirth": ""
                 },
                 "social": {
                   "facebookId": "facebookId",
@@ -11432,8 +11432,8 @@
               "otherNames": "otherNames",
               "title": "title"
             },
-            "nationalIdentification": "nationalIdentification",
-            "dateOfBirth": "2000-01-23T00:00:00.000Z"
+            "nationalIdentification": "",
+            "dateOfBirth": ""
           },
           "social": {
             "facebookId": "facebookId",
@@ -11640,8 +11640,8 @@
                 "otherNames": "otherNames",
                 "title": "title"
               },
-              "nationalIdentification": "nationalIdentification",
-              "dateOfBirth": "2000-01-23T00:00:00.000Z"
+              "nationalIdentification": "",
+              "dateOfBirth": ""
             },
             "social": {
               "facebookId": "facebookId",
@@ -11715,21 +11715,39 @@
             "otherNames": "otherNames",
             "title": "title"
           },
-          "nationalIdentification": "nationalIdentification",
-          "dateOfBirth": "2000-01-23T00:00:00.000Z"
+          "nationalIdentification": "",
+          "dateOfBirth": ""
         },
         "properties": {
           "name": {
             "$ref": "#/components/schemas/Individual_name"
           },
           "nationalIdentification": {
-            "pattern": "^[\\d]{9}$",
-            "type": "string"
+            "oneOf": [
+              {
+                "pattern": "^[\\d]{9}$",
+                "type": "string"
+              },
+              {
+                "description": "If not authorized to view, value will be masked. Exmaple: XXXXX1234",
+                "pattern": "^XXXXX[\\d]{4}$",
+                "type": "string"
+              }
+            ]
           },
           "dateOfBirth": {
-            "description": "example - 1970-05-20",
-            "format": "date",
-            "type": "string"
+            "oneOf": [
+              {
+                "description": "example - 1970-05-20",
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "description": "If not authorized to view, value will be masked. Example: - XXXX-XX-XX",
+                "pattern": "^XXXX-XX-XX$",
+                "type": "string"
+              }
+            ]
           }
         },
         "required": [
@@ -12094,8 +12112,8 @@
               "otherNames": "otherNames",
               "title": "title"
             },
-            "nationalIdentification": "nationalIdentification",
-            "dateOfBirth": "2000-01-23T00:00:00.000Z"
+            "nationalIdentification": "",
+            "dateOfBirth": ""
           },
           "social": {
             "facebookId": "facebookId",
@@ -13262,8 +13280,8 @@
                   "otherNames": "otherNames",
                   "title": "title"
                 },
-                "nationalIdentification": "nationalIdentification",
-                "dateOfBirth": "2000-01-23T00:00:00.000Z"
+                "nationalIdentification": "",
+                "dateOfBirth": ""
               },
               "social": {
                 "facebookId": "facebookId",
@@ -13337,8 +13355,8 @@
                   "otherNames": "otherNames",
                   "title": "title"
                 },
-                "nationalIdentification": "nationalIdentification",
-                "dateOfBirth": "2000-01-23T00:00:00.000Z"
+                "nationalIdentification": "",
+                "dateOfBirth": ""
               },
               "social": {
                 "facebookId": "facebookId",
@@ -13454,8 +13472,8 @@
                   "otherNames": "otherNames",
                   "title": "title"
                 },
-                "nationalIdentification": "nationalIdentification",
-                "dateOfBirth": "2000-01-23T00:00:00.000Z"
+                "nationalIdentification": "",
+                "dateOfBirth": ""
               },
               "social": {
                 "facebookId": "facebookId",
@@ -13531,8 +13549,8 @@
                   "otherNames": "otherNames",
                   "title": "title"
                 },
-                "nationalIdentification": "nationalIdentification",
-                "dateOfBirth": "2000-01-23T00:00:00.000Z"
+                "nationalIdentification": "",
+                "dateOfBirth": ""
               },
               "social": {
                 "facebookId": "facebookId",
