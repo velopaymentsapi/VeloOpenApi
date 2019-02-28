@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.19
+  version: 2.11.20
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -802,7 +802,7 @@ paths:
     description: List Source Accounts
     get:
       description: List source accounts.
-      operationId: listSourceAccounts
+      operationId: getSourceAccounts
       parameters:
         - description: Physical Account Name
           in: query
@@ -813,7 +813,7 @@ paths:
         - description: The account owner Payor ID
           in: query
           name: payorId
-          required: true
+          required: false
           schema:
             format: uuid
             type: string
@@ -897,6 +897,8 @@ paths:
           description: List Source Account response
         '400':
           description: Invalid Request Parameters
+        '404':
+          description: Not Found
       summary: Get list of source accounts
       tags:
         - Funding Manager
@@ -959,10 +961,10 @@ paths:
             $ curl 'https://api.sandbox.velopayments.com/v1/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \
                 -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
     summary: Get Source Account
-  '/v1/sourceAccounts/{sourceAccountId}/fundingRequest':
+  '/v2/sourceAccounts/{sourceAccountId}/fundingRequest':
     post:
       description: 'Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).'
-      operationId: createAchFundingRequest
+      operationId: createFundingRequest
       parameters:
         - description: Source account id
           in: path
@@ -995,7 +997,7 @@ paths:
       x-code-samples:
         - lang: shell
           source: |
-            $ curl 'https://api.sandbox.velopayments.com/v1/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/fundingRequest' -i -X POST \
+            $ curl 'https://api.sandbox.velopayments.com/v2/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/fundingRequest' -i -X POST \
                 -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \
                 -H 'Content-Type: application/json' \
                 -d '{"amount":999990}'
@@ -8170,24 +8172,6 @@ components:
         - payments
         - payorId
       type: object
-    PayeeResponse_page:
-      example:
-        numberOfElements: 2
-        totalPages: 9
-        pageSize: 2
-        page: 3
-        totalElements: 7
-      properties:
-        numberOfElements:
-          type: integer
-        totalElements:
-          type: integer
-        totalPages:
-          type: integer
-        page:
-          type: integer
-        pageSize:
-          type: integer
     Company:
       example:
         taxId: taxId
@@ -8232,15 +8216,6 @@ components:
             $ref: '#/components/schemas/PaymentChannelRule'
           type: array
       type: object
-    PayeeResponse_links:
-      example:
-        rel: rel
-        href: href
-      properties:
-        rel:
-          type: string
-        href:
-          type: string
     Address:
       example:
         country: country
@@ -9571,6 +9546,24 @@ components:
             $ref: '#/components/schemas/SupportedCountry'
           type: array
       type: object
+    ListSourceAccountResponse_page:
+      example:
+        numberOfElements: 2
+        totalPages: 9
+        pageSize: 2
+        page: 3
+        totalElements: 7
+      properties:
+        numberOfElements:
+          type: integer
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
     PaymentChannel:
       example:
         paymentChannelName: paymentChannelName
@@ -10022,14 +10015,55 @@ components:
         - submittedDateTime
       type: object
     ListSourceAccountResponse:
-      allOf:
-        - $ref: '#/components/schemas/PagedResponse'
-        - properties:
-            content:
-              items:
-                type: object
-              type: array
-          type: object
+      description: List Source Accounts Response Object
+      example:
+        links:
+          - rel: rel
+            href: href
+          - rel: rel
+            href: href
+        page:
+          numberOfElements: 2
+          totalPages: 9
+          pageSize: 2
+          page: 3
+          totalElements: 7
+        content:
+          - physicalAccountName: physicalAccountName
+            fundingRef: fundingRef
+            balance: 0.8008281904610115
+            pooled: true
+            name: name
+            customerId: customerId
+            physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            currency: USD
+            railsId: railsId
+            balanceVisible: true
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - physicalAccountName: physicalAccountName
+            fundingRef: fundingRef
+            balance: 0.8008281904610115
+            pooled: true
+            name: name
+            customerId: customerId
+            physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            currency: USD
+            railsId: railsId
+            balanceVisible: true
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        page:
+          $ref: '#/components/schemas/ListSourceAccountResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/ListSourceAccountResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/SourceAccountResponse'
+          type: array
       type: object
     Language:
       description: Available Payee Language codes
@@ -10390,10 +10424,10 @@ components:
         summary:
           $ref: '#/components/schemas/PayeeResponse_summary'
         page:
-          $ref: '#/components/schemas/PayeeResponse_page'
+          $ref: '#/components/schemas/ListSourceAccountResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/PayeeResponse_links'
+            $ref: '#/components/schemas/ListSourceAccountResponse_links'
           type: array
         content:
           items:
@@ -10410,6 +10444,15 @@ components:
       required:
         - payorId
       type: object
+    ListSourceAccountResponse_links:
+      example:
+        rel: rel
+        href: href
+      properties:
+        rel:
+          type: string
+        href:
+          type: string
     CreatePayeesRequest:
       example:
         payees:
@@ -10584,9 +10627,10 @@ components:
         physicalAccountName: physicalAccountName
         fundingRef: fundingRef
         balance: 0.8008281904610115
-        pooled: pooled
+        pooled: true
         name: name
         customerId: customerId
+        physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         currency: USD
         railsId: railsId
         balanceVisible: true
@@ -10619,10 +10663,14 @@ components:
         name:
           type: string
         pooled:
-          type: string
+          type: boolean
         balanceVisible:
           type: boolean
         customerId:
+          nullable: true
+          type: string
+        physicalAccountId:
+          format: uuid
           type: string
       type: object
     OnboardedStatus:

@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.19",
+    "version": "2.11.20",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -907,7 +907,7 @@
       "description": "List Source Accounts",
       "get": {
         "description": "List source accounts.",
-        "operationId": "listSourceAccounts",
+        "operationId": "getSourceAccounts",
         "parameters": [
           {
             "description": "Physical Account Name",
@@ -922,7 +922,7 @@
             "description": "The account owner Payor ID",
             "in": "query",
             "name": "payorId",
-            "required": true,
+            "required": false,
             "schema": {
               "format": "uuid",
               "type": "string"
@@ -974,6 +974,9 @@
           },
           "400": {
             "description": "Invalid Request Parameters"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "summary": "Get list of source accounts",
@@ -1040,10 +1043,10 @@
       },
       "summary": "Get Source Account"
     },
-    "/v1/sourceAccounts/{sourceAccountId}/fundingRequest": {
+    "/v2/sourceAccounts/{sourceAccountId}/fundingRequest": {
       "post": {
         "description": "Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).",
-        "operationId": "createAchFundingRequest",
+        "operationId": "createFundingRequest",
         "parameters": [
           {
             "description": "Source account id",
@@ -1090,7 +1093,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/fundingRequest' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"amount\":999990}'\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/fundingRequest' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"amount\":999990}'\n"
           }
         ]
       }
@@ -10383,32 +10386,6 @@
         ],
         "type": "object"
       },
-      "PayeeResponse_page": {
-        "example": {
-          "numberOfElements": 2,
-          "totalPages": 9,
-          "pageSize": 2,
-          "page": 3,
-          "totalElements": 7
-        },
-        "properties": {
-          "numberOfElements": {
-            "type": "integer"
-          },
-          "totalElements": {
-            "type": "integer"
-          },
-          "totalPages": {
-            "type": "integer"
-          },
-          "page": {
-            "type": "integer"
-          },
-          "pageSize": {
-            "type": "integer"
-          }
-        }
-      },
       "Company": {
         "example": {
           "taxId": "taxId",
@@ -10469,20 +10446,6 @@
           }
         },
         "type": "object"
-      },
-      "PayeeResponse_links": {
-        "example": {
-          "rel": "rel",
-          "href": "href"
-        },
-        "properties": {
-          "rel": {
-            "type": "string"
-          },
-          "href": {
-            "type": "string"
-          }
-        }
       },
       "Address": {
         "example": {
@@ -12296,6 +12259,32 @@
         },
         "type": "object"
       },
+      "ListSourceAccountResponse_page": {
+        "example": {
+          "numberOfElements": 2,
+          "totalPages": 9,
+          "pageSize": 2,
+          "page": 3,
+          "totalElements": 7
+        },
+        "properties": {
+          "numberOfElements": {
+            "type": "integer"
+          },
+          "totalElements": {
+            "type": "integer"
+          },
+          "totalPages": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pageSize": {
+            "type": "integer"
+          }
+        }
+      },
       "PaymentChannel": {
         "example": {
           "paymentChannelName": "paymentChannelName",
@@ -12887,22 +12876,73 @@
         "type": "object"
       },
       "ListSourceAccountResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PagedResponse"
-          },
-          {
-            "properties": {
-              "content": {
-                "items": {
-                  "type": "object"
-                },
-                "type": "array"
-              }
+        "description": "List Source Accounts Response Object",
+        "example": {
+          "links": [
+            {
+              "rel": "rel",
+              "href": "href"
             },
-            "type": "object"
+            {
+              "rel": "rel",
+              "href": "href"
+            }
+          ],
+          "page": {
+            "numberOfElements": 2,
+            "totalPages": 9,
+            "pageSize": 2,
+            "page": 3,
+            "totalElements": 7
+          },
+          "content": [
+            {
+              "physicalAccountName": "physicalAccountName",
+              "fundingRef": "fundingRef",
+              "balance": 0.8008281904610115,
+              "pooled": true,
+              "name": "name",
+              "customerId": "customerId",
+              "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "currency": "USD",
+              "railsId": "railsId",
+              "balanceVisible": true,
+              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+            },
+            {
+              "physicalAccountName": "physicalAccountName",
+              "fundingRef": "fundingRef",
+              "balance": 0.8008281904610115,
+              "pooled": true,
+              "name": "name",
+              "customerId": "customerId",
+              "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "currency": "USD",
+              "railsId": "railsId",
+              "balanceVisible": true,
+              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+            }
+          ]
+        },
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/ListSourceAccountResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/ListSourceAccountResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/SourceAccountResponse"
+            },
+            "type": "array"
           }
-        ],
+        },
         "type": "object"
       },
       "Language": {
@@ -13405,11 +13445,11 @@
             "$ref": "#/components/schemas/PayeeResponse_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/ListSourceAccountResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/ListSourceAccountResponse_links"
             },
             "type": "array"
           },
@@ -13436,6 +13476,20 @@
           "payorId"
         ],
         "type": "object"
+      },
+      "ListSourceAccountResponse_links": {
+        "example": {
+          "rel": "rel",
+          "href": "href"
+        },
+        "properties": {
+          "rel": {
+            "type": "string"
+          },
+          "href": {
+            "type": "string"
+          }
+        }
       },
       "CreatePayeesRequest": {
         "example": {
@@ -13679,9 +13733,10 @@
           "physicalAccountName": "physicalAccountName",
           "fundingRef": "fundingRef",
           "balance": 0.8008281904610115,
-          "pooled": "pooled",
+          "pooled": true,
           "name": "name",
           "customerId": "customerId",
+          "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "currency": "USD",
           "railsId": "railsId",
           "balanceVisible": true,
@@ -13724,12 +13779,17 @@
             "type": "string"
           },
           "pooled": {
-            "type": "string"
+            "type": "boolean"
           },
           "balanceVisible": {
             "type": "boolean"
           },
           "customerId": {
+            "nullable": true,
+            "type": "string"
+          },
+          "physicalAccountId": {
+            "format": "uuid",
             "type": "string"
           }
         },
