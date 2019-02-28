@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.20",
+    "version": "2.11.21",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -1107,7 +1107,7 @@
             "description": "The account owner Payor ID",
             "in": "query",
             "name": "payorId",
-            "required": true,
+            "required": false,
             "schema": {
               "format": "uuid",
               "type": "string"
@@ -1154,6 +1154,9 @@
               }
             },
             "description": "Get Fundings normal response"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "404": {
             "description": "Payor Id Not Found"
@@ -1483,17 +1486,17 @@
             "description": "The UUID of the payee.",
             "in": "query",
             "name": "payeeId",
-            "required": true,
+            "required": false,
             "schema": {
               "format": "uuid",
               "type": "string"
             }
           },
           {
-            "description": "The account owner Payor ID",
+            "description": "The account owner Payor Id. Required for external users.",
             "in": "query",
             "name": "payorId",
-            "required": true,
+            "required": false,
             "schema": {
               "format": "uuid",
               "type": "string"
@@ -1754,10 +1757,10 @@
         "operationId": "getPayoutStats",
         "parameters": [
           {
-            "description": "The account owner Payor ID",
+            "description": "The account owner Payor ID. Required for external users.",
             "in": "query",
             "name": "payorId",
-            "required": true,
+            "required": false,
             "schema": {
               "format": "uuid",
               "type": "string"
@@ -1774,6 +1777,12 @@
               }
             },
             "description": "List Source Account response"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "summary": "Get Payout Statistics",
@@ -1788,7 +1797,7 @@
         ]
       }
     },
-    "/v3/paymentaudit/transactions": {
+    "/v4/paymentaudit/transactions": {
       "get": {
         "description": "Download a CSV file containing payments in a date range. Uses Transfer-Encoding - chunked to stream to the client. Date range is inclusive of both the start and end dates.",
         "operationId": "exportTransactionsCSV",
@@ -1797,7 +1806,7 @@
             "description": "The account owner Payor ID",
             "in": "query",
             "name": "payorId",
-            "required": true,
+            "required": false,
             "schema": {
               "format": "uuid",
               "type": "string"
@@ -1834,6 +1843,12 @@
               }
             },
             "description": "Export Transactions response"
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "invalid Request"
           }
         },
         "summary": "Export Transactions",
@@ -1843,7 +1858,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/paymentaudit/transactions?startDate=2018-05-01&endDate=2018-05-31' -i -X GET \\\n    -H 'Authorization: Bearer a8369ecc-0399-42c0-84d3-562999ecd021'\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/transactions?startDate=2018-05-01&endDate=2018-05-31' -i -X GET \\\n    -H 'Authorization: Bearer 76748e09-775d-4e2d-b889-f0555901d8eb'\n"
           }
         ]
       }
@@ -10512,53 +10527,6 @@
         ],
         "type": "object"
       },
-      "PaymentsSummary": {
-        "properties": {
-          "payoutId": {
-            "format": "uuid",
-            "type": "string"
-          },
-          "payorId": {
-            "format": "uuid",
-            "type": "string"
-          },
-          "status": {
-            "$ref": "#/components/schemas/PayoutStatus"
-          },
-          "submittedDateTime": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "instructedDateTime": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "withdrawnDateTime": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "totalPayments": {
-            "type": "integer"
-          },
-          "confirmedPayments": {
-            "type": "integer"
-          },
-          "releasedPayments": {
-            "type": "integer"
-          },
-          "incompletePayments": {
-            "type": "integer"
-          },
-          "failedPayments": {
-            "type": "integer"
-          }
-        },
-        "required": [
-          "payoutStatus",
-          "submittedDateTime"
-        ],
-        "type": "object"
-      },
       "InvitationStatusResponse": {
         "example": {
           "payeeInvitationStatuses": [
@@ -11089,6 +11057,16 @@
         "type": "string"
       },
       "FxSummary": {
+        "example": {
+          "invertedRate": 2.3021358869347655,
+          "rate": 5.637376656633329,
+          "totalPaymentAmount": 9,
+          "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "totalCost": 7,
+          "fundingStatus": "FUNDED",
+          "creationDateTime": "2000-01-23T04:56:07.000Z",
+          "status": "UNQUOTED"
+        },
         "properties": {
           "quoteId": {
             "format": "uuid",
@@ -11147,6 +11125,32 @@
           "totalPaymentAmount"
         ],
         "type": "object"
+      },
+      "GetPaymentsForPayoutResponse_page": {
+        "example": {
+          "numberOfElements": 2,
+          "totalPages": 9,
+          "pageSize": 2,
+          "page": 3,
+          "totalElements": 7
+        },
+        "properties": {
+          "numberOfElements": {
+            "type": "integer"
+          },
+          "totalElements": {
+            "type": "integer"
+          },
+          "totalPages": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "pageSize": {
+            "type": "integer"
+          }
+        }
       },
       "QuoteResponse": {
         "example": {
@@ -11341,25 +11345,171 @@
         "type": "object"
       },
       "GetPaymentsForPayoutResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PagedResponse"
+        "description": "List Payments for payout",
+        "example": {
+          "summary": {
+            "totalOnboardedCount": 5,
+            "totalRegisteredCount": 1,
+            "totalPayeesCount": 0,
+            "totalInvitedCount": 6,
+            "totalOfacFailedCount": 5
           },
-          {
-            "properties": {
-              "summary": {
-                "$ref": "#/components/schemas/PaymentsSummary"
-              },
-              "content": {
-                "items": {
-                  "$ref": "#/components/schemas/PaymentResponse"
-                },
-                "type": "array"
-              }
+          "links": [
+            {
+              "rel": "rel",
+              "href": "href"
             },
-            "type": "object"
+            {
+              "rel": "rel",
+              "href": "href"
+            }
+          ],
+          "page": {
+            "numberOfElements": 2,
+            "totalPages": 9,
+            "pageSize": 2,
+            "page": 3,
+            "totalElements": 7
+          },
+          "content": [
+            {
+              "traceNumber": "traceNumber",
+              "accountName": "accountName",
+              "paymentMemo": "paymentMemo",
+              "paymentAmount": 6,
+              "fundingStatus": "FUNDED",
+              "paymentChannelName": "paymentChannelName",
+              "filenameReference": "filenameReference",
+              "rate": 1.4658129805029452,
+              "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "countryCode": "countryCode",
+              "returnReason": "returnReason",
+              "submittedDateTime": "2000-01-23T04:56:07.000Z",
+              "sourceAmount": 0,
+              "railsId": "railsId",
+              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "events": [
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z",
+                  "routingNumber": "routingNumber",
+                  "accountName": "accountName",
+                  "iban": "iban",
+                  "sourceAmount": 5.637376656633329,
+                  "eventType": "PAYOUT_SUBMITTED",
+                  "accountNumber": "accountNumber",
+                  "paymentAmount": 2.3021358869347655
+                },
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z",
+                  "routingNumber": "routingNumber",
+                  "accountName": "accountName",
+                  "iban": "iban",
+                  "sourceAmount": 5.637376656633329,
+                  "eventType": "PAYOUT_SUBMITTED",
+                  "accountNumber": "accountNumber",
+                  "paymentAmount": 2.3021358869347655
+                }
+              ],
+              "payorName": "payorName",
+              "sourceAccountName": "sourceAccountName",
+              "paymentChannelId": "paymentChannelId",
+              "invertedRate": 5.962133916683182,
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "individualIdentificationNumber": "individualIdentificationNumber",
+              "accountNumber": "accountNumber",
+              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "remoteId": "remoteId",
+              "routingNumber": "routingNumber",
+              "returnCost": 7,
+              "iban": "iban",
+              "payorPaymentId": "payorPaymentId",
+              "status": "ACCEPTED"
+            },
+            {
+              "traceNumber": "traceNumber",
+              "accountName": "accountName",
+              "paymentMemo": "paymentMemo",
+              "paymentAmount": 6,
+              "fundingStatus": "FUNDED",
+              "paymentChannelName": "paymentChannelName",
+              "filenameReference": "filenameReference",
+              "rate": 1.4658129805029452,
+              "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "countryCode": "countryCode",
+              "returnReason": "returnReason",
+              "submittedDateTime": "2000-01-23T04:56:07.000Z",
+              "sourceAmount": 0,
+              "railsId": "railsId",
+              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "events": [
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z",
+                  "routingNumber": "routingNumber",
+                  "accountName": "accountName",
+                  "iban": "iban",
+                  "sourceAmount": 5.637376656633329,
+                  "eventType": "PAYOUT_SUBMITTED",
+                  "accountNumber": "accountNumber",
+                  "paymentAmount": 2.3021358869347655
+                },
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z",
+                  "routingNumber": "routingNumber",
+                  "accountName": "accountName",
+                  "iban": "iban",
+                  "sourceAmount": 5.637376656633329,
+                  "eventType": "PAYOUT_SUBMITTED",
+                  "accountNumber": "accountNumber",
+                  "paymentAmount": 2.3021358869347655
+                }
+              ],
+              "payorName": "payorName",
+              "sourceAccountName": "sourceAccountName",
+              "paymentChannelId": "paymentChannelId",
+              "invertedRate": 5.962133916683182,
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "individualIdentificationNumber": "individualIdentificationNumber",
+              "accountNumber": "accountNumber",
+              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "remoteId": "remoteId",
+              "routingNumber": "routingNumber",
+              "returnCost": 7,
+              "iban": "iban",
+              "payorPaymentId": "payorPaymentId",
+              "status": "ACCEPTED"
+            }
+          ]
+        },
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_summary"
+          },
+          "page": {
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/PaymentResponse"
+            },
+            "type": "array"
           }
-        ],
+        },
         "type": "object"
       },
       "CreatePayee": {
@@ -11549,6 +11699,10 @@
         "type": "object"
       },
       "SourceAccountSummary": {
+        "example": {
+          "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "totalCost": 5.962133916683182
+        },
         "properties": {
           "sourceAccountId": {
             "format": "uuid",
@@ -11563,11 +11717,36 @@
           }
         },
         "required": [
-          "currency",
           "sourceAccountId",
           "totalCost"
         ],
         "type": "object"
+      },
+      "GetPaymentsForPayoutResponse_summary": {
+        "example": {
+          "totalOnboardedCount": 5,
+          "totalRegisteredCount": 1,
+          "totalPayeesCount": 0,
+          "totalInvitedCount": 6,
+          "totalOfacFailedCount": 5
+        },
+        "properties": {
+          "totalPayeesCount": {
+            "type": "integer"
+          },
+          "totalInvitedCount": {
+            "type": "integer"
+          },
+          "totalRegisteredCount": {
+            "type": "integer"
+          },
+          "totalOnboardedCount": {
+            "type": "integer"
+          },
+          "totalOfacFailedCount": {
+            "type": "integer"
+          }
+        }
       },
       "FailedSubmission": {
         "example": {
@@ -12259,32 +12438,6 @@
         },
         "type": "object"
       },
-      "ListSourceAccountResponse_page": {
-        "example": {
-          "numberOfElements": 2,
-          "totalPages": 9,
-          "pageSize": 2,
-          "page": 3,
-          "totalElements": 7
-        },
-        "properties": {
-          "numberOfElements": {
-            "type": "integer"
-          },
-          "totalElements": {
-            "type": "integer"
-          },
-          "totalPages": {
-            "type": "integer"
-          },
-          "page": {
-            "type": "integer"
-          },
-          "pageSize": {
-            "type": "integer"
-          }
-        }
-      },
       "PaymentChannel": {
         "example": {
           "paymentChannelName": "paymentChannelName",
@@ -12554,6 +12707,7 @@
           "rate": 1.4658129805029452,
           "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "countryCode": "countryCode",
+          "returnReason": "returnReason",
           "submittedDateTime": "2000-01-23T04:56:07.000Z",
           "sourceAmount": 0,
           "railsId": "railsId",
@@ -12561,10 +12715,10 @@
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "events": [
             {
+              "principal": "principal",
               "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "eventDateTime": "2000-01-23T04:56:07.000Z",
               "routingNumber": "routingNumber",
-              "principle": "principle",
               "accountName": "accountName",
               "iban": "iban",
               "sourceAmount": 5.637376656633329,
@@ -12573,10 +12727,10 @@
               "paymentAmount": 2.3021358869347655
             },
             {
+              "principal": "principal",
               "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "eventDateTime": "2000-01-23T04:56:07.000Z",
               "routingNumber": "routingNumber",
-              "principle": "principle",
               "accountName": "accountName",
               "iban": "iban",
               "sourceAmount": 5.637376656633329,
@@ -12593,8 +12747,9 @@
           "individualIdentificationNumber": "individualIdentificationNumber",
           "accountNumber": "accountNumber",
           "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "remoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "remoteId": "remoteId",
           "routingNumber": "routingNumber",
+          "returnCost": 7,
           "iban": "iban",
           "payorPaymentId": "payorPaymentId",
           "status": "ACCEPTED"
@@ -12627,7 +12782,6 @@
             "type": "string"
           },
           "remoteId": {
-            "format": "uuid",
             "type": "string"
           },
           "sourceAmount": {
@@ -12721,6 +12875,12 @@
               "$ref": "#/components/schemas/PaymentEventResponse"
             },
             "type": "array"
+          },
+          "returnCost": {
+            "type": "integer"
+          },
+          "returnReason": {
+            "type": "string"
           }
         },
         "required": [
@@ -12820,6 +12980,49 @@
         "type": "object"
       },
       "PayoutSummaryAudit": {
+        "example": {
+          "dateTime": "2000-01-23T04:56:07.000Z",
+          "sourceAccountSummary": [
+            {
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalCost": 5.962133916683182
+            },
+            {
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalCost": 5.962133916683182
+            }
+          ],
+          "submittedDateTime": "submittedDateTime",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "totalIncompletePayments": 6,
+          "fxSummaries": [
+            {
+              "invertedRate": 2.3021358869347655,
+              "rate": 5.637376656633329,
+              "totalPaymentAmount": 9,
+              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalCost": 7,
+              "fundingStatus": "FUNDED",
+              "creationDateTime": "2000-01-23T04:56:07.000Z",
+              "status": "UNQUOTED"
+            },
+            {
+              "invertedRate": 2.3021358869347655,
+              "rate": 5.637376656633329,
+              "totalPaymentAmount": 9,
+              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalCost": 7,
+              "fundingStatus": "FUNDED",
+              "creationDateTime": "2000-01-23T04:56:07.000Z",
+              "status": "UNQUOTED"
+            }
+          ],
+          "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "totalPayments": 0,
+          "instructedDateTime": "instructedDateTime",
+          "totalFailedPayments": 1,
+          "payoutMemo": "payoutMemo"
+        },
         "properties": {
           "payoutId": {
             "format": "uuid",
@@ -12868,7 +13071,6 @@
           }
         },
         "required": [
-          "payorId",
           "payoutId",
           "status",
           "submittedDateTime"
@@ -12928,11 +13130,11 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/ListSourceAccountResponse_page"
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/ListSourceAccountResponse_links"
+              "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_links"
             },
             "type": "array"
           },
@@ -13022,20 +13224,186 @@
         }
       },
       "ListPaymentsResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PagedResponse"
+        "description": "List Payments Response Object",
+        "example": {
+          "summary": {
+            "totalOnboardedCount": 5,
+            "totalRegisteredCount": 1,
+            "totalPayeesCount": 0,
+            "totalInvitedCount": 6,
+            "totalOfacFailedCount": 5
           },
-          {
-            "properties": {
-              "content": {
-                "$ref": "#/components/schemas/PaymentResponse"
-              }
+          "links": [
+            {
+              "rel": "rel",
+              "href": "href"
             },
-            "type": "object"
+            {
+              "rel": "rel",
+              "href": "href"
+            }
+          ],
+          "page": {
+            "numberOfElements": 2,
+            "totalPages": 9,
+            "pageSize": 2,
+            "page": 3,
+            "totalElements": 7
+          },
+          "content": [
+            {
+              "traceNumber": "traceNumber",
+              "accountName": "accountName",
+              "paymentMemo": "paymentMemo",
+              "paymentAmount": 6,
+              "fundingStatus": "FUNDED",
+              "paymentChannelName": "paymentChannelName",
+              "filenameReference": "filenameReference",
+              "rate": 1.4658129805029452,
+              "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "countryCode": "countryCode",
+              "returnReason": "returnReason",
+              "submittedDateTime": "2000-01-23T04:56:07.000Z",
+              "sourceAmount": 0,
+              "railsId": "railsId",
+              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "events": [
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z",
+                  "routingNumber": "routingNumber",
+                  "accountName": "accountName",
+                  "iban": "iban",
+                  "sourceAmount": 5.637376656633329,
+                  "eventType": "PAYOUT_SUBMITTED",
+                  "accountNumber": "accountNumber",
+                  "paymentAmount": 2.3021358869347655
+                },
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z",
+                  "routingNumber": "routingNumber",
+                  "accountName": "accountName",
+                  "iban": "iban",
+                  "sourceAmount": 5.637376656633329,
+                  "eventType": "PAYOUT_SUBMITTED",
+                  "accountNumber": "accountNumber",
+                  "paymentAmount": 2.3021358869347655
+                }
+              ],
+              "payorName": "payorName",
+              "sourceAccountName": "sourceAccountName",
+              "paymentChannelId": "paymentChannelId",
+              "invertedRate": 5.962133916683182,
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "individualIdentificationNumber": "individualIdentificationNumber",
+              "accountNumber": "accountNumber",
+              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "remoteId": "remoteId",
+              "routingNumber": "routingNumber",
+              "returnCost": 7,
+              "iban": "iban",
+              "payorPaymentId": "payorPaymentId",
+              "status": "ACCEPTED"
+            },
+            {
+              "traceNumber": "traceNumber",
+              "accountName": "accountName",
+              "paymentMemo": "paymentMemo",
+              "paymentAmount": 6,
+              "fundingStatus": "FUNDED",
+              "paymentChannelName": "paymentChannelName",
+              "filenameReference": "filenameReference",
+              "rate": 1.4658129805029452,
+              "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "countryCode": "countryCode",
+              "returnReason": "returnReason",
+              "submittedDateTime": "2000-01-23T04:56:07.000Z",
+              "sourceAmount": 0,
+              "railsId": "railsId",
+              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "events": [
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z",
+                  "routingNumber": "routingNumber",
+                  "accountName": "accountName",
+                  "iban": "iban",
+                  "sourceAmount": 5.637376656633329,
+                  "eventType": "PAYOUT_SUBMITTED",
+                  "accountNumber": "accountNumber",
+                  "paymentAmount": 2.3021358869347655
+                },
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z",
+                  "routingNumber": "routingNumber",
+                  "accountName": "accountName",
+                  "iban": "iban",
+                  "sourceAmount": 5.637376656633329,
+                  "eventType": "PAYOUT_SUBMITTED",
+                  "accountNumber": "accountNumber",
+                  "paymentAmount": 2.3021358869347655
+                }
+              ],
+              "payorName": "payorName",
+              "sourceAccountName": "sourceAccountName",
+              "paymentChannelId": "paymentChannelId",
+              "invertedRate": 5.962133916683182,
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "individualIdentificationNumber": "individualIdentificationNumber",
+              "accountNumber": "accountNumber",
+              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "remoteId": "remoteId",
+              "routingNumber": "routingNumber",
+              "returnCost": 7,
+              "iban": "iban",
+              "payorPaymentId": "payorPaymentId",
+              "status": "ACCEPTED"
+            }
+          ]
+        },
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_summary"
+          },
+          "page": {
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/PaymentResponse"
+            },
+            "type": "array"
           }
-        ],
+        },
         "type": "object"
+      },
+      "GetPaymentsForPayoutResponse_links": {
+        "example": {
+          "rel": "rel",
+          "href": "href"
+        },
+        "properties": {
+          "rel": {
+            "type": "string"
+          },
+          "href": {
+            "type": "string"
+          }
+        }
       },
       "PagedResponse_page": {
         "properties": {
@@ -13116,22 +13484,141 @@
         "type": "object"
       },
       "GetPayoutsResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PagedResponse"
+        "description": "List Payouts Response",
+        "example": {
+          "summary": {
+            "totalOnboardedCount": 5,
+            "totalRegisteredCount": 1,
+            "totalPayeesCount": 0,
+            "totalInvitedCount": 6,
+            "totalOfacFailedCount": 5
           },
-          {
-            "properties": {
-              "content": {
-                "items": {
-                  "$ref": "#/components/schemas/PayoutSummaryAudit"
-                },
-                "type": "array"
-              }
+          "links": [
+            {
+              "rel": "rel",
+              "href": "href"
             },
-            "type": "object"
+            {
+              "rel": "rel",
+              "href": "href"
+            }
+          ],
+          "page": {
+            "numberOfElements": 2,
+            "totalPages": 9,
+            "pageSize": 2,
+            "page": 3,
+            "totalElements": 7
+          },
+          "content": [
+            {
+              "dateTime": "2000-01-23T04:56:07.000Z",
+              "sourceAccountSummary": [
+                {
+                  "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 5.962133916683182
+                },
+                {
+                  "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 5.962133916683182
+                }
+              ],
+              "submittedDateTime": "submittedDateTime",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalIncompletePayments": 6,
+              "fxSummaries": [
+                {
+                  "invertedRate": 2.3021358869347655,
+                  "rate": 5.637376656633329,
+                  "totalPaymentAmount": 9,
+                  "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 7,
+                  "fundingStatus": "FUNDED",
+                  "creationDateTime": "2000-01-23T04:56:07.000Z",
+                  "status": "UNQUOTED"
+                },
+                {
+                  "invertedRate": 2.3021358869347655,
+                  "rate": 5.637376656633329,
+                  "totalPaymentAmount": 9,
+                  "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 7,
+                  "fundingStatus": "FUNDED",
+                  "creationDateTime": "2000-01-23T04:56:07.000Z",
+                  "status": "UNQUOTED"
+                }
+              ],
+              "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalPayments": 0,
+              "instructedDateTime": "instructedDateTime",
+              "totalFailedPayments": 1,
+              "payoutMemo": "payoutMemo"
+            },
+            {
+              "dateTime": "2000-01-23T04:56:07.000Z",
+              "sourceAccountSummary": [
+                {
+                  "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 5.962133916683182
+                },
+                {
+                  "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 5.962133916683182
+                }
+              ],
+              "submittedDateTime": "submittedDateTime",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalIncompletePayments": 6,
+              "fxSummaries": [
+                {
+                  "invertedRate": 2.3021358869347655,
+                  "rate": 5.637376656633329,
+                  "totalPaymentAmount": 9,
+                  "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 7,
+                  "fundingStatus": "FUNDED",
+                  "creationDateTime": "2000-01-23T04:56:07.000Z",
+                  "status": "UNQUOTED"
+                },
+                {
+                  "invertedRate": 2.3021358869347655,
+                  "rate": 5.637376656633329,
+                  "totalPaymentAmount": 9,
+                  "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 7,
+                  "fundingStatus": "FUNDED",
+                  "creationDateTime": "2000-01-23T04:56:07.000Z",
+                  "status": "UNQUOTED"
+                }
+              ],
+              "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalPayments": 0,
+              "instructedDateTime": "instructedDateTime",
+              "totalFailedPayments": 1,
+              "payoutMemo": "payoutMemo"
+            }
+          ]
+        },
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_summary"
+          },
+          "page": {
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/PayoutSummaryAudit"
+            },
+            "type": "array"
           }
-        ],
+        },
         "type": "object"
       },
       "PayeeInvitationStatus": {
@@ -13193,32 +13680,6 @@
           "totalPayoutCost"
         ],
         "type": "object"
-      },
-      "PayeeResponse_summary": {
-        "example": {
-          "totalOnboardedCount": 5,
-          "totalRegisteredCount": 1,
-          "totalPayeesCount": 0,
-          "totalInvitedCount": 6,
-          "totalOfacFailedCount": 5
-        },
-        "properties": {
-          "totalPayeesCount": {
-            "type": "integer"
-          },
-          "totalInvitedCount": {
-            "type": "integer"
-          },
-          "totalRegisteredCount": {
-            "type": "integer"
-          },
-          "totalOnboardedCount": {
-            "type": "integer"
-          },
-          "totalOfacFailedCount": {
-            "type": "integer"
-          }
-        }
       },
       "PayorBrandingResponse": {
         "example": {
@@ -13442,14 +13903,14 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/PayeeResponse_summary"
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/ListSourceAccountResponse_page"
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/ListSourceAccountResponse_links"
+              "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_links"
             },
             "type": "array"
           },
@@ -13476,20 +13937,6 @@
           "payorId"
         ],
         "type": "object"
-      },
-      "ListSourceAccountResponse_links": {
-        "example": {
-          "rel": "rel",
-          "href": "href"
-        },
-        "properties": {
-          "rel": {
-            "type": "string"
-          },
-          "href": {
-            "type": "string"
-          }
-        }
       },
       "CreatePayeesRequest": {
         "example": {
@@ -13806,10 +14253,10 @@
       },
       "PaymentEventResponse": {
         "example": {
+          "principal": "principal",
           "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "eventDateTime": "2000-01-23T04:56:07.000Z",
           "routingNumber": "routingNumber",
-          "principle": "principle",
           "accountName": "accountName",
           "iban": "iban",
           "sourceAmount": 5.637376656633329,
@@ -13894,7 +14341,7 @@
           "accountName": {
             "type": "string"
           },
-          "principle": {
+          "principal": {
             "type": "string"
           }
         },
