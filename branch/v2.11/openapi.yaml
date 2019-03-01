@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.21
+  version: 2.11.22
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -1567,7 +1567,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreatePayoutRequest'
-          multipart/formdata:
+          multipart/form-data:
             schema:
               properties:
                 payorId:
@@ -1590,6 +1590,12 @@ paths:
               schema:
                 format: uri
                 type: string
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '503':
+          description: Service Unavailable
       summary: Submit Payout
       tags:
         - Payout Service
@@ -1613,6 +1619,8 @@ paths:
       responses:
         '202':
           description: HTTP 202 Accepted
+        '404':
+          description: Not Found
       summary: Withdraw Payout
       tags:
         - Payout Service
@@ -1697,6 +1705,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/PayoutSummaryResponse'
           description: Details of Payout
+        '404':
+          description: Not Found
       summary: Get Payout Summary
       tags:
         - Payout Service
@@ -1718,6 +1728,10 @@ paths:
       responses:
         '202':
           description: HTTP 202 Accepted
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
       summary: Instruct Payout
       tags:
         - Payout Service
@@ -1742,7 +1756,7 @@ paths:
         '200':
           content:
             application/json:
-              example: |-
+              example: |
                 HTTP/1.1 200 OK
                 Content-Type: application/json;charset=UTF-8
                 Content-Length: 354
@@ -1763,6 +1777,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/QuoteResponse'
           description: Quote for payout
+        '404':
+          description: Not Found
+        '409':
+          description: Conflict
       summary: Create a quote for the payout
       tags:
         - Payout Service
@@ -1870,8 +1888,8 @@ paths:
                   } ]
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200'
-          description: HTTP Okay
+                $ref: '#/components/schemas/PaymentChannelRulesResponse'
+          description: List Payment Channel Country Rules
       summary: List Payment Channel Country Rules
       tags:
         - Countries
@@ -1884,13 +1902,6 @@ paths:
     get:
       description: List the supported countries.
       operationId: listSupportedCountries
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PayorCreateApiKeyRequest'
-        description: Details of application API key to create
-        required: true
       responses:
         '200':
           content:
@@ -1919,8 +1930,8 @@ paths:
                   } ]
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
-          description: HTTP Okay
+                $ref: '#/components/schemas/SupportedCountriesResponse'
+          description: List of Supported Countries
       summary: List Supported Countries
       tags:
         - Countries
@@ -1991,8 +2002,8 @@ paths:
                   } ]
                 }
               schema:
-                $ref: '#/components/schemas/inline_response_200_2'
-          description: HTTP Okay
+                $ref: '#/components/schemas/SupportedCurrencyResponse'
+          description: List Supported Currencies
       summary: List Supported Currencies
       tags:
         - Currencies
@@ -8364,15 +8375,17 @@ components:
       type: object
     QuoteFxSummary:
       example:
-        invertedRate: 6.027456183070403
+        invertedRate: 5.637376656633329
         creationTime: 2000-01-23T04:56:07.000Z
-        rate: 0.8008281904610115
+        rate: 5.962133916683182
         expiryTime: 2000-01-23T04:56:07.000Z
         sourceCurrency: sourceCurrency
-        totalPaymentAmount: 5
+        totalPaymentAmount: 7
         paymentCurrency: paymentCurrency
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalSourceAmount: 1
+        totalSourceAmount: 2
+        fundingStatus: fundingStatus
+        status: status
       properties:
         rate:
           format: decimal
@@ -8401,16 +8414,18 @@ components:
           maxLength: 3
           minLength: 3
           type: string
+        fundingStatus:
+          type: string
+        status:
+          type: string
       required:
-        - creationDateTime
-        - fundingStatus
+        - creationTime
         - paymentCurrency
         - quoteId
         - rate
         - sourceCurrency
-        - status
-        - totalCost
         - totalPaymentAmount
+        - totalSourceAmount
       type: object
     QueryBatchResponse:
       example:
@@ -8745,24 +8760,28 @@ components:
     QuoteResponse:
       example:
         fxSummaries:
-          - invertedRate: 6.027456183070403
+          - invertedRate: 5.637376656633329
             creationTime: 2000-01-23T04:56:07.000Z
-            rate: 0.8008281904610115
+            rate: 5.962133916683182
             expiryTime: 2000-01-23T04:56:07.000Z
             sourceCurrency: sourceCurrency
-            totalPaymentAmount: 5
+            totalPaymentAmount: 7
             paymentCurrency: paymentCurrency
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalSourceAmount: 1
-          - invertedRate: 6.027456183070403
+            totalSourceAmount: 2
+            fundingStatus: fundingStatus
+            status: status
+          - invertedRate: 5.637376656633329
             creationTime: 2000-01-23T04:56:07.000Z
-            rate: 0.8008281904610115
+            rate: 5.962133916683182
             expiryTime: 2000-01-23T04:56:07.000Z
             sourceCurrency: sourceCurrency
-            totalPaymentAmount: 5
+            totalPaymentAmount: 7
             paymentCurrency: paymentCurrency
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalSourceAmount: 1
+            totalSourceAmount: 2
+            fundingStatus: fundingStatus
+            status: status
       properties:
         fxSummaries:
           items:
@@ -8824,9 +8843,9 @@ components:
       example:
         currencyType: currencyType
         reason: UNKNOWN_REMOTE_ID
-        amount: 9
+        amount: 3
         payorPaymentId: payorPaymentId
-        lineNumber: 3
+        lineNumber: 2
         message: message
         remoteId: remoteId
         sourceAccountName: sourceAccountName
@@ -8865,8 +8884,6 @@ components:
       required:
         - amount
         - currencyType
-        - lineNumber
-        - message
         - payorPaymentId
         - reason
         - remoteId
@@ -9307,49 +9324,53 @@ components:
         rejectedPayments:
           - currencyType: currencyType
             reason: UNKNOWN_REMOTE_ID
-            amount: 9
+            amount: 3
             payorPaymentId: payorPaymentId
-            lineNumber: 3
+            lineNumber: 2
             message: message
             remoteId: remoteId
             sourceAccountName: sourceAccountName
           - currencyType: currencyType
             reason: UNKNOWN_REMOTE_ID
-            amount: 9
+            amount: 3
             payorPaymentId: payorPaymentId
-            lineNumber: 3
+            lineNumber: 2
             message: message
             remoteId: remoteId
             sourceAccountName: sourceAccountName
         paymentsRejected: 1
         paymentsSubmitted: 0
         fxSummaries:
-          - rate: 5.962133916683182
+          - invertedRate: 5.637376656633329
+            creationTime: 2000-01-23T04:56:07.000Z
+            rate: 5.962133916683182
+            expiryTime: 2000-01-23T04:56:07.000Z
             sourceCurrency: sourceCurrency
-            totalPaymentAmount: 2.3021358869347655
+            totalPaymentAmount: 7
             paymentCurrency: paymentCurrency
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 5.637376656633329
-            fundingStatus: FUNDED
-            creationDateTime: 2000-01-23T04:56:07.000Z
-            status: QUOTED
-          - rate: 5.962133916683182
+            totalSourceAmount: 2
+            fundingStatus: fundingStatus
+            status: status
+          - invertedRate: 5.637376656633329
+            creationTime: 2000-01-23T04:56:07.000Z
+            rate: 5.962133916683182
+            expiryTime: 2000-01-23T04:56:07.000Z
             sourceCurrency: sourceCurrency
-            totalPaymentAmount: 2.3021358869347655
+            totalPaymentAmount: 7
             paymentCurrency: paymentCurrency
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 5.637376656633329
-            fundingStatus: FUNDED
-            creationDateTime: 2000-01-23T04:56:07.000Z
-            status: QUOTED
+            totalSourceAmount: 2
+            fundingStatus: fundingStatus
+            status: status
         accounts:
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             currency: currency
-            totalPayoutCost: 7
+            totalPayoutCost: 9
             sourceAccountName: sourceAccountName
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             currency: currency
-            totalPayoutCost: 7
+            totalPayoutCost: 9
             sourceAccountName: sourceAccountName
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         status: status
@@ -9368,7 +9389,7 @@ components:
           type: integer
         fxSummaries:
           items:
-            $ref: '#/components/schemas/FxSummaries'
+            $ref: '#/components/schemas/QuoteFxSummary'
           type: array
         accounts:
           items:
@@ -9383,32 +9404,6 @@ components:
         - fxSummaries
         - rejectedPayments
       type: object
-    inline_response_200_1:
-      example:
-        content:
-          countries:
-            - isoCountryCOde: isoCountryCOde
-              currencies:
-                - currencies
-                - currencies
-            - isoCountryCOde: isoCountryCOde
-              currencies:
-                - currencies
-                - currencies
-      properties:
-        content:
-          $ref: '#/components/schemas/SupportedCountriesResponse'
-    inline_response_200_2:
-      example:
-        content:
-          currencies:
-            - currency: currency
-              maxPaymentAmount: 0
-            - currency: currency
-              maxPaymentAmount: 0
-      properties:
-        content:
-          $ref: '#/components/schemas/SupportedCurrencyResponse'
     CreatePayeesCSVRequest:
       properties:
         type:
@@ -9681,11 +9676,11 @@ components:
     SupportedCountriesResponse:
       example:
         countries:
-          - isoCountryCOde: isoCountryCOde
+          - isoCountryCode: isoCountryCode
             currencies:
               - currencies
               - currencies
-          - isoCountryCOde: isoCountryCOde
+          - isoCountryCode: isoCountryCode
             currencies:
               - currencies
               - currencies
@@ -10053,64 +10048,6 @@ components:
         - PASSED
         - FAILED
       type: string
-    FxSummaries:
-      example:
-        rate: 5.962133916683182
-        sourceCurrency: sourceCurrency
-        totalPaymentAmount: 2.3021358869347655
-        paymentCurrency: paymentCurrency
-        quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalCost: 5.637376656633329
-        fundingStatus: FUNDED
-        creationDateTime: 2000-01-23T04:56:07.000Z
-        status: QUOTED
-      properties:
-        quoteId:
-          format: uuid
-          type: string
-        creationDateTime:
-          format: date-time
-          type: string
-        rate:
-          format: decimal
-          type: number
-        totalCost:
-          format: int32
-          type: number
-        totalPaymentAmount:
-          format: int32
-          type: number
-        sourceCurrency:
-          maxLength: 3
-          minLength: 3
-          type: string
-        paymentCurrency:
-          maxLength: 3
-          minLength: 3
-          type: string
-        status:
-          enum:
-            - QUOTED
-            - EXPIRED
-            - EXECUTED
-          type: string
-        fundingStatus:
-          enum:
-            - FUNDED
-            - INSTRUCTED
-            - UNFUNDED
-          type: string
-      required:
-        - creationDateTime
-        - fundingStatus
-        - paymentCurrency
-        - quoteId
-        - rate
-        - sourceCurrency
-        - status
-        - totalCost
-        - totalPaymentAmount
-      type: object
     PayoutSummaryAudit:
       example:
         dateTime: 2000-01-23T04:56:07.000Z
@@ -10247,45 +10184,6 @@ components:
         - UR
         - ZH
       type: string
-    inline_response_200:
-      example:
-        content:
-          bank:
-            - isoCountryCode: isoCountryCode
-              rules:
-                - displayName: displayName
-                  minLength: 0
-                  displayOrder: 1
-                  required: true
-                  maxLength: 6
-                  validation: validation
-                  element: element
-                - displayName: displayName
-                  minLength: 0
-                  displayOrder: 1
-                  required: true
-                  maxLength: 6
-                  validation: validation
-                  element: element
-            - isoCountryCode: isoCountryCode
-              rules:
-                - displayName: displayName
-                  minLength: 0
-                  displayOrder: 1
-                  required: true
-                  maxLength: 6
-                  validation: validation
-                  element: element
-                - displayName: displayName
-                  minLength: 0
-                  displayOrder: 1
-                  required: true
-                  maxLength: 6
-                  validation: validation
-                  element: element
-      properties:
-        content:
-          $ref: '#/components/schemas/PaymentChannelRulesResponse'
     ListPaymentsResponse:
       description: List Payments Response Object
       example:
@@ -10612,7 +10510,7 @@ components:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         currency: currency
-        totalPayoutCost: 7
+        totalPayoutCost: 9
         sourceAccountName: sourceAccountName
       properties:
         sourceAccountName:
@@ -10951,12 +10849,12 @@ components:
       type: object
     SupportedCountry:
       example:
-        isoCountryCOde: isoCountryCOde
+        isoCountryCode: isoCountryCode
         currencies:
           - currencies
           - currencies
       properties:
-        isoCountryCOde:
+        isoCountryCode:
           type: string
         currencies:
           items:
