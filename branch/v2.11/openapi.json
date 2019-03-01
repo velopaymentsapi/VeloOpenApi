@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.22",
+    "version": "2.11.23",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -92,14 +92,6 @@
                 "contractId": 2
               }
             ]
-          },
-          "500": {
-            "description": "Server Error",
-            "x-contracts": [
-              {
-                "contractId": 3
-              }
-            ]
           }
         },
         "summary": "Get Payor",
@@ -116,11 +108,6 @@
             "contractId": 2,
             "name": "Test Not Found",
             "contractPath": "/v1/payors/00000000-0000-0000-0000-000000000000"
-          },
-          {
-            "contractId": 3,
-            "name": "Test Bad Schema",
-            "contractPath": "/v1/payors/16ea5c75-1476-4651-b117-bcb33d77f2b5"
           }
         ],
         "x-code-samples": [
