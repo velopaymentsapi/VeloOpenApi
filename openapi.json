@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.10.60",
+    "version": "2.10.61",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -2120,6 +2120,7 @@
     },
     "/v1/payors/{payorId}/balance": {
       "get": {
+        "deprecated": true,
         "description": "This API operation will allow you to query the system by Payor ID. The system will return a JSON response object\nwith details about the given Payor.\n",
         "operationId": "getPayorBalance",
         "parameters": [
@@ -2144,7 +2145,7 @@
                 }
               }
             },
-            "description": "Details of payor"
+            "description": "Information about Payor Balance"
           },
           "404": {
             "description": "Payor Id Not Found"
@@ -2152,7 +2153,7 @@
         },
         "summary": "Get Payor Balance",
         "tags": [
-          "Payor Service"
+          "Payor Information"
         ],
         "x-code-samples": [
           {
