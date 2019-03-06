@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.10.60
+  version: 2.10.61
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
@@ -1998,6 +1998,7 @@ paths:
               -H 'Authorization: Bearer 2f661796-3b13-467b-82c0-faf0f0721294'
   /v1/payors/{payorId}/balance:
     get:
+      deprecated: true
       description: |
         This API operation will allow you to query the system by Payor ID. The system will return a JSON response object
         with details about the given Payor.
@@ -2025,12 +2026,12 @@ paths:
                 }
               schema:
                 $ref: '#/components/schemas/PayorBalance'
-          description: Details of payor
+          description: Information about Payor Balance
         404:
           description: Payor Id Not Found
       summary: Get Payor Balance
       tags:
-      - Payor Service
+      - Payor Information
       x-code-samples:
       - lang: shell
         source: |
