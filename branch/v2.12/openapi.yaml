@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.12.5
+  version: 2.12.6
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -1081,7 +1081,7 @@ paths:
     get:
       description: |
         Returns a list of payees associated with a payor, along with invitation status and grace period end date.
-      operationId: getPayor
+      operationId: getPayeesInvitationStatus
       parameters:
         - description: The account owner Payor ID
           in: path
@@ -1096,7 +1096,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InvitationStatusResponse'
-          description: Get Payor Details
+          description: Get Payees with Invitaion status
       summary: Get Payee Invitation Status
       tags:
         - Payee Invitation
@@ -1104,6 +1104,146 @@ paths:
         - lang: shell
           source: |
             $ curl 'https://api.sandbox.velopayments.com/v1/payees/payors/77f84ae9-42df-49d7-941b-47360347f86f/invitationStatus' -i -X GET \
+                -H 'Authorization: Bearer ed73aa9a-b51b-44cb-a8e9-11e2fb85046b'
+  '/v2/payees/payors/{payorId}/invitationStatus':
+    get:
+      description: |
+        Returns a filtered, paginated list of payees associated with a payor, along with invitation status and grace period end date.
+      operationId: getPayeesInvitationStatusV2
+      parameters:
+        - description: The account owner Payor ID
+          in: path
+          name: payorId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: The UUID of the payee.
+          in: query
+          name: payeeId
+          required: false
+          schema:
+            format: uuid
+            type: string
+        - description: The invitation status of the payees.
+          in: query
+          name: invitationStatus
+          required: false
+          schema:
+            $ref: '#/components/schemas/InvitationStatus'
+        - description: Page number. Default is 1.
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              example: |
+                {
+                    "page" : {
+                        "numberOfElements" : 1,
+                        "totalElements" : 1,
+                        "totalPages" : 1,
+                        "page" : 1,
+                        "pageSize" : 25
+                    },
+                    "content" : [ {
+                                      "payeeId" : "c3d60e1f-a4d0-4273-b501-bfa81c70d56b",
+                                      "invitationStatus" : "ACCEPTED",
+                                      "gracePeriodEndDate" : "2019-06-25"
+                                  } ],
+                    "links" : [ {
+                                    "rel" : "first",
+                                    "href" : "http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25"
+                                }, {
+                                    "rel" : "last",
+                                    "href" : "http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25"
+                                }, {
+                                    "rel" : "self",
+                                    "href" : "http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25"
+                                } ]
+                }
+              schema:
+                $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse'
+          description: Get Payees with Invitaion status - filters of payeeId and invitationStatus
+          x-contracts:
+            - contractId: 1
+              headers:
+                Content-Type: application/json
+              body:
+                page:
+                  numberOfElements: 1
+                  totalElements: 1
+                  totalPages: 1
+                  page: 1
+                  pageSize: 25
+                links:
+                  - rel: first
+                    href: 'http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25'
+                content:
+                  - payeeId: c3d60e1f-a4d0-4273-b501-bfa81c70d56b
+              matchers:
+                headers:
+                  - key: Content-Type
+                    regex: application/json.*
+                body:
+                  - path: $.page
+                    type: by_type
+                    minOccurrence: 1
+                  - path: $.page.numberOfElements
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.totalElements
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.totalPages
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.page
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.pageSize
+                    type: by_regex
+                    predefined: number
+                  - path: $.links
+                    type: by_type
+                    minOccurrence: 1
+                    maxOccurrence: 5
+                  - path: '$.links[0].href'
+                    type: by_regex
+                    predefined: url
+                  - path: $.content
+                    type: by_type
+                    minOccurrence: 1
+                  - path: '$.content[0].payeeId'
+                    type: by_regex
+                    predefined: uuid
+        '400':
+          description: Bad Request
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      summary: Get Payee Invitation Status
+      tags:
+        - Payee Invitation
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED' -i -X GET \
                 -H 'Authorization: Bearer ed73aa9a-b51b-44cb-a8e9-11e2fb85046b'
   /v1/sourceAccounts:
     description: List Source Accounts
@@ -8734,6 +8874,37 @@ components:
         - totalPaymentAmount
         - totalSourceAmount
       type: object
+    PagedPayeeInvitationStatusResponse:
+      description: List Payees Invitation Status Object
+      example:
+        links:
+          - rel: rel
+            href: href
+          - rel: rel
+            href: href
+        page:
+          numberOfElements: 2
+          totalPages: 9
+          pageSize: 2
+          page: 3
+          totalElements: 7
+        content:
+          - payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            gracePeriodEndDate: 2000-01-23T00:00:00.000Z
+          - payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            gracePeriodEndDate: 2000-01-23T00:00:00.000Z
+      properties:
+        page:
+          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/PayeeInvitationStatusResponse'
+          type: array
+      type: object
     QueryBatchResponse:
       example:
         failures:
@@ -8967,6 +9138,12 @@ components:
         - countryCode
         - currency
       type: object
+    InvitationStatus:
+      enum:
+        - ACCEPTED
+        - PENDING
+        - DECLINED
+      type: string
     SupportedCurrency:
       example:
         currency: currency
@@ -9046,7 +9223,7 @@ components:
         - totalCost
         - totalPaymentAmount
       type: object
-    GetPaymentsForPayoutResponse_page:
+    PagedPayeeInvitationStatusResponse_page:
       example:
         numberOfElements: 2
         totalPages: 9
@@ -9107,6 +9284,23 @@ components:
       required:
         - thisMonthFailedPaymentsCount
         - thisMonthPayoutsCount
+      type: object
+    PayeeInvitationStatusResponse:
+      example:
+        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        gracePeriodEndDate: 2000-01-23T00:00:00.000Z
+      properties:
+        payeeId:
+          format: uuid
+          type: string
+        invitationStatus:
+          $ref: '#/components/schemas/InvitationStatus'
+        gracePeriodEndDate:
+          format: date
+          type: string
+      required:
+        - invitationStatus
+        - payeeId
       type: object
     PayorCreateApplicationRequest:
       example:
@@ -9335,10 +9529,10 @@ components:
         summary:
           $ref: '#/components/schemas/GetPaymentsForPayoutResponse_summary'
         page:
-          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_page'
+          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/GetPaymentsForPayoutResponse_links'
+            $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_links'
           type: array
         content:
           items:
@@ -10466,10 +10660,10 @@ components:
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         page:
-          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_page'
+          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/GetPaymentsForPayoutResponse_links'
+            $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_links'
           type: array
         content:
           items:
@@ -10618,25 +10812,16 @@ components:
         summary:
           $ref: '#/components/schemas/GetPaymentsForPayoutResponse_summary'
         page:
-          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_page'
+          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/GetPaymentsForPayoutResponse_links'
+            $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_links'
           type: array
         content:
           items:
             $ref: '#/components/schemas/PaymentResponse'
           type: array
       type: object
-    GetPaymentsForPayoutResponse_links:
-      example:
-        rel: rel
-        href: href
-      properties:
-        rel:
-          type: string
-        href:
-          type: string
     PagedResponse_page:
       properties:
         numberOfElements:
@@ -10781,10 +10966,10 @@ components:
         summary:
           $ref: '#/components/schemas/GetPaymentsForPayoutResponse_summary'
         page:
-          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_page'
+          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/GetPaymentsForPayoutResponse_links'
+            $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_links'
           type: array
         content:
           items:
@@ -11003,10 +11188,10 @@ components:
         summary:
           $ref: '#/components/schemas/GetPaymentsForPayoutResponse_summary'
         page:
-          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_page'
+          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/GetPaymentsForPayoutResponse_links'
+            $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_links'
           type: array
         content:
           items:
@@ -11168,6 +11353,15 @@ components:
             type: string
           type: array
       type: object
+    PagedPayeeInvitationStatusResponse_links:
+      example:
+        rel: rel
+        href: href
+      properties:
+        rel:
+          type: string
+        href:
+          type: string
     MarketingOptIn:
       example:
         optedIn: true
