@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.11.67
+  version: 2.11.68
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -90,6 +90,8 @@ tags:
   - description: |
       A payee is a person you wish to transfer money to. In this section you will find API opertions for working with Payees.
     name: Payees
+  - description: Payee invitation is a process of inviting individual payees to the Velo platform. In this sction you will find APIs for working with Payee Invitations.
+    name: Payee Invitation
   - description: A Payor is the entity which is sending money. Here you will find the available APIs for working with Payors.
     name: Payors
   - description: Payout Service APIs allow you to create and instruct payouts to payees.
@@ -419,7 +421,7 @@ paths:
           description: Payor Id Not Found
       summary: Reminder Email Opt-Out
       tags:
-        - Payor Service
+        - Payors
       x-code-samples:
         - lang: shell
           source: |
@@ -455,7 +457,7 @@ paths:
           description: Payor Id Not Found
       summary: Add Logo
       tags:
-        - Payor Branding
+        - Payors
       x-code-samples:
         - lang: shell
           source: |
@@ -529,7 +531,7 @@ paths:
             - contractId: 2
       summary: Get Branding
       tags:
-        - Payor Branding
+        - Payors
       x-contracts:
         - contractId: 1
           name: Get Payor Branding Details
@@ -813,7 +815,7 @@ paths:
           description: Bad Request. Payee Id failed validation for deletion.
       summary: Delete Payee by Id
       tags:
-        - Payee Service
+        - Payees
     get:
       description: Get Payee by Id
       operationId: getPayeeById
@@ -985,7 +987,7 @@ paths:
           description: Bad Request
       summary: Intiate Payee Creation
       tags:
-        - Payee Batch Creation
+        - Payee Invitation
       x-contracts:
         - contractId: 1
           name: Create Payees by JSON
@@ -1031,7 +1033,7 @@ paths:
           description: Get Batch Status
       summary: Query Batch Status
       tags:
-        - Payee Batch Creation
+        - Payee Invitation
       x-code-samples:
         - lang: shell
           source: |
@@ -1041,7 +1043,7 @@ paths:
   '/v1/payees/{payeeId}/invite':
     post:
       description: Resend an invite to the Payee The payee must have already been invited by the payor and not yet accepted or declined Any previous invites to the payee by this Payor will be invalidated
-      operationId: sendPayeeInvite
+      operationId: resendPayeeInvite
       parameters:
         - description: The UUID of the payee.
           in: path
@@ -1054,7 +1056,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PayeeInviteRequest'
+              $ref: '#/components/schemas/InvitePayeeRequest'
         required: true
       responses:
         '200':
@@ -1067,7 +1069,7 @@ paths:
           description: Not Found
         '409':
           description: Conflict
-      summary: Invite Payee
+      summary: Resend Payee Invite
       tags:
         - Payee Invitation
       x-code-samples:
@@ -1209,7 +1211,6 @@ paths:
       summary: Get list of source accounts
       tags:
         - Funding Manager
-        - Payor Information
       x-code-samples:
         - lang: shell
           source: |
@@ -1261,7 +1262,6 @@ paths:
       summary: Get details about given source account.
       tags:
         - Funding Manager
-        - Payor Information
       x-code-samples:
         - lang: shell
           source: |
@@ -1358,6 +1358,7 @@ paths:
       summary: Get Fundings for Payor
       tags:
         - Payment Audit Service
+        - Funding Manager
       x-code-samples:
         - lang: shell
           source: |
@@ -3466,6 +3467,16 @@ components:
         failureMessage:
           type: string
       type: object
+    InvitePayeeRequest:
+      example:
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        payorId:
+          format: uuid
+          type: string
+      required:
+        - payorId
+      type: object
     FundingEventType:
       enum:
         - PAYOR_FUNDING_DETECTED
@@ -4888,16 +4899,6 @@ components:
             $ref: '#/components/schemas/Payee'
           type: array
       type: object
-    PayeeInviteRequest:
-      example:
-        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-      properties:
-        payorId:
-          format: uuid
-          type: string
-      required:
-        - payorId
-      type: object
     CreatePayeesRequest:
       example:
         payees:
@@ -5329,18 +5330,14 @@ components:
           tokenUrl: 'https://api.sandbox.velopayments.com/v1/login'
       type: oauth2
 x-tagGroups:
-  - name: Payor
+  - name: Payor Operations
     tags:
       - Payors
       - Payor Branding
-      - Payor Funding
       - Payor Applications
       - Payor Information
-      - Payor Service
-  - name: Payor Funding
-    tags:
       - Funding Manager
-  - name: Payee
+  - name: Payee Operations
     tags:
       - Payees
       - Payee Service
@@ -5358,7 +5355,7 @@ x-tagGroups:
     tags:
       - Payments
       - Payment Audit Service
-  - name: Utilities
+  - name: API Utilities
     tags:
       - Currencies
       - Countries
