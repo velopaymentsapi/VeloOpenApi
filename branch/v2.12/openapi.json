@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.12.13",
+    "version": "2.12.14",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -27,6 +27,10 @@
     {
       "description": "A payee is a person you wish to transfer money to. In this section you will find API opertions for working with Payees.\n",
       "name": "Payees"
+    },
+    {
+      "description": "Payee invitation is a process of inviting individual payees to the Velo platform. In this sction you will find APIs for working with Payee Invitations.",
+      "name": "Payee Invitation"
     },
     {
       "description": "A Payor is the entity which is sending money. Here you will find the available APIs for working with Payors.",
@@ -521,7 +525,7 @@
         },
         "summary": "Reminder Email Opt-Out",
         "tags": [
-          "Payor Service"
+          "Payors"
         ],
         "x-code-samples": [
           {
@@ -571,7 +575,7 @@
         },
         "summary": "Add Logo",
         "tags": [
-          "Payor Branding"
+          "Payors"
         ],
         "x-code-samples": [
           {
@@ -670,7 +674,7 @@
         },
         "summary": "Get Branding",
         "tags": [
-          "Payor Branding"
+          "Payors"
         ],
         "x-contracts": [
           {
@@ -1003,7 +1007,7 @@
         },
         "summary": "Delete Payee by Id",
         "tags": [
-          "Payee Service"
+          "Payees"
         ]
       },
       "get": {
@@ -1256,7 +1260,7 @@
         },
         "summary": "Intiate Payee Creation",
         "tags": [
-          "Payee Batch Creation"
+          "Payee Invitation"
         ],
         "x-contracts": [
           {
@@ -1306,7 +1310,7 @@
         },
         "summary": "Query Batch Status",
         "tags": [
-          "Payee Batch Creation"
+          "Payee Invitation"
         ],
         "x-code-samples": [
           {
@@ -1319,7 +1323,7 @@
     "/v1/payees/{payeeId}/invite": {
       "post": {
         "description": "Resend an invite to the Payee The payee must have already been invited by the payor and not yet accepted or declined Any previous invites to the payee by this Payor will be invalidated",
-        "operationId": "sendPayeeInvite",
+        "operationId": "resendPayeeInvite",
         "parameters": [
           {
             "description": "The UUID of the payee.",
@@ -1336,7 +1340,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/PayeeInviteRequest"
+                "$ref": "#/components/schemas/InvitePayeeRequest"
               }
             }
           },
@@ -1360,7 +1364,7 @@
             "description": "Conflict"
           }
         },
-        "summary": "Invite Payee",
+        "summary": "Resend Payee Invite",
         "tags": [
           "Payee Invitation"
         ],
@@ -1670,8 +1674,7 @@
         },
         "summary": "Get list of source accounts",
         "tags": [
-          "Funding Manager",
-          "Payor Information"
+          "Funding Manager"
         ],
         "x-code-samples": [
           {
@@ -1720,8 +1723,7 @@
         },
         "summary": "Get details about given source account.",
         "tags": [
-          "Funding Manager",
-          "Payor Information"
+          "Funding Manager"
         ],
         "x-code-samples": [
           {
@@ -1853,7 +1855,8 @@
         },
         "summary": "Get Fundings for Payor",
         "tags": [
-          "Payment Audit Service"
+          "Payment Audit Service",
+          "Funding Manager"
         ],
         "x-code-samples": [
           {
@@ -4437,6 +4440,21 @@
         },
         "type": "object"
       },
+      "InvitePayeeRequest": {
+        "example": {
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties": {
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "payorId"
+        ],
+        "type": "object"
+      },
       "FundingEventType": {
         "enum": [
           "PAYOR_FUNDING_DETECTED",
@@ -6328,21 +6346,6 @@
         },
         "type": "object"
       },
-      "PayeeInviteRequest": {
-        "example": {
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-        },
-        "properties": {
-          "payorId": {
-            "format": "uuid",
-            "type": "string"
-          }
-        },
-        "required": [
-          "payorId"
-        ],
-        "type": "object"
-      },
       "CreatePayeesRequest": {
         "example": {
           "payees": [
@@ -6931,24 +6934,17 @@
   },
   "x-tagGroups": [
     {
-      "name": "Payor",
+      "name": "Payor Operations",
       "tags": [
         "Payors",
         "Payor Branding",
-        "Payor Funding",
         "Payor Applications",
         "Payor Information",
-        "Payor Service"
-      ]
-    },
-    {
-      "name": "Payor Funding",
-      "tags": [
         "Funding Manager"
       ]
     },
     {
-      "name": "Payee",
+      "name": "Payee Operations",
       "tags": [
         "Payees",
         "Payee Service",
@@ -6975,7 +6971,7 @@
       ]
     },
     {
-      "name": "Utilities",
+      "name": "API Utilities",
       "tags": [
         "Currencies",
         "Countries"
