@@ -1444,7 +1444,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
