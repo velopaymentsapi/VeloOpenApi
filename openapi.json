@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.68",
+    "version": "2.11.69",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -797,7 +797,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
@@ -1627,7 +1627,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
@@ -1753,7 +1753,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
@@ -1920,7 +1920,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
@@ -2152,7 +2152,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
