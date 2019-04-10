@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.69",
+    "version": "2.11.70",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -3897,7 +3897,6 @@
           "displayName": "displayName",
           "created": "2000-01-23T04:56:07.000Z",
           "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
-          "type": "Individual",
           "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
           "remoteId": "remoteId",
           "paymentChannel": {
@@ -3947,9 +3946,8 @@
           },
           "email": {
             "format": "email",
-            "maxLength": 244,
+            "maxLength": 255,
             "minLength": 3,
-            "nullable": true,
             "type": "string"
           },
           "remoteId": {
@@ -3958,11 +3956,7 @@
             "type": "string"
           },
           "type": {
-            "enum": [
-              "Individual",
-              "Company"
-            ],
-            "type": "string"
+            "$ref": "#/components/schemas/PayeeType"
           },
           "displayName": {
             "type": "string"
@@ -3991,9 +3985,6 @@
           },
           "cellphoneNumber": {
             "type": "string"
-          },
-          "payeeType": {
-            "$ref": "#/components/schemas/PayeeType"
           },
           "company": {
             "$ref": "#/components/schemas/Company"
@@ -4034,8 +4025,10 @@
           }
         },
         "required": [
+          "address",
           "email",
-          "remoteId"
+          "remoteId",
+          "type"
         ],
         "type": "object"
       },
@@ -6142,7 +6135,6 @@
               "displayName": "displayName",
               "created": "2000-01-23T04:56:07.000Z",
               "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
-              "type": "Individual",
               "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
               "remoteId": "remoteId",
               "paymentChannel": {
@@ -6219,7 +6211,6 @@
               "displayName": "displayName",
               "created": "2000-01-23T04:56:07.000Z",
               "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
-              "type": "Individual",
               "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
               "remoteId": "remoteId",
               "paymentChannel": {
