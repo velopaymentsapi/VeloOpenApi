@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.71",
+    "version": "2.11.72",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -1554,6 +1554,61 @@
       },
       "summary": "Get Source Account"
     },
+    "/v1/sourceAccounts/{sourceAccountId}/achFundingRequest": {
+      "post": {
+        "description": "Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).",
+        "operationId": "createAchFundingRequest",
+        "parameters": [
+          {
+            "description": "Source account id",
+            "in": "path",
+            "name": "sourceAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FundingRequest"
+              }
+            }
+          },
+          "description": "Body to included ammount to be funded",
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "example": "HTTP/1.1 202 Accepted\n"
+              }
+            },
+            "description": "Request Accepted"
+          },
+          "400": {
+            "description": "Invalid Request Body"
+          },
+          "404": {
+            "description": "Source Account Not Found"
+          }
+        },
+        "summary": "Create Funding Request",
+        "tags": [
+          "Funding Manager"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/achFundingRequest' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"amount\":999990}'\n"
+          }
+        ]
+      }
+    },
     "/v2/sourceAccounts/{sourceAccountId}/fundingRequest": {
       "post": {
         "description": "Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).",
@@ -1574,7 +1629,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FundingRequest"
+                "$ref": "#/components/schemas/FundingRequest_2"
               }
             }
           },
@@ -2885,6 +2940,23 @@
         },
         "required": [
           "payeeInvitationStatuses"
+        ],
+        "type": "object"
+      },
+      "FundingRequest_2": {
+        "example": {
+          "amount": 800828191
+        },
+        "properties": {
+          "amount": {
+            "description": "Amount to fund, decimal implied",
+            "maximum": 9999999999,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "amount"
         ],
         "type": "object"
       },
