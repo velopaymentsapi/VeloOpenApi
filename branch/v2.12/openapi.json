@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.12.14",
+    "version": "2.12.15",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -56,7 +56,7 @@
   "paths": {
     "/v1/payors/{payorId}": {
       "get": {
-        "description": "Get a Single Payor by Id (200 - OK, 404 - payor not found).\n",
+        "description": "Get a Single Payor by Id.\n",
         "operationId": "getPayorById",
         "parameters": [
           {
@@ -83,8 +83,31 @@
             "x-contracts": [
               {
                 "contractId": 1,
+                "headers": {
+                  "Content-Type": "application/json;charset=UTF-8"
+                },
                 "body": {
-                  "payorId": "0a818933-087d-47f2-ad83-2f986ed087eb"
+                  "payorId": "0a818933-087d-47f2-ad83-2f986ed087eb",
+                  "payorName": "Joe",
+                  "address": {
+                    "line1": "101 California Street",
+                    "city": "San Francisco",
+                    "zipOrPostcode": "94111",
+                    "country": "US"
+                  },
+                  "primaryContactName": "Joe",
+                  "primaryContactPhone": 1231231234,
+                  "primaryContactEmail": "foo@example.com",
+                  "kycState": "PASSED_KYC",
+                  "manualLockout": false,
+                  "payeeGracePeriodProcessingEnabled": true,
+                  "payeeGracePeriodDays": 90,
+                  "dbaName": "FlyByNight, Inc",
+                  "allowsLanguageChoice": false,
+                  "reminderEmailsOptOut": false,
+                  "language": "EN",
+                  "supportContact": "support@example.com",
+                  "collectiveAlias": "MyAlias"
                 }
               }
             ]
@@ -93,7 +116,10 @@
             "description": "Payor Id Not Found",
             "x-contracts": [
               {
-                "contractId": 2
+                "contractId": 2,
+                "headers": {
+                  "Content-Length": "0"
+                }
               }
             ]
           }
@@ -105,13 +131,15 @@
         "x-contracts": [
           {
             "contractId": 1,
-            "name": "Test Good Response",
-            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb"
+            "name": "Test Get Payor",
+            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb",
+            "serviceName": "payor-service"
           },
           {
             "contractId": 2,
-            "name": "Test Not Found",
-            "contractPath": "/v1/payors/00000000-0000-0000-0000-000000000000"
+            "name": "Test Payor Not Found",
+            "contractPath": "/v1/payors/00000000-0000-0000-0000-000000000000",
+            "serviceName": "payor-service"
           }
         ],
         "x-code-samples": [
@@ -214,7 +242,8 @@
           {
             "contractId": 1,
             "name": "Set Funding Bank Details",
-            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb/payorFundingBankDetailsUpdate"
+            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb/payorFundingBankDetailsUpdate",
+            "serviceName": "payor-service"
           }
         ],
         "x-code-samples": [
@@ -327,7 +356,8 @@
           {
             "contractId": 1,
             "name": "Test Create Application",
-            "contractPath": "/v1/payors/835ac62e-616c-4261-bf38-63366db78c0d/applications"
+            "contractPath": "/v1/payors/835ac62e-616c-4261-bf38-63366db78c0d/applications",
+            "serviceName": "payor-service"
           }
         ],
         "x-code-samples": [
@@ -460,7 +490,7 @@
             ]
           },
           "400": {
-            "description": "Invalid Request Body or Payor in invalid state"
+            "description": "Invalid Request Body or Payor in Invalid State"
           },
           "404": {
             "description": "Payor Id Not Found"
@@ -474,7 +504,8 @@
           {
             "contractId": 4,
             "name": "Create an API key for a payor",
-            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb/applications/ba08877f-9d96-41e4-9c26-44a872d856ae/keys"
+            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb/applications/ba08877f-9d96-41e4-9c26-44a872d856ae/keys",
+            "serviceName": "payor-service"
           }
         ],
         "x-code-samples": [
@@ -510,22 +541,86 @@
             }
           },
           "description": "Details of application API key to create",
-          "required": true
+          "required": true,
+          "x-contracts": [
+            {
+              "contractId": 1,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "reminderEmailsOptOut": true
+              }
+            },
+            {
+              "contractId": 2,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "reminderEmailsOptOut": true
+              }
+            },
+            {
+              "contractId": 3,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "reminderEmailsOptOut_BadRequest": true
+              }
+            }
+          ]
         },
         "responses": {
           "202": {
-            "description": "HTTP Accepted"
+            "description": "HTTP Accepted",
+            "x-contracts": [
+              {
+                "contractId": 1
+              }
+            ]
           },
           "400": {
-            "description": "Invalid Request Body"
+            "description": "Invalid Request Body",
+            "x-contracts": [
+              {
+                "contractId": 3
+              }
+            ]
           },
           "404": {
-            "description": "Payor Id Not Found"
+            "description": "Payor Id Not Found",
+            "x-contracts": [
+              {
+                "contractId": 2
+              }
+            ]
           }
         },
         "summary": "Reminder Email Opt-Out",
         "tags": [
           "Payors"
+        ],
+        "x-contracts": [
+          {
+            "contractId": 1,
+            "name": "Test Email Opt-Out",
+            "serviceName": "payor-service",
+            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb/reminderEmailsUpdate"
+          },
+          {
+            "contractId": 2,
+            "name": "Test Not Found",
+            "serviceName": "payor-service",
+            "contractPath": "/v1/payors/00000000-0000-0000-0000-000000000000/reminderEmailsUpdate"
+          },
+          {
+            "contractId": 3,
+            "name": "Test Email Opt-Out Bad Request",
+            "serviceName": "payor-service",
+            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb/reminderEmailsUpdate"
+          }
         ],
         "x-code-samples": [
           {
@@ -684,7 +779,8 @@
             "label": "Payor_Branding",
             "priority": 10,
             "ignored": false,
-            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb/branding"
+            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb/branding",
+            "serviceName": "payor-service"
           },
           {
             "contractId": 2,
@@ -692,7 +788,8 @@
             "description": "Test to not found status returned by API",
             "label": "Payor_Branding",
             "priority": 20,
-            "contractPath": "/v1/payors/00000000-0000-0000-0000-000000000000/branding"
+            "contractPath": "/v1/payors/00000000-0000-0000-0000-000000000000/branding",
+            "serviceName": "payor-service"
           }
         ],
         "x-code-samples": [
@@ -797,7 +894,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
@@ -970,7 +1067,8 @@
                   "value": 30
                 }
               ]
-            }
+            },
+            "serviceName": "payeeService"
           }
         ],
         "x-code-samples": [
@@ -1265,11 +1363,13 @@
         "x-contracts": [
           {
             "contractId": 1,
-            "name": "Create Payees by JSON"
+            "name": "Create Payees by JSON",
+            "serviceName": "payeeService"
           },
           {
             "contractId": 2,
-            "name": "Create Payees by CSV"
+            "name": "Create Payees by CSV",
+            "serviceName": "payeeService"
           }
         ],
         "x-code-samples": [
@@ -1453,7 +1553,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
@@ -1624,7 +1724,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
@@ -1734,6 +1834,62 @@
       },
       "summary": "Get Source Account"
     },
+    "/v1/sourceAccounts/{sourceAccountId}/achFundingRequest": {
+      "post": {
+        "deprecated": true,
+        "description": "Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).",
+        "operationId": "createAchFundingRequest",
+        "parameters": [
+          {
+            "description": "Source account id",
+            "in": "path",
+            "name": "sourceAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FundingRequest"
+              }
+            }
+          },
+          "description": "Body to included ammount to be funded",
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "example": "HTTP/1.1 202 Accepted\n"
+              }
+            },
+            "description": "Request Accepted"
+          },
+          "400": {
+            "description": "Invalid Request Body"
+          },
+          "404": {
+            "description": "Source Account Not Found"
+          }
+        },
+        "summary": "Create Funding Request",
+        "tags": [
+          "Funding Manager"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/achFundingRequest' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"amount\":999990}'\n"
+          }
+        ]
+      }
+    },
     "/v2/sourceAccounts/{sourceAccountId}/fundingRequest": {
       "post": {
         "description": "Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).",
@@ -1754,7 +1910,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FundingRequest"
+                "$ref": "#/components/schemas/FundingRequest_2"
               }
             }
           },
@@ -1807,7 +1963,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
@@ -1933,7 +2089,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
@@ -2100,7 +2256,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
@@ -2332,7 +2488,7 @@
           {
             "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "pageNumber",
+            "name": "page",
             "required": false,
             "schema": {
               "default": 1,
@@ -2872,17 +3028,19 @@
     "schemas": {
       "PayorCreateApiKeyResponse": {
         "example": {
-          "apiKey": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "apiSecret": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          "apiKey": "385d4506-e7dd-446e-a092-5f30b98e7b26",
+          "apiSecret": "f25767d9-342a-48ac-a788-0a7a38ae6fb3"
         },
         "properties": {
           "apiKey": {
             "description": "API Key",
+            "example": "385d4506-e7dd-446e-a092-5f30b98e7b26",
             "format": "uuid",
             "type": "string"
           },
           "apiSecret": {
             "description": "API Secret",
+            "example": "f25767d9-342a-48ac-a788-0a7a38ae6fb3",
             "format": "uuid",
             "type": "string"
           }
@@ -2977,19 +3135,21 @@
       },
       "Address": {
         "example": {
-          "country": "country",
-          "countyOrProvince": "countyOrProvince",
+          "country": "US",
+          "countyOrProvince": "FL",
           "line4": "line4",
-          "city": "city",
+          "city": "Key West",
           "line3": "line3",
           "line2": "line2",
-          "line1": "line1",
-          "zipOrPostcode": "zipOrPostcode"
+          "line1": "500 Duval St",
+          "zipOrPostcode": "33945"
         },
         "properties": {
           "line1": {
+            "example": "500 Duval St",
             "maxLength": 255,
             "minLength": 2,
+            "nullable": false,
             "type": "string"
           },
           "line2": {
@@ -3011,25 +3171,31 @@
             "type": "string"
           },
           "city": {
+            "example": "Key West",
             "maxLength": 100,
             "minLength": 2,
+            "nullable": false,
             "type": "string"
           },
           "countyOrProvince": {
+            "example": "FL",
             "maxLength": 100,
             "minLength": 2,
             "nullable": true,
             "type": "string"
           },
           "zipOrPostcode": {
+            "example": "33945",
             "maxLength": 30,
             "minLength": 2,
             "nullable": true,
             "type": "string"
           },
           "country": {
+            "example": "US",
             "maxLength": 50,
             "minLength": 2,
+            "nullable": false,
             "type": "string"
           }
         },
@@ -3065,6 +3231,23 @@
         },
         "required": [
           "payeeInvitationStatuses"
+        ],
+        "type": "object"
+      },
+      "FundingRequest_2": {
+        "example": {
+          "amount": 800828191
+        },
+        "properties": {
+          "amount": {
+            "description": "Amount to fund, decimal implied",
+            "maximum": 9999999999,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "amount"
         ],
         "type": "object"
       },
@@ -3106,35 +3289,32 @@
       "PayorCreateApiKeyRequest": {
         "example": {
           "roles": [
-            "payor.admin",
-            "payor.admin",
-            "payor.admin",
-            "payor.admin",
-            "payor.admin",
-            "payor.admin",
-            "payor.admin",
-            "payor.admin",
-            "payor.admin",
             "payor.admin"
           ],
-          "name": "name",
-          "description": "description"
+          "name": "iOS Key",
+          "description": "Key for iOS mobile application"
         },
         "properties": {
           "name": {
             "description": "A name for the key.",
+            "example": "iOS Key",
             "maxLength": 100,
             "minLength": 2,
             "type": "string"
           },
           "description": {
             "description": "Description of the key.",
+            "example": "Key for iOS mobile application",
             "maxLength": 1024,
             "minLength": 2,
+            "nullable": true,
             "type": "string"
           },
           "roles": {
             "description": "A list of roles to assign to the key.",
+            "example": [
+              "payor.admin"
+            ],
             "items": {
               "description": "Name of role",
               "enum": [
@@ -3280,27 +3460,27 @@
               "failedSubmission": {
                 "payorRefs": [
                   {
-                    "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                    "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                     "invitationStatus": "invitationStatus",
-                    "remoteId": "remoteId"
+                    "remoteId": "uniqueIdForRemoteEntity"
                   },
                   {
-                    "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                    "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                     "invitationStatus": "invitationStatus",
-                    "remoteId": "remoteId"
+                    "remoteId": "uniqueIdForRemoteEntity"
                   }
                 ],
                 "country": "country",
                 "cellphoneNumber": "cellphoneNumber",
                 "address": {
-                  "country": "country",
-                  "countyOrProvince": "countyOrProvince",
+                  "country": "US",
+                  "countyOrProvince": "FL",
                   "line4": "line4",
-                  "city": "city",
+                  "city": "Key West",
                   "line3": "line3",
                   "line2": "line2",
-                  "line1": "line1",
-                  "zipOrPostcode": "zipOrPostcode"
+                  "line1": "500 Duval St",
+                  "zipOrPostcode": "33945"
                 },
                 "individual": {
                   "name": {
@@ -3358,27 +3538,27 @@
               "failedSubmission": {
                 "payorRefs": [
                   {
-                    "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                    "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                     "invitationStatus": "invitationStatus",
-                    "remoteId": "remoteId"
+                    "remoteId": "uniqueIdForRemoteEntity"
                   },
                   {
-                    "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                    "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                     "invitationStatus": "invitationStatus",
-                    "remoteId": "remoteId"
+                    "remoteId": "uniqueIdForRemoteEntity"
                   }
                 ],
                 "country": "country",
                 "cellphoneNumber": "cellphoneNumber",
                 "address": {
-                  "country": "country",
-                  "countyOrProvince": "countyOrProvince",
+                  "country": "US",
+                  "countyOrProvince": "FL",
                   "line4": "line4",
-                  "city": "city",
+                  "city": "Key West",
                   "line3": "line3",
                   "line2": "line2",
-                  "line1": "line1",
-                  "zipOrPostcode": "zipOrPostcode"
+                  "line1": "500 Duval St",
+                  "zipOrPostcode": "33945"
                 },
                 "individual": {
                   "name": {
@@ -3815,20 +3995,23 @@
       },
       "PayorCreateApplicationRequest": {
         "example": {
-          "name": "name",
-          "description": "description"
+          "name": "SAP",
+          "description": "SAP Application integration"
         },
         "properties": {
           "name": {
             "description": "The name of the application.",
+            "example": "SAP",
             "maxLength": 100,
             "minLength": 2,
             "type": "string"
           },
           "description": {
             "description": "Description of the application.",
+            "example": "SAP Application integration",
             "maxLength": 1024,
             "minLength": 2,
+            "nullable": true,
             "type": "string"
           }
         },
@@ -4119,27 +4302,27 @@
         "example": {
           "payorRefs": [
             {
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
               "invitationStatus": "invitationStatus",
-              "remoteId": "remoteId"
+              "remoteId": "uniqueIdForRemoteEntity"
             },
             {
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
               "invitationStatus": "invitationStatus",
-              "remoteId": "remoteId"
+              "remoteId": "uniqueIdForRemoteEntity"
             }
           ],
           "country": "country",
           "cellphoneNumber": "cellphoneNumber",
           "address": {
-            "country": "country",
-            "countyOrProvince": "countyOrProvince",
+            "country": "US",
+            "countyOrProvince": "FL",
             "line4": "line4",
-            "city": "city",
+            "city": "Key West",
             "line3": "line3",
             "line2": "line2",
-            "line1": "line1",
-            "zipOrPostcode": "zipOrPostcode"
+            "line1": "500 Duval St",
+            "zipOrPostcode": "33945"
           },
           "individual": {
             "name": {
@@ -4159,7 +4342,6 @@
           "displayName": "displayName",
           "created": "2000-01-23T04:56:07.000Z",
           "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
-          "type": "Individual",
           "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
           "remoteId": "remoteId",
           "paymentChannel": {
@@ -4209,9 +4391,8 @@
           },
           "email": {
             "format": "email",
-            "maxLength": 244,
+            "maxLength": 255,
             "minLength": 3,
-            "nullable": true,
             "type": "string"
           },
           "remoteId": {
@@ -4220,11 +4401,7 @@
             "type": "string"
           },
           "type": {
-            "enum": [
-              "Individual",
-              "Company"
-            ],
-            "type": "string"
+            "$ref": "#/components/schemas/PayeeType"
           },
           "displayName": {
             "type": "string"
@@ -4253,9 +4430,6 @@
           },
           "cellphoneNumber": {
             "type": "string"
-          },
-          "payeeType": {
-            "$ref": "#/components/schemas/PayeeType"
           },
           "company": {
             "$ref": "#/components/schemas/Company"
@@ -4296,8 +4470,10 @@
           }
         },
         "required": [
+          "address",
           "email",
-          "remoteId"
+          "remoteId",
+          "type"
         ],
         "type": "object"
       },
@@ -4356,27 +4532,27 @@
           "failedSubmission": {
             "payorRefs": [
               {
-                "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                 "invitationStatus": "invitationStatus",
-                "remoteId": "remoteId"
+                "remoteId": "uniqueIdForRemoteEntity"
               },
               {
-                "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                 "invitationStatus": "invitationStatus",
-                "remoteId": "remoteId"
+                "remoteId": "uniqueIdForRemoteEntity"
               }
             ],
             "country": "country",
             "cellphoneNumber": "cellphoneNumber",
             "address": {
-              "country": "country",
-              "countyOrProvince": "countyOrProvince",
+              "country": "US",
+              "countyOrProvince": "FL",
               "line4": "line4",
-              "city": "city",
+              "city": "Key West",
               "line3": "line3",
               "line2": "line2",
-              "line1": "line1",
-              "zipOrPostcode": "zipOrPostcode"
+              "line1": "500 Duval St",
+              "zipOrPostcode": "33945"
             },
             "individual": {
               "name": {
@@ -4801,27 +4977,27 @@
         "example": {
           "payorRefs": [
             {
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
               "invitationStatus": "invitationStatus",
-              "remoteId": "remoteId"
+              "remoteId": "uniqueIdForRemoteEntity"
             },
             {
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
               "invitationStatus": "invitationStatus",
-              "remoteId": "remoteId"
+              "remoteId": "uniqueIdForRemoteEntity"
             }
           ],
           "country": "country",
           "cellphoneNumber": "cellphoneNumber",
           "address": {
-            "country": "country",
-            "countyOrProvince": "countyOrProvince",
+            "country": "US",
+            "countyOrProvince": "FL",
             "line4": "line4",
-            "city": "city",
+            "city": "Key West",
             "line3": "line3",
             "line2": "line2",
-            "line1": "line1",
-            "zipOrPostcode": "zipOrPostcode"
+            "line1": "500 Duval St",
+            "zipOrPostcode": "33945"
           },
           "individual": {
             "name": {
@@ -5082,6 +5258,9 @@
             "type": "boolean"
           }
         },
+        "required": [
+          "reminderEmailsOptOut"
+        ],
         "type": "object"
       },
       "FundingAudit": {
@@ -5174,25 +5353,28 @@
       },
       "PayorFundingBankDetailsUpdate": {
         "example": {
-          "routingNumber": "routingNumber",
-          "accountName": "accountName",
-          "accountNumber": "accountNumber"
+          "routingNumber": "123123123",
+          "accountName": "Bank of America",
+          "accountNumber": "123456789012345"
         },
         "properties": {
           "routingNumber": {
             "description": "Routing number for the payor’s bank",
+            "example": "123123123",
             "maxLength": 9,
             "minLength": 9,
             "type": "string"
           },
           "accountNumber": {
             "description": "Payor’s bank account number.",
+            "example": "123456789012345",
             "maxLength": 17,
             "minLength": 4,
             "type": "string"
           },
           "accountName": {
             "description": "Payor’s bank account name.",
+            "example": "Bank of America",
             "maxLength": 22,
             "minLength": 1,
             "type": "string"
@@ -5207,16 +5389,18 @@
       },
       "PayorRef": {
         "example": {
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
           "invitationStatus": "invitationStatus",
-          "remoteId": "remoteId"
+          "remoteId": "uniqueIdForRemoteEntity"
         },
         "properties": {
           "payorId": {
+            "example": "ba08877f-9d96-41e4-9c26-44a872d856ae",
             "format": "uuid",
             "type": "string"
           },
           "remoteId": {
+            "example": "uniqueIdForRemoteEntity",
             "type": "string"
           },
           "invitationStatus": {
@@ -6106,34 +6290,39 @@
       },
       "PayorBrandingResponse": {
         "example": {
-          "supportContact": "supportContact",
-          "collectiveAlias": "collectiveAlias",
-          "dbaName": "dbaName",
-          "logoUrl": "http://example.com/aeiou",
-          "payorName": "payorName"
+          "supportContact": "support@example.com",
+          "collectiveAlias": "Payee",
+          "dbaName": "Key West Imports",
+          "logoUrl": "example.com",
+          "payorName": "Key West Imports, Inc"
         },
         "properties": {
           "payorName": {
             "description": "The name of the payor",
+            "example": "Key West Imports, Inc",
             "type": "string"
           },
           "logoUrl": {
             "description": "The URL to use for this payor’s logo",
+            "example": "example.com",
             "format": "uri",
             "type": "string"
           },
           "collectiveAlias": {
             "description": "How the payor has chosen to refer to payees",
+            "example": "Payee",
             "nullable": true,
             "type": "string"
           },
           "supportContact": {
             "description": "The payor’s support contact address",
+            "example": "support@example.com",
             "nullable": true,
             "type": "string"
           },
           "dbaName": {
             "description": "The payor’s 'Doing Business As' name",
+            "example": "Key West Imports",
             "nullable": true,
             "type": "string"
           }
@@ -6175,27 +6364,27 @@
             {
               "payorRefs": [
                 {
-                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatus": "invitationStatus",
-                  "remoteId": "remoteId"
+                  "remoteId": "uniqueIdForRemoteEntity"
                 },
                 {
-                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatus": "invitationStatus",
-                  "remoteId": "remoteId"
+                  "remoteId": "uniqueIdForRemoteEntity"
                 }
               ],
               "country": "country",
               "cellphoneNumber": "cellphoneNumber",
               "address": {
-                "country": "country",
-                "countyOrProvince": "countyOrProvince",
+                "country": "US",
+                "countyOrProvince": "FL",
                 "line4": "line4",
-                "city": "city",
+                "city": "Key West",
                 "line3": "line3",
                 "line2": "line2",
-                "line1": "line1",
-                "zipOrPostcode": "zipOrPostcode"
+                "line1": "500 Duval St",
+                "zipOrPostcode": "33945"
               },
               "individual": {
                 "name": {
@@ -6250,27 +6439,27 @@
             {
               "payorRefs": [
                 {
-                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatus": "invitationStatus",
-                  "remoteId": "remoteId"
+                  "remoteId": "uniqueIdForRemoteEntity"
                 },
                 {
-                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatus": "invitationStatus",
-                  "remoteId": "remoteId"
+                  "remoteId": "uniqueIdForRemoteEntity"
                 }
               ],
               "country": "country",
               "cellphoneNumber": "cellphoneNumber",
               "address": {
-                "country": "country",
-                "countyOrProvince": "countyOrProvince",
+                "country": "US",
+                "countyOrProvince": "FL",
                 "line4": "line4",
-                "city": "city",
+                "city": "Key West",
                 "line3": "line3",
                 "line2": "line2",
-                "line1": "line1",
-                "zipOrPostcode": "zipOrPostcode"
+                "line1": "500 Duval St",
+                "zipOrPostcode": "33945"
               },
               "individual": {
                 "name": {
@@ -6352,27 +6541,27 @@
             {
               "payorRefs": [
                 {
-                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatus": "invitationStatus",
-                  "remoteId": "remoteId"
+                  "remoteId": "uniqueIdForRemoteEntity"
                 },
                 {
-                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatus": "invitationStatus",
-                  "remoteId": "remoteId"
+                  "remoteId": "uniqueIdForRemoteEntity"
                 }
               ],
               "country": "country",
               "cellphoneNumber": "cellphoneNumber",
               "address": {
-                "country": "country",
-                "countyOrProvince": "countyOrProvince",
+                "country": "US",
+                "countyOrProvince": "FL",
                 "line4": "line4",
-                "city": "city",
+                "city": "Key West",
                 "line3": "line3",
                 "line2": "line2",
-                "line1": "line1",
-                "zipOrPostcode": "zipOrPostcode"
+                "line1": "500 Duval St",
+                "zipOrPostcode": "33945"
               },
               "individual": {
                 "name": {
@@ -6392,7 +6581,6 @@
               "displayName": "displayName",
               "created": "2000-01-23T04:56:07.000Z",
               "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
-              "type": "Individual",
               "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
               "remoteId": "remoteId",
               "paymentChannel": {
@@ -6429,27 +6617,27 @@
             {
               "payorRefs": [
                 {
-                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatus": "invitationStatus",
-                  "remoteId": "remoteId"
+                  "remoteId": "uniqueIdForRemoteEntity"
                 },
                 {
-                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatus": "invitationStatus",
-                  "remoteId": "remoteId"
+                  "remoteId": "uniqueIdForRemoteEntity"
                 }
               ],
               "country": "country",
               "cellphoneNumber": "cellphoneNumber",
               "address": {
-                "country": "country",
-                "countyOrProvince": "countyOrProvince",
+                "country": "US",
+                "countyOrProvince": "FL",
                 "line4": "line4",
-                "city": "city",
+                "city": "Key West",
                 "line3": "line3",
                 "line2": "line2",
-                "line1": "line1",
-                "zipOrPostcode": "zipOrPostcode"
+                "line1": "500 Duval St",
+                "zipOrPostcode": "33945"
               },
               "individual": {
                 "name": {
@@ -6469,7 +6657,6 @@
               "displayName": "displayName",
               "created": "2000-01-23T04:56:07.000Z",
               "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
-              "type": "Individual",
               "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
               "remoteId": "remoteId",
               "paymentChannel": {
@@ -6790,35 +6977,35 @@
       },
       "Payor": {
         "example": {
-          "primaryContactName": "primaryContactName",
+          "primaryContactName": "Joe Buck",
           "payeeGracePeriodProcessingEnabled": true,
-          "supportContact": "supportContact",
+          "supportContact": "support@example.com",
           "address": {
-            "country": "country",
-            "countyOrProvince": "countyOrProvince",
+            "country": "US",
+            "countyOrProvince": "FL",
             "line4": "line4",
-            "city": "city",
+            "city": "Key West",
             "line3": "line3",
             "line2": "line2",
-            "line1": "line1",
-            "zipOrPostcode": "zipOrPostcode"
+            "line1": "500 Duval St",
+            "zipOrPostcode": "33945"
           },
-          "fundingAccountAccountName": "fundingAccountAccountName",
+          "fundingAccountAccountName": "Example Corp BOA",
           "includesReports": true,
           "allowsLanguageChoice": true,
           "language": "EN",
-          "fundingAccountAccountNumber": "fundingAccountAccountNumber",
-          "dbaName": "dbaName",
-          "primaryContactPhone": "primaryContactPhone",
+          "fundingAccountAccountNumber": "1234567890123",
+          "dbaName": "Some Biz",
+          "primaryContactPhone": "123-123-1234",
           "payeeGracePeriodDays": 0,
-          "fundingAccountRoutingNumber": "fundingAccountRoutingNumber",
+          "fundingAccountRoutingNumber": "123456789",
           "reminderEmailsOptOut": true,
           "manualLockout": true,
-          "collectiveAlias": "collectiveAlias",
+          "collectiveAlias": "Payee",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "kycState": "FAILED_KYC",
-          "primaryContactEmail": "primaryContactEmail",
-          "payorName": "payorName"
+          "kycState": "PASSED_KYC",
+          "primaryContactEmail": "joe.buck@example.com",
+          "payorName": "Example, Corp"
         },
         "properties": {
           "payorId": {
@@ -6828,6 +7015,7 @@
           },
           "payorName": {
             "description": "The name of the payor.",
+            "example": "Example, Corp",
             "type": "string"
           },
           "address": {
@@ -6835,27 +7023,33 @@
           },
           "primaryContactName": {
             "description": "Name of primary contact for the payor.",
+            "example": "Joe Buck",
             "type": "string"
           },
           "primaryContactPhone": {
             "description": "Primary contact phone number for the payor.",
+            "example": "123-123-1234",
             "type": "string"
           },
           "primaryContactEmail": {
             "description": "Primary contact email for the payor.",
+            "example": "joe.buck@example.com",
             "format": "email",
             "type": "string"
           },
           "fundingAccountRoutingNumber": {
             "description": "The funding account routing number to be used for the payor.",
+            "example": "123456789",
             "type": "string"
           },
           "fundingAccountAccountNumber": {
             "description": "The funding account number to be used for the payor.",
+            "example": "1234567890123",
             "type": "string"
           },
           "fundingAccountAccountName": {
             "description": "The funding account name to be used for the payor.",
+            "example": "Example Corp BOA",
             "type": "string"
           },
           "kycState": {
@@ -6865,6 +7059,8 @@
               "PASSED_KYC",
               "REQUIRES_KYC"
             ],
+            "example": "PASSED_KYC",
+            "readOnly": true,
             "type": "string"
           },
           "manualLockout": {
@@ -6873,22 +7069,27 @@
           },
           "payeeGracePeriodProcessingEnabled": {
             "description": "Whether grace period processing is enabled.",
+            "readOnly": true,
             "type": "boolean"
           },
           "payeeGracePeriodDays": {
             "description": "The grace period for paying payees in days.",
+            "readOnly": true,
             "type": "integer"
           },
           "collectiveAlias": {
             "description": "How the payor has chosen to refer to payees.",
+            "example": "Payee",
             "type": "string"
           },
           "supportContact": {
-            "description": "The payor’s support contact address.",
+            "description": "The payor’s support contact email address.",
+            "example": "support@example.com",
             "type": "string"
           },
           "dbaName": {
             "description": "The payor’s 'Doing Business As' name.",
+            "example": "Some Biz",
             "type": "string"
           },
           "allowsLanguageChoice": {
@@ -6897,6 +7098,7 @@
           },
           "reminderEmailsOptOut": {
             "description": "Whether or not the payor has opted-out of reminder emails being sent.",
+            "readOnly": true,
             "type": "boolean"
           },
           "language": {
@@ -6905,6 +7107,7 @@
               "EN",
               "FR"
             ],
+            "example": "EN",
             "type": "string"
           },
           "includesReports": {
