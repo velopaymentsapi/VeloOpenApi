@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.11.72",
+    "version": "2.11.73",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -1556,6 +1556,7 @@
     },
     "/v1/sourceAccounts/{sourceAccountId}/achFundingRequest": {
       "post": {
+        "deprecated": true,
         "description": "Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).",
         "operationId": "createAchFundingRequest",
         "parameters": [
