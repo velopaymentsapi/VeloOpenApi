@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.12.15
+  version: 2.12.16
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -2136,7 +2136,7 @@ paths:
                     $ref: '#/components/schemas/PaymentInstruction'
                   type: array
               type: object
-        description: Post ammount to transfer via ACH using stored funding account details.
+        description: Post amount to transfer using stored funding account details.
         required: true
       responses:
         '202':
