@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.13.1
+  version: 2.13.2
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -1318,6 +1318,7 @@ paths:
   /v1/sourceAccounts:
     description: List Source Accounts
     get:
+      deprecated: true
       description: List source accounts.
       operationId: getSourceAccounts
       parameters:
@@ -1428,6 +1429,7 @@ paths:
   '/v1/sourceAccounts/{sourceAccountId}':
     description: Get details about given source account.
     get:
+      deprecated: true
       description: Get details about given source account.
       operationId: getSourceAccount
       parameters:
@@ -1517,6 +1519,42 @@ paths:
                 -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \
                 -H 'Content-Type: application/json' \
                 -d '{"amount":999990}'
+  '/v1/sourceAccounts/{sourceAccountId}/notifications':
+    post:
+      description: Set notifications for a given source account
+      operationId: setNotificationsRequest
+      parameters:
+        - description: Source account id
+          in: path
+          name: sourceAccountId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetNotificationsRequest'
+        description: Body to included minimum balance to set
+        required: true
+      responses:
+        '204':
+          description: Request Fulfilled
+        '400':
+          description: Invalid Request Body
+        '404':
+          description: Source Account Not Found
+      summary: Set notifications
+      tags:
+        - Funding Manager
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/notifications' -i -X POST \
+                -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \
+                -H 'Content-Type: application/json' \
+                -d '{"minimumBalance":900}'
   '/v2/sourceAccounts/{sourceAccountId}/fundingRequest':
     post:
       description: 'Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).'
@@ -1557,6 +1595,176 @@ paths:
                 -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \
                 -H 'Content-Type: application/json' \
                 -d '{"amount":999990}'
+  /v2/sourceAccounts:
+    description: List Source Accounts
+    get:
+      description: List source accounts.
+      operationId: getSourceAccountsV2
+      parameters:
+        - description: Physical Account Name
+          in: query
+          name: physicalAccountName
+          required: false
+          schema:
+            type: string
+        - description: The account owner Payor ID
+          in: query
+          name: payorId
+          required: false
+          schema:
+            format: uuid
+            type: string
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            type: integer
+        - description: Sort String
+          in: query
+          name: sort
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example: |
+                HTTP/1.1 200 OK
+                Content-Length: 1455
+                Content-Type: application/json;charset=UTF-8
+
+                {
+                  "page" : {
+                    "numberOfElements" : 2,
+                    "totalElements" : 2,
+                    "totalPages" : 1,
+                    "page" : 1,
+                    "pageSize" : 0
+                  },
+                  "links" : [ {
+                    "rel" : "first",
+                    "href" : "https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+                  }, {
+                    "rel" : "last",
+                    "href" : "https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+                  }, {
+                    "rel" : "self",
+                    "href" : "https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+                  } ],
+                  "content" : [ {
+                    "id" : "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
+                    "balance" : 1203489,
+                    "currency" : "USD",
+                    "fundingRef" : "a1b2c3d4",
+                    "physicalAccountName" : "VELO_FBO_MYBANKA_USD",
+                    "railsId" : "SIM",
+                    "payorId" : "a2967711-df07-41e5-b5ea-f563088911c6",
+                    "name" : "mySourceAccount",
+                    "pooled" : true,
+                    "balanceVisible" : true,
+                    "customerId" : null,
+                    "notifications" : {
+                       "minimumBalance": 900
+                    }
+                  }, {
+                    "id" : "a587c938-e497-4349-8817-129a5e801f30",
+                    "balance" : 1203489,
+                    "currency" : "USD",
+                    "fundingRef" : "a1b2c3d4",
+                    "physicalAccountName" : "VELO_FBO_MYBANKA_USD",
+                    "railsId" : "SIM",
+                    "payorId" : "a2967711-df07-41e5-b5ea-f563088911c6",
+                    "name" : "mySourceAccount",
+                    "pooled" : true,
+                    "balanceVisible" : true,
+                    "customerId" : null,
+                    "notifications" : {
+                      "minimumBalance": 900
+                    }
+                  } ]
+                }
+              schema:
+                $ref: '#/components/schemas/ListSourceAccountResponse_2'
+          description: List Source Account response
+        '400':
+          description: Invalid Request Parameters
+        '404':
+          description: Not Found
+      summary: Get list of source accounts
+      tags:
+        - Funding Manager
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \
+                -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'
+    summary: List Source Accounts
+  '/v2/sourceAccounts/{sourceAccountId}':
+    description: Get details about given source account.
+    get:
+      description: Get details about given source account.
+      operationId: getSourceAccountV2
+      parameters:
+        - description: Source account id
+          in: path
+          name: sourceAccountId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              example: |
+                HTTP/1.1 200 OK
+                Content-Type: application/json;charset=UTF-8
+                Content-Length: 356
+
+                {
+                  "id" : "414ad313-51b4-4d93-82b2-0a40963d95ba",
+                  "balance" : 1203489,
+                  "currency" : "USD",
+                  "fundingRef" : "a1b2c3d4",
+                  "physicalAccountName" : "VELO_FBO_MYBANKA_USD",
+                  "railsId" : "SIM",
+                  "payorId" : "a2967711-df07-41e5-b5ea-f563088911c6",
+                  "name" : "mySourceAccount",
+                  "pooled" : true,
+                  "balanceVisible" : true,
+                  "customerId" : "123456789",
+                  "notifications" : {
+                    "minimumBalance": 900
+                  }
+                }
+              schema:
+                $ref: '#/components/schemas/SourceAccountResponse_2'
+          description: Source account response
+        '400':
+          description: 'Bad Request, Invalid path parameter'
+        '404':
+          description: Not found
+      summary: Get details about given source account.
+      tags:
+        - Funding Manager
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \
+                -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
+    summary: Get Source Account
   /v1/paymentaudit/fundings:
     get:
       description: |
@@ -3786,6 +3994,61 @@ components:
         failureMessage:
           type: string
       type: object
+    SourceAccountResponse_2:
+      example:
+        physicalAccountName: physicalAccountName
+        fundingRef: fundingRef
+        balance: 0.8008281904610115
+        pooled: true
+        name: name
+        customerId: customerId
+        physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        currency: USD
+        railsId: railsId
+        balanceVisible: true
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        notifications:
+          minimumBalance: 6
+      properties:
+        id:
+          description: Source Account Id
+          format: uuid
+          type: string
+        balance:
+          description: Decimal implied
+          format: int32
+          type: number
+        currency:
+          enum:
+            - USD
+          maxLength: 3
+          minLength: 3
+          type: string
+        fundingRef:
+          type: string
+        physicalAccountName:
+          type: string
+        railsId:
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        name:
+          type: string
+        pooled:
+          type: boolean
+        balanceVisible:
+          type: boolean
+        customerId:
+          nullable: true
+          type: string
+        physicalAccountId:
+          format: uuid
+          type: string
+        notifications:
+          $ref: '#/components/schemas/Notifications'
+      type: object
     InvitePayeeRequest:
       example:
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -3923,6 +4186,18 @@ components:
         - accounts
         - fxSummaries
         - rejectedPayments
+      type: object
+    SetNotificationsRequest:
+      example:
+        minimumBalance: 800828190
+      properties:
+        minimumBalance:
+          description: Amount to set as minimum balance in minor units
+          maximum: 9999999999
+          minimum: 0
+          type: integer
+      required:
+        - minimumBalance
       type: object
     CreatePayeesCSVRequest:
       properties:
@@ -4177,6 +4452,13 @@ components:
           $ref: '#/components/schemas/OnboardedStatus'
         social:
           $ref: '#/components/schemas/Social'
+      type: object
+    Notifications:
+      example:
+        minimumBalance: 6
+      properties:
+        minimumBalance:
+          type: integer
       type: object
     CreatePayeesCSVResponse:
       example:
@@ -4705,6 +4987,61 @@ components:
         - UR
         - ZH
       type: string
+    ListSourceAccountResponse_2:
+      description: List Source Accounts Response Object
+      example:
+        links:
+          - rel: rel
+            href: href
+          - rel: rel
+            href: href
+        page:
+          numberOfElements: 2
+          totalPages: 9
+          pageSize: 2
+          page: 3
+          totalElements: 7
+        content:
+          - physicalAccountName: physicalAccountName
+            fundingRef: fundingRef
+            balance: 0.8008281904610115
+            pooled: true
+            name: name
+            customerId: customerId
+            physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            currency: USD
+            railsId: railsId
+            balanceVisible: true
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            notifications:
+              minimumBalance: 6
+          - physicalAccountName: physicalAccountName
+            fundingRef: fundingRef
+            balance: 0.8008281904610115
+            pooled: true
+            name: name
+            customerId: customerId
+            physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            currency: USD
+            railsId: railsId
+            balanceVisible: true
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            notifications:
+              minimumBalance: 6
+      properties:
+        page:
+          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/SourceAccountResponse_2'
+          type: array
+      type: object
     ListPaymentsResponse:
       description: List Payments Response Object
       example:
