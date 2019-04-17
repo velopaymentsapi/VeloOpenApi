@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.13.3",
+    "version": "2.13.4",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -6076,6 +6076,7 @@
           "content": [
             {
               "physicalAccountName": "physicalAccountName",
+              "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "fundingRef": "fundingRef",
               "balance": 0.8008281904610115,
               "pooled": true,
@@ -6090,6 +6091,7 @@
             },
             {
               "physicalAccountName": "physicalAccountName",
+              "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "fundingRef": "fundingRef",
               "balance": 0.8008281904610115,
               "pooled": true,
@@ -7162,6 +7164,7 @@
       "SourceAccountResponse": {
         "example": {
           "physicalAccountName": "physicalAccountName",
+          "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "fundingRef": "fundingRef",
           "balance": 0.8008281904610115,
           "pooled": true,
@@ -7221,6 +7224,11 @@
           },
           "physicalAccountId": {
             "format": "uuid",
+            "type": "string"
+          },
+          "fundingAccountId": {
+            "format": "uuid",
+            "nullable": true,
             "type": "string"
           }
         },
