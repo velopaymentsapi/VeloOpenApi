@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.13.4",
+    "version": "2.13.5",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -3833,6 +3833,38 @@
         },
         "type": "object"
       },
+      "AutoTopUpConfig": {
+        "example": {
+          "targetBalance": 300000,
+          "minBalance": 10000,
+          "enabled": true
+        },
+        "properties": {
+          "enabled": {
+            "description": "Is auto top-up enabled? automatically trigger funding to top-up the source account balance when the balance falls below the configured minimum level.",
+            "example": true,
+            "type": "boolean"
+          },
+          "minBalance": {
+            "description": "When the payor balance falls below this level then auto top-up will be triggered. Note - This is in minor units.",
+            "example": 10000,
+            "format": "int32",
+            "nullable": true,
+            "type": "number"
+          },
+          "targetBalance": {
+            "description": "When the payor balance falls below the min balance then auto top-up will request funds bring the balance to this level. Note - this is in minor units.",
+            "example": 300000,
+            "format": "int32",
+            "nullable": true,
+            "type": "number"
+          }
+        },
+        "required": [
+          "enabled"
+        ],
+        "type": "object"
+      },
       "PaymentChannelRulesResponse": {
         "example": {
           "bank": [
@@ -4213,6 +4245,11 @@
               "name": "name",
               "customerId": "customerId",
               "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "autoTopUpConfig": {
+                "targetBalance": 300000,
+                "minBalance": 10000,
+                "enabled": true
+              },
               "currency": "USD",
               "railsId": "railsId",
               "balanceVisible": true,
@@ -4231,6 +4268,11 @@
               "name": "name",
               "customerId": "customerId",
               "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "autoTopUpConfig": {
+                "targetBalance": 300000,
+                "minBalance": 10000,
+                "enabled": true
+              },
               "currency": "USD",
               "railsId": "railsId",
               "balanceVisible": true,
@@ -6152,6 +6194,11 @@
           "name": "name",
           "customerId": "customerId",
           "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "autoTopUpConfig": {
+            "targetBalance": 300000,
+            "minBalance": 10000,
+            "enabled": true
+          },
           "currency": "USD",
           "railsId": "railsId",
           "balanceVisible": true,
@@ -6217,8 +6264,20 @@
             "format": "uuid",
             "nullable": true,
             "type": "string"
+          },
+          "autoTopUpConfig": {
+            "$ref": "#/components/schemas/AutoTopUpConfig"
           }
         },
+        "required": [
+          "autoTopUpConfig",
+          "balanceVisible",
+          "fundingRef",
+          "id",
+          "physicalAccountName",
+          "pooled",
+          "railsId"
+        ],
         "type": "object"
       },
       "ListPaymentsResponse": {
