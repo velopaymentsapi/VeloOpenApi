@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.13.5",
+    "version": "2.13.6",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -2107,7 +2107,6 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "HTTP/1.1 200 OK\nContent-Type: application/json;charset=UTF-8\nContent-Length: 356\n\n{\n  \"id\" : \"414ad313-51b4-4d93-82b2-0a40963d95ba\",\n  \"balance\" : 1203489,\n  \"currency\" : \"USD\",\n  \"fundingRef\" : \"a1b2c3d4\",\n  \"physicalAccountName\" : \"VELO_FBO_MYBANKA_USD\",\n  \"railsId\" : \"SIM\",\n  \"payorId\" : \"a2967711-df07-41e5-b5ea-f563088911c6\",\n  \"name\" : \"mySourceAccount\",\n  \"pooled\" : true,\n  \"balanceVisible\" : true,\n  \"customerId\" : \"123456789\",\n  \"notifications\" : {\n    \"minimumBalance\": 900\n  }\n}\n",
                 "schema": {
                   "$ref": "#/components/schemas/SourceAccountResponseV2"
                 }

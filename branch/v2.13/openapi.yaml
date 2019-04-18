@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.13.5
+  version: 2.13.6
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -1728,27 +1728,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Type: application/json;charset=UTF-8
-                Content-Length: 356
-
-                {
-                  "id" : "414ad313-51b4-4d93-82b2-0a40963d95ba",
-                  "balance" : 1203489,
-                  "currency" : "USD",
-                  "fundingRef" : "a1b2c3d4",
-                  "physicalAccountName" : "VELO_FBO_MYBANKA_USD",
-                  "railsId" : "SIM",
-                  "payorId" : "a2967711-df07-41e5-b5ea-f563088911c6",
-                  "name" : "mySourceAccount",
-                  "pooled" : true,
-                  "balanceVisible" : true,
-                  "customerId" : "123456789",
-                  "notifications" : {
-                    "minimumBalance": 900
-                  }
-                }
               schema:
                 $ref: '#/components/schemas/SourceAccountResponseV2'
           description: Source account response
