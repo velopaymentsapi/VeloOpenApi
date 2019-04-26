@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.13.9
+  version: 2.13.10
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -109,6 +109,7 @@ tags:
 paths:
   '/v1/payors/{payorId}':
     get:
+      deprecated: true
       description: |
         Get a Single Payor by Id.
       operationId: getPayorById
@@ -175,6 +176,75 @@ paths:
         - contractId: 2
           name: Test Payor Not Found
           contractPath: /v1/payors/00000000-0000-0000-0000-000000000000
+          serviceName: payor-service
+  '/v2/payors/{payorId}':
+    get:
+      description: |
+        Get a Single Payor by Id.
+      operationId: getPayorByIdV2
+      parameters:
+        - description: The account owner Payor ID
+          in: path
+          name: payorId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payor_2'
+          description: Get Payor Details
+          x-contracts:
+            - contractId: 1
+              headers:
+                Content-Type: application/json;charset=UTF-8
+              body:
+                payorId: 0a818933-087d-47f2-ad83-2f986ed087eb
+                payorName: Joe
+                address:
+                  line1: 101 California Street
+                  city: San Francisco
+                  zipOrPostcode: '94111'
+                  country: US
+                primaryContactName: Joe
+                primaryContactPhone: 1231231234
+                primaryContactEmail: foo@example.com
+                kycState: PASSED_KYC
+                manualLockout: false
+                payeeGracePeriodProcessingEnabled: true
+                payeeGracePeriodDays: 90
+                dbaName: 'FlyByNight, Inc'
+                allowsLanguageChoice: false
+                reminderEmailsOptOut: false
+                language: EN
+                supportContact: support@example.com
+                collectiveAlias: MyAlias
+        '404':
+          description: Payor Id Not Found
+          x-contracts:
+            - contractId: 2
+              headers:
+                Content-Length: '0'
+      summary: Get Payor
+      tags:
+        - Payors
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/payors/126969bd-6a18-47ec-96e1-57559afecf32' -i -X GET \
+                -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \
+                -H 'Content-Type: application/json'
+      x-contracts:
+        - contractId: 1
+          name: Test Get Payor V2
+          contractPath: /v2/payors/0a818933-087d-47f2-ad83-2f986ed087eb
+          serviceName: payor-service
+        - contractId: 2
+          name: Test Payor Not Found V2
+          contractPath: /v2/payors/00000000-0000-0000-0000-000000000000
           serviceName: payor-service
   '/v1/payors/{payorId}/payorFundingBankDetailsUpdate':
     post:
@@ -2825,6 +2895,108 @@ components:
         fundingAccountAccountName:
           description: The funding account name to be used for the payor.
           example: Example Corp BOA
+          type: string
+        kycState:
+          description: The kyc state of the payor.
+          enum:
+            - FAILED_KYC
+            - PASSED_KYC
+            - REQUIRES_KYC
+          example: PASSED_KYC
+          readOnly: true
+          type: string
+        manualLockout:
+          description: Whether or not the payor has been manually locked by the backoffice.
+          type: boolean
+        payeeGracePeriodProcessingEnabled:
+          description: Whether grace period processing is enabled.
+          readOnly: true
+          type: boolean
+        payeeGracePeriodDays:
+          description: The grace period for paying payees in days.
+          readOnly: true
+          type: integer
+        collectiveAlias:
+          description: How the payor has chosen to refer to payees.
+          example: Payee
+          type: string
+        supportContact:
+          description: The payor’s support contact email address.
+          example: support@example.com
+          type: string
+        dbaName:
+          description: The payor’s 'Doing Business As' name.
+          example: Some Biz
+          type: string
+        allowsLanguageChoice:
+          description: Whether or not the payor allows language choice in the UI.
+          type: boolean
+        reminderEmailsOptOut:
+          description: Whether or not the payor has opted-out of reminder emails being sent.
+          readOnly: true
+          type: boolean
+        language:
+          description: 'The payor’s language preference. Must be one of [EN, FR].'
+          enum:
+            - EN
+            - FR
+          example: EN
+          type: string
+        includesReports:
+          type: boolean
+      required:
+        - payorName
+      type: object
+    Payor_2:
+      example:
+        primaryContactName: Joe Buck
+        payeeGracePeriodProcessingEnabled: true
+        supportContact: support@example.com
+        address:
+          country: US
+          countyOrProvince: FL
+          line4: line4
+          city: Key West
+          line3: line3
+          line2: line2
+          line1: 500 Duval St
+          zipOrPostcode: '33945'
+        includesReports: true
+        allowsLanguageChoice: true
+        language: EN
+        dbaName: Some Biz
+        primaryContactPhone: 123-123-1234
+        payeeGracePeriodDays: 0
+        reminderEmailsOptOut: true
+        manualLockout: true
+        collectiveAlias: Payee
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        kycState: PASSED_KYC
+        primaryContactEmail: joe.buck@example.com
+        payorName: 'Example, Corp'
+      properties:
+        payorId:
+          format: uuid
+          readOnly: true
+          type: string
+        payorName:
+          description: The name of the payor.
+          example: 'Example, Corp'
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        primaryContactName:
+          description: Name of primary contact for the payor.
+          example: Joe Buck
+          type: string
+        primaryContactPhone:
+          description: Primary contact phone number for the payor.
+          example: 123-123-1234
+          type: string
+        primaryContactEmail:
+          description: Primary contact email for the payor.
+          example: joe.buck@example.com
+          format: email
           type: string
         kycState:
           description: The kyc state of the payor.
