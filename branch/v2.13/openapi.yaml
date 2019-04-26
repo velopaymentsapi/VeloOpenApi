@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.13.10
+  version: 2.13.11
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -3268,10 +3268,6 @@ components:
                 title: title
               nationalIdentification: ''
               dateOfBirth: ''
-            social:
-              facebookId: facebookId
-              twitterId: twitterId
-              linkedInId: linkedInId
             displayName: displayName
             created: 2000-01-23T04:56:07.000Z
             lastOfacCheckTimestamp: lastOfacCheckTimestamp
@@ -3324,10 +3320,6 @@ components:
                 title: title
               nationalIdentification: ''
               dateOfBirth: ''
-            social:
-              facebookId: facebookId
-              twitterId: twitterId
-              linkedInId: linkedInId
             displayName: displayName
             created: 2000-01-23T04:56:07.000Z
             lastOfacCheckTimestamp: lastOfacCheckTimestamp
@@ -3396,10 +3388,6 @@ components:
             title: title
           nationalIdentification: ''
           dateOfBirth: ''
-        social:
-          facebookId: facebookId
-          twitterId: twitterId
-          linkedInId: linkedInId
         displayName: displayName
         created: 2000-01-23T04:56:07.000Z
         lastOfacCheckTimestamp: lastOfacCheckTimestamp
@@ -3488,8 +3476,6 @@ components:
           $ref: '#/components/schemas/OfacStatus'
         onboardedStatus:
           $ref: '#/components/schemas/OnboardedStatus'
-        social:
-          $ref: '#/components/schemas/Social'
       type: object
     CreatePayeesRequest:
       example:
@@ -3520,10 +3506,6 @@ components:
                 title: title
               nationalIdentification: ''
               dateOfBirth: ''
-            social:
-              facebookId: facebookId
-              twitterId: twitterId
-              linkedInId: linkedInId
             displayName: displayName
             created: 2000-01-23T04:56:07.000Z
             lastOfacCheckTimestamp: lastOfacCheckTimestamp
@@ -3577,10 +3559,6 @@ components:
                 title: title
               nationalIdentification: ''
               dateOfBirth: ''
-            social:
-              facebookId: facebookId
-              twitterId: twitterId
-              linkedInId: linkedInId
             displayName: displayName
             created: 2000-01-23T04:56:07.000Z
             lastOfacCheckTimestamp: lastOfacCheckTimestamp
@@ -3796,10 +3774,6 @@ components:
                   title: title
                 nationalIdentification: ''
                 dateOfBirth: ''
-              social:
-                facebookId: facebookId
-                twitterId: twitterId
-                linkedInId: linkedInId
               displayName: displayName
               created: 2000-01-23T04:56:07.000Z
               lastOfacCheckTimestamp: lastOfacCheckTimestamp
@@ -3854,10 +3828,6 @@ components:
                   title: title
                 nationalIdentification: ''
                 dateOfBirth: ''
-              social:
-                facebookId: facebookId
-                twitterId: twitterId
-                linkedInId: linkedInId
               displayName: displayName
               created: 2000-01-23T04:56:07.000Z
               lastOfacCheckTimestamp: lastOfacCheckTimestamp
@@ -5289,20 +5259,6 @@ components:
           format: date-time
           type: string
       type: object
-    Social:
-      example:
-        facebookId: facebookId
-        twitterId: twitterId
-        linkedInId: linkedInId
-      nullable: true
-      properties:
-        twitterId:
-          type: string
-        facebookId:
-          type: string
-        linkedInId:
-          type: string
-      type: object
     CreatePayee:
       example:
         payorRefs:
@@ -5331,10 +5287,6 @@ components:
             title: title
           nationalIdentification: ''
           dateOfBirth: ''
-        social:
-          facebookId: facebookId
-          twitterId: twitterId
-          linkedInId: linkedInId
         displayName: displayName
         created: 2000-01-23T04:56:07.000Z
         lastOfacCheckTimestamp: lastOfacCheckTimestamp
@@ -5429,8 +5381,6 @@ components:
           $ref: '#/components/schemas/OfacStatus'
         onboardedStatus:
           $ref: '#/components/schemas/OnboardedStatus'
-        social:
-          $ref: '#/components/schemas/Social'
       required:
         - address
         - email
@@ -5466,10 +5416,6 @@ components:
               title: title
             nationalIdentification: ''
             dateOfBirth: ''
-          social:
-            facebookId: facebookId
-            twitterId: twitterId
-            linkedInId: linkedInId
           displayName: displayName
           created: 2000-01-23T04:56:07.000Z
           lastOfacCheckTimestamp: lastOfacCheckTimestamp
