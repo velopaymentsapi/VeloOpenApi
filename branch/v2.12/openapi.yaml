@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.12.18
+  version: 2.12.19
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -246,7 +246,7 @@ paths:
              -d '{"routingNumber":"123456789","accountNumber":"12345","accountName":"Robert C. Smith"}'
   '/v1/payors/{payorId}/applications':
     post:
-      description: Create an application for the given Payor ID
+      description: Create an application for the given Payor ID. Applications are programatic users which can be assigned unique keys.
       operationId: payorCreateApplicationRequest
       parameters:
         - description: The account owner Payor ID
