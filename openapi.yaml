@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.12.75
+  version: 2.12.76
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -3759,20 +3759,20 @@ components:
                 routingNumber: routingNumber
                 accountName: accountName
                 iban: iban
-                sourceAmount: 5.637376656633329
+                sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
                 accountNumber: accountNumber
-                paymentAmount: 2.3021358869347655
+                paymentAmount: 1299
               - principal: principal
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 routingNumber: routingNumber
                 accountName: accountName
                 iban: iban
-                sourceAmount: 5.637376656633329
+                sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
                 accountNumber: accountNumber
-                paymentAmount: 2.3021358869347655
+                paymentAmount: 1299
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
@@ -3783,7 +3783,7 @@ components:
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 7
+            returnCost: 5
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
@@ -3810,20 +3810,20 @@ components:
                 routingNumber: routingNumber
                 accountName: accountName
                 iban: iban
-                sourceAmount: 5.637376656633329
+                sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
                 accountNumber: accountNumber
-                paymentAmount: 2.3021358869347655
+                paymentAmount: 1299
               - principal: principal
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 routingNumber: routingNumber
                 accountName: accountName
                 iban: iban
-                sourceAmount: 5.637376656633329
+                sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
                 accountNumber: accountNumber
-                paymentAmount: 2.3021358869347655
+                paymentAmount: 1299
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
@@ -3834,7 +3834,7 @@ components:
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 7
+            returnCost: 5
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
@@ -4943,20 +4943,20 @@ components:
             routingNumber: routingNumber
             accountName: accountName
             iban: iban
-            sourceAmount: 5.637376656633329
+            sourceAmount: 1299
             eventType: PAYOUT_SUBMITTED
             accountNumber: accountNumber
-            paymentAmount: 2.3021358869347655
+            paymentAmount: 1299
           - principal: principal
             eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000Z
             routingNumber: routingNumber
             accountName: accountName
             iban: iban
-            sourceAmount: 5.637376656633329
+            sourceAmount: 1299
             eventType: PAYOUT_SUBMITTED
             accountNumber: accountNumber
-            paymentAmount: 2.3021358869347655
+            paymentAmount: 1299
         payorName: payorName
         sourceAccountName: sourceAccountName
         paymentChannelId: paymentChannelId
@@ -4967,7 +4967,7 @@ components:
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         remoteId: remoteId
         routingNumber: routingNumber
-        returnCost: 7
+        returnCost: 5
         iban: iban
         payorPaymentId: payorPaymentId
         status: ACCEPTED
@@ -5262,20 +5262,20 @@ components:
                 routingNumber: routingNumber
                 accountName: accountName
                 iban: iban
-                sourceAmount: 5.637376656633329
+                sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
                 accountNumber: accountNumber
-                paymentAmount: 2.3021358869347655
+                paymentAmount: 1299
               - principal: principal
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 routingNumber: routingNumber
                 accountName: accountName
                 iban: iban
-                sourceAmount: 5.637376656633329
+                sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
                 accountNumber: accountNumber
-                paymentAmount: 2.3021358869347655
+                paymentAmount: 1299
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
@@ -5286,7 +5286,7 @@ components:
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 7
+            returnCost: 5
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
@@ -5313,20 +5313,20 @@ components:
                 routingNumber: routingNumber
                 accountName: accountName
                 iban: iban
-                sourceAmount: 5.637376656633329
+                sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
                 accountNumber: accountNumber
-                paymentAmount: 2.3021358869347655
+                paymentAmount: 1299
               - principal: principal
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 routingNumber: routingNumber
                 accountName: accountName
                 iban: iban
-                sourceAmount: 5.637376656633329
+                sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
                 accountNumber: accountNumber
-                paymentAmount: 2.3021358869347655
+                paymentAmount: 1299
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
@@ -5337,7 +5337,7 @@ components:
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 7
+            returnCost: 5
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
@@ -5995,10 +5995,10 @@ components:
         routingNumber: routingNumber
         accountName: accountName
         iban: iban
-        sourceAmount: 5.637376656633329
+        sourceAmount: 1299
         eventType: PAYOUT_SUBMITTED
         accountNumber: accountNumber
-        paymentAmount: 2.3021358869347655
+        paymentAmount: 1299
       properties:
         eventId:
           description: The id of the event.
@@ -6046,14 +6046,16 @@ components:
           $ref: '#/components/schemas/PaymentAuditCurrency'
         sourceAmount:
           description: The source amount exposed by the event.
-          format: double
-          type: number
+          example: 1299
+          format: int32
+          type: integer
         paymentCurrency:
           $ref: '#/components/schemas/PaymentAuditCurrency'
         paymentAmount:
           description: The destination amount exposed by the event.
-          format: double
-          type: number
+          example: 1299
+          format: int32
+          type: integer
         accountNumber:
           description: The account number attached to the event.
           type: string
