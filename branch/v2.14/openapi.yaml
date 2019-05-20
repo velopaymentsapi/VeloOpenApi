@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.14.6
+  version: 2.14.7
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -3505,7 +3505,7 @@ components:
                 lastName: lastName
                 otherNames: otherNames
                 title: title
-              nationalIdentification: 0
+              nationalIdentification: nationalIdentification
               dateOfBirth: 2000-01-23T00:00:00.000Z
             social:
               facebookId: facebookId
@@ -3551,7 +3551,7 @@ components:
                 lastName: lastName
                 otherNames: otherNames
                 title: title
-              nationalIdentification: 0
+              nationalIdentification: nationalIdentification
               dateOfBirth: 2000-01-23T00:00:00.000Z
             social:
               facebookId: facebookId
@@ -3633,10 +3633,9 @@ components:
           minLength: 2
           type: string
         individualNationalIdentification:
-          description: Must be 9 digits if provided
-          maxLength: 9
-          minLength: 9
-          type: integer
+          maxLength: 30
+          minLength: 6
+          type: string
         individualDateOfBirth:
           description: Must not be date in future. Example - 1970-05-20
           format: date
@@ -5541,7 +5540,7 @@ components:
             lastName: lastName
             otherNames: otherNames
             title: title
-          nationalIdentification: 0
+          nationalIdentification: nationalIdentification
           dateOfBirth: 2000-01-23T00:00:00.000Z
         social:
           facebookId: facebookId
@@ -6484,16 +6483,15 @@ components:
           lastName: lastName
           otherNames: otherNames
           title: title
-        nationalIdentification: 0
+        nationalIdentification: nationalIdentification
         dateOfBirth: 2000-01-23T00:00:00.000Z
       properties:
         name:
           $ref: '#/components/schemas/Individual_name'
         nationalIdentification:
-          description: Must be 9 digits if provided
-          maxLength: 9
-          minLength: 9
-          type: integer
+          maxLength: 30
+          minLength: 6
+          type: string
         dateOfBirth:
           description: Must not be date in future. Example - 1970-05-20
           format: date
