@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.14.5",
+    "version": "2.14.6",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -3899,7 +3899,7 @@
               "company": {
                 "taxId": "taxId",
                 "name": "name",
-                "dbaName": "dbaName"
+                "operatingName": "operatingName"
               },
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "email": "email",
@@ -3970,7 +3970,7 @@
               "company": {
                 "taxId": "taxId",
                 "name": "name",
-                "dbaName": "dbaName"
+                "operatingName": "operatingName"
               },
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "email": "email",
@@ -4066,7 +4066,7 @@
           "company": {
             "taxId": "taxId",
             "name": "name",
-            "dbaName": "dbaName"
+            "operatingName": "operatingName"
           },
           "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "email": "email",
@@ -4207,7 +4207,7 @@
               "company": {
                 "taxId": "taxId",
                 "name": "name",
-                "dbaName": "dbaName"
+                "operatingName": "operatingName"
               },
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "email": "email",
@@ -4267,7 +4267,7 @@
               "company": {
                 "taxId": "taxId",
                 "name": "name",
-                "dbaName": "dbaName"
+                "operatingName": "operatingName"
               },
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "email": "email",
@@ -4399,7 +4399,7 @@
             "pattern": "[\\\\d]{9}",
             "type": "string"
           },
-          "companyDbaName": {
+          "companyOperatingName": {
             "maxLength": 100,
             "minLength": 1,
             "type": "string"
@@ -4820,7 +4820,7 @@
                 "company": {
                   "taxId": "taxId",
                   "name": "name",
-                  "dbaName": "dbaName"
+                  "operatingName": "operatingName"
                 },
                 "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "email": "email",
@@ -4894,7 +4894,7 @@
                 "company": {
                   "taxId": "taxId",
                   "name": "name",
-                  "dbaName": "dbaName"
+                  "operatingName": "operatingName"
                 },
                 "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "email": "email",
@@ -6663,7 +6663,7 @@
         "example": {
           "taxId": "taxId",
           "name": "name",
-          "dbaName": "dbaName"
+          "operatingName": "operatingName"
         },
         "nullable": true,
         "properties": {
@@ -6678,7 +6678,7 @@
             "pattern": "^[\\d]{9}$",
             "type": "string"
           },
-          "dbaName": {
+          "operatingName": {
             "maxLength": 100,
             "minLength": 1,
             "nullable": true,
@@ -6803,7 +6803,7 @@
           "company": {
             "taxId": "taxId",
             "name": "name",
-            "dbaName": "dbaName"
+            "operatingName": "operatingName"
           },
           "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "email": "email",
@@ -6943,7 +6943,7 @@
             "company": {
               "taxId": "taxId",
               "name": "name",
-              "dbaName": "dbaName"
+              "operatingName": "operatingName"
             },
             "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
             "email": "email",

@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.14.5
+  version: 2.14.6
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -3291,7 +3291,7 @@ components:
             company:
               taxId: taxId
               name: name
-              dbaName: dbaName
+              operatingName: operatingName
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             email: email
             acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
@@ -3344,7 +3344,7 @@ components:
             company:
               taxId: taxId
               name: name
-              dbaName: dbaName
+              operatingName: operatingName
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             email: email
             acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
@@ -3413,7 +3413,7 @@ components:
         company:
           taxId: taxId
           name: name
-          dbaName: dbaName
+          operatingName: operatingName
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         email: email
         acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
@@ -3517,7 +3517,7 @@ components:
             company:
               taxId: taxId
               name: name
-              dbaName: dbaName
+              operatingName: operatingName
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             email: email
             remoteId: remoteId
@@ -3563,7 +3563,7 @@ components:
             company:
               taxId: taxId
               name: name
-              dbaName: dbaName
+              operatingName: operatingName
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             email: email
             remoteId: remoteId
@@ -3665,7 +3665,7 @@ components:
           description: 'Company Tax Id (EIN) must be 9 numeric characters. Must match the regular expression ```[\d]{9}```.'
           pattern: '[\\d]{9}'
           type: string
-        companyDbaName:
+        companyOperatingName:
           maxLength: 100
           minLength: 1
           type: string
@@ -4047,7 +4047,7 @@ components:
               company:
                 taxId: taxId
                 name: name
-                dbaName: dbaName
+                operatingName: operatingName
               payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               email: email
               acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
@@ -4102,7 +4102,7 @@ components:
               company:
                 taxId: taxId
                 name: name
-                dbaName: dbaName
+                operatingName: operatingName
               payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               email: email
               acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
@@ -5453,7 +5453,7 @@ components:
       example:
         taxId: taxId
         name: name
-        dbaName: dbaName
+        operatingName: operatingName
       nullable: true
       properties:
         name:
@@ -5465,7 +5465,7 @@ components:
           nullable: true
           pattern: '^[\d]{9}$'
           type: string
-        dbaName:
+        operatingName:
           maxLength: 100
           minLength: 1
           nullable: true
@@ -5553,7 +5553,7 @@ components:
         company:
           taxId: taxId
           name: name
-          dbaName: dbaName
+          operatingName: operatingName
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         email: email
         remoteId: remoteId
@@ -5659,7 +5659,7 @@ components:
           company:
             taxId: taxId
             name: name
-            dbaName: dbaName
+            operatingName: operatingName
           payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           email: email
           acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
