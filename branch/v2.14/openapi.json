@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.14.8",
+    "version": "2.14.9",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -910,19 +910,16 @@
             "schema": {
               "format": "uuid",
               "type": "string"
-            },
-            "x-contracts": [
-              {
-                "contractId": 1,
-                "value": "0a818933-087d-47f2-ad83-2f986ed087eb",
-                "matchers": [
-                  {
-                    "type": "equal_to",
-                    "value": "0a818933-087d-47f2-ad83-2f986ed087eb"
-                  }
-                ]
-              }
-            ]
+            }
+          },
+          {
+            "description": "List of additional Payor fields to include in the response for each Payor.\nThe values of payorId and payorName and always included for each Payor - 'fields' allows you to add to this.\nExample: ```fields=primaryContactEmail,kycState``` - will include payorId+payorName+primaryContactEmail+kycState for each Payor\nDefault if not specified is to include only payorId and payorName.\nThe supported fields are any combination of: primaryContactEmail,kycState\n            \n",
+            "in": "query",
+            "name": "fields",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -938,6 +935,50 @@
             "x-contracts": [
               {
                 "contractId": 1,
+                "headers": {
+                  "Content-Type": "application/json"
+                },
+                "body": {
+                  "links": [
+                    {
+                      "linkId": "65514617-d18d-4bb4-8cee-09b3e7625fc9",
+                      "fromPayorId": "51e93026-2f47-4dfd-a5ff-c0da0954a847",
+                      "linkType": "PARENT_OF",
+                      "toPayorId": "b0b09d8a-866c-4703-833e-2ff9106e185b"
+                    },
+                    {
+                      "linkId": "6a91b045-6f42-4f9f-a627-f97f66d39bef",
+                      "fromPayorId": "b0b09d8a-866c-4703-833e-2ff9106e185b",
+                      "linkType": "PARENT_OF",
+                      "toPayorId": "15486051-aa39-430d-8926-a4bc2fea1d04"
+                    }
+                  ],
+                  "payors": [
+                    {
+                      "payorId": "51e93026-2f47-4dfd-a5ff-c0da0954a847",
+                      "payorName": "Payor One"
+                    },
+                    {
+                      "payorId": "b0b09d8a-866c-4703-833e-2ff9106e185b",
+                      "payorName": "Payor Two"
+                    },
+                    {
+                      "payorId": "15486051-aa39-430d-8926-a4bc2fea1d04",
+                      "payorName": "Payor Three"
+                    }
+                  ]
+                },
+                "matchers": {
+                  "headers": [
+                    {
+                      "key": "Content-Type",
+                      "regex": "application/json.*"
+                    }
+                  ]
+                }
+              },
+              {
+                "contractId": 2,
                 "headers": {
                   "Content-Type": "application/json"
                 },
@@ -1005,12 +1046,29 @@
         "x-contracts": [
           {
             "contractId": 1,
-            "name": "Test List Payor Links",
+            "name": "Test List Payor Links - default Payor fields",
             "request": {
               "queryParameters": [
                 {
                   "key": "descendantsOfPayor",
                   "value": "0a818933-087d-47f2-ad83-2f986ed087eb"
+                }
+              ]
+            },
+            "serviceName": "payor-service"
+          },
+          {
+            "contractId": 2,
+            "name": "Test List Payor Links - all Payor fields requested",
+            "request": {
+              "queryParameters": [
+                {
+                  "key": "descendantsOfPayor",
+                  "value": "0a818933-087d-47f2-ad83-2f986ed087eb"
+                },
+                {
+                  "key": "fields",
+                  "value": "primaryContactEmail,kycState"
                 }
               ]
             },
@@ -8372,7 +8430,13 @@
             "format": "uuid",
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "fromPayorId",
+          "linkId",
+          "linkType",
+          "toPayorId"
+        ]
       },
       "PayorLinksResponse_payors": {
         "example": {
@@ -8400,7 +8464,11 @@
             ],
             "type": "string"
           }
-        }
+        },
+        "required": [
+          "payorId",
+          "payorName"
+        ]
       },
       "PayeeResponse_summary": {
         "example": {
