@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.14.7",
+    "version": "2.14.8",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -893,6 +893,134 @@
             "priority": 20,
             "contractPath": "/v1/payors/00000000-0000-0000-0000-000000000000/branding",
             "serviceName": "payor-service"
+          }
+        ]
+      }
+    },
+    "/v1/payorLinks": {
+      "get": {
+        "description": "This endpoint allows you to list payor links",
+        "operationId": "payorLinks",
+        "parameters": [
+          {
+            "description": "The Payor ID from which to start the query to show all descendants",
+            "in": "query",
+            "name": "descendantsOfPayor",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "x-contracts": [
+              {
+                "contractId": 1,
+                "value": "0a818933-087d-47f2-ad83-2f986ed087eb",
+                "matchers": [
+                  {
+                    "type": "equal_to",
+                    "value": "0a818933-087d-47f2-ad83-2f986ed087eb"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayorLinksResponse"
+                }
+              }
+            },
+            "description": "Details of Payor Links",
+            "x-contracts": [
+              {
+                "contractId": 1,
+                "headers": {
+                  "Content-Type": "application/json"
+                },
+                "body": {
+                  "links": [
+                    {
+                      "linkId": "65514617-d18d-4bb4-8cee-09b3e7625fc9",
+                      "fromPayorId": "51e93026-2f47-4dfd-a5ff-c0da0954a847",
+                      "linkType": "PARENT_OF",
+                      "toPayorId": "b0b09d8a-866c-4703-833e-2ff9106e185b"
+                    },
+                    {
+                      "linkId": "6a91b045-6f42-4f9f-a627-f97f66d39bef",
+                      "fromPayorId": "b0b09d8a-866c-4703-833e-2ff9106e185b",
+                      "linkType": "PARENT_OF",
+                      "toPayorId": "15486051-aa39-430d-8926-a4bc2fea1d04"
+                    }
+                  ],
+                  "payors": [
+                    {
+                      "payorId": "51e93026-2f47-4dfd-a5ff-c0da0954a847",
+                      "payorName": "Payor One",
+                      "primaryContactEmail": "payorone@somewhere.com",
+                      "kycState": "FAILED_KYC"
+                    },
+                    {
+                      "payorId": "b0b09d8a-866c-4703-833e-2ff9106e185b",
+                      "payorName": "Payor Two",
+                      "primaryContactEmail": "payortwo@anothersite.com",
+                      "kycState": "PASSED_KYC"
+                    },
+                    {
+                      "payorId": "15486051-aa39-430d-8926-a4bc2fea1d04",
+                      "payorName": "Payor Three",
+                      "primaryContactEmail": "payorthree@example.com",
+                      "kycState": "REQUIRES_KYC"
+                    }
+                  ]
+                },
+                "matchers": {
+                  "headers": [
+                    {
+                      "key": "Content-Type",
+                      "regex": "application/json.*"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "List Payor Links",
+        "tags": [
+          "Payors"
+        ],
+        "x-contracts": [
+          {
+            "contractId": 1,
+            "name": "Test List Payor Links",
+            "request": {
+              "queryParameters": [
+                {
+                  "key": "descendantsOfPayor",
+                  "value": "0a818933-087d-47f2-ad83-2f986ed087eb"
+                }
+              ]
+            },
+            "serviceName": "payor-service"
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payorLinks?descendantsOfPayor=0a818933-087d-47f2-ad83-2f986ed087eb' -i -X GET \\\n    -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \\\n    -H 'Content-Type: application/json'\n"
           }
         ]
       }
@@ -3780,6 +3908,54 @@
           "logoUrl",
           "payorName"
         ],
+        "type": "object"
+      },
+      "PayorLinksResponse": {
+        "description": "List Payor Links Response Object",
+        "example": {
+          "payors": [
+            {
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "kycState": "FAILED_KYC",
+              "primaryContactEmail": "primaryContactEmail",
+              "payorName": "payorName"
+            },
+            {
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "kycState": "FAILED_KYC",
+              "primaryContactEmail": "primaryContactEmail",
+              "payorName": "payorName"
+            }
+          ],
+          "links": [
+            {
+              "toPayorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "linkId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "fromPayorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "linkType": "PARENT_OF"
+            },
+            {
+              "toPayorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "linkId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "fromPayorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "linkType": "PARENT_OF"
+            }
+          ]
+        },
+        "properties": {
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/PayorLinksResponse_links"
+            },
+            "type": "array"
+          },
+          "payors": {
+            "items": {
+              "$ref": "#/components/schemas/PayorLinksResponse_payors"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "OfacStatus": {
@@ -8169,6 +8345,62 @@
           "FUNDING_DEALLOCATED"
         ],
         "type": "string"
+      },
+      "PayorLinksResponse_links": {
+        "example": {
+          "toPayorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "linkId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "fromPayorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "linkType": "PARENT_OF"
+        },
+        "properties": {
+          "linkId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "fromPayorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "linkType": {
+            "enum": [
+              "PARENT_OF"
+            ],
+            "type": "string"
+          },
+          "toPayorId": {
+            "format": "uuid",
+            "type": "string"
+          }
+        }
+      },
+      "PayorLinksResponse_payors": {
+        "example": {
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "kycState": "FAILED_KYC",
+          "primaryContactEmail": "primaryContactEmail",
+          "payorName": "payorName"
+        },
+        "properties": {
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "payorName": {
+            "type": "string"
+          },
+          "primaryContactEmail": {
+            "type": "string"
+          },
+          "kycState": {
+            "enum": [
+              "FAILED_KYC",
+              "PASSED_KYC",
+              "REQUIRES_KYC"
+            ],
+            "type": "string"
+          }
+        }
       },
       "PayeeResponse_summary": {
         "example": {
