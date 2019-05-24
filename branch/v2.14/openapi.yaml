@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.14.9
+  version: 2.14.11
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -2115,6 +2115,7 @@ paths:
               - ACCEPTED_BY_RAILS
               - CONFIRMED
               - FAILED
+              - RETURNED
               - WITHDRAWN
             type: string
         - description: The source amount from range filter. Filters for sourceAmount >= sourceAmountFrom
@@ -2258,6 +2259,7 @@ paths:
               - ACCEPTED_BY_RAILS
               - CONFIRMED
               - FAILED
+              - RETURNED
               - WITHDRAWN
             type: string
         - description: The source account name filter. This filters via a case insensitive substring match.
@@ -2485,6 +2487,138 @@ paths:
           source: |
             $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/transactions?startDate=2018-05-01&endDate=2018-05-31' -i -X GET \
                 -H 'Authorization: Bearer 76748e09-775d-4e2d-b889-f0555901d8eb'
+  '/v4/paymentaudit/payouts/{payoutId}':
+    get:
+      description: |
+        Get List of payments for Payout, allowing for RETURNED status
+      operationId: getPaymentsForPayoutV4
+      parameters:
+        - description: The id (UUID) of the payout.
+          in: path
+          name: payoutId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: The remote id of the payees.
+          in: query
+          name: remoteId
+          required: false
+          schema:
+            type: string
+        - description: Payment Status
+          in: query
+          name: status
+          required: false
+          schema:
+            enum:
+              - ACCEPTED
+              - AWAITING_FUNDS
+              - FUNDED
+              - UNFUNDED
+              - BANK_PAYMENT_REQUESTED
+              - REJECTED
+              - ACCEPTED_BY_RAILS
+              - CONFIRMED
+              - FAILED
+              - RETURNED
+              - WITHDRAWN
+            type: string
+        - description: The source amount from range filter. Filters for sourceAmount >= sourceAmountFrom
+          in: query
+          name: sourceAmountFrom
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The source amount to range filter. Filters for sourceAmount ⇐ sourceAmountTo
+          in: query
+          name: sourceAmountTo
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The payment amount from range filter. Filters for paymentAmount >= paymentAmountFrom
+          in: query
+          name: paymentAmountFrom
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The payment amount to range filter. Filters for paymentAmount ⇐ paymentAmountTo
+          in: query
+          name: paymentAmountTo
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The submitted date from range filter. Format is yyyy-MM-dd.
+          in: query
+          name: submittedDateFrom
+          required: false
+          schema:
+            format: date
+            type: string
+        - description: The submitted date to range filter. Format is yyyy-MM-dd.
+          in: query
+          name: submittedDateTo
+          required: false
+          schema:
+            format: date
+            type: string
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            type: integer
+        - description: |
+            List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId
+            The supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,
+            routingNumber, accountNumber, remoteId, submittedDateTime and status
+          in: query
+          name: sort
+          required: false
+          schema:
+            type: string
+        - description: |
+            Optional. If omitted or set to false, any Personal Identifiable Information (PII) values are returned masked.
+            If set to true, and you have permission, the PII values will be returned as their original unmasked values.
+          in: query
+          name: sensitive
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPaymentsForPayoutResponse_2'
+          description: '200 response, data found okay'
+        '400':
+          description: Invalid Request Parameter
+        '404':
+          description: Payout Id Not Found
+      summary: Get Payments for Payout
+      tags:
+        - Payment Audit Service
+        - Payout History
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/payouts/7b524212-6fd7-4699-983d-cac082022a2e' -i -X GET \
+                -H 'Authorization: Bearer f7a9a696-e528-487b-8734-e0a22e41ef7a'
   /v3/payouts:
     post:
       description: |
@@ -4731,11 +4865,15 @@ components:
       description: List Payments for payout
       example:
         summary:
-          totalOnboardedCount: 5
-          totalRegisteredCount: 1
-          totalPayeesCount: 0
-          totalInvitedCount: 6
-          totalOfacFailedCount: 5
+          incompletePayments: 5
+          confirmedPayments: 6
+          releasedPayments: 1
+          submittedDateTime: 2000-01-23T04:56:07.000Z
+          payoutStatus: ACCEPTED
+          totalPayments: 0
+          instructedDateTime: 2000-01-23T04:56:07.000Z
+          payoutMemo: payoutMemo
+          failedPayments: 5
         links:
           - rel: rel
             href: href
@@ -4751,16 +4889,16 @@ components:
           - traceNumber: traceNumber
             accountName: accountName
             paymentMemo: paymentMemo
-            paymentAmount: 6
+            paymentAmount: 7
             fundingStatus: FUNDED
             paymentChannelName: paymentChannelName
             filenameReference: filenameReference
-            rate: 1.4658129805029452
+            rate: 9.301444243932576
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             countryCode: countryCode
             returnReason: returnReason
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 0
+            sourceAmount: 2
             railsId: railsId
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -4788,30 +4926,30 @@ components:
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
-            invertedRate: 5.962133916683182
+            invertedRate: 3.616076749251911
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: individualIdentificationNumber
             accountNumber: accountNumber
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 5
+            returnCost: 2
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
           - traceNumber: traceNumber
             accountName: accountName
             paymentMemo: paymentMemo
-            paymentAmount: 6
+            paymentAmount: 7
             fundingStatus: FUNDED
             paymentChannelName: paymentChannelName
             filenameReference: filenameReference
-            rate: 1.4658129805029452
+            rate: 9.301444243932576
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             countryCode: countryCode
             returnReason: returnReason
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 0
+            sourceAmount: 2
             railsId: railsId
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -4839,20 +4977,20 @@ components:
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
-            invertedRate: 5.962133916683182
+            invertedRate: 3.616076749251911
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: individualIdentificationNumber
             accountNumber: accountNumber
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 5
+            returnCost: 2
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
       properties:
         summary:
-          $ref: '#/components/schemas/PayeeResponse_summary'
+          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_summary'
         page:
           $ref: '#/components/schemas/PayeeResponse_page'
         links:
@@ -4888,16 +5026,16 @@ components:
           - traceNumber: traceNumber
             accountName: accountName
             paymentMemo: paymentMemo
-            paymentAmount: 6
+            paymentAmount: 7
             fundingStatus: FUNDED
             paymentChannelName: paymentChannelName
             filenameReference: filenameReference
-            rate: 1.4658129805029452
+            rate: 9.301444243932576
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             countryCode: countryCode
             returnReason: returnReason
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 0
+            sourceAmount: 2
             railsId: railsId
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -4925,30 +5063,30 @@ components:
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
-            invertedRate: 5.962133916683182
+            invertedRate: 3.616076749251911
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: individualIdentificationNumber
             accountNumber: accountNumber
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 5
+            returnCost: 2
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
           - traceNumber: traceNumber
             accountName: accountName
             paymentMemo: paymentMemo
-            paymentAmount: 6
+            paymentAmount: 7
             fundingStatus: FUNDED
             paymentChannelName: paymentChannelName
             filenameReference: filenameReference
-            rate: 1.4658129805029452
+            rate: 9.301444243932576
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             countryCode: countryCode
             returnReason: returnReason
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 0
+            sourceAmount: 2
             railsId: railsId
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -4976,14 +5114,14 @@ components:
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
-            invertedRate: 5.962133916683182
+            invertedRate: 3.616076749251911
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: individualIdentificationNumber
             accountNumber: accountNumber
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 5
+            returnCost: 2
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
@@ -5006,16 +5144,16 @@ components:
         traceNumber: traceNumber
         accountName: accountName
         paymentMemo: paymentMemo
-        paymentAmount: 6
+        paymentAmount: 7
         fundingStatus: FUNDED
         paymentChannelName: paymentChannelName
         filenameReference: filenameReference
-        rate: 1.4658129805029452
+        rate: 9.301444243932576
         paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         countryCode: countryCode
         returnReason: returnReason
         submittedDateTime: 2000-01-23T04:56:07.000Z
-        sourceAmount: 0
+        sourceAmount: 2
         railsId: railsId
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -5043,14 +5181,14 @@ components:
         payorName: payorName
         sourceAccountName: sourceAccountName
         paymentChannelId: paymentChannelId
-        invertedRate: 5.962133916683182
+        invertedRate: 3.616076749251911
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         individualIdentificationNumber: individualIdentificationNumber
         accountNumber: accountNumber
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         remoteId: remoteId
         routingNumber: routingNumber
-        returnCost: 5
+        returnCost: 2
         iban: iban
         payorPaymentId: payorPaymentId
         status: ACCEPTED
@@ -5171,6 +5309,147 @@ components:
       required:
         - thisMonthFailedPaymentsCount
         - thisMonthPayoutsCount
+      type: object
+    GetPaymentsForPayoutResponse_2:
+      description: List Payments for payout
+      example:
+        summary:
+          incompletePayments: 5
+          confirmedPayments: 6
+          releasedPayments: 1
+          submittedDateTime: 2000-01-23T04:56:07.000Z
+          payoutStatus: ACCEPTED
+          totalPayments: 0
+          returnedPayments: 5
+          instructedDateTime: 2000-01-23T04:56:07.000Z
+          payoutMemo: payoutMemo
+        links:
+          - rel: rel
+            href: href
+          - rel: rel
+            href: href
+        page:
+          numberOfElements: 2
+          totalPages: 9
+          pageSize: 2
+          page: 3
+          totalElements: 7
+        content:
+          - traceNumber: traceNumber
+            accountName: accountName
+            paymentMemo: paymentMemo
+            paymentAmount: 7
+            fundingStatus: FUNDED
+            paymentChannelName: paymentChannelName
+            filenameReference: filenameReference
+            rate: 9.301444243932576
+            paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            countryCode: countryCode
+            returnReason: returnReason
+            submittedDateTime: 2000-01-23T04:56:07.000Z
+            sourceAmount: 2
+            railsId: railsId
+            payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            events:
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+            payorName: payorName
+            sourceAccountName: sourceAccountName
+            paymentChannelId: paymentChannelId
+            invertedRate: 3.616076749251911
+            sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            individualIdentificationNumber: individualIdentificationNumber
+            accountNumber: accountNumber
+            quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            remoteId: remoteId
+            routingNumber: routingNumber
+            returnCost: 2
+            iban: iban
+            payorPaymentId: payorPaymentId
+            status: ACCEPTED
+          - traceNumber: traceNumber
+            accountName: accountName
+            paymentMemo: paymentMemo
+            paymentAmount: 7
+            fundingStatus: FUNDED
+            paymentChannelName: paymentChannelName
+            filenameReference: filenameReference
+            rate: 9.301444243932576
+            paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            countryCode: countryCode
+            returnReason: returnReason
+            submittedDateTime: 2000-01-23T04:56:07.000Z
+            sourceAmount: 2
+            railsId: railsId
+            payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            events:
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+            payorName: payorName
+            sourceAccountName: sourceAccountName
+            paymentChannelId: paymentChannelId
+            invertedRate: 3.616076749251911
+            sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            individualIdentificationNumber: individualIdentificationNumber
+            accountNumber: accountNumber
+            quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            remoteId: remoteId
+            routingNumber: routingNumber
+            returnCost: 2
+            iban: iban
+            payorPaymentId: payorPaymentId
+            status: ACCEPTED
+      properties:
+        summary:
+          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_2_summary'
+        page:
+          $ref: '#/components/schemas/PayeeResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/PayeeResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/PaymentResponse_2'
+          type: array
       type: object
     CreatePayoutRequest:
       example: |-
@@ -6091,6 +6370,164 @@ components:
         - eventId
         - eventType
       type: object
+    PaymentResponse_2:
+      example:
+        traceNumber: traceNumber
+        accountName: accountName
+        paymentMemo: paymentMemo
+        paymentAmount: 7
+        fundingStatus: FUNDED
+        paymentChannelName: paymentChannelName
+        filenameReference: filenameReference
+        rate: 9.301444243932576
+        paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        countryCode: countryCode
+        returnReason: returnReason
+        submittedDateTime: 2000-01-23T04:56:07.000Z
+        sourceAmount: 2
+        railsId: railsId
+        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        events:
+          - principal: principal
+            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            eventDateTime: 2000-01-23T04:56:07.000Z
+            routingNumber: routingNumber
+            accountName: accountName
+            iban: iban
+            sourceAmount: 1299
+            eventType: PAYOUT_SUBMITTED
+            accountNumber: accountNumber
+            paymentAmount: 1299
+          - principal: principal
+            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            eventDateTime: 2000-01-23T04:56:07.000Z
+            routingNumber: routingNumber
+            accountName: accountName
+            iban: iban
+            sourceAmount: 1299
+            eventType: PAYOUT_SUBMITTED
+            accountNumber: accountNumber
+            paymentAmount: 1299
+        payorName: payorName
+        sourceAccountName: sourceAccountName
+        paymentChannelId: paymentChannelId
+        invertedRate: 3.616076749251911
+        sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        individualIdentificationNumber: individualIdentificationNumber
+        accountNumber: accountNumber
+        quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        remoteId: remoteId
+        routingNumber: routingNumber
+        returnCost: 2
+        iban: iban
+        payorPaymentId: payorPaymentId
+        status: ACCEPTED
+      properties:
+        paymentId:
+          format: uuid
+          type: string
+        payeeId:
+          format: uuid
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        payorName:
+          type: string
+        quoteId:
+          format: uuid
+          type: string
+        sourceAccountId:
+          format: uuid
+          type: string
+        sourceAccountName:
+          type: string
+        remoteId:
+          type: string
+        sourceAmount:
+          type: integer
+        sourceCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        paymentAmount:
+          type: integer
+        paymentCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        rate:
+          format: double
+          type: number
+        invertedRate:
+          format: double
+          type: number
+        submittedDateTime:
+          format: date-time
+          type: string
+        status:
+          enum:
+            - ACCEPTED
+            - AWAITING_FUNDS
+            - FUNDED
+            - UNFUNDED
+            - BANK_PAYMENT_REQUESTED
+            - REJECTED
+            - ACCEPTED_BY_RAILS
+            - CONFIRMED
+            - RETURNED
+            - WITHDRAWN
+          type: string
+        fundingStatus:
+          enum:
+            - FUNDED
+            - INSTRUCTED
+            - UNFUNDED
+          type: string
+        routingNumber:
+          type: string
+        accountNumber:
+          type: string
+        iban:
+          type: string
+        paymentMemo:
+          type: string
+        filenameReference:
+          type: string
+        individualIdentificationNumber:
+          type: string
+        traceNumber:
+          type: string
+        payorPaymentId:
+          type: string
+        paymentChannelId:
+          type: string
+        paymentChannelName:
+          type: string
+        accountName:
+          type: string
+        railsId:
+          type: string
+        countryCode:
+          type: string
+        events:
+          items:
+            $ref: '#/components/schemas/PaymentEventResponse_2'
+          type: array
+        returnCost:
+          type: integer
+        returnReason:
+          type: string
+      required:
+        - events
+        - fundingStatus
+        - payeeId
+        - paymentAmount
+        - paymentId
+        - payorId
+        - quoteId
+        - railsId
+        - sourceAccountId
+        - status
+        - submittedDateTime
+      type: object
     QuoteFxSummary:
       example:
         invertedRate: 5.637376656633329
@@ -6763,6 +7200,101 @@ components:
         - totalCost
         - totalPaymentAmount
       type: object
+    PaymentAuditCurrency_2:
+      description: ISO 3 character currency code
+      enum:
+        - USD
+        - GBP
+        - EUR
+      maxLength: 3
+      minLength: 3
+      type: string
+    PaymentEventResponse_2:
+      example:
+        principal: principal
+        eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        eventDateTime: 2000-01-23T04:56:07.000Z
+        routingNumber: routingNumber
+        accountName: accountName
+        iban: iban
+        sourceAmount: 1299
+        eventType: PAYOUT_SUBMITTED
+        accountNumber: accountNumber
+        paymentAmount: 1299
+      properties:
+        eventId:
+          description: The id of the event.
+          format: uuid
+          type: string
+        eventDateTime:
+          description: The date/time at which the event occurred.
+          format: date-time
+          type: string
+        eventType:
+          description: The type of the event.
+          enum:
+            - PAYOUT_SUBMITTED
+            - PAYOUT_COMPLETED
+            - PAYOUT_INSTRUCTED_V3
+            - BANK_PAYMENT_REQUESTED
+            - SOURCE_AMOUNT_CONFIRMED
+            - PAYMENT_SUBMITTED
+            - PAYMENT_SUBMITTED_ACCEPTED
+            - PAYMENT_SUBMITTED_REJECTED
+            - PAYMENT_CONFIRMED
+            - PAYMENT_AWAITING_FUNDS
+            - PAYMENT_FUNDED
+            - PAYMENT_UNFUNDED
+            - PAYMENT_FAILED
+            - ACH_SUBMITTED_TO_ODFI
+            - PAYMENT_ACCEPTED_BY_RAILS
+            - ACH_RETURN_RECEIVED
+            - RETURN_PAYMENT_FUNDING_REQUESTED
+            - PAYOUT_BATCH_EXECUTED
+            - PAYOUT_BATCH_QUOTE_EXPIRED
+            - PAYOUT_BATCH_FUNDED
+            - PAYOUT_BATCH_FUNDS_RETURN_REQUEST
+            - PAYOUT_BATCH_FUNDS_RETURNED
+            - PAYOUT_FUNDS_REQUEST
+            - PAYOUT_FUNDS_GRANTED
+            - PAYOUT_FUNDS_DENIED
+            - PAYOUT_BATCH_QUOTED
+            - PAYOUT_QUOTED
+            - ACH_PAYMENT_RETURN_CANCELLED
+            - RETURN_PAYMENT_CANCELLATION_REQUESTED
+            - PAYOUT_WITHDRAWN
+          type: string
+        sourceCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        sourceAmount:
+          description: The source amount exposed by the event.
+          example: 1299
+          format: int32
+          type: integer
+        paymentCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        paymentAmount:
+          description: The destination amount exposed by the event.
+          example: 1299
+          format: int32
+          type: integer
+        accountNumber:
+          description: The account number attached to the event.
+          type: string
+        routingNumber:
+          description: The routing number attached to the event.
+          type: string
+        iban:
+          type: string
+        accountName:
+          type: string
+        principal:
+          type: string
+      required:
+        - eventDateTime
+        - eventId
+        - eventType
+      type: object
     PaymentChannelRule:
       example:
         displayName: displayName
@@ -6891,6 +7423,108 @@ components:
           type: string
         href:
           type: string
+    GetPaymentsForPayoutResponse_summary:
+      example:
+        incompletePayments: 5
+        confirmedPayments: 6
+        releasedPayments: 1
+        submittedDateTime: 2000-01-23T04:56:07.000Z
+        payoutStatus: ACCEPTED
+        totalPayments: 0
+        instructedDateTime: 2000-01-23T04:56:07.000Z
+        payoutMemo: payoutMemo
+        failedPayments: 5
+      properties:
+        payoutStatus:
+          description: The current status of the payout.
+          enum:
+            - ACCEPTED
+            - REJECTED
+            - SUBMITTED
+            - QUOTED
+            - INSTRUCTED
+            - COMPLETED
+            - INCOMPLETE
+            - CONFIRMED
+            - WITHDRAWN
+          type: string
+        submittedDateTime:
+          description: The date/time at which the payout was submitted.
+          format: date-time
+          type: string
+        instructedDateTime:
+          description: The date/time at which the payout was instructed.
+          format: date-time
+          type: string
+        payoutMemo:
+          description: The memo attached to the payout.
+          type: string
+        totalPayments:
+          description: The count of payments within the payout.
+          type: integer
+        confirmedPayments:
+          description: The count of payments within the payout which have been confirmed.
+          type: integer
+        releasedPayments:
+          description: The count of payments within the payout which have been released.
+          type: integer
+        incompletePayments:
+          description: The count of payments within the payout which are incomplete.
+          type: integer
+        failedPayments:
+          description: The count of payments within the payout which have failed or been returned.
+          type: integer
+    GetPaymentsForPayoutResponse_2_summary:
+      example:
+        incompletePayments: 5
+        confirmedPayments: 6
+        releasedPayments: 1
+        submittedDateTime: 2000-01-23T04:56:07.000Z
+        payoutStatus: ACCEPTED
+        totalPayments: 0
+        returnedPayments: 5
+        instructedDateTime: 2000-01-23T04:56:07.000Z
+        payoutMemo: payoutMemo
+      properties:
+        payoutStatus:
+          description: The current status of the payout.
+          enum:
+            - ACCEPTED
+            - REJECTED
+            - SUBMITTED
+            - QUOTED
+            - INSTRUCTED
+            - COMPLETED
+            - INCOMPLETE
+            - CONFIRMED
+            - WITHDRAWN
+          type: string
+        submittedDateTime:
+          description: The date/time at which the payout was submitted.
+          format: date-time
+          type: string
+        instructedDateTime:
+          description: The date/time at which the payout was instructed.
+          format: date-time
+          type: string
+        payoutMemo:
+          description: The memo attached to the payout.
+          type: string
+        totalPayments:
+          description: The count of payments within the payout.
+          type: integer
+        confirmedPayments:
+          description: The count of payments within the payout which have been confirmed.
+          type: integer
+        releasedPayments:
+          description: The count of payments within the payout which have been released.
+          type: integer
+        incompletePayments:
+          description: The count of payments within the payout which are incomplete.
+          type: integer
+        returnedPayments:
+          description: The count of payments within the payout which have been returned.
+          type: integer
     Individual_name:
       example:
         firstName: firstName
