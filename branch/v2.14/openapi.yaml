@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.14.12
+  version: 2.14.13
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -2409,7 +2409,7 @@ paths:
       x-code-samples:
         - lang: shell
           source: |
-            $ curl 'https://api.sandbox.velopayments.com/v1/paymentaudit/payments/c3a422c2-12ac-4416-84fe-964221bd9815' -i \
+            $ curl 'https://api.sandbox.velopayments.com/v3/paymentaudit/payments/c3a422c2-12ac-4416-84fe-964221bd9815' -i \
                 -H 'Authorization: Bearer 67a1b299-69b1-4fdf-a576-96b81199a2b9'
   /v1/paymentaudit/payoutStatistics:
     get:
@@ -2779,6 +2779,44 @@ paths:
       summary: Get List of Payments
       tags:
         - Payment Audit Service
+  '/v4/paymentaudit/payments/{paymentId}':
+    get:
+      description: |
+        Get the payment with the given id. This contains the payment history.
+      operationId: getPaymentDetailsV4
+      parameters:
+        - description: Payment Id
+          in: path
+          name: paymentId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: |
+            Optional. If omitted or set to false, any Personal Identifiable Information (PII) values are returned masked.
+            If set to true, and you have permission, the PII values will be returned as their original unmasked values.
+          in: query
+          name: sensitive
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse_2'
+          description: '200 response, request completed okay'
+        '404':
+          description: Payment Id Not Found
+      summary: Get Payment
+      tags:
+        - Payment Audit Service
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/payments/c3a422c2-12ac-4416-84fe-964221bd9815' -i \
+                -H 'Authorization: Bearer 67a1b299-69b1-4fdf-a576-96b81199a2b9'
   /v3/payouts:
     post:
       description: |
@@ -5611,6 +5649,164 @@ components:
             $ref: '#/components/schemas/PaymentResponse_2'
           type: array
       type: object
+    PaymentResponse_2:
+      example:
+        traceNumber: traceNumber
+        accountName: accountName
+        paymentMemo: paymentMemo
+        paymentAmount: 7
+        fundingStatus: FUNDED
+        paymentChannelName: paymentChannelName
+        filenameReference: filenameReference
+        rate: 9.301444243932576
+        paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        countryCode: countryCode
+        returnReason: returnReason
+        submittedDateTime: 2000-01-23T04:56:07.000Z
+        sourceAmount: 2
+        railsId: railsId
+        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        events:
+          - principal: principal
+            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            eventDateTime: 2000-01-23T04:56:07.000Z
+            routingNumber: routingNumber
+            accountName: accountName
+            iban: iban
+            sourceAmount: 1299
+            eventType: PAYOUT_SUBMITTED
+            accountNumber: accountNumber
+            paymentAmount: 1299
+          - principal: principal
+            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            eventDateTime: 2000-01-23T04:56:07.000Z
+            routingNumber: routingNumber
+            accountName: accountName
+            iban: iban
+            sourceAmount: 1299
+            eventType: PAYOUT_SUBMITTED
+            accountNumber: accountNumber
+            paymentAmount: 1299
+        payorName: payorName
+        sourceAccountName: sourceAccountName
+        paymentChannelId: paymentChannelId
+        invertedRate: 3.616076749251911
+        sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        individualIdentificationNumber: individualIdentificationNumber
+        accountNumber: accountNumber
+        quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        remoteId: remoteId
+        routingNumber: routingNumber
+        returnCost: 2
+        iban: iban
+        payorPaymentId: payorPaymentId
+        status: ACCEPTED
+      properties:
+        paymentId:
+          format: uuid
+          type: string
+        payeeId:
+          format: uuid
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        payorName:
+          type: string
+        quoteId:
+          format: uuid
+          type: string
+        sourceAccountId:
+          format: uuid
+          type: string
+        sourceAccountName:
+          type: string
+        remoteId:
+          type: string
+        sourceAmount:
+          type: integer
+        sourceCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        paymentAmount:
+          type: integer
+        paymentCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        rate:
+          format: double
+          type: number
+        invertedRate:
+          format: double
+          type: number
+        submittedDateTime:
+          format: date-time
+          type: string
+        status:
+          enum:
+            - ACCEPTED
+            - AWAITING_FUNDS
+            - FUNDED
+            - UNFUNDED
+            - BANK_PAYMENT_REQUESTED
+            - REJECTED
+            - ACCEPTED_BY_RAILS
+            - CONFIRMED
+            - RETURNED
+            - WITHDRAWN
+          type: string
+        fundingStatus:
+          enum:
+            - FUNDED
+            - INSTRUCTED
+            - UNFUNDED
+          type: string
+        routingNumber:
+          type: string
+        accountNumber:
+          type: string
+        iban:
+          type: string
+        paymentMemo:
+          type: string
+        filenameReference:
+          type: string
+        individualIdentificationNumber:
+          type: string
+        traceNumber:
+          type: string
+        payorPaymentId:
+          type: string
+        paymentChannelId:
+          type: string
+        paymentChannelName:
+          type: string
+        accountName:
+          type: string
+        railsId:
+          type: string
+        countryCode:
+          type: string
+        events:
+          items:
+            $ref: '#/components/schemas/PaymentEventResponse_2'
+          type: array
+        returnCost:
+          type: integer
+        returnReason:
+          type: string
+      required:
+        - events
+        - fundingStatus
+        - payeeId
+        - paymentAmount
+        - paymentId
+        - payorId
+        - quoteId
+        - railsId
+        - sourceAccountId
+        - status
+        - submittedDateTime
+      type: object
     CreatePayoutRequest:
       example: |-
         { "payorId":"ef7da492-e5a5-4086-b1ed-6d27323fc669",
@@ -6530,163 +6726,100 @@ components:
         - eventId
         - eventType
       type: object
-    PaymentResponse_2:
+    PaymentAuditCurrency_2:
+      description: ISO 3 character currency code
+      enum:
+        - USD
+        - GBP
+        - EUR
+      maxLength: 3
+      minLength: 3
+      type: string
+    PaymentEventResponse_2:
       example:
-        traceNumber: traceNumber
-        accountName: accountName
-        paymentMemo: paymentMemo
-        paymentAmount: 7
-        fundingStatus: FUNDED
-        paymentChannelName: paymentChannelName
-        filenameReference: filenameReference
-        rate: 9.301444243932576
-        paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        countryCode: countryCode
-        returnReason: returnReason
-        submittedDateTime: 2000-01-23T04:56:07.000Z
-        sourceAmount: 2
-        railsId: railsId
-        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        events:
-          - principal: principal
-            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            eventDateTime: 2000-01-23T04:56:07.000Z
-            routingNumber: routingNumber
-            accountName: accountName
-            iban: iban
-            sourceAmount: 1299
-            eventType: PAYOUT_SUBMITTED
-            accountNumber: accountNumber
-            paymentAmount: 1299
-          - principal: principal
-            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            eventDateTime: 2000-01-23T04:56:07.000Z
-            routingNumber: routingNumber
-            accountName: accountName
-            iban: iban
-            sourceAmount: 1299
-            eventType: PAYOUT_SUBMITTED
-            accountNumber: accountNumber
-            paymentAmount: 1299
-        payorName: payorName
-        sourceAccountName: sourceAccountName
-        paymentChannelId: paymentChannelId
-        invertedRate: 3.616076749251911
-        sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        individualIdentificationNumber: individualIdentificationNumber
-        accountNumber: accountNumber
-        quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        remoteId: remoteId
+        principal: principal
+        eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        eventDateTime: 2000-01-23T04:56:07.000Z
         routingNumber: routingNumber
-        returnCost: 2
+        accountName: accountName
         iban: iban
-        payorPaymentId: payorPaymentId
-        status: ACCEPTED
+        sourceAmount: 1299
+        eventType: PAYOUT_SUBMITTED
+        accountNumber: accountNumber
+        paymentAmount: 1299
       properties:
-        paymentId:
+        eventId:
+          description: The id of the event.
           format: uuid
           type: string
-        payeeId:
-          format: uuid
+        eventDateTime:
+          description: The date/time at which the event occurred.
+          format: date-time
           type: string
-        payorId:
-          format: uuid
+        eventType:
+          description: The type of the event.
+          enum:
+            - PAYOUT_SUBMITTED
+            - PAYOUT_COMPLETED
+            - PAYOUT_INSTRUCTED_V3
+            - BANK_PAYMENT_REQUESTED
+            - SOURCE_AMOUNT_CONFIRMED
+            - PAYMENT_SUBMITTED
+            - PAYMENT_SUBMITTED_ACCEPTED
+            - PAYMENT_SUBMITTED_REJECTED
+            - PAYMENT_CONFIRMED
+            - PAYMENT_AWAITING_FUNDS
+            - PAYMENT_FUNDED
+            - PAYMENT_UNFUNDED
+            - PAYMENT_FAILED
+            - ACH_SUBMITTED_TO_ODFI
+            - PAYMENT_ACCEPTED_BY_RAILS
+            - ACH_RETURN_RECEIVED
+            - RETURN_PAYMENT_FUNDING_REQUESTED
+            - PAYOUT_BATCH_EXECUTED
+            - PAYOUT_BATCH_QUOTE_EXPIRED
+            - PAYOUT_BATCH_FUNDED
+            - PAYOUT_BATCH_FUNDS_RETURN_REQUEST
+            - PAYOUT_BATCH_FUNDS_RETURNED
+            - PAYOUT_FUNDS_REQUEST
+            - PAYOUT_FUNDS_GRANTED
+            - PAYOUT_FUNDS_DENIED
+            - PAYOUT_BATCH_QUOTED
+            - PAYOUT_QUOTED
+            - ACH_PAYMENT_RETURN_CANCELLED
+            - RETURN_PAYMENT_CANCELLATION_REQUESTED
+            - PAYOUT_WITHDRAWN
           type: string
-        payorName:
-          type: string
-        quoteId:
-          format: uuid
-          type: string
-        sourceAccountId:
-          format: uuid
-          type: string
-        sourceAccountName:
-          type: string
-        remoteId:
-          type: string
-        sourceAmount:
-          type: integer
         sourceCurrency:
           $ref: '#/components/schemas/PaymentAuditCurrency_2'
-        paymentAmount:
+        sourceAmount:
+          description: The source amount exposed by the event.
+          example: 1299
+          format: int32
           type: integer
         paymentCurrency:
           $ref: '#/components/schemas/PaymentAuditCurrency_2'
-        rate:
-          format: double
-          type: number
-        invertedRate:
-          format: double
-          type: number
-        submittedDateTime:
-          format: date-time
-          type: string
-        status:
-          enum:
-            - ACCEPTED
-            - AWAITING_FUNDS
-            - FUNDED
-            - UNFUNDED
-            - BANK_PAYMENT_REQUESTED
-            - REJECTED
-            - ACCEPTED_BY_RAILS
-            - CONFIRMED
-            - RETURNED
-            - WITHDRAWN
-          type: string
-        fundingStatus:
-          enum:
-            - FUNDED
-            - INSTRUCTED
-            - UNFUNDED
+        paymentAmount:
+          description: The destination amount exposed by the event.
+          example: 1299
+          format: int32
+          type: integer
+        accountNumber:
+          description: The account number attached to the event.
           type: string
         routingNumber:
-          type: string
-        accountNumber:
+          description: The routing number attached to the event.
           type: string
         iban:
           type: string
-        paymentMemo:
-          type: string
-        filenameReference:
-          type: string
-        individualIdentificationNumber:
-          type: string
-        traceNumber:
-          type: string
-        payorPaymentId:
-          type: string
-        paymentChannelId:
-          type: string
-        paymentChannelName:
-          type: string
         accountName:
           type: string
-        railsId:
-          type: string
-        countryCode:
-          type: string
-        events:
-          items:
-            $ref: '#/components/schemas/PaymentEventResponse_2'
-          type: array
-        returnCost:
-          type: integer
-        returnReason:
+        principal:
           type: string
       required:
-        - events
-        - fundingStatus
-        - payeeId
-        - paymentAmount
-        - paymentId
-        - payorId
-        - quoteId
-        - railsId
-        - sourceAccountId
-        - status
-        - submittedDateTime
+        - eventDateTime
+        - eventId
+        - eventType
       type: object
     QuoteFxSummary:
       example:
@@ -7359,101 +7492,6 @@ components:
         - status
         - totalCost
         - totalPaymentAmount
-      type: object
-    PaymentAuditCurrency_2:
-      description: ISO 3 character currency code
-      enum:
-        - USD
-        - GBP
-        - EUR
-      maxLength: 3
-      minLength: 3
-      type: string
-    PaymentEventResponse_2:
-      example:
-        principal: principal
-        eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        eventDateTime: 2000-01-23T04:56:07.000Z
-        routingNumber: routingNumber
-        accountName: accountName
-        iban: iban
-        sourceAmount: 1299
-        eventType: PAYOUT_SUBMITTED
-        accountNumber: accountNumber
-        paymentAmount: 1299
-      properties:
-        eventId:
-          description: The id of the event.
-          format: uuid
-          type: string
-        eventDateTime:
-          description: The date/time at which the event occurred.
-          format: date-time
-          type: string
-        eventType:
-          description: The type of the event.
-          enum:
-            - PAYOUT_SUBMITTED
-            - PAYOUT_COMPLETED
-            - PAYOUT_INSTRUCTED_V3
-            - BANK_PAYMENT_REQUESTED
-            - SOURCE_AMOUNT_CONFIRMED
-            - PAYMENT_SUBMITTED
-            - PAYMENT_SUBMITTED_ACCEPTED
-            - PAYMENT_SUBMITTED_REJECTED
-            - PAYMENT_CONFIRMED
-            - PAYMENT_AWAITING_FUNDS
-            - PAYMENT_FUNDED
-            - PAYMENT_UNFUNDED
-            - PAYMENT_FAILED
-            - ACH_SUBMITTED_TO_ODFI
-            - PAYMENT_ACCEPTED_BY_RAILS
-            - ACH_RETURN_RECEIVED
-            - RETURN_PAYMENT_FUNDING_REQUESTED
-            - PAYOUT_BATCH_EXECUTED
-            - PAYOUT_BATCH_QUOTE_EXPIRED
-            - PAYOUT_BATCH_FUNDED
-            - PAYOUT_BATCH_FUNDS_RETURN_REQUEST
-            - PAYOUT_BATCH_FUNDS_RETURNED
-            - PAYOUT_FUNDS_REQUEST
-            - PAYOUT_FUNDS_GRANTED
-            - PAYOUT_FUNDS_DENIED
-            - PAYOUT_BATCH_QUOTED
-            - PAYOUT_QUOTED
-            - ACH_PAYMENT_RETURN_CANCELLED
-            - RETURN_PAYMENT_CANCELLATION_REQUESTED
-            - PAYOUT_WITHDRAWN
-          type: string
-        sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency_2'
-        sourceAmount:
-          description: The source amount exposed by the event.
-          example: 1299
-          format: int32
-          type: integer
-        paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency_2'
-        paymentAmount:
-          description: The destination amount exposed by the event.
-          example: 1299
-          format: int32
-          type: integer
-        accountNumber:
-          description: The account number attached to the event.
-          type: string
-        routingNumber:
-          description: The routing number attached to the event.
-          type: string
-        iban:
-          type: string
-        accountName:
-          type: string
-        principal:
-          type: string
-      required:
-        - eventDateTime
-        - eventId
-        - eventType
       type: object
     PaymentChannelRule:
       example:
