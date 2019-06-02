@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.12.76
+  version: 2.12.77
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
@@ -2493,29 +2493,6 @@ paths:
         200:
           content:
             application/json:
-              example: |-
-                HTTP/1.1 200 OK
-                Content-Length: 347
-                Content-Type: application/json;charset=UTF-8
-
-                {
-                  "countries" : [ {
-                    "isoCountryCode" : "US",
-                    "currencies" : [ "USD" ]
-                  }, {
-                    "isoCountryCode" : "GB",
-                    "currencies" : [ "GBP" ]
-                  }, {
-                    "isoCountryCode" : "FR",
-                    "currencies" : [ "EUR" ]
-                  }, {
-                    "isoCountryCode" : "CA",
-                    "currencies" : [ "CAD" ]
-                  }, {
-                    "isoCountryCode" : "JP",
-                    "currencies" : [ "JPY" ]
-                  } ]
-                }
               schema:
                 $ref: '#/components/schemas/SupportedCountriesResponse'
           description: List of Supported Countries
@@ -4746,14 +4723,12 @@ components:
     SupportedCountriesResponse:
       example:
         countries:
-        - isoCountryCode: isoCountryCode
+        - isoCountryCode: US
           currencies:
-          - currencies
-          - currencies
-        - isoCountryCode: isoCountryCode
+          - USD
+        - isoCountryCode: US
           currencies:
-          - currencies
-          - currencies
+          - USD
       properties:
         countries:
           items:
@@ -5860,15 +5835,29 @@ components:
       type: object
     SupportedCountry:
       example:
-        isoCountryCode: isoCountryCode
+        isoCountryCode: US
         currencies:
-        - currencies
-        - currencies
+        - USD
       properties:
         isoCountryCode:
+          enum:
+          - US
+          - GB
+          - FR
+          - CA
+          - JP
+          example: US
           type: string
         currencies:
+          example:
+          - USD
           items:
+            enum:
+            - USD
+            - GBP
+            - EUR
+            - CAD
+            - JPY
             type: string
           type: array
       type: object
