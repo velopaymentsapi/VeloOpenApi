@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.13.12",
+    "version": "2.13.13",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -3259,7 +3259,6 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "HTTP/1.1 200 OK\nContent-Length: 347\nContent-Type: application/json;charset=UTF-8\n\n{\n  \"countries\" : [ {\n    \"isoCountryCode\" : \"US\",\n    \"currencies\" : [ \"USD\" ]\n  }, {\n    \"isoCountryCode\" : \"GB\",\n    \"currencies\" : [ \"GBP\" ]\n  }, {\n    \"isoCountryCode\" : \"FR\",\n    \"currencies\" : [ \"EUR\" ]\n  }, {\n    \"isoCountryCode\" : \"CA\",\n    \"currencies\" : [ \"CAD\" ]\n  }, {\n    \"isoCountryCode\" : \"JP\",\n    \"currencies\" : [ \"JPY\" ]\n  } ]\n}",
                 "schema": {
                   "$ref": "#/components/schemas/SupportedCountriesResponse"
                 }
@@ -4192,11 +4191,6 @@
                 "nationalIdentification": 0,
                 "dateOfBirth": "2000-01-23T00:00:00.000Z"
               },
-              "social": {
-                "facebookId": "facebookId",
-                "twitterId": "twitterId",
-                "linkedInId": "linkedInId"
-              },
               "challenge": {
                 "description": "description",
                 "value": "value"
@@ -4250,11 +4244,6 @@
                 },
                 "nationalIdentification": 0,
                 "dateOfBirth": "2000-01-23T00:00:00.000Z"
-              },
-              "social": {
-                "facebookId": "facebookId",
-                "twitterId": "twitterId",
-                "linkedInId": "linkedInId"
               },
               "challenge": {
                 "description": "description",
@@ -6405,17 +6394,15 @@
         "example": {
           "countries": [
             {
-              "isoCountryCode": "isoCountryCode",
+              "isoCountryCode": "US",
               "currencies": [
-                "currencies",
-                "currencies"
+                "USD"
               ]
             },
             {
-              "isoCountryCode": "isoCountryCode",
+              "isoCountryCode": "US",
               "currencies": [
-                "currencies",
-                "currencies"
+                "USD"
               ]
             }
           ]
@@ -6772,11 +6759,6 @@
             "nationalIdentification": 0,
             "dateOfBirth": "2000-01-23T00:00:00.000Z"
           },
-          "social": {
-            "facebookId": "facebookId",
-            "twitterId": "twitterId",
-            "linkedInId": "linkedInId"
-          },
           "challenge": {
             "description": "description",
             "value": "value"
@@ -6843,9 +6825,6 @@
           },
           "individual": {
             "$ref": "#/components/schemas/CreateIndividual"
-          },
-          "social": {
-            "$ref": "#/components/schemas/Social"
           }
         },
         "required": [
@@ -7504,18 +7483,35 @@
       },
       "SupportedCountry": {
         "example": {
-          "isoCountryCode": "isoCountryCode",
+          "isoCountryCode": "US",
           "currencies": [
-            "currencies",
-            "currencies"
+            "USD"
           ]
         },
         "properties": {
           "isoCountryCode": {
+            "enum": [
+              "US",
+              "GB",
+              "FR",
+              "CA",
+              "JP"
+            ],
+            "example": "US",
             "type": "string"
           },
           "currencies": {
+            "example": [
+              "USD"
+            ],
             "items": {
+              "enum": [
+                "USD",
+                "GBP",
+                "EUR",
+                "CAD",
+                "JPY"
+              ],
               "type": "string"
             },
             "type": "array"
@@ -7952,32 +7948,6 @@
           "dateOfBirth",
           "name"
         ],
-        "type": "object"
-      },
-      "Social": {
-        "example": {
-          "facebookId": "facebookId",
-          "twitterId": "twitterId",
-          "linkedInId": "linkedInId"
-        },
-        "nullable": true,
-        "properties": {
-          "twitterId": {
-            "maxLength": 256,
-            "minLength": 1,
-            "type": "string"
-          },
-          "facebookId": {
-            "maxLength": 256,
-            "minLength": 1,
-            "type": "string"
-          },
-          "linkedInId": {
-            "maxLength": 256,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
         "type": "object"
       },
       "FundingEvent": {
