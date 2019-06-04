@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.12.77",
+    "version": "2.12.78",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -6549,6 +6549,8 @@
         }
       },
       "Social": {
+        "deprecated": true,
+        "description": "This property is no longer used.",
         "example": {
           "facebookId": "facebookId",
           "twitterId": "twitterId",
@@ -6557,16 +6559,19 @@
         "nullable": true,
         "properties": {
           "twitterId": {
+            "deprecated": true,
             "maxLength": 256,
             "minLength": 1,
             "type": "string"
           },
           "facebookId": {
+            "deprecated": true,
             "maxLength": 256,
             "minLength": 1,
             "type": "string"
           },
           "linkedInId": {
+            "deprecated": true,
             "maxLength": 256,
             "minLength": 1,
             "type": "string"
