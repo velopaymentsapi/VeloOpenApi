@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.14.15
+  version: 2.14.16
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -1101,7 +1101,7 @@ paths:
       summary: Get Payee by Id
       tags:
         - Payees
-  /v1/payees/delta:
+  /v1/deltas/payees:
     get:
       description: Get a paginated response listing payee changes.
       operationId: listPayeeChanges
@@ -1177,15 +1177,15 @@ paths:
                     "links": [
                         {
                             "rel": "first",
-                            "href": "http://api.sandbox.velopayments.com/v1/payees/delta?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
                         },
                         {
                             "rel": "last",
-                            "href": "http://api.sandbox.velopayments.com/v1/payees/delta?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
                         },
                         {
                             "rel": "self",
-                            "href": "http://api.sandbox.velopayments.com/v1/payees/delta?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
                         }
                     ]
                 }
@@ -1211,7 +1211,7 @@ paths:
       x-code-samples:
         - lang: shell
           source: |
-            $ curl 'https://api.sandbox.velopayments.com/v1/payees/delta?pageSize=2&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \
+            $ curl 'https://api.sandbox.velopayments.com/v1/deltas/payees?pageSize=2&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \
                 -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \
                 -H 'Content-Type: application/json'
   /v2/payees:
@@ -6447,7 +6447,7 @@ components:
         payeeCountry:
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus'
+          $ref: '#/components/schemas/OnboardedStatus_2'
       required:
         - payeeId
         - remoteId
@@ -7161,6 +7161,13 @@ components:
     RemoteId:
       maxLength: 100
       minLength: 1
+      type: string
+    OnboardedStatus_2:
+      enum:
+        - CREATED
+        - INVITED
+        - REGISTERED
+        - ONBOARDED
       type: string
     CreatePayeeAddress:
       example:
