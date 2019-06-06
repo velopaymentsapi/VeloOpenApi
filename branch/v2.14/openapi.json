@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.14.17",
+    "version": "2.14.18",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -1811,6 +1811,7 @@
           {
             "contractId": 1,
             "name": "Test List Payee Changes",
+            "ignored": true,
             "request": {
               "queryParameters": [
                 {
