@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.13.13
+  version: 2.13.14
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -777,69 +777,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                {
-                  "page" : {
-                    "numberOfElements" : 2,
-                    "totalElements" : 45,
-                    "totalPages" : 23,
-                    "page" : 9,
-                    "pageSize" : 2
-                  },
-                  "links" : [ {
-                    "rel" : "first",
-                    "href" : "https://api.sandbox.velopayments.com/v1/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=1&pageSize=2&sort=displayName:asc"
-                  }, {
-                    "rel" : "last",
-                    "href" : "https://api.sandbox.velopayments.com/v1/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=23&pageSize=2&sort=displayName:asc"
-                  }, {
-                    "rel" : "self",
-                    "href" : "https://api.sandbox.velopayments.com/v1/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=9&pageSize=2&sort=displayName:asc"
-                  }, {
-                    "rel" : "prev",
-                    "href" : "https://api.sandbox.velopayments.com/v1/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=8&pageSize=2&sort=displayName:asc"
-                  }, {
-                    "rel" : "next",
-                    "href" : "https://api.sandbox.velopayments.com/v1/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=10&pageSize=2&sort=displayName:asc"
-                  } ],
-                  "content" : [ {
-                    "payeeId" : "ee2cc9a1-34dd-4ab6-91e3-db111d08d995",
-                    "payorRefs" : [ {
-                      "payorId" : "13322f2a-8edb-41ef-aab4-9b070317a51a",
-                      "remoteId" : "remoteId"
-                    } ],
-                    "displayName" : null,
-                    "email" : "bob@example.com",
-                    "individual" : {
-                      "name" : {
-                        "title" : "Mr",
-                        "firstName" : "Barney",
-                        "otherNames" : "Grubb",
-                        "lastName" : "Cuthbert"
-                      }
-                    },
-                    "onboardedStatus" : "CREATED",
-                    "ofacStatus" : "PENDING"
-                  }, {
-                    "payeeId" : "e904966e-ae6a-4ddd-879c-fd1167c21849",
-                    "payorRefs" : [ {
-                      "payorId" : "13322f2a-8edb-41ef-aab4-9b070317a51a",
-                      "remoteId" : "remoteId"
-                    } ],
-                    "displayName" : null,
-                    "email" : "bob@example.com",
-                    "individual" : {
-                      "name" : {
-                        "title" : "Mr",
-                        "firstName" : "Barney",
-                        "otherNames" : "Grubb",
-                        "lastName" : "Cuthbert"
-                      }
-                    },
-                    "onboardedStatus" : "CREATED",
-                    "ofacStatus" : "PENDING"
-                  } ]
-                }
               schema:
                 $ref: '#/components/schemas/PayeeResponse'
           description: Details of Payee
@@ -864,9 +801,6 @@ paths:
                   - key: Content-Type
                     regex: application/json.*
                 body:
-                  - path: $.page
-                    type: by_type
-                    minOccurrence: 1
                   - path: $.page.numberOfElements
                     type: by_regex
                     predefined: number
@@ -900,7 +834,7 @@ paths:
                     predefined: email
                   - path: '$.content[0].created'
                     type: by_regex
-                    value: '([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9]).([0-9]{6})Z'
+                    value: '([\d]{4})-([\d]{2})-([\d]{2})T([\d]{2}):([\d]{2}):([\d]{2}).([\d]{1,3})Z'
                   - path: '$.content[0].payorRefs[0].payorId'
                     type: by_regex
                     predefined: uuid
@@ -913,13 +847,29 @@ paths:
         - Payees
       x-contracts:
         - contractId: 1
-          name: Test List Payees
+          name: Test List Payees All params
+          headers:
+            Content-Type: application/json
           request:
             queryParameters:
               - key: page
                 value: 1
               - key: pageSize
                 value: 30
+              - key: ofacStatus
+                value: PASSED
+              - key: onboardedStatus
+                value: CREATED
+              - key: email
+                value: testemail@example.com
+              - key: displayName
+                value: foo
+              - key: remoteId
+                value: 123123123asdf
+              - key: payeeType
+                value: Individual
+              - key: payeeCountry
+                value: US
           serviceName: payee-service
       x-code-samples:
         - lang: shell
@@ -947,11 +897,26 @@ paths:
       responses:
         '204':
           description: No content. Payee Id accepted for deletion.
+          x-contracts:
+            - contractId: 1
         '400':
           description: Bad Request. Payee Id failed validation for deletion.
+        '404':
+          description: Payee Id not found
+          x-contracts:
+            - contractId: 2
       summary: Delete Payee by Id
       tags:
         - Payees
+      x-contracts:
+        - contractId: 1
+          name: Delete normal Id
+          serviceName: payee-service
+          contractPath: /v1/payees/0a818933-087d-47f2-ad83-2f986ed087eb
+        - contractId: 2
+          name: Delete Payee Id Not Found
+          serviceName: payee-service
+          contractPath: /v1/payees/00000000-0000-0000-0000-000000000000
     get:
       description: Get Payee by Id
       operationId: getPayeeById
@@ -971,6 +936,9 @@ paths:
           required: false
           schema:
             type: boolean
+          x-contracts:
+            - contractId: 4
+              value: true
       responses:
         '200':
           content:
@@ -978,11 +946,153 @@ paths:
               schema:
                 $ref: '#/components/schemas/Payee'
           description: '200 response, request completed okay'
+          x-contracts:
+            - contractId: 1
+              headers:
+                Content-Type: application/json;charset=UTF-8
+              body:
+                payeeId: 0a818933-087d-47f2-ad83-2f986ed087eb
+                individual:
+                  name:
+                    title: Mr
+                    firstName: Barney
+                    lastName: Cuthbert
+                    otherNames: Grubb
+                  nationalIdentification: XXXXX4321
+                  dateOfBirth: XXXX-XX-XX
+                email: bob@example.com
+                onboardedStatus: CREATED
+                ofacStatus: PENDING
+                address:
+                  line1: 100 Battery Street
+                  line2: line2
+                  line3: line3
+                  line4: line4
+                  city: San Francisco
+                  country: US
+                  countyOrProvince: California
+                  zipOrPostcode: 94018
+                language: FR
+                marketingOptIns:
+                  - optedIn: true
+              matchers:
+                body:
+                  - path: $.gracePeriodEndDate
+                    type: by_regex
+                    value: '([\d]{4})-([\d]{2})-([\d]{2})'
+                  - path: $.created
+                    type: by_regex
+                    value: '([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9]).*'
+                  - path: $.acceptTermsAndConditionsTimestamp
+                    type: by_regex
+                    value: '([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9]).*'
+                  - path: $.lastOfacCheckTimestamp
+                    type: by_regex
+                    value: '([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9]).*'
+                  - path: '$.marketingOptIns[*].timestamp'
+                    type: by_regex
+                    value: '([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9]).*'
+                  - path: '$.payorRefs[*].payorId'
+                    type: by_regex
+                    predefined: uuid
+                  - path: '$.payorRefs[*].remoteId'
+                    type: by_regex
+                    predefined: non_blank
+                  - path: '$.payorRefs[*].invitationStatus'
+                    type: by_regex
+                    predefined: non_blank
+                  - path: $.cellphoneNumber
+                    type: by_regex
+                    predefined: non_blank
+            - contractId: 2
+              headers:
+                Content-Type: application/json;charset=UTF-8
+              body:
+                payeeId: a712d914-61ea-4623-8bd0-32c0f6545bfd
+                company:
+                  name: WIDGET CORP
+                  taxId: 223344556
+                email: bob@example.com
+                onboardedStatus: CREATED
+                ofacStatus: PENDING
+                address:
+                  line1: 100 Battery Street
+                  line2: line2
+                  line3: line3
+                  line4: line4
+                  city: San Francisco
+                  country: US
+                  countyOrProvince: California
+                  zipOrPostcode: 94018
+                language: FR
+                marketingOptIns:
+                  - optedIn: true
+              matchers:
+                body:
+                  - path: $.gracePeriodEndDate
+                    type: by_regex
+                    value: '([\d]{4})-([\d]{2})-([\d]{2})'
+                  - path: $.created
+                    type: by_regex
+                    value: '([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9]).*'
+                  - path: $.acceptTermsAndConditionsTimestamp
+                    type: by_regex
+                    value: '([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9]).*'
+                  - path: $.lastOfacCheckTimestamp
+                    type: by_regex
+                    value: '([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9]).*'
+                  - path: '$.marketingOptIns[*].timestamp'
+                    type: by_regex
+                    value: '([0-9]{4})-(1[0-2]|0[1-9])-(3[01]|0[1-9]|[12][0-9])T(2[0-3]|[01][0-9]):([0-5][0-9]):([0-5][0-9]).*'
+                  - path: '$.payorRefs[*].payorId'
+                    type: by_regex
+                    predefined: uuid
+                  - path: '$.payorRefs[*].remoteId'
+                    type: by_regex
+                    predefined: non_blank
+                  - path: '$.payorRefs[*].invitationStatus'
+                    type: by_regex
+                    predefined: non_blank
+                  - path: $.cellphoneNumber
+                    type: by_regex
+                    predefined: non_blank
+            - contractId: 4
+              headers:
+                Content-Type: application/json;charset=UTF-8
+              body:
+                payeeId: 026cc3c8-3a0c-4083-a05b-e908048c1b08
+                individual:
+                  name:
+                    title: Mr
+                    firstName: Barney
+                    lastName: Cuthbert
+                    otherNames: Grubb
+                  nationalIdentification: 987654321
+                  dateOfBirth: 1970-05-20T00:00:00.000Z
         '404':
           description: Payee Not found
+          x-contracts:
+            - contractId: 3
       summary: Get Payee by Id
       tags:
         - Payees
+      x-contracts:
+        - contractId: 1
+          name: Get Individual Payee
+          serviceName: payee-service
+          contractPath: /v1/payees/0a818933-087d-47f2-ad83-2f986ed087eb
+        - contractId: 2
+          name: Get Company Payee
+          serviceName: payee-service
+          contractPath: /v1/payees/a712d914-61ea-4623-8bd0-32c0f6545bfd
+        - contractId: 3
+          name: Payee Id Not Found
+          serviceName: payee-service
+          contractPath: /v1/payees/00000000-0000-0000-0000-000000000000
+        - contractId: 4
+          name: Get Payee sensitve true
+          serviceName: payee-service
+          contractPath: /v1/payees/026cc3c8-3a0c-4083-a05b-e908048c1b08
   /v2/payees:
     post:
       description: |
@@ -1099,15 +1209,12 @@ paths:
           x-contracts:
             - contractId: 1
               headers:
-                Content-Type: application/json
                 Location: 'https://api.sandbox.velopayments.com/v2/payees/batch/dbe7df3a-6b75-4bcb-97c5-45d25f828267'
               matchers:
                 headers:
                   - key: Location
                     type: by_regex
                     predefined: url
-                  - key: Content-Type
-                    regex: application/json.*
             - contractId: 2
               headers:
                 Content-Type: application/json
@@ -1127,10 +1234,10 @@ paths:
       x-contracts:
         - contractId: 1
           name: Create Payees by JSON
-          serviceName: payeeService
+          serviceName: payee-service
         - contractId: 2
           name: Create Payees by CSV
-          serviceName: payeeService
+          serviceName: payee-service
       x-code-samples:
         - lang: shell
           source: |
