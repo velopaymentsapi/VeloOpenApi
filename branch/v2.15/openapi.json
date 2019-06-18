@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.15.3",
+    "version": "2.15.4",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -4050,7 +4050,7 @@
           {
             "description": "The Payor ID to find associated Payments",
             "in": "query",
-            "name": "paymentId",
+            "name": "payorId",
             "required": true,
             "schema": {
               "format": "uuid",
