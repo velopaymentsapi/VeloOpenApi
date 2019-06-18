@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.15.4
+  version: 2.15.5
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -3147,7 +3147,7 @@ paths:
           description: Bad Request
       summary: List Payment Changes
       tags:
-        - Payments
+        - Payment Audit Service
       x-contracts:
         - contractId: 1
           name: Test List Payment Changes
@@ -7969,6 +7969,7 @@ components:
         - REJECTED
         - RETURNED
         - WITHDRAWN
+      nullable: true
       type: string
     PaymentChannelRule:
       example:
