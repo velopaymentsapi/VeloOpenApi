@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.15.5",
+    "version": "2.15.6",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -3026,6 +3026,7 @@
     },
     "/v3/paymentaudit/payouts/{payoutId}": {
       "get": {
+        "deprecated": true,
         "description": "Get List of payments for Payout\n",
         "operationId": "getPaymentsForPayout",
         "parameters": [
@@ -3204,6 +3205,7 @@
     },
     "/v3/paymentaudit/payments": {
       "get": {
+        "deprecated": true,
         "description": "Get payments for the given payor Id",
         "operationId": "listPaymentsAudit",
         "parameters": [
@@ -3427,6 +3429,7 @@
     },
     "/v3/paymentaudit/payments/{paymentId}": {
       "get": {
+        "deprecated": true,
         "description": "Get the payment with the given id. This contains the payment history.\n",
         "operationId": "getPaymentDetails",
         "parameters": [
