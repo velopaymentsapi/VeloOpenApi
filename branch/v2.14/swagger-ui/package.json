@@ -1,31 +1,31 @@
 {
   "_args": [
     [
-      "swagger-ui-dist@3.20.7",
+      "swagger-ui-dist@3.22.3",
       "/home/circleci/repo"
     ]
   ],
-  "_from": "swagger-ui-dist@3.20.7",
-  "_id": "swagger-ui-dist@3.20.7",
+  "_from": "swagger-ui-dist@3.22.3",
+  "_id": "swagger-ui-dist@3.22.3",
   "_inBundle": false,
-  "_integrity": "sha512-lMXgaB53akVJr8NKFCchivvIzu6hQQAkC9e7shXszSeV4DsJolde9yL+88kc8xG44qJ434qXl7xELQPxUpd1ww==",
+  "_integrity": "sha512-tmjAsqT43pqg5UoiQ2805c+juX0ASSoI/Ash/0c19jjAOFtTfE93ZrzmFd9hjqVgre935CYeXT0uaku42Lu8xg==",
   "_location": "/swagger-ui-dist",
   "_phantomChildren": {},
   "_requested": {
     "type": "version",
     "registry": true,
-    "raw": "swagger-ui-dist@3.20.7",
+    "raw": "swagger-ui-dist@3.22.3",
     "name": "swagger-ui-dist",
     "escapedName": "swagger-ui-dist",
-    "rawSpec": "3.20.7",
+    "rawSpec": "3.22.3",
     "saveSpec": null,
-    "fetchSpec": "3.20.7"
+    "fetchSpec": "3.22.3"
   },
   "_requiredBy": [
     "/swagger-repo"
   ],
-  "_resolved": "https://registry.npmjs.org/swagger-ui-dist/-/swagger-ui-dist-3.20.7.tgz",
-  "_spec": "3.20.7",
+  "_resolved": "https://registry.npmjs.org/swagger-ui-dist/-/swagger-ui-dist-3.22.3.tgz",
+  "_spec": "3.22.3",
   "_where": "/home/circleci/repo",
   "bugs": {
     "url": "https://github.com/swagger-api/swagger-ui/issues"
@@ -70,5 +70,5 @@
     "type": "git",
     "url": "git+ssh://git@github.com/swagger-api/swagger-ui.git"
   },
-  "version": "3.20.7"
+  "version": "3.22.3"
 }
