@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.15.10",
+    "version": "2.15.11",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -3532,7 +3532,7 @@
         "operationId": "exportTransactionsCSV",
         "parameters": [
           {
-            "description": "The account owner Payor ID",
+            "description": "The Payor ID for whom you wish to run the report.\nFor a Payor requesting the report, this could be their exact Payor, or it could be a child/descendant Payor.\n",
             "in": "query",
             "name": "payorId",
             "required": false,

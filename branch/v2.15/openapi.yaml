@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.15.10
+  version: 2.15.11
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -2678,7 +2678,9 @@ paths:
       description: Download a CSV file containing payments in a date range. Uses Transfer-Encoding - chunked to stream to the client. Date range is inclusive of both the start and end dates.
       operationId: exportTransactionsCSV
       parameters:
-        - description: The account owner Payor ID
+        - description: |
+            The Payor ID for whom you wish to run the report.
+            For a Payor requesting the report, this could be their exact Payor, or it could be a child/descendant Payor.
           in: query
           name: payorId
           required: false
