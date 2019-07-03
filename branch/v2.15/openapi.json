@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.15.11",
+    "version": "2.15.12",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -2900,6 +2900,7 @@
     },
     "/v3/paymentaudit/payouts": {
       "get": {
+        "deprecated": true,
         "description": "Get List of payouts for payor\n",
         "operationId": "getPayoutsForPayor",
         "parameters": [
@@ -3601,6 +3602,132 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/transactions?startDate=2018-05-01&endDate=2018-05-31' -i -X GET \\\n    -H 'Authorization: Bearer 76748e09-775d-4e2d-b889-f0555901d8eb'\n"
+          }
+        ]
+      }
+    },
+    "/v4/paymentaudit/payouts": {
+      "get": {
+        "description": "Get List of payouts for payor\n",
+        "operationId": "getPayoutsForPayorV4",
+        "parameters": [
+          {
+            "description": "The account owner Payor ID",
+            "in": "query",
+            "name": "payorId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Payout Memo filter - case insensitive sub-string match",
+            "in": "query",
+            "name": "payoutMemo",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Payout Status",
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ACCEPTED",
+                "REJECTED",
+                "SUBMITTED",
+                "QUOTED",
+                "INSTRUCTED",
+                "COMPLETED",
+                "INCOMPLETE",
+                "CONFIRMED",
+                "WITHDRAWN"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "The submitted date from range filter. Format is yyyy-MM-dd.",
+            "in": "query",
+            "name": "submittedDateFrom",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The submitted date to range filter. Format is yyyy-MM-dd.",
+            "in": "query",
+            "name": "submittedDateTo",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page size. Default is 25. Max allowable is 100.",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "List of sort fields (e.g. ?sort=submittedDateTime:asc,instructedDateTime:asc,status:asc)\nDefault is submittedDateTime:asc\nThe supported sort fields are: submittedDateTime, instructedDateTime, status.\n",
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPayoutsResponse_2"
+                }
+              }
+            },
+            "description": "Payor data found"
+          },
+          "400": {
+            "description": "Invalid Request Parameter"
+          },
+          "404": {
+            "description": "Payor Id Not Found"
+          }
+        },
+        "summary": "Get Payouts for Payor",
+        "tags": [
+          "Payment Audit Service"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/payouts?payorId=449aa6c3-0569-47f6-a430-a470040da67c' -i -X GET \\\n    -H 'Authorization: Bearer a9d9247d-5e30-4cea-a6e1-0898534ce768'\n"
           }
         ]
       }
@@ -7403,6 +7530,144 @@
         ],
         "type": "object"
       },
+      "GetPayoutsResponse_2": {
+        "description": "List Payouts Response",
+        "example": {
+          "summary": {
+            "totalOnboardedCount": 5,
+            "totalRegisteredCount": 1,
+            "totalPayeesCount": 0,
+            "totalInvitedCount": 6,
+            "totalOfacFailedCount": 5
+          },
+          "links": [
+            {
+              "rel": "rel",
+              "href": "href"
+            },
+            {
+              "rel": "rel",
+              "href": "href"
+            }
+          ],
+          "page": {
+            "numberOfElements": 2,
+            "totalPages": 9,
+            "pageSize": 2,
+            "page": 3,
+            "totalElements": 7
+          },
+          "content": [
+            {
+              "dateTime": "2000-01-23T04:56:07.000Z",
+              "sourceAccountSummary": [
+                {
+                  "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 5.962133916683182
+                },
+                {
+                  "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 5.962133916683182
+                }
+              ],
+              "totalReturnedPayments": 1,
+              "submittedDateTime": "submittedDateTime",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalIncompletePayments": 6,
+              "fxSummaries": [
+                {
+                  "invertedRate": 2.3021358869347655,
+                  "rate": 5.637376656633329,
+                  "totalPaymentAmount": 9,
+                  "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 7,
+                  "fundingStatus": "FUNDED",
+                  "creationDateTime": "2000-01-23T04:56:07.000Z",
+                  "status": "UNQUOTED"
+                },
+                {
+                  "invertedRate": 2.3021358869347655,
+                  "rate": 5.637376656633329,
+                  "totalPaymentAmount": 9,
+                  "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 7,
+                  "fundingStatus": "FUNDED",
+                  "creationDateTime": "2000-01-23T04:56:07.000Z",
+                  "status": "UNQUOTED"
+                }
+              ],
+              "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalPayments": 0,
+              "instructedDateTime": "instructedDateTime",
+              "payoutMemo": "payoutMemo"
+            },
+            {
+              "dateTime": "2000-01-23T04:56:07.000Z",
+              "sourceAccountSummary": [
+                {
+                  "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 5.962133916683182
+                },
+                {
+                  "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 5.962133916683182
+                }
+              ],
+              "totalReturnedPayments": 1,
+              "submittedDateTime": "submittedDateTime",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalIncompletePayments": 6,
+              "fxSummaries": [
+                {
+                  "invertedRate": 2.3021358869347655,
+                  "rate": 5.637376656633329,
+                  "totalPaymentAmount": 9,
+                  "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 7,
+                  "fundingStatus": "FUNDED",
+                  "creationDateTime": "2000-01-23T04:56:07.000Z",
+                  "status": "UNQUOTED"
+                },
+                {
+                  "invertedRate": 2.3021358869347655,
+                  "rate": 5.637376656633329,
+                  "totalPaymentAmount": 9,
+                  "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "totalCost": 7,
+                  "fundingStatus": "FUNDED",
+                  "creationDateTime": "2000-01-23T04:56:07.000Z",
+                  "status": "UNQUOTED"
+                }
+              ],
+              "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalPayments": 0,
+              "instructedDateTime": "instructedDateTime",
+              "payoutMemo": "payoutMemo"
+            }
+          ]
+        },
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/PayeeResponse_summary"
+          },
+          "page": {
+            "$ref": "#/components/schemas/PayeeResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/PayeeResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/PayoutSummaryAudit_2"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "GetPaymentsForPayoutResponse_2": {
         "description": "List Payments for payout",
         "example": {
@@ -9073,6 +9338,104 @@
         ],
         "type": "object"
       },
+      "PayoutSummaryAudit_2": {
+        "example": {
+          "dateTime": "2000-01-23T04:56:07.000Z",
+          "sourceAccountSummary": [
+            {
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalCost": 5.962133916683182
+            },
+            {
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalCost": 5.962133916683182
+            }
+          ],
+          "totalReturnedPayments": 1,
+          "submittedDateTime": "submittedDateTime",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "totalIncompletePayments": 6,
+          "fxSummaries": [
+            {
+              "invertedRate": 2.3021358869347655,
+              "rate": 5.637376656633329,
+              "totalPaymentAmount": 9,
+              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalCost": 7,
+              "fundingStatus": "FUNDED",
+              "creationDateTime": "2000-01-23T04:56:07.000Z",
+              "status": "UNQUOTED"
+            },
+            {
+              "invertedRate": 2.3021358869347655,
+              "rate": 5.637376656633329,
+              "totalPaymentAmount": 9,
+              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalCost": 7,
+              "fundingStatus": "FUNDED",
+              "creationDateTime": "2000-01-23T04:56:07.000Z",
+              "status": "UNQUOTED"
+            }
+          ],
+          "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "totalPayments": 0,
+          "instructedDateTime": "instructedDateTime",
+          "payoutMemo": "payoutMemo"
+        },
+        "properties": {
+          "payoutId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/PayoutStatus_2"
+          },
+          "dateTime": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "submittedDateTime": {
+            "type": "string"
+          },
+          "instructedDateTime": {
+            "type": "string"
+          },
+          "totalPayments": {
+            "type": "integer"
+          },
+          "totalIncompletePayments": {
+            "type": "integer"
+          },
+          "totalReturnedPayments": {
+            "type": "integer"
+          },
+          "sourceAccountSummary": {
+            "items": {
+              "$ref": "#/components/schemas/SourceAccountSummary_2"
+            },
+            "type": "array"
+          },
+          "fxSummaries": {
+            "items": {
+              "$ref": "#/components/schemas/FxSummary_2"
+            },
+            "type": "array"
+          },
+          "payoutMemo": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "payoutId",
+          "status",
+          "submittedDateTime"
+        ],
+        "type": "object"
+      },
       "PaymentAuditCurrency_2": {
         "description": "ISO 3 character currency code",
         "enum": [
@@ -10012,6 +10375,114 @@
           },
           "paymentCurrency": {
             "$ref": "#/components/schemas/PaymentAuditCurrency"
+          },
+          "status": {
+            "enum": [
+              "UNQUOTED",
+              "QUOTED",
+              "EXPIRED",
+              "EXECUTED"
+            ],
+            "type": "string"
+          },
+          "fundingStatus": {
+            "enum": [
+              "FUNDED",
+              "INSTRUCTED",
+              "UNFUNDED"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "creationDateTime",
+          "fundingStatus",
+          "invertedRate",
+          "quoteId",
+          "rate",
+          "status",
+          "totalCost",
+          "totalPaymentAmount"
+        ],
+        "type": "object"
+      },
+      "PayoutStatus_2": {
+        "enum": [
+          "ACCEPTED",
+          "REJECTED",
+          "SUBMITTED",
+          "QUOTED",
+          "INSTRUCTED",
+          "COMPLETED",
+          "INCOMPLETE",
+          "CONFIRMED",
+          "WITHDRAWN"
+        ],
+        "type": "string"
+      },
+      "SourceAccountSummary_2": {
+        "example": {
+          "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "totalCost": 5.962133916683182
+        },
+        "properties": {
+          "sourceAccountId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "totalCost": {
+            "format": "int32",
+            "type": "number"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
+          }
+        },
+        "required": [
+          "sourceAccountId",
+          "totalCost"
+        ],
+        "type": "object"
+      },
+      "FxSummary_2": {
+        "example": {
+          "invertedRate": 2.3021358869347655,
+          "rate": 5.637376656633329,
+          "totalPaymentAmount": 9,
+          "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "totalCost": 7,
+          "fundingStatus": "FUNDED",
+          "creationDateTime": "2000-01-23T04:56:07.000Z",
+          "status": "UNQUOTED"
+        },
+        "properties": {
+          "quoteId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "creationDateTime": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "rate": {
+            "format": "double",
+            "type": "number"
+          },
+          "invertedRate": {
+            "format": "double",
+            "type": "number"
+          },
+          "totalCost": {
+            "type": "integer"
+          },
+          "totalPaymentAmount": {
+            "type": "integer"
+          },
+          "sourceCurrency": {
+            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
+          },
+          "paymentCurrency": {
+            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
           },
           "status": {
             "enum": [
