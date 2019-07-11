@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.14.24
+  version: 2.14.25
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -439,15 +439,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Type: application/json;charset=UTF-8
-                Content-Length: 111
-
-                {
-                    "apiKey" : "385d4506-e7dd-446e-a092-5f30b98e7b26",
-                    "apiSecret" : "f25767d9-342a-48ac-a788-0a7a38ae6fb3"
-                }
               schema:
                 $ref: '#/components/schemas/PayorCreateApiKeyResponse'
           description: 'HTTP Ok, key created'
@@ -613,18 +604,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Type: application/json;charset=UTF-8
-                Content-Length: 221
-
-                {
-                  "payorName" : "Payor1",
-                  "logoUrl" : "https://s3-us-west-2.amazonaws.com/velopayments-branding/test/logo.png",
-                  "collectiveAlias" : "customer",
-                  "supportContact" : "support@mycorp.com",
-                  "dbaName" : "my company"
-                }
               schema:
                 $ref: '#/components/schemas/PayorBrandingResponse'
           description: 'HTTP Ok, key created'
@@ -1770,55 +1749,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Length: 1455
-                Content-Type: application/json;charset=UTF-8
-
-                {
-                  "page" : {
-                    "numberOfElements" : 2,
-                    "totalElements" : 2,
-                    "totalPages" : 1,
-                    "page" : 1,
-                    "pageSize" : 0
-                  },
-                  "links" : [ {
-                    "rel" : "first",
-                    "href" : "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-                  }, {
-                    "rel" : "last",
-                    "href" : "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-                  }, {
-                    "rel" : "self",
-                    "href" : "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-                  } ],
-                  "content" : [ {
-                    "id" : "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
-                    "balance" : 1203489,
-                    "currency" : "USD",
-                    "fundingRef" : "a1b2c3d4",
-                    "physicalAccountName" : "VELO_FBO_MYBANKA_USD",
-                    "railsId" : "SIM",
-                    "payorId" : "a2967711-df07-41e5-b5ea-f563088911c6",
-                    "name" : "mySourceAccount",
-                    "pooled" : true,
-                    "balanceVisible" : true,
-                    "customerId" : null
-                  }, {
-                    "id" : "a587c938-e497-4349-8817-129a5e801f30",
-                    "balance" : 1203489,
-                    "currency" : "USD",
-                    "fundingRef" : "a1b2c3d4",
-                    "physicalAccountName" : "VELO_FBO_MYBANKA_USD",
-                    "railsId" : "SIM",
-                    "payorId" : "a2967711-df07-41e5-b5ea-f563088911c6",
-                    "name" : "mySourceAccount",
-                    "pooled" : true,
-                    "balanceVisible" : true,
-                    "customerId" : null
-                  } ]
-                }
               schema:
                 $ref: '#/components/schemas/ListSourceAccountResponse'
           description: List Source Account response
@@ -1853,24 +1783,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Type: application/json;charset=UTF-8
-                Content-Length: 356
-
-                {
-                  "id" : "414ad313-51b4-4d93-82b2-0a40963d95ba",
-                  "balance" : 1203489,
-                  "currency" : "USD",
-                  "fundingRef" : "a1b2c3d4",
-                  "physicalAccountName" : "VELO_FBO_MYBANKA_USD",
-                  "railsId" : "SIM",
-                  "payorId" : "a2967711-df07-41e5-b5ea-f563088911c6",
-                  "name" : "mySourceAccount",
-                  "pooled" : true,
-                  "balanceVisible" : true,
-                  "customerId" : "123456789"
-                }
               schema:
                 $ref: '#/components/schemas/SourceAccountResponse'
           description: Source account response
@@ -5002,49 +4914,49 @@ components:
       description: List Source Accounts Response Object
       example:
         links:
-          - rel: rel
-            href: href
-          - rel: rel
-            href: href
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
         page:
-          numberOfElements: 2
-          totalPages: 9
-          pageSize: 2
-          page: 3
-          totalElements: 7
+          numberOfElements: 1
+          totalPages: 2
+          pageSize: 25
+          page: 1
+          totalElements: 1
         content:
-          - physicalAccountName: physicalAccountName
+          - physicalAccountName: VELO_FBO_MYBANKA_USD
             fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            fundingRef: fundingRef
-            balance: 0.8008281904610115
+            fundingRef: a1b2c3d4
+            balance: 1203489
             pooled: true
-            name: name
-            customerId: customerId
+            name: MyAccountName
+            customerId: Joe Customer
             physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             currency: USD
-            railsId: railsId
+            railsId: BOA_RAIL
             balanceVisible: true
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          - physicalAccountName: physicalAccountName
+          - physicalAccountName: VELO_FBO_MYBANKA_USD
             fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            fundingRef: fundingRef
-            balance: 0.8008281904610115
+            fundingRef: a1b2c3d4
+            balance: 1203489
             pooled: true
-            name: name
-            customerId: customerId
+            name: MyAccountName
+            customerId: Joe Customer
             physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             currency: USD
-            railsId: railsId
+            railsId: BOA_RAIL
             balanceVisible: true
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         page:
-          $ref: '#/components/schemas/PayeeResponse_page'
+          $ref: '#/components/schemas/ListSourceAccountResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/PayeeResponse_links'
+            $ref: '#/components/schemas/ListSourceAccountResponse_links'
           type: array
         content:
           items:
@@ -5053,16 +4965,16 @@ components:
       type: object
     SourceAccountResponse:
       example:
-        physicalAccountName: physicalAccountName
+        physicalAccountName: VELO_FBO_MYBANKA_USD
         fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        fundingRef: fundingRef
-        balance: 0.8008281904610115
+        fundingRef: a1b2c3d4
+        balance: 1203489
         pooled: true
-        name: name
-        customerId: customerId
+        name: MyAccountName
+        customerId: Joe Customer
         physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         currency: USD
-        railsId: railsId
+        railsId: BOA_RAIL
         balanceVisible: true
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -5073,30 +4985,37 @@ components:
           type: string
         balance:
           description: Decimal implied
+          example: 1203489
           format: int32
           type: number
         currency:
           enum:
             - USD
+          example: USD
           maxLength: 3
           minLength: 3
           type: string
         fundingRef:
+          example: a1b2c3d4
           type: string
         physicalAccountName:
+          example: VELO_FBO_MYBANKA_USD
           type: string
         railsId:
+          example: BOA_RAIL
           type: string
         payorId:
           format: uuid
           type: string
         name:
+          example: MyAccountName
           type: string
         pooled:
           type: boolean
         balanceVisible:
           type: boolean
         customerId:
+          example: Joe Customer
           nullable: true
           type: string
         physicalAccountId:
@@ -8226,6 +8145,40 @@ components:
         rel:
           type: string
         href:
+          type: string
+    ListSourceAccountResponse_page:
+      example:
+        numberOfElements: 1
+        totalPages: 2
+        pageSize: 25
+        page: 1
+        totalElements: 1
+      properties:
+        numberOfElements:
+          example: 1
+          type: integer
+        totalElements:
+          example: 1
+          type: integer
+        totalPages:
+          example: 2
+          type: integer
+        page:
+          example: 1
+          type: integer
+        pageSize:
+          example: 25
+          type: integer
+    ListSourceAccountResponse_links:
+      example:
+        rel: first
+        href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+      properties:
+        rel:
+          example: first
+          type: string
+        href:
+          example: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
           type: string
     GetPaymentsForPayoutResponse_summary:
       example:
