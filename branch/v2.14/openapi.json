@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.14.26",
+    "version": "2.14.27",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -8793,6 +8793,7 @@
               "PENDING",
               "DECLINED"
             ],
+            "example": "ACCEPTED",
             "type": "string"
           },
           "gracePeriodEndDate": {
