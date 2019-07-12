@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.14.25",
+    "version": "2.14.26",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -2539,11 +2539,6 @@
         },
         "responses": {
           "202": {
-            "content": {
-              "application/json": {
-                "example": "HTTP/1.1 202 Accepted\n"
-              }
-            },
             "description": "Request Accepted"
           },
           "400": {
@@ -2644,11 +2639,6 @@
         },
         "responses": {
           "202": {
-            "content": {
-              "application/json": {
-                "example": "HTTP/1.1 202 Accepted\n"
-              }
-            },
             "description": "Request Accepted"
           },
           "400": {
@@ -5372,47 +5362,47 @@
         "example": {
           "links": [
             {
-              "rel": "rel",
-              "href": "href"
+              "rel": "first",
+              "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
             },
             {
-              "rel": "rel",
-              "href": "href"
+              "rel": "first",
+              "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
             }
           ],
           "page": {
             "numberOfElements": 2,
-            "totalPages": 9,
-            "pageSize": 2,
-            "page": 3,
-            "totalElements": 7
+            "totalPages": 1,
+            "pageSize": 25,
+            "page": 1,
+            "totalElements": 2
           },
           "content": [
             {
-              "payeeCountry": "payeeCountry",
-              "displayName": "displayName",
+              "payeeCountry": "US",
+              "displayName": "Payee1",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "dbaName": "dbaName",
-              "email": "email",
-              "remoteId": "remoteId"
+              "dbaName": "Payee DBA Name",
+              "email": "payee1@example.com",
+              "remoteId": "payee_1"
             },
             {
-              "payeeCountry": "payeeCountry",
-              "displayName": "displayName",
+              "payeeCountry": "US",
+              "displayName": "Payee1",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "dbaName": "dbaName",
-              "email": "email",
-              "remoteId": "remoteId"
+              "dbaName": "Payee DBA Name",
+              "email": "payee1@example.com",
+              "remoteId": "payee_1"
             }
           ]
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/PayeeDeltaResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/PayeeDeltaResponse_links"
             },
             "type": "array"
           },
@@ -6494,30 +6484,30 @@
         "example": {
           "links": [
             {
-              "rel": "rel",
-              "href": "href"
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
             },
             {
-              "rel": "rel",
-              "href": "href"
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
             }
           ],
           "page": {
-            "numberOfElements": 2,
-            "totalPages": 9,
-            "pageSize": 2,
-            "page": 3,
-            "totalElements": 7
+            "numberOfElements": 12,
+            "totalPages": 2,
+            "pageSize": 25,
+            "page": 1,
+            "totalElements": 33
           },
           "content": [
             {
-              "physicalAccountName": "physicalAccountName",
+              "physicalAccountName": "VELO_FBO_MYBANKA_USD",
               "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "fundingRef": "fundingRef",
-              "balance": 0.8008281904610115,
+              "fundingRef": "a1b2c3d4",
+              "balance": 1203489,
               "pooled": true,
-              "name": "name",
-              "customerId": "customerId",
+              "name": "MyAccountName",
+              "customerId": "Joe Customer",
               "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "autoTopUpConfig": {
                 "targetBalance": 300000,
@@ -6525,22 +6515,22 @@
                 "enabled": true
               },
               "currency": "USD",
-              "railsId": "railsId",
+              "railsId": "BOA_RAIL",
               "balanceVisible": true,
               "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "notifications": {
-                "minimumBalance": 6
+                "minimumBalance": 120000
               }
             },
             {
-              "physicalAccountName": "physicalAccountName",
+              "physicalAccountName": "VELO_FBO_MYBANKA_USD",
               "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "fundingRef": "fundingRef",
-              "balance": 0.8008281904610115,
+              "fundingRef": "a1b2c3d4",
+              "balance": 1203489,
               "pooled": true,
-              "name": "name",
-              "customerId": "customerId",
+              "name": "MyAccountName",
+              "customerId": "Joe Customer",
               "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "autoTopUpConfig": {
                 "targetBalance": 300000,
@@ -6548,23 +6538,23 @@
                 "enabled": true
               },
               "currency": "USD",
-              "railsId": "railsId",
+              "railsId": "BOA_RAIL",
               "balanceVisible": true,
               "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "notifications": {
-                "minimumBalance": 6
+                "minimumBalance": 120000
               }
             }
           ]
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/ListSourceAccountResponseV2_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/ListSourceAccountResponse_links"
             },
             "type": "array"
           },
@@ -6579,13 +6569,13 @@
       },
       "SourceAccountResponseV2": {
         "example": {
-          "physicalAccountName": "physicalAccountName",
+          "physicalAccountName": "VELO_FBO_MYBANKA_USD",
           "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "fundingRef": "fundingRef",
-          "balance": 0.8008281904610115,
+          "fundingRef": "a1b2c3d4",
+          "balance": 1203489,
           "pooled": true,
-          "name": "name",
-          "customerId": "customerId",
+          "name": "MyAccountName",
+          "customerId": "Joe Customer",
           "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "autoTopUpConfig": {
             "targetBalance": 300000,
@@ -6593,12 +6583,12 @@
             "enabled": true
           },
           "currency": "USD",
-          "railsId": "railsId",
+          "railsId": "BOA_RAIL",
           "balanceVisible": true,
           "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "notifications": {
-            "minimumBalance": 6
+            "minimumBalance": 120000
           }
         },
         "properties": {
@@ -6609,6 +6599,7 @@
           },
           "balance": {
             "description": "Decimal implied",
+            "example": 1203489,
             "format": "int32",
             "type": "number"
           },
@@ -6616,17 +6607,21 @@
             "enum": [
               "USD"
             ],
+            "example": "USD",
             "maxLength": 3,
             "minLength": 3,
             "type": "string"
           },
           "fundingRef": {
+            "example": "a1b2c3d4",
             "type": "string"
           },
           "physicalAccountName": {
+            "example": "VELO_FBO_MYBANKA_USD",
             "type": "string"
           },
           "railsId": {
+            "example": "BOA_RAIL",
             "type": "string"
           },
           "payorId": {
@@ -6634,6 +6629,7 @@
             "type": "string"
           },
           "name": {
+            "example": "MyAccountName",
             "type": "string"
           },
           "pooled": {
@@ -6643,6 +6639,7 @@
             "type": "boolean"
           },
           "customerId": {
+            "example": "Joe Customer",
             "nullable": true,
             "type": "string"
           },
@@ -8536,15 +8533,16 @@
       },
       "PayeeDelta": {
         "example": {
-          "payeeCountry": "payeeCountry",
-          "displayName": "displayName",
+          "payeeCountry": "US",
+          "displayName": "Payee1",
           "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "dbaName": "dbaName",
-          "email": "email",
-          "remoteId": "remoteId"
+          "dbaName": "Payee DBA Name",
+          "email": "payee1@example.com",
+          "remoteId": "payee_1"
         },
         "properties": {
           "remoteId": {
+            "example": "payee_1",
             "maxLength": 100,
             "minLength": 1,
             "type": "string"
@@ -8555,17 +8553,21 @@
             "type": "string"
           },
           "displayName": {
+            "example": "Payee1",
             "type": "string"
           },
           "dbaName": {
+            "example": "Payee DBA Name",
             "type": "string"
           },
           "email": {
+            "example": "payee1@example.com",
             "format": "email",
             "nullable": true,
             "type": "string"
           },
           "payeeCountry": {
+            "example": "US",
             "type": "string"
           },
           "onboardedStatus": {
@@ -8830,10 +8832,11 @@
       },
       "Notifications": {
         "example": {
-          "minimumBalance": 6
+          "minimumBalance": 120000
         },
         "properties": {
           "minimumBalance": {
+            "example": 120000,
             "type": "integer"
           }
         },
@@ -9601,11 +9604,6 @@
           }
         },
         "type": "object"
-      },
-      "RemoteId": {
-        "maxLength": 100,
-        "minLength": 1,
-        "type": "string"
       },
       "OnboardedStatus_2": {
         "enum": [
@@ -10441,6 +10439,53 @@
           }
         }
       },
+      "PayeeDeltaResponse_page": {
+        "example": {
+          "numberOfElements": 2,
+          "totalPages": 1,
+          "pageSize": 25,
+          "page": 1,
+          "totalElements": 2
+        },
+        "properties": {
+          "numberOfElements": {
+            "example": 2,
+            "type": "integer"
+          },
+          "totalElements": {
+            "example": 2,
+            "type": "integer"
+          },
+          "totalPages": {
+            "example": 1,
+            "type": "integer"
+          },
+          "page": {
+            "example": 1,
+            "type": "integer"
+          },
+          "pageSize": {
+            "example": 25,
+            "type": "integer"
+          }
+        }
+      },
+      "PayeeDeltaResponse_links": {
+        "example": {
+          "rel": "first",
+          "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+        },
+        "properties": {
+          "rel": {
+            "example": "first",
+            "type": "string"
+          },
+          "href": {
+            "example": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000",
+            "type": "string"
+          }
+        }
+      },
       "ListSourceAccountResponse_page": {
         "example": {
           "numberOfElements": 1,
@@ -10485,6 +10530,37 @@
           "href": {
             "example": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc",
             "type": "string"
+          }
+        }
+      },
+      "ListSourceAccountResponseV2_page": {
+        "example": {
+          "numberOfElements": 12,
+          "totalPages": 2,
+          "pageSize": 25,
+          "page": 1,
+          "totalElements": 33
+        },
+        "properties": {
+          "numberOfElements": {
+            "example": 12,
+            "type": "integer"
+          },
+          "totalElements": {
+            "example": 33,
+            "type": "integer"
+          },
+          "totalPages": {
+            "example": 2,
+            "type": "integer"
+          },
+          "page": {
+            "example": 1,
+            "type": "integer"
+          },
+          "pageSize": {
+            "example": 25,
+            "type": "integer"
           }
         }
       },
