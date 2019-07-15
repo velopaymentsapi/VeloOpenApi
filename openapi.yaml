@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.14.84
+  version: 2.14.85
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -3054,6 +3054,10 @@ paths:
             schema:
               $ref: '#/components/schemas/CreatePayoutRequest'
           multipart/form-data:
+            example: |
+              remoteId,currency,amount,paymentMemo,sourceAccountName,payorPaymentId
+              remoteId1,USD,12345,ref1,myAccountUSD,1234567abc
+              remoteId2,USD,23456,ref2,myAccountUSD,1234567def
             schema:
               properties:
                 payorId:
@@ -3131,64 +3135,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Length: 1586
-                Content-Type: application/json;charset=UTF-8
-
-                {
-                  "payoutId" : "e547b83b-37d7-4f39-b4d0-dd65c224609d",
-                  "status" : "QUOTED",
-                  "paymentsSubmitted" : 5,
-                  "paymentsAccepted" : 3,
-                  "paymentsRejected" : 2,
-                  "fxSummaries" : [ {
-                    "quoteId" : "c005696c-14e6-4d5c-a96c-666bf0711f62",
-                    "expiryTime" : "2019-02-01T10:32:22.045Z",
-                    "creationTime" : "2019-02-01T10:31:22.045Z",
-                    "rate" : 1.1599,
-                    "invertedRate" : 0.8621,
-                    "totalSourceAmount" : 1160,
-                    "totalPaymentAmount" : 1000,
-                    "sourceCurrency" : "USD",
-                    "paymentCurrency" : "EUR",
-                    "status" : "QUOTED",
-                    "fundingStatus" : "UNFUNDED"
-                  }, {
-                    "quoteId" : "c005696c-14e6-4d5c-a96c-666bf0711f62",
-                    "expiryTime" : "2019-02-01T10:32:22.045Z",
-                    "creationTime" : "2019-02-01T10:31:22.045Z",
-                    "rate" : 1.3267,
-                    "invertedRate" : 0.7537,
-                    "totalSourceAmount" : 3980,
-                    "totalPaymentAmount" : 3000,
-                    "sourceCurrency" : "USD",
-                    "paymentCurrency" : "GBP",
-                    "status" : "QUOTED",
-                    "fundingStatus" : "UNFUNDED"
-                  } ],
-                  "accounts" : [ {
-                    "sourceAccountName" : "source account 1",
-                    "sourceAccountId" : "2db02c2f-ad14-4737-9f02-87903df03a83",
-                    "currency" : "USD",
-                    "totalPayoutCost" : 51
-                  } ],
-                  "rejectedPayments" : [ {
-                    "remoteId" : "myRemoteId03",
-                    "currencyType" : "EUR",
-                    "amount" : 1245,
-                    "sourceAccountName" : "source account 1",
-                    "payorPaymentId" : "Ref001",
-                    "reason" : "UNKNOWN_REMOTE_ID"
-                  }, {
-                    "remoteId" : "myRemoteId04",
-                    "currencyType" : "GBP",
-                    "amount" : 2999,
-                    "sourceAccountName" : "source account 1",
-                    "payorPaymentId" : "Ref001",
-                    "reason" : "COMPLIANCE_ISSUE"
-                  } ]
-                }
               schema:
                 $ref: '#/components/schemas/PayoutSummaryResponse'
           description: Details of Payout
@@ -3244,24 +3190,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Type: application/json;charset=UTF-8
-                Content-Length: 354
-
-                {
-                  "fxSummaries" : [ {
-                    "quoteId" : "cf5007a0-2c51-4187-9581-837c0345b060",
-                    "expiryTime" : "2019-02-01T10:32:21.754Z",
-                    "creationTime" : "2019-02-01T10:31:21.754Z",
-                    "rate" : 1.1599,
-                    "invertedRate" : 0.8621,
-                    "totalSourceAmount" : 11,
-                    "totalPaymentAmount" : 10,
-                    "sourceCurrency" : "USD",
-                    "paymentCurrency" : "EUR"
-                  } ]
-                }
               schema:
                 $ref: '#/components/schemas/QuoteResponse'
           description: Quote for payout
@@ -5210,93 +5138,93 @@ components:
       description: List Payouts Response
       example:
         summary:
-          totalOnboardedCount: 5
-          totalRegisteredCount: 1
-          totalPayeesCount: 0
-          totalInvitedCount: 6
-          totalOfacFailedCount: 5
+          totalOnboardedCount: 123
+          totalRegisteredCount: 123
+          totalPayeesCount: 12
+          totalInvitedCount: 100
+          totalOfacFailedCount: 23
         links:
-          - rel: rel
-            href: href
-          - rel: rel
-            href: href
+          - rel: first
+            href: 'https://example.com'
+          - rel: first
+            href: 'https://example.com'
         page:
-          numberOfElements: 2
-          totalPages: 9
-          pageSize: 2
-          page: 3
-          totalElements: 7
+          numberOfElements: 12
+          totalPages: 123
+          pageSize: 25
+          page: 1
+          totalElements: 123
         content:
           - dateTime: 2000-01-23T04:56:07.000Z
             sourceAccountSummary:
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                totalCost: 5.962133916683182
+                totalCost: 0.8008281904610115
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                totalCost: 5.962133916683182
+                totalCost: 0.8008281904610115
             submittedDateTime: submittedDateTime
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalIncompletePayments: 6
+            totalIncompletePayments: 123
             fxSummaries:
-              - invertedRate: 2.3021358869347655
-                rate: 5.637376656633329
-                totalPaymentAmount: 9
+              - invertedRate: 1.12
+                rate: 1.12
+                totalPaymentAmount: 1234
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                totalCost: 7
+                totalCost: 1234
                 fundingStatus: FUNDED
                 creationDateTime: 2000-01-23T04:56:07.000Z
                 status: UNQUOTED
-              - invertedRate: 2.3021358869347655
-                rate: 5.637376656633329
-                totalPaymentAmount: 9
+              - invertedRate: 1.12
+                rate: 1.12
+                totalPaymentAmount: 1234
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                totalCost: 7
+                totalCost: 1234
                 fundingStatus: FUNDED
                 creationDateTime: 2000-01-23T04:56:07.000Z
                 status: UNQUOTED
             payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalPayments: 0
+            totalPayments: 123
             instructedDateTime: instructedDateTime
-            totalFailedPayments: 1
+            totalFailedPayments: 123
             payoutMemo: payoutMemo
           - dateTime: 2000-01-23T04:56:07.000Z
             sourceAccountSummary:
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                totalCost: 5.962133916683182
+                totalCost: 0.8008281904610115
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                totalCost: 5.962133916683182
+                totalCost: 0.8008281904610115
             submittedDateTime: submittedDateTime
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalIncompletePayments: 6
+            totalIncompletePayments: 123
             fxSummaries:
-              - invertedRate: 2.3021358869347655
-                rate: 5.637376656633329
-                totalPaymentAmount: 9
+              - invertedRate: 1.12
+                rate: 1.12
+                totalPaymentAmount: 1234
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                totalCost: 7
+                totalCost: 1234
                 fundingStatus: FUNDED
                 creationDateTime: 2000-01-23T04:56:07.000Z
                 status: UNQUOTED
-              - invertedRate: 2.3021358869347655
-                rate: 5.637376656633329
-                totalPaymentAmount: 9
+              - invertedRate: 1.12
+                rate: 1.12
+                totalPaymentAmount: 1234
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                totalCost: 7
+                totalCost: 1234
                 fundingStatus: FUNDED
                 creationDateTime: 2000-01-23T04:56:07.000Z
                 status: UNQUOTED
             payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalPayments: 0
+            totalPayments: 123
             instructedDateTime: instructedDateTime
-            totalFailedPayments: 1
+            totalFailedPayments: 123
             payoutMemo: payoutMemo
       properties:
         summary:
-          $ref: '#/components/schemas/PayeeResponse_summary'
+          $ref: '#/components/schemas/GetPayoutsResponse_summary'
         page:
-          $ref: '#/components/schemas/PayeeResponse_page'
+          $ref: '#/components/schemas/GetPayoutsResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/PayeeResponse_links'
+            $ref: '#/components/schemas/GetPayoutsResponse_links'
           type: array
         content:
           items:
@@ -5307,137 +5235,137 @@ components:
       description: List Payments for payout
       example:
         summary:
-          incompletePayments: 5
-          confirmedPayments: 6
-          releasedPayments: 1
+          incompletePayments: 123
+          confirmedPayments: 123
+          releasedPayments: 123
           submittedDateTime: 2000-01-23T04:56:07.000Z
           payoutStatus: ACCEPTED
-          totalPayments: 0
+          totalPayments: 123
           instructedDateTime: 2000-01-23T04:56:07.000Z
-          payoutMemo: payoutMemo
-          failedPayments: 5
+          payoutMemo: Payment Memo value
+          failedPayments: 0
         links:
-          - rel: rel
-            href: href
-          - rel: rel
-            href: href
+          - rel: first
+            href: 'https://example.com'
+          - rel: first
+            href: 'https://example.com'
         page:
-          numberOfElements: 2
-          totalPages: 9
-          pageSize: 2
-          page: 3
-          totalElements: 7
+          numberOfElements: 12
+          totalPages: 10
+          pageSize: 25
+          page: 1
+          totalElements: 12
         content:
-          - traceNumber: traceNumber
-            accountName: accountName
-            paymentMemo: paymentMemo
-            paymentAmount: 7
+          - traceNumber: abodu123
+            accountName: My Account Name
+            paymentMemo: Payment memo
+            paymentAmount: 0
             fundingStatus: FUNDED
-            paymentChannelName: paymentChannelName
-            filenameReference: filenameReference
-            rate: 9.301444243932576
+            paymentChannelName: My Payment Channel
+            filenameReference: file ref
+            rate: 6.027456183070403
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            countryCode: countryCode
-            returnReason: returnReason
+            countryCode: US
+            returnReason: Some Reason Value
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 2
-            railsId: railsId
+            sourceAmount: 12345
+            railsId: asdf123
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             events:
-              - principal: principal
+              - principal: Prinicple example
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
-                routingNumber: routingNumber
-                accountName: accountName
-                iban: iban
+                routingNumber: '123123123'
+                accountName: My account
+                iban: DE89 3704 0044 0532 0130 00
                 sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
-                accountNumber: accountNumber
+                accountNumber: '123123123'
                 paymentAmount: 1299
-              - principal: principal
+              - principal: Prinicple example
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
-                routingNumber: routingNumber
-                accountName: accountName
-                iban: iban
+                routingNumber: '123123123'
+                accountName: My account
+                iban: DE89 3704 0044 0532 0130 00
                 sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
-                accountNumber: accountNumber
+                accountNumber: '123123123'
                 paymentAmount: 1299
             payorName: payorName
-            sourceAccountName: sourceAccountName
-            paymentChannelId: paymentChannelId
-            invertedRate: 3.616076749251911
+            sourceAccountName: My Account
+            paymentChannelId: 123asdf
+            invertedRate: 1.4658129805029452
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            individualIdentificationNumber: individualIdentificationNumber
-            accountNumber: accountNumber
+            individualIdentificationNumber: 1231231adf
+            accountNumber: '123123232323'
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            remoteId: remoteId
-            routingNumber: routingNumber
-            returnCost: 2
-            iban: iban
-            payorPaymentId: payorPaymentId
+            remoteId: aasdf123
+            routingNumber: '123123123123'
+            returnCost: 1232
+            iban: DE89 3704 0044 0532 0130 00
+            payorPaymentId: 123123asdf
             status: ACCEPTED
-          - traceNumber: traceNumber
-            accountName: accountName
-            paymentMemo: paymentMemo
-            paymentAmount: 7
+          - traceNumber: abodu123
+            accountName: My Account Name
+            paymentMemo: Payment memo
+            paymentAmount: 0
             fundingStatus: FUNDED
-            paymentChannelName: paymentChannelName
-            filenameReference: filenameReference
-            rate: 9.301444243932576
+            paymentChannelName: My Payment Channel
+            filenameReference: file ref
+            rate: 6.027456183070403
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            countryCode: countryCode
-            returnReason: returnReason
+            countryCode: US
+            returnReason: Some Reason Value
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 2
-            railsId: railsId
+            sourceAmount: 12345
+            railsId: asdf123
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             events:
-              - principal: principal
+              - principal: Prinicple example
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
-                routingNumber: routingNumber
-                accountName: accountName
-                iban: iban
+                routingNumber: '123123123'
+                accountName: My account
+                iban: DE89 3704 0044 0532 0130 00
                 sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
-                accountNumber: accountNumber
+                accountNumber: '123123123'
                 paymentAmount: 1299
-              - principal: principal
+              - principal: Prinicple example
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
-                routingNumber: routingNumber
-                accountName: accountName
-                iban: iban
+                routingNumber: '123123123'
+                accountName: My account
+                iban: DE89 3704 0044 0532 0130 00
                 sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
-                accountNumber: accountNumber
+                accountNumber: '123123123'
                 paymentAmount: 1299
             payorName: payorName
-            sourceAccountName: sourceAccountName
-            paymentChannelId: paymentChannelId
-            invertedRate: 3.616076749251911
+            sourceAccountName: My Account
+            paymentChannelId: 123asdf
+            invertedRate: 1.4658129805029452
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            individualIdentificationNumber: individualIdentificationNumber
-            accountNumber: accountNumber
+            individualIdentificationNumber: 1231231adf
+            accountNumber: '123123232323'
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            remoteId: remoteId
-            routingNumber: routingNumber
-            returnCost: 2
-            iban: iban
-            payorPaymentId: payorPaymentId
+            remoteId: aasdf123
+            routingNumber: '123123123123'
+            returnCost: 1232
+            iban: DE89 3704 0044 0532 0130 00
+            payorPaymentId: 123123asdf
             status: ACCEPTED
       properties:
         summary:
           $ref: '#/components/schemas/GetPaymentsForPayoutResponse_summary'
         page:
-          $ref: '#/components/schemas/PayeeResponse_page'
+          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/PayeeResponse_links'
+            $ref: '#/components/schemas/GetPayoutsResponse_links'
           type: array
         content:
           items:
@@ -5448,133 +5376,133 @@ components:
       description: List Payments Response Object
       example:
         summary:
-          totalOnboardedCount: 5
-          totalRegisteredCount: 1
-          totalPayeesCount: 0
-          totalInvitedCount: 6
-          totalOfacFailedCount: 5
+          totalOnboardedCount: 123
+          totalRegisteredCount: 123
+          totalPayeesCount: 123
+          totalInvitedCount: 123
+          totalOfacFailedCount: 123
         links:
-          - rel: rel
-            href: href
-          - rel: rel
-            href: href
+          - rel: first
+            href: 'https://example.com'
+          - rel: first
+            href: 'https://example.com'
         page:
-          numberOfElements: 2
-          totalPages: 9
-          pageSize: 2
-          page: 3
-          totalElements: 7
+          numberOfElements: 12
+          totalPages: 12
+          pageSize: 25
+          page: 1
+          totalElements: 12
         content:
-          - traceNumber: traceNumber
-            accountName: accountName
-            paymentMemo: paymentMemo
-            paymentAmount: 7
+          - traceNumber: abodu123
+            accountName: My Account Name
+            paymentMemo: Payment memo
+            paymentAmount: 0
             fundingStatus: FUNDED
-            paymentChannelName: paymentChannelName
-            filenameReference: filenameReference
-            rate: 9.301444243932576
+            paymentChannelName: My Payment Channel
+            filenameReference: file ref
+            rate: 6.027456183070403
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            countryCode: countryCode
-            returnReason: returnReason
+            countryCode: US
+            returnReason: Some Reason Value
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 2
-            railsId: railsId
+            sourceAmount: 12345
+            railsId: asdf123
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             events:
-              - principal: principal
+              - principal: Prinicple example
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
-                routingNumber: routingNumber
-                accountName: accountName
-                iban: iban
+                routingNumber: '123123123'
+                accountName: My account
+                iban: DE89 3704 0044 0532 0130 00
                 sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
-                accountNumber: accountNumber
+                accountNumber: '123123123'
                 paymentAmount: 1299
-              - principal: principal
+              - principal: Prinicple example
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
-                routingNumber: routingNumber
-                accountName: accountName
-                iban: iban
+                routingNumber: '123123123'
+                accountName: My account
+                iban: DE89 3704 0044 0532 0130 00
                 sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
-                accountNumber: accountNumber
+                accountNumber: '123123123'
                 paymentAmount: 1299
             payorName: payorName
-            sourceAccountName: sourceAccountName
-            paymentChannelId: paymentChannelId
-            invertedRate: 3.616076749251911
+            sourceAccountName: My Account
+            paymentChannelId: 123asdf
+            invertedRate: 1.4658129805029452
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            individualIdentificationNumber: individualIdentificationNumber
-            accountNumber: accountNumber
+            individualIdentificationNumber: 1231231adf
+            accountNumber: '123123232323'
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            remoteId: remoteId
-            routingNumber: routingNumber
-            returnCost: 2
-            iban: iban
-            payorPaymentId: payorPaymentId
+            remoteId: aasdf123
+            routingNumber: '123123123123'
+            returnCost: 1232
+            iban: DE89 3704 0044 0532 0130 00
+            payorPaymentId: 123123asdf
             status: ACCEPTED
-          - traceNumber: traceNumber
-            accountName: accountName
-            paymentMemo: paymentMemo
-            paymentAmount: 7
+          - traceNumber: abodu123
+            accountName: My Account Name
+            paymentMemo: Payment memo
+            paymentAmount: 0
             fundingStatus: FUNDED
-            paymentChannelName: paymentChannelName
-            filenameReference: filenameReference
-            rate: 9.301444243932576
+            paymentChannelName: My Payment Channel
+            filenameReference: file ref
+            rate: 6.027456183070403
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            countryCode: countryCode
-            returnReason: returnReason
+            countryCode: US
+            returnReason: Some Reason Value
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 2
-            railsId: railsId
+            sourceAmount: 12345
+            railsId: asdf123
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             events:
-              - principal: principal
+              - principal: Prinicple example
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
-                routingNumber: routingNumber
-                accountName: accountName
-                iban: iban
+                routingNumber: '123123123'
+                accountName: My account
+                iban: DE89 3704 0044 0532 0130 00
                 sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
-                accountNumber: accountNumber
+                accountNumber: '123123123'
                 paymentAmount: 1299
-              - principal: principal
+              - principal: Prinicple example
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
-                routingNumber: routingNumber
-                accountName: accountName
-                iban: iban
+                routingNumber: '123123123'
+                accountName: My account
+                iban: DE89 3704 0044 0532 0130 00
                 sourceAmount: 1299
                 eventType: PAYOUT_SUBMITTED
-                accountNumber: accountNumber
+                accountNumber: '123123123'
                 paymentAmount: 1299
             payorName: payorName
-            sourceAccountName: sourceAccountName
-            paymentChannelId: paymentChannelId
-            invertedRate: 3.616076749251911
+            sourceAccountName: My Account
+            paymentChannelId: 123asdf
+            invertedRate: 1.4658129805029452
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            individualIdentificationNumber: individualIdentificationNumber
-            accountNumber: accountNumber
+            individualIdentificationNumber: 1231231adf
+            accountNumber: '123123232323'
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            remoteId: remoteId
-            routingNumber: routingNumber
-            returnCost: 2
-            iban: iban
-            payorPaymentId: payorPaymentId
+            remoteId: aasdf123
+            routingNumber: '123123123123'
+            returnCost: 1232
+            iban: DE89 3704 0044 0532 0130 00
+            payorPaymentId: 123123asdf
             status: ACCEPTED
       properties:
         summary:
-          $ref: '#/components/schemas/PayeeResponse_summary'
+          $ref: '#/components/schemas/ListPaymentsResponse_summary'
         page:
-          $ref: '#/components/schemas/PayeeResponse_page'
+          $ref: '#/components/schemas/ListPaymentsResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/PayeeResponse_links'
+            $ref: '#/components/schemas/GetPayoutsResponse_links'
           type: array
         content:
           items:
@@ -5583,56 +5511,56 @@ components:
       type: object
     PaymentResponse:
       example:
-        traceNumber: traceNumber
-        accountName: accountName
-        paymentMemo: paymentMemo
-        paymentAmount: 7
+        traceNumber: abodu123
+        accountName: My Account Name
+        paymentMemo: Payment memo
+        paymentAmount: 0
         fundingStatus: FUNDED
-        paymentChannelName: paymentChannelName
-        filenameReference: filenameReference
-        rate: 9.301444243932576
+        paymentChannelName: My Payment Channel
+        filenameReference: file ref
+        rate: 6.027456183070403
         paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        countryCode: countryCode
-        returnReason: returnReason
+        countryCode: US
+        returnReason: Some Reason Value
         submittedDateTime: 2000-01-23T04:56:07.000Z
-        sourceAmount: 2
-        railsId: railsId
+        sourceAmount: 12345
+        railsId: asdf123
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         events:
-          - principal: principal
+          - principal: Prinicple example
             eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000Z
-            routingNumber: routingNumber
-            accountName: accountName
-            iban: iban
+            routingNumber: '123123123'
+            accountName: My account
+            iban: DE89 3704 0044 0532 0130 00
             sourceAmount: 1299
             eventType: PAYOUT_SUBMITTED
-            accountNumber: accountNumber
+            accountNumber: '123123123'
             paymentAmount: 1299
-          - principal: principal
+          - principal: Prinicple example
             eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000Z
-            routingNumber: routingNumber
-            accountName: accountName
-            iban: iban
+            routingNumber: '123123123'
+            accountName: My account
+            iban: DE89 3704 0044 0532 0130 00
             sourceAmount: 1299
             eventType: PAYOUT_SUBMITTED
-            accountNumber: accountNumber
+            accountNumber: '123123123'
             paymentAmount: 1299
         payorName: payorName
-        sourceAccountName: sourceAccountName
-        paymentChannelId: paymentChannelId
-        invertedRate: 3.616076749251911
+        sourceAccountName: My Account
+        paymentChannelId: 123asdf
+        invertedRate: 1.4658129805029452
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        individualIdentificationNumber: individualIdentificationNumber
-        accountNumber: accountNumber
+        individualIdentificationNumber: 1231231adf
+        accountNumber: '123123232323'
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        remoteId: remoteId
-        routingNumber: routingNumber
-        returnCost: 2
-        iban: iban
-        payorPaymentId: payorPaymentId
+        remoteId: aasdf123
+        routingNumber: '123123123123'
+        returnCost: 1232
+        iban: DE89 3704 0044 0532 0130 00
+        payorPaymentId: 123123asdf
         status: ACCEPTED
       properties:
         paymentId:
@@ -5653,10 +5581,13 @@ components:
           format: uuid
           type: string
         sourceAccountName:
+          example: My Account
           type: string
         remoteId:
+          example: aasdf123
           type: string
         sourceAmount:
+          example: 12345
           type: integer
         sourceCurrency:
           $ref: '#/components/schemas/PaymentAuditCurrency'
@@ -5665,10 +5596,10 @@ components:
         paymentCurrency:
           $ref: '#/components/schemas/PaymentAuditCurrency'
         rate:
-          format: double
+          format: decimal
           type: number
         invertedRate:
-          format: double
+          format: decimal
           type: number
         submittedDateTime:
           format: date-time
@@ -5693,38 +5624,53 @@ components:
             - UNFUNDED
           type: string
         routingNumber:
+          example: '123123123123'
           type: string
         accountNumber:
+          example: '123123232323'
           type: string
         iban:
+          example: DE89 3704 0044 0532 0130 00
           type: string
         paymentMemo:
+          example: Payment memo
           type: string
         filenameReference:
+          example: file ref
           type: string
         individualIdentificationNumber:
+          example: 1231231adf
           type: string
         traceNumber:
+          example: abodu123
           type: string
         payorPaymentId:
+          example: 123123asdf
           type: string
         paymentChannelId:
+          example: 123asdf
           type: string
         paymentChannelName:
+          example: My Payment Channel
           type: string
         accountName:
+          example: My Account Name
           type: string
         railsId:
+          example: asdf123
           type: string
         countryCode:
+          example: US
           type: string
         events:
           items:
             $ref: '#/components/schemas/PaymentEventResponse'
           type: array
         returnCost:
+          example: 1232
           type: integer
         returnReason:
+          example: Some Reason Value
           type: string
       required:
         - events
@@ -6149,38 +6095,46 @@ components:
         - submittedDateTime
       type: object
     CreatePayoutRequest:
-      example: |-
-        { "payorId":"ef7da492-e5a5-4086-b1ed-6d27323fc669",
-          "payments":[
-            {"remoteId":"myRemoteId01",
-              "currency":"USD",
-              "amount":12345,
-              "sourceAccountName":"PAYOR_SRC_ACCT",
-              "payorPaymentId":"1111"},
-            {"remoteId":"myRemoteId02",
-              "currency":"USD",
-              "amount":23456,
-              "sourceAccountName":"PAYOR_SRC_ACCT",
-              "payorPaymentId":"2222"},
-            {"remoteId":"myRemoteId01",
-             "currency":"USD",
-             "amount":1020,
-             "sourceAccountName":"PAYOR_SRC_ACCT",
-             "payorPaymentId":"3333"},
-            {"remoteId":"myRemoteId03",
-             "currency":"USD","amount":3456,
-             "sourceAccountName":"PAYOR_SRC_ACCT",
-             "payorPaymentId":"4444"},
-            {"remoteId":"myRemoteId04",
-             "currency":"USD","amount":8765,
-             "sourceAccountName":"PAYOR_SRC_ACCT",
-             "payorPaymentId":"5555"}]
-          }
+      example:
+        payments:
+          - amount: 1299
+            currency: USD
+            payorPaymentId: 123211321ABSD
+            paymentMemo: my memo
+            remoteId: remoteId1234
+            sourceAccountName: MyAccountName
+          - amount: 1299
+            currency: USD
+            payorPaymentId: 123211321ABSD
+            paymentMemo: my memo
+            remoteId: remoteId1234
+            sourceAccountName: MyAccountName
+          - amount: 1299
+            currency: USD
+            payorPaymentId: 123211321ABSD
+            paymentMemo: my memo
+            remoteId: remoteId1234
+            sourceAccountName: MyAccountName
+          - amount: 1299
+            currency: USD
+            payorPaymentId: 123211321ABSD
+            paymentMemo: my memo
+            remoteId: remoteId1234
+            sourceAccountName: MyAccountName
+          - amount: 1299
+            currency: USD
+            payorPaymentId: 123211321ABSD
+            paymentMemo: my memo
+            remoteId: remoteId1234
+            sourceAccountName: MyAccountName
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payoutMemo: A memo
       properties:
         payorId:
           format: uuid
           type: string
         payoutMemo:
+          example: A memo
           type: string
         payments:
           items:
@@ -6193,9 +6147,17 @@ components:
         - payorId
       type: object
     PaymentInstruction:
+      example:
+        amount: 1299
+        currency: USD
+        payorPaymentId: 123211321ABSD
+        paymentMemo: my memo
+        remoteId: remoteId1234
+        sourceAccountName: MyAccountName
       properties:
         remoteId:
           description: Your identifier for payee
+          example: remoteId1234
           maxLength: 100
           minLength: 1
           type: string
@@ -6205,22 +6167,27 @@ components:
             - USD
             - GBP
             - EUR
+          example: USD
           type: string
         amount:
           description: Amount to send to Payee
+          example: 1299
           format: int64
           maximum: 9223372036854776000
           minimum: 1
           type: integer
         paymentMemo:
+          example: my memo
           maxLength: 40
           minLength: 0
           type: string
         sourceAccountName:
+          example: MyAccountName
           maxLength: 64
           minLength: 1
           type: string
         payorPaymentId:
+          example: 123211321ABSD
           maxLength: 40
           minLength: 0
           type: string
@@ -6233,70 +6200,74 @@ components:
     PayoutSummaryResponse:
       example:
         rejectedPayments:
-          - currencyType: currencyType
-            reason: UNKNOWN_REMOTE_ID
-            amount: 3
-            payorPaymentId: payorPaymentId
-            lineNumber: 2
-            message: message
-            remoteId: remoteId
-            sourceAccountName: sourceAccountName
-          - currencyType: currencyType
-            reason: UNKNOWN_REMOTE_ID
-            amount: 3
-            payorPaymentId: payorPaymentId
-            lineNumber: 2
-            message: message
-            remoteId: remoteId
-            sourceAccountName: sourceAccountName
-        paymentsRejected: 1
-        paymentsSubmitted: 0
+          - currencyType: USD
+            reason: PAYEE_NOT_ONBOARDED
+            amount: 1234
+            payorPaymentId: paymenIdVal123123
+            lineNumber: 10
+            message: Payment cannot be processed because of the Payee's OFAC or Compliance Status
+            remoteId: remoteIdVal123
+            sourceAccountName: Chase
+          - currencyType: USD
+            reason: PAYEE_NOT_ONBOARDED
+            amount: 1234
+            payorPaymentId: paymenIdVal123123
+            lineNumber: 10
+            message: Payment cannot be processed because of the Payee's OFAC or Compliance Status
+            remoteId: remoteIdVal123
+            sourceAccountName: Chase
+        paymentsRejected: 0
+        paymentsSubmitted: 10
         fxSummaries:
-          - invertedRate: 5.637376656633329
+          - invertedRate: 1.12
             creationTime: 2000-01-23T04:56:07.000Z
-            rate: 5.962133916683182
+            rate: 1.12
             expiryTime: 2000-01-23T04:56:07.000Z
-            sourceCurrency: sourceCurrency
-            totalPaymentAmount: 7
-            paymentCurrency: paymentCurrency
+            sourceCurrency: USD
+            totalPaymentAmount: 1234
+            paymentCurrency: USD
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalSourceAmount: 2
-            fundingStatus: fundingStatus
-            status: status
-          - invertedRate: 5.637376656633329
+            totalSourceAmount: 1234
+            fundingStatus: FUNDED
+            status: QUOTED
+          - invertedRate: 1.12
             creationTime: 2000-01-23T04:56:07.000Z
-            rate: 5.962133916683182
+            rate: 1.12
             expiryTime: 2000-01-23T04:56:07.000Z
-            sourceCurrency: sourceCurrency
-            totalPaymentAmount: 7
-            paymentCurrency: paymentCurrency
+            sourceCurrency: USD
+            totalPaymentAmount: 1234
+            paymentCurrency: USD
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalSourceAmount: 2
-            fundingStatus: fundingStatus
-            status: status
+            totalSourceAmount: 1234
+            fundingStatus: FUNDED
+            status: QUOTED
         accounts:
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            currency: currency
-            totalPayoutCost: 9
-            sourceAccountName: sourceAccountName
+            currency: USD
+            totalPayoutCost: 1231200
+            sourceAccountName: AccountName
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            currency: currency
-            totalPayoutCost: 9
-            sourceAccountName: sourceAccountName
+            currency: USD
+            totalPayoutCost: 1231200
+            sourceAccountName: AccountName
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        status: status
-        paymentsAccepted: 6
+        status: COMPLETED
+        paymentsAccepted: 10
       properties:
         payoutId:
           format: uuid
           type: string
         status:
+          example: COMPLETED
           type: string
         paymentsSubmitted:
+          example: 10
           type: integer
         paymentsAccepted:
+          example: 10
           type: integer
         paymentsRejected:
+          example: 0
           type: integer
         fxSummaries:
           items:
@@ -6318,28 +6289,28 @@ components:
     QuoteResponse:
       example:
         fxSummaries:
-          - invertedRate: 5.637376656633329
+          - invertedRate: 1.12
             creationTime: 2000-01-23T04:56:07.000Z
-            rate: 5.962133916683182
+            rate: 1.12
             expiryTime: 2000-01-23T04:56:07.000Z
-            sourceCurrency: sourceCurrency
-            totalPaymentAmount: 7
-            paymentCurrency: paymentCurrency
+            sourceCurrency: USD
+            totalPaymentAmount: 1234
+            paymentCurrency: USD
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalSourceAmount: 2
-            fundingStatus: fundingStatus
-            status: status
-          - invertedRate: 5.637376656633329
+            totalSourceAmount: 1234
+            fundingStatus: FUNDED
+            status: QUOTED
+          - invertedRate: 1.12
             creationTime: 2000-01-23T04:56:07.000Z
-            rate: 5.962133916683182
+            rate: 1.12
             expiryTime: 2000-01-23T04:56:07.000Z
-            sourceCurrency: sourceCurrency
-            totalPaymentAmount: 7
-            paymentCurrency: paymentCurrency
+            sourceCurrency: USD
+            totalPaymentAmount: 1234
+            paymentCurrency: USD
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalSourceAmount: 2
-            fundingStatus: fundingStatus
-            status: status
+            totalSourceAmount: 1234
+            fundingStatus: FUNDED
+            status: QUOTED
       properties:
         fxSummaries:
           items:
@@ -6939,33 +6910,33 @@ components:
         dateTime: 2000-01-23T04:56:07.000Z
         sourceAccountSummary:
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 5.962133916683182
+            totalCost: 0.8008281904610115
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 5.962133916683182
+            totalCost: 0.8008281904610115
         submittedDateTime: submittedDateTime
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalIncompletePayments: 6
+        totalIncompletePayments: 123
         fxSummaries:
-          - invertedRate: 2.3021358869347655
-            rate: 5.637376656633329
-            totalPaymentAmount: 9
+          - invertedRate: 1.12
+            rate: 1.12
+            totalPaymentAmount: 1234
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 7
+            totalCost: 1234
             fundingStatus: FUNDED
             creationDateTime: 2000-01-23T04:56:07.000Z
             status: UNQUOTED
-          - invertedRate: 2.3021358869347655
-            rate: 5.637376656633329
-            totalPaymentAmount: 9
+          - invertedRate: 1.12
+            rate: 1.12
+            totalPaymentAmount: 1234
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 7
+            totalCost: 1234
             fundingStatus: FUNDED
             creationDateTime: 2000-01-23T04:56:07.000Z
             status: UNQUOTED
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalPayments: 0
+        totalPayments: 123
         instructedDateTime: instructedDateTime
-        totalFailedPayments: 1
+        totalFailedPayments: 123
         payoutMemo: payoutMemo
       properties:
         payoutId:
@@ -6984,10 +6955,13 @@ components:
         instructedDateTime:
           type: string
         totalPayments:
+          example: 123
           type: integer
         totalIncompletePayments:
+          example: 123
           type: integer
         totalFailedPayments:
+          example: 123
           type: integer
         sourceAccountSummary:
           items:
@@ -7015,15 +6989,15 @@ components:
       type: string
     PaymentEventResponse:
       example:
-        principal: principal
+        principal: Prinicple example
         eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         eventDateTime: 2000-01-23T04:56:07.000Z
-        routingNumber: routingNumber
-        accountName: accountName
-        iban: iban
+        routingNumber: '123123123'
+        accountName: My account
+        iban: DE89 3704 0044 0532 0130 00
         sourceAmount: 1299
         eventType: PAYOUT_SUBMITTED
-        accountNumber: accountNumber
+        accountNumber: '123123123'
         paymentAmount: 1299
       properties:
         eventId:
@@ -7084,15 +7058,20 @@ components:
           type: integer
         accountNumber:
           description: The account number attached to the event.
+          example: '123123123'
           type: string
         routingNumber:
           description: The routing number attached to the event.
+          example: '123123123'
           type: string
         iban:
+          example: DE89 3704 0044 0532 0130 00
           type: string
         accountName:
+          example: My account
           type: string
         principal:
+          example: Prinicple example
           type: string
       required:
         - eventDateTime
@@ -7266,22 +7245,24 @@ components:
       type: object
     QuoteFxSummary:
       example:
-        invertedRate: 5.637376656633329
+        invertedRate: 1.12
         creationTime: 2000-01-23T04:56:07.000Z
-        rate: 5.962133916683182
+        rate: 1.12
         expiryTime: 2000-01-23T04:56:07.000Z
-        sourceCurrency: sourceCurrency
-        totalPaymentAmount: 7
-        paymentCurrency: paymentCurrency
+        sourceCurrency: USD
+        totalPaymentAmount: 1234
+        paymentCurrency: USD
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalSourceAmount: 2
-        fundingStatus: fundingStatus
-        status: status
+        totalSourceAmount: 1234
+        fundingStatus: FUNDED
+        status: QUOTED
       properties:
         rate:
+          example: 1.12
           format: decimal
           type: number
         invertedRate:
+          example: 1.12
           format: decimal
           type: number
         creationTime:
@@ -7294,20 +7275,26 @@ components:
           format: uuid
           type: string
         totalSourceAmount:
+          example: 1234
           type: integer
         totalPaymentAmount:
+          example: 1234
           type: integer
         sourceCurrency:
+          example: USD
           maxLength: 3
           minLength: 3
           type: string
         paymentCurrency:
+          example: USD
           maxLength: 3
           minLength: 3
           type: string
         fundingStatus:
+          example: FUNDED
           type: string
         status:
+          example: QUOTED
           type: string
       required:
         - creationTime
@@ -7321,18 +7308,21 @@ components:
     SourceAccount:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        currency: currency
-        totalPayoutCost: 9
-        sourceAccountName: sourceAccountName
+        currency: USD
+        totalPayoutCost: 1231200
+        sourceAccountName: AccountName
       properties:
         sourceAccountName:
+          example: AccountName
           type: string
         sourceAccountId:
           format: uuid
           type: string
         currency:
+          example: USD
           type: string
         totalPayoutCost:
+          example: 1231200
           type: integer
       required:
         - currency
@@ -7342,24 +7332,29 @@ components:
       type: object
     RejectedPayment:
       example:
-        currencyType: currencyType
-        reason: UNKNOWN_REMOTE_ID
-        amount: 3
-        payorPaymentId: payorPaymentId
-        lineNumber: 2
-        message: message
-        remoteId: remoteId
-        sourceAccountName: sourceAccountName
+        currencyType: USD
+        reason: PAYEE_NOT_ONBOARDED
+        amount: 1234
+        payorPaymentId: paymenIdVal123123
+        lineNumber: 10
+        message: Payment cannot be processed because of the Payee's OFAC or Compliance Status
+        remoteId: remoteIdVal123
+        sourceAccountName: Chase
       properties:
         remoteId:
+          example: remoteIdVal123
           type: string
         currencyType:
+          example: USD
           type: string
         amount:
+          example: 1234
           type: integer
         sourceAccountName:
+          example: Chase
           type: string
         payorPaymentId:
+          example: paymenIdVal123123
           type: string
         reason:
           enum:
@@ -7377,10 +7372,13 @@ components:
             - PENDING_INVITE
             - BADLY_FORMED_DATA_ROW
             - OTHER
+          example: PAYEE_NOT_ONBOARDED
           type: string
         lineNumber:
+          example: 10
           type: integer
         message:
+          example: Payment cannot be processed because of the Payee's OFAC or Compliance Status
           type: string
       required:
         - amount
@@ -7869,7 +7867,7 @@ components:
     SourceAccountSummary:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalCost: 5.962133916683182
+        totalCost: 0.8008281904610115
       properties:
         sourceAccountId:
           format: uuid
@@ -7885,11 +7883,11 @@ components:
       type: object
     FxSummary:
       example:
-        invertedRate: 2.3021358869347655
-        rate: 5.637376656633329
-        totalPaymentAmount: 9
+        invertedRate: 1.12
+        rate: 1.12
+        totalPaymentAmount: 1234
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalCost: 7
+        totalCost: 1234
         fundingStatus: FUNDED
         creationDateTime: 2000-01-23T04:56:07.000Z
         status: UNQUOTED
@@ -7901,14 +7899,18 @@ components:
           format: date-time
           type: string
         rate:
-          format: double
+          example: 1.12
+          format: decimal
           type: number
         invertedRate:
-          format: double
+          example: 1.12
+          format: decimal
           type: number
         totalCost:
+          example: 1234
           type: integer
         totalPaymentAmount:
+          example: 1234
           type: integer
         sourceCurrency:
           $ref: '#/components/schemas/PaymentAuditCurrency'
@@ -8239,17 +8241,74 @@ components:
         pageSize:
           example: 25
           type: integer
+    GetPayoutsResponse_summary:
+      example:
+        totalOnboardedCount: 123
+        totalRegisteredCount: 123
+        totalPayeesCount: 12
+        totalInvitedCount: 100
+        totalOfacFailedCount: 23
+      properties:
+        totalPayeesCount:
+          example: 12
+          type: integer
+        totalInvitedCount:
+          example: 100
+          type: integer
+        totalRegisteredCount:
+          example: 123
+          type: integer
+        totalOnboardedCount:
+          example: 123
+          type: integer
+        totalOfacFailedCount:
+          example: 23
+          type: integer
+    GetPayoutsResponse_page:
+      example:
+        numberOfElements: 12
+        totalPages: 123
+        pageSize: 25
+        page: 1
+        totalElements: 123
+      properties:
+        numberOfElements:
+          example: 12
+          type: integer
+        totalElements:
+          example: 123
+          type: integer
+        totalPages:
+          example: 123
+          type: integer
+        page:
+          example: 1
+          type: integer
+        pageSize:
+          example: 25
+          type: integer
+    GetPayoutsResponse_links:
+      example:
+        rel: first
+        href: 'https://example.com'
+      properties:
+        rel:
+          example: first
+          type: string
+        href:
+          example: 'https://example.com'
+          type: string
     GetPaymentsForPayoutResponse_summary:
       example:
-        incompletePayments: 5
-        confirmedPayments: 6
-        releasedPayments: 1
+        incompletePayments: 123
+        confirmedPayments: 123
+        releasedPayments: 123
         submittedDateTime: 2000-01-23T04:56:07.000Z
         payoutStatus: ACCEPTED
-        totalPayments: 0
+        totalPayments: 123
         instructedDateTime: 2000-01-23T04:56:07.000Z
-        payoutMemo: payoutMemo
-        failedPayments: 5
+        payoutMemo: Payment Memo value
+        failedPayments: 0
       properties:
         payoutStatus:
           description: The current status of the payout.
@@ -8274,21 +8333,96 @@ components:
           type: string
         payoutMemo:
           description: The memo attached to the payout.
+          example: Payment Memo value
           type: string
         totalPayments:
           description: The count of payments within the payout.
+          example: 123
           type: integer
         confirmedPayments:
           description: The count of payments within the payout which have been confirmed.
+          example: 123
           type: integer
         releasedPayments:
           description: The count of payments within the payout which have been released.
+          example: 123
           type: integer
         incompletePayments:
           description: The count of payments within the payout which are incomplete.
+          example: 123
           type: integer
         failedPayments:
           description: The count of payments within the payout which have failed or been returned.
+          example: 0
+          type: integer
+    GetPaymentsForPayoutResponse_page:
+      example:
+        numberOfElements: 12
+        totalPages: 10
+        pageSize: 25
+        page: 1
+        totalElements: 12
+      properties:
+        numberOfElements:
+          example: 12
+          type: integer
+        totalElements:
+          example: 12
+          type: integer
+        totalPages:
+          example: 10
+          type: integer
+        page:
+          example: 1
+          type: integer
+        pageSize:
+          example: 25
+          type: integer
+    ListPaymentsResponse_summary:
+      example:
+        totalOnboardedCount: 123
+        totalRegisteredCount: 123
+        totalPayeesCount: 123
+        totalInvitedCount: 123
+        totalOfacFailedCount: 123
+      properties:
+        totalPayeesCount:
+          example: 123
+          type: integer
+        totalInvitedCount:
+          example: 123
+          type: integer
+        totalRegisteredCount:
+          example: 123
+          type: integer
+        totalOnboardedCount:
+          example: 123
+          type: integer
+        totalOfacFailedCount:
+          example: 123
+          type: integer
+    ListPaymentsResponse_page:
+      example:
+        numberOfElements: 12
+        totalPages: 12
+        pageSize: 25
+        page: 1
+        totalElements: 12
+      properties:
+        numberOfElements:
+          example: 12
+          type: integer
+        totalElements:
+          example: 12
+          type: integer
+        totalPages:
+          example: 12
+          type: integer
+        page:
+          example: 1
+          type: integer
+        pageSize:
+          example: 25
           type: integer
     GetPaymentsForPayoutResponse_2_summary:
       example:
