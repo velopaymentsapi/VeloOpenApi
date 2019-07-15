@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.13.83
+  version: 2.14.84
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -439,15 +439,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Type: application/json;charset=UTF-8
-                Content-Length: 111
-
-                {
-                    "apiKey" : "385d4506-e7dd-446e-a092-5f30b98e7b26",
-                    "apiSecret" : "f25767d9-342a-48ac-a788-0a7a38ae6fb3"
-                }
               schema:
                 $ref: '#/components/schemas/PayorCreateApiKeyResponse'
           description: 'HTTP Ok, key created'
@@ -613,18 +604,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Type: application/json;charset=UTF-8
-                Content-Length: 221
-
-                {
-                  "payorName" : "Payor1",
-                  "logoUrl" : "https://s3-us-west-2.amazonaws.com/velopayments-branding/test/logo.png",
-                  "collectiveAlias" : "customer",
-                  "supportContact" : "support@mycorp.com",
-                  "dbaName" : "my company"
-                }
               schema:
                 $ref: '#/components/schemas/PayorBrandingResponse'
           description: 'HTTP Ok, key created'
@@ -687,6 +666,124 @@ paths:
           priority: 20
           contractPath: /v1/payors/00000000-0000-0000-0000-000000000000/branding
           serviceName: payor-service
+  /v1/payorLinks:
+    get:
+      description: This endpoint allows you to list payor links
+      operationId: payorLinks
+      parameters:
+        - description: The Payor ID from which to start the query to show all descendants
+          in: query
+          name: descendantsOfPayor
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: |
+            List of additional Payor fields to include in the response for each Payor.
+            The values of payorId and payorName and always included for each Payor - 'fields' allows you to add to this.
+            Example: ```fields=primaryContactEmail,kycState``` - will include payorId+payorName+primaryContactEmail+kycState for each Payor
+            Default if not specified is to include only payorId and payorName.
+            The supported fields are any combination of: primaryContactEmail,kycState
+                        
+          in: query
+          name: fields
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayorLinksResponse'
+          description: Details of Payor Links
+          x-contracts:
+            - contractId: 1
+              headers:
+                Content-Type: application/json
+              body:
+                links:
+                  - linkId: 65514617-d18d-4bb4-8cee-09b3e7625fc9
+                    fromPayorId: 51e93026-2f47-4dfd-a5ff-c0da0954a847
+                    linkType: PARENT_OF
+                    toPayorId: b0b09d8a-866c-4703-833e-2ff9106e185b
+                  - linkId: 6a91b045-6f42-4f9f-a627-f97f66d39bef
+                    fromPayorId: b0b09d8a-866c-4703-833e-2ff9106e185b
+                    linkType: PARENT_OF
+                    toPayorId: 15486051-aa39-430d-8926-a4bc2fea1d04
+                payors:
+                  - payorId: 51e93026-2f47-4dfd-a5ff-c0da0954a847
+                    payorName: Payor One
+                  - payorId: b0b09d8a-866c-4703-833e-2ff9106e185b
+                    payorName: Payor Two
+                  - payorId: 15486051-aa39-430d-8926-a4bc2fea1d04
+                    payorName: Payor Three
+              matchers:
+                headers:
+                  - key: Content-Type
+                    regex: application/json.*
+            - contractId: 2
+              headers:
+                Content-Type: application/json
+              body:
+                links:
+                  - linkId: 65514617-d18d-4bb4-8cee-09b3e7625fc9
+                    fromPayorId: 51e93026-2f47-4dfd-a5ff-c0da0954a847
+                    linkType: PARENT_OF
+                    toPayorId: b0b09d8a-866c-4703-833e-2ff9106e185b
+                  - linkId: 6a91b045-6f42-4f9f-a627-f97f66d39bef
+                    fromPayorId: b0b09d8a-866c-4703-833e-2ff9106e185b
+                    linkType: PARENT_OF
+                    toPayorId: 15486051-aa39-430d-8926-a4bc2fea1d04
+                payors:
+                  - payorId: 51e93026-2f47-4dfd-a5ff-c0da0954a847
+                    payorName: Payor One
+                    primaryContactEmail: payorone@somewhere.com
+                    kycState: FAILED_KYC
+                  - payorId: b0b09d8a-866c-4703-833e-2ff9106e185b
+                    payorName: Payor Two
+                    primaryContactEmail: payortwo@anothersite.com
+                    kycState: PASSED_KYC
+                  - payorId: 15486051-aa39-430d-8926-a4bc2fea1d04
+                    payorName: Payor Three
+                    primaryContactEmail: payorthree@example.com
+                    kycState: REQUIRES_KYC
+              matchers:
+                headers:
+                  - key: Content-Type
+                    regex: application/json.*
+        '400':
+          description: Bad Request
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+      summary: List Payor Links
+      tags:
+        - Payors
+      x-contracts:
+        - contractId: 1
+          name: Test List Payor Links - default Payor fields
+          request:
+            queryParameters:
+              - key: descendantsOfPayor
+                value: 0a818933-087d-47f2-ad83-2f986ed087eb
+          serviceName: payor-service
+        - contractId: 2
+          name: Test List Payor Links - all Payor fields requested
+          request:
+            queryParameters:
+              - key: descendantsOfPayor
+                value: 0a818933-087d-47f2-ad83-2f986ed087eb
+              - key: fields
+                value: 'primaryContactEmail,kycState'
+          serviceName: payor-service
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/payorLinks?descendantsOfPayor=0a818933-087d-47f2-ad83-2f986ed087eb' -i -X GET \
+                -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \
+                -H 'Content-Type: application/json'
   /v1/payees:
     get:
       description: Get a paginated response listing the payees for a payor.
@@ -1093,6 +1190,120 @@ paths:
           name: Get Payee sensitve true
           serviceName: payee-service
           contractPath: /v1/payees/026cc3c8-3a0c-4083-a05b-e908048c1b08
+  /v1/deltas/payees:
+    get:
+      description: Get a paginated response listing payee changes.
+      operationId: listPayeeChanges
+      parameters:
+        - description: The Payor ID to find associated Payees
+          in: query
+          name: payorId
+          required: true
+          schema:
+            format: uuid
+            type: string
+          x-contracts:
+            - contractId: 1
+              value: 0a818933-087d-47f2-ad83-2f986ed087eb
+              matchers:
+                - type: equal_to
+                  value: 0a818933-087d-47f2-ad83-2f986ed087eb
+        - description: 'The updatedSince filter in the format YYYY-MM-DDThh:mm:ss+hh:mm'
+          in: query
+          name: updatedSince
+          required: true
+          schema:
+            format: date-time
+            type: string
+          x-contracts:
+            - contractId: 1
+              value: 2019-01-20T09:00:00.000Z
+              matchers:
+                - type: equal_to
+                  value: 2019-01-20T09:00:00.000Z
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 100. Max allowable is 1000.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 100
+            format: int32
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              example: |
+                {
+                    "page": {
+                        "numberOfElements": 2,
+                        "totalElements": 2,
+                        "totalPages": 1,
+                        "page": 1,
+                        "pageSize": 1000
+                    },
+                    "content": [
+                        {
+                            "remoteId":"payeeA",
+                            "payeeId":"ee2cc9a1-34dd-4ab6-91e3-db111d08d995",
+                            "displayName":"pA"
+                        },{
+                            "remoteId" : "payeeB",
+                            "payeeId":"e904966e-ae6a-4ddd-879c-fd1167c21849",
+                            "onboardedStatus":"INVITED",
+                            "email":"payeeB@example.com",
+                            "displayName":"P AyeeB"
+                        }
+                    ],
+                    "links": [
+                        {
+                            "rel": "first",
+                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+                        },
+                        {
+                            "rel": "last",
+                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+                        },
+                        {
+                            "rel": "self",
+                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+                        }
+                    ]
+                }
+              schema:
+                $ref: '#/components/schemas/PayeeDeltaResponse'
+          description: Details of Payee Changes
+          x-contracts: null
+        '400':
+          description: Bad Request
+      summary: List Payee Changes
+      tags:
+        - Payees
+      x-contracts:
+        - contractId: 1
+          name: Test List Payee Changes
+          ignored: true
+          request:
+            queryParameters:
+              - key: page
+                value: 1
+              - key: pageSize
+                value: 30
+          serviceName: payee-service
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/deltas/payees?pageSize=2&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \
+                -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \
+                -H 'Content-Type: application/json'
   /v2/payees:
     post:
       description: |
@@ -1538,55 +1749,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Length: 1455
-                Content-Type: application/json;charset=UTF-8
-
-                {
-                  "page" : {
-                    "numberOfElements" : 2,
-                    "totalElements" : 2,
-                    "totalPages" : 1,
-                    "page" : 1,
-                    "pageSize" : 0
-                  },
-                  "links" : [ {
-                    "rel" : "first",
-                    "href" : "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-                  }, {
-                    "rel" : "last",
-                    "href" : "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-                  }, {
-                    "rel" : "self",
-                    "href" : "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-                  } ],
-                  "content" : [ {
-                    "id" : "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
-                    "balance" : 1203489,
-                    "currency" : "USD",
-                    "fundingRef" : "a1b2c3d4",
-                    "physicalAccountName" : "VELO_FBO_MYBANKA_USD",
-                    "railsId" : "SIM",
-                    "payorId" : "a2967711-df07-41e5-b5ea-f563088911c6",
-                    "name" : "mySourceAccount",
-                    "pooled" : true,
-                    "balanceVisible" : true,
-                    "customerId" : null
-                  }, {
-                    "id" : "a587c938-e497-4349-8817-129a5e801f30",
-                    "balance" : 1203489,
-                    "currency" : "USD",
-                    "fundingRef" : "a1b2c3d4",
-                    "physicalAccountName" : "VELO_FBO_MYBANKA_USD",
-                    "railsId" : "SIM",
-                    "payorId" : "a2967711-df07-41e5-b5ea-f563088911c6",
-                    "name" : "mySourceAccount",
-                    "pooled" : true,
-                    "balanceVisible" : true,
-                    "customerId" : null
-                  } ]
-                }
               schema:
                 $ref: '#/components/schemas/ListSourceAccountResponse'
           description: List Source Account response
@@ -1621,24 +1783,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Type: application/json;charset=UTF-8
-                Content-Length: 356
-
-                {
-                  "id" : "414ad313-51b4-4d93-82b2-0a40963d95ba",
-                  "balance" : 1203489,
-                  "currency" : "USD",
-                  "fundingRef" : "a1b2c3d4",
-                  "physicalAccountName" : "VELO_FBO_MYBANKA_USD",
-                  "railsId" : "SIM",
-                  "payorId" : "a2967711-df07-41e5-b5ea-f563088911c6",
-                  "name" : "mySourceAccount",
-                  "pooled" : true,
-                  "balanceVisible" : true,
-                  "customerId" : "123456789"
-                }
               schema:
                 $ref: '#/components/schemas/SourceAccountResponse'
           description: Source account response
@@ -1677,10 +1821,6 @@ paths:
         required: true
       responses:
         '202':
-          content:
-            application/json:
-              example: |
-                HTTP/1.1 202 Accepted
           description: Request Accepted
         '400':
           description: Invalid Request Body
@@ -1753,10 +1893,6 @@ paths:
         required: true
       responses:
         '202':
-          content:
-            application/json:
-              example: |
-                HTTP/1.1 202 Accepted
           description: Request Accepted
         '400':
           description: Invalid Request Body
@@ -1979,6 +2115,7 @@ paths:
                 -H 'Authorization: Bearer 3667f994-7d41-4d20-990d-b79fa720e56b'
   /v3/paymentaudit/payouts:
     get:
+      deprecated: true
       description: |
         Get List of payouts for payor
       operationId: getPayoutsForPayor
@@ -2072,6 +2209,7 @@ paths:
                 -H 'Authorization: Bearer a9d9247d-5e30-4cea-a6e1-0898534ce768'
   '/v3/paymentaudit/payouts/{payoutId}':
     get:
+      deprecated: true
       description: |
         Get List of payments for Payout
       operationId: getPaymentsForPayout
@@ -2104,6 +2242,7 @@ paths:
               - ACCEPTED_BY_RAILS
               - CONFIRMED
               - FAILED
+              - RETURNED
               - WITHDRAWN
             type: string
         - description: The source amount from range filter. Filters for sourceAmount >= sourceAmountFrom
@@ -2203,6 +2342,7 @@ paths:
                 -H 'Authorization: Bearer f7a9a696-e528-487b-8734-e0a22e41ef7a'
   /v3/paymentaudit/payments:
     get:
+      deprecated: true
       description: Get payments for the given payor Id
       operationId: listPaymentsAudit
       parameters:
@@ -2247,6 +2387,7 @@ paths:
               - ACCEPTED_BY_RAILS
               - CONFIRMED
               - FAILED
+              - RETURNED
               - WITHDRAWN
             type: string
         - description: The source account name filter. This filters via a case insensitive substring match.
@@ -2362,6 +2503,7 @@ paths:
         - Payment Audit Service
   '/v3/paymentaudit/payments/{paymentId}':
     get:
+      deprecated: true
       description: |
         Get the payment with the given id. This contains the payment history.
       operationId: getPaymentDetails
@@ -2396,7 +2538,7 @@ paths:
       x-code-samples:
         - lang: shell
           source: |
-            $ curl 'https://api.sandbox.velopayments.com/v1/paymentaudit/payments/c3a422c2-12ac-4416-84fe-964221bd9815' -i \
+            $ curl 'https://api.sandbox.velopayments.com/v3/paymentaudit/payments/c3a422c2-12ac-4416-84fe-964221bd9815' -i \
                 -H 'Authorization: Bearer 67a1b299-69b1-4fdf-a576-96b81199a2b9'
   /v1/paymentaudit/payoutStatistics:
     get:
@@ -2474,6 +2616,429 @@ paths:
           source: |
             $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/transactions?startDate=2018-05-01&endDate=2018-05-31' -i -X GET \
                 -H 'Authorization: Bearer 76748e09-775d-4e2d-b889-f0555901d8eb'
+  /v4/paymentaudit/payouts:
+    get:
+      description: |
+        Get List of payouts for payor
+      operationId: getPayoutsForPayorV4
+      parameters:
+        - description: The account owner Payor ID
+          in: query
+          name: payorId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: Payout Memo filter - case insensitive sub-string match
+          in: query
+          name: payoutMemo
+          required: false
+          schema:
+            type: string
+        - description: Payout Status
+          in: query
+          name: status
+          required: false
+          schema:
+            enum:
+              - ACCEPTED
+              - REJECTED
+              - SUBMITTED
+              - QUOTED
+              - INSTRUCTED
+              - COMPLETED
+              - INCOMPLETE
+              - CONFIRMED
+              - WITHDRAWN
+            type: string
+        - description: The submitted date from range filter. Format is yyyy-MM-dd.
+          in: query
+          name: submittedDateFrom
+          required: false
+          schema:
+            format: date
+            type: string
+        - description: The submitted date to range filter. Format is yyyy-MM-dd.
+          in: query
+          name: submittedDateTo
+          required: false
+          schema:
+            format: date
+            type: string
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            type: integer
+        - description: |
+            List of sort fields (e.g. ?sort=submittedDateTime:asc,instructedDateTime:asc,status:asc)
+            Default is submittedDateTime:asc
+            The supported sort fields are: submittedDateTime, instructedDateTime, status.
+          in: query
+          name: sort
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPayoutsResponse_2'
+          description: Payor data found
+        '400':
+          description: Invalid Request Parameter
+        '404':
+          description: Payor Id Not Found
+      summary: Get Payouts for Payor
+      tags:
+        - Payment Audit Service
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/payouts?payorId=449aa6c3-0569-47f6-a430-a470040da67c' -i -X GET \
+                -H 'Authorization: Bearer a9d9247d-5e30-4cea-a6e1-0898534ce768'
+  '/v4/paymentaudit/payouts/{payoutId}':
+    get:
+      description: |
+        Get List of payments for Payout, allowing for RETURNED status
+      operationId: getPaymentsForPayoutV4
+      parameters:
+        - description: The id (UUID) of the payout.
+          in: path
+          name: payoutId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: The remote id of the payees.
+          in: query
+          name: remoteId
+          required: false
+          schema:
+            type: string
+        - description: Payment Status
+          in: query
+          name: status
+          required: false
+          schema:
+            enum:
+              - ACCEPTED
+              - AWAITING_FUNDS
+              - FUNDED
+              - UNFUNDED
+              - BANK_PAYMENT_REQUESTED
+              - REJECTED
+              - ACCEPTED_BY_RAILS
+              - CONFIRMED
+              - FAILED
+              - RETURNED
+              - WITHDRAWN
+            type: string
+        - description: The source amount from range filter. Filters for sourceAmount >= sourceAmountFrom
+          in: query
+          name: sourceAmountFrom
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The source amount to range filter. Filters for sourceAmount ⇐ sourceAmountTo
+          in: query
+          name: sourceAmountTo
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The payment amount from range filter. Filters for paymentAmount >= paymentAmountFrom
+          in: query
+          name: paymentAmountFrom
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The payment amount to range filter. Filters for paymentAmount ⇐ paymentAmountTo
+          in: query
+          name: paymentAmountTo
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The submitted date from range filter. Format is yyyy-MM-dd.
+          in: query
+          name: submittedDateFrom
+          required: false
+          schema:
+            format: date
+            type: string
+        - description: The submitted date to range filter. Format is yyyy-MM-dd.
+          in: query
+          name: submittedDateTo
+          required: false
+          schema:
+            format: date
+            type: string
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            type: integer
+        - description: |
+            List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId
+            The supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,
+            routingNumber, accountNumber, remoteId, submittedDateTime and status
+          in: query
+          name: sort
+          required: false
+          schema:
+            type: string
+        - description: |
+            Optional. If omitted or set to false, any Personal Identifiable Information (PII) values are returned masked.
+            If set to true, and you have permission, the PII values will be returned as their original unmasked values.
+          in: query
+          name: sensitive
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPaymentsForPayoutResponse_2'
+          description: '200 response, data found okay'
+        '400':
+          description: Invalid Request Parameter
+        '404':
+          description: Payout Id Not Found
+      summary: Get Payments for Payout
+      tags:
+        - Payment Audit Service
+        - Payout History
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/payouts/7b524212-6fd7-4699-983d-cac082022a2e' -i -X GET \
+                -H 'Authorization: Bearer f7a9a696-e528-487b-8734-e0a22e41ef7a'
+  /v4/paymentaudit/payments:
+    get:
+      description: Get payments for the given payor Id
+      operationId: listPaymentsAuditV4
+      parameters:
+        - description: The UUID of the payee.
+          in: query
+          name: payeeId
+          required: false
+          schema:
+            format: uuid
+            type: string
+        - description: The account owner Payor Id. Required for external users.
+          in: query
+          name: payorId
+          required: false
+          schema:
+            format: uuid
+            type: string
+        - description: The payor’s name. This filters via a case insensitive substring match.
+          in: query
+          name: payorName
+          required: false
+          schema:
+            type: string
+        - description: The remote id of the payees.
+          in: query
+          name: remoteId
+          required: false
+          schema:
+            type: string
+        - description: Payment Status
+          in: query
+          name: status
+          required: false
+          schema:
+            enum:
+              - ACCEPTED
+              - AWAITING_FUNDS
+              - FUNDED
+              - UNFUNDED
+              - BANK_PAYMENT_REQUESTED
+              - REJECTED
+              - ACCEPTED_BY_RAILS
+              - CONFIRMED
+              - FAILED
+              - RETURNED
+              - WITHDRAWN
+            type: string
+        - description: The source account name filter. This filters via a case insensitive substring match.
+          in: query
+          name: sourceAccountName
+          required: false
+          schema:
+            type: string
+        - description: The source amount from range filter. Filters for sourceAmount >= sourceAmountFrom
+          in: query
+          name: sourceAmountFrom
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The source amount to range filter. Filters for sourceAmount ⇐ sourceAmountTo
+          in: query
+          name: sourceAmountTo
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The source currency filter. Filters based on an exact match on the currency.
+          in: query
+          name: sourceCurrency
+          required: false
+          schema:
+            type: string
+        - description: The payment amount from range filter. Filters for paymentAmount >= paymentAmountFrom
+          in: query
+          name: paymentAmountFrom
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The payment amount to range filter. Filters for paymentAmount ⇐ paymentAmountTo
+          in: query
+          name: paymentAmountTo
+          required: false
+          schema:
+            format: int32
+            type: integer
+        - description: The source currency filter. Filters based on an exact match on the currency.
+          in: query
+          name: paymentCurrency
+          required: false
+          schema:
+            type: string
+        - description: The submitted date from range filter. Format is yyyy-MM-dd.
+          in: query
+          name: submittedDateFrom
+          required: false
+          schema:
+            format: date
+            type: string
+        - description: The submitted date to range filter. Format is yyyy-MM-dd.
+          in: query
+          name: submittedDateTo
+          required: false
+          schema:
+            format: date
+            type: string
+        - description: The payment memo filter. This filters via a case insensitive substring match.
+          in: query
+          name: paymentMemo
+          required: false
+          schema:
+            type: string
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            type: integer
+        - description: |
+            List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId
+            The supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,
+            routingNumber, accountNumber, remoteId, submittedDateTime and status
+          in: query
+          name: sort
+          required: false
+          schema:
+            type: string
+        - description: |
+            Optional. If omitted or set to false, any Personal Identifiable Information (PII) values are returned masked.
+            If set to true, and you have permission, the PII values will be returned as their original unmasked values.
+          in: query
+          name: sensitive
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListPaymentsResponse'
+          description: Details of Payee
+        '400':
+          description: Bad Request Parameter
+      summary: Get List of Payments
+      tags:
+        - Payment Audit Service
+  '/v4/paymentaudit/payments/{paymentId}':
+    get:
+      description: |
+        Get the payment with the given id. This contains the payment history.
+      operationId: getPaymentDetailsV4
+      parameters:
+        - description: Payment Id
+          in: path
+          name: paymentId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: |
+            Optional. If omitted or set to false, any Personal Identifiable Information (PII) values are returned masked.
+            If set to true, and you have permission, the PII values will be returned as their original unmasked values.
+          in: query
+          name: sensitive
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse_2'
+          description: '200 response, request completed okay'
+        '404':
+          description: Payment Id Not Found
+      summary: Get Payment
+      tags:
+        - Payment Audit Service
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/payments/c3a422c2-12ac-4416-84fe-964221bd9815' -i \
+                -H 'Authorization: Bearer 67a1b299-69b1-4fdf-a576-96b81199a2b9'
   /v3/payouts:
     post:
       description: |
@@ -3287,6 +3852,37 @@ components:
         - logoUrl
         - payorName
       type: object
+    PayorLinksResponse:
+      description: List Payor Links Response Object
+      example:
+        payors:
+          - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            kycState: FAILED_KYC
+            primaryContactEmail: primaryContactEmail
+            payorName: payorName
+          - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            kycState: FAILED_KYC
+            primaryContactEmail: primaryContactEmail
+            payorName: payorName
+        links:
+          - toPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            linkId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            fromPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            linkType: PARENT_OF
+          - toPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            linkId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            fromPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            linkType: PARENT_OF
+      properties:
+        links:
+          items:
+            $ref: '#/components/schemas/PayorLinksResponse_links'
+          type: array
+        payors:
+          items:
+            $ref: '#/components/schemas/PayorLinksResponse_payors'
+          type: array
+      type: object
     OfacStatus:
       enum:
         - PENDING
@@ -3375,6 +3971,7 @@ components:
             company:
               taxId: taxId
               name: name
+              operatingName: operatingName
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             email: email
             acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
@@ -3427,6 +4024,7 @@ components:
             company:
               taxId: taxId
               name: name
+              operatingName: operatingName
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             email: email
             acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
@@ -3495,6 +4093,7 @@ components:
         company:
           taxId: taxId
           name: name
+          operatingName: operatingName
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         email: email
         acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
@@ -3561,6 +4160,45 @@ components:
         onboardedStatus:
           $ref: '#/components/schemas/OnboardedStatus'
       type: object
+    PayeeDeltaResponse:
+      description: List Payee Changes Response Object
+      example:
+        links:
+          - rel: first
+            href: 'http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
+          - rel: first
+            href: 'http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
+        page:
+          numberOfElements: 2
+          totalPages: 1
+          pageSize: 25
+          page: 1
+          totalElements: 2
+        content:
+          - payeeCountry: US
+            displayName: Payee1
+            payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            dbaName: Payee DBA Name
+            email: payee1@example.com
+            remoteId: payee_1
+          - payeeCountry: US
+            displayName: Payee1
+            payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            dbaName: Payee DBA Name
+            email: payee1@example.com
+            remoteId: payee_1
+      properties:
+        page:
+          $ref: '#/components/schemas/PayeeDeltaResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/PayeeDeltaResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/PayeeDelta'
+          type: array
+      type: object
     CreatePayeesRequest:
       example:
         payees:
@@ -3586,7 +4224,7 @@ components:
                 lastName: lastName
                 otherNames: otherNames
                 title: title
-              nationalIdentification: 0
+              nationalIdentification: nationalIdentification
               dateOfBirth: 2000-01-23T00:00:00.000Z
             challenge:
               description: description
@@ -3594,6 +4232,7 @@ components:
             company:
               taxId: taxId
               name: name
+              operatingName: operatingName
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             email: email
             remoteId: remoteId
@@ -3627,7 +4266,7 @@ components:
                 lastName: lastName
                 otherNames: otherNames
                 title: title
-              nationalIdentification: 0
+              nationalIdentification: nationalIdentification
               dateOfBirth: 2000-01-23T00:00:00.000Z
             challenge:
               description: description
@@ -3635,6 +4274,7 @@ components:
             company:
               taxId: taxId
               name: name
+              operatingName: operatingName
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             email: email
             remoteId: remoteId
@@ -3704,10 +4344,9 @@ components:
           minLength: 2
           type: string
         individualNationalIdentification:
-          description: Must be 9 digits if provided
-          maxLength: 9
-          minLength: 9
-          type: integer
+          maxLength: 30
+          minLength: 6
+          type: string
         individualDateOfBirth:
           description: Must not be date in future. Example - 1970-05-20
           format: date
@@ -3735,6 +4374,10 @@ components:
         companyEIN:
           description: 'Company Tax Id (EIN) must be 9 numeric characters. Must match the regular expression ```[\d]{9}```.'
           pattern: '[\\d]{9}'
+          type: string
+        companyOperatingName:
+          maxLength: 100
+          minLength: 1
           type: string
         paymentChannelAccountNumber:
           description: Either routing number and account number or only iban must be set
@@ -4114,6 +4757,7 @@ components:
               company:
                 taxId: taxId
                 name: name
+                operatingName: operatingName
               payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               email: email
               acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
@@ -4168,6 +4812,7 @@ components:
               company:
                 taxId: taxId
                 name: name
+                operatingName: operatingName
               payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               email: email
               acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
@@ -4261,49 +4906,49 @@ components:
       description: List Source Accounts Response Object
       example:
         links:
-          - rel: rel
-            href: href
-          - rel: rel
-            href: href
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
         page:
-          numberOfElements: 2
-          totalPages: 9
-          pageSize: 2
-          page: 3
-          totalElements: 7
+          numberOfElements: 1
+          totalPages: 2
+          pageSize: 25
+          page: 1
+          totalElements: 1
         content:
-          - physicalAccountName: physicalAccountName
+          - physicalAccountName: VELO_FBO_MYBANKA_USD
             fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            fundingRef: fundingRef
-            balance: 0.8008281904610115
+            fundingRef: a1b2c3d4
+            balance: 1203489
             pooled: true
-            name: name
-            customerId: customerId
+            name: MyAccountName
+            customerId: Joe Customer
             physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             currency: USD
-            railsId: railsId
+            railsId: BOA_RAIL
             balanceVisible: true
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          - physicalAccountName: physicalAccountName
+          - physicalAccountName: VELO_FBO_MYBANKA_USD
             fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            fundingRef: fundingRef
-            balance: 0.8008281904610115
+            fundingRef: a1b2c3d4
+            balance: 1203489
             pooled: true
-            name: name
-            customerId: customerId
+            name: MyAccountName
+            customerId: Joe Customer
             physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             currency: USD
-            railsId: railsId
+            railsId: BOA_RAIL
             balanceVisible: true
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         page:
-          $ref: '#/components/schemas/PayeeResponse_page'
+          $ref: '#/components/schemas/ListSourceAccountResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/PayeeResponse_links'
+            $ref: '#/components/schemas/ListSourceAccountResponse_links'
           type: array
         content:
           items:
@@ -4312,16 +4957,16 @@ components:
       type: object
     SourceAccountResponse:
       example:
-        physicalAccountName: physicalAccountName
+        physicalAccountName: VELO_FBO_MYBANKA_USD
         fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        fundingRef: fundingRef
-        balance: 0.8008281904610115
+        fundingRef: a1b2c3d4
+        balance: 1203489
         pooled: true
-        name: name
-        customerId: customerId
+        name: MyAccountName
+        customerId: Joe Customer
         physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         currency: USD
-        railsId: railsId
+        railsId: BOA_RAIL
         balanceVisible: true
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -4332,30 +4977,37 @@ components:
           type: string
         balance:
           description: Decimal implied
+          example: 1203489
           format: int32
           type: number
         currency:
           enum:
             - USD
+          example: USD
           maxLength: 3
           minLength: 3
           type: string
         fundingRef:
+          example: a1b2c3d4
           type: string
         physicalAccountName:
+          example: VELO_FBO_MYBANKA_USD
           type: string
         railsId:
+          example: BOA_RAIL
           type: string
         payorId:
           format: uuid
           type: string
         name:
+          example: MyAccountName
           type: string
         pooled:
           type: boolean
         balanceVisible:
           type: boolean
         customerId:
+          example: Joe Customer
           nullable: true
           type: string
         physicalAccountId:
@@ -4404,61 +5056,61 @@ components:
       description: List Source Accounts Response Object
       example:
         links:
-          - rel: rel
-            href: href
-          - rel: rel
-            href: href
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
         page:
-          numberOfElements: 2
-          totalPages: 9
-          pageSize: 2
-          page: 3
-          totalElements: 7
+          numberOfElements: 12
+          totalPages: 2
+          pageSize: 25
+          page: 1
+          totalElements: 33
         content:
-          - physicalAccountName: physicalAccountName
+          - physicalAccountName: VELO_FBO_MYBANKA_USD
             fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            fundingRef: fundingRef
-            balance: 0.8008281904610115
+            fundingRef: a1b2c3d4
+            balance: 1203489
             pooled: true
-            name: name
-            customerId: customerId
+            name: MyAccountName
+            customerId: Joe Customer
             physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             autoTopUpConfig:
               targetBalance: 300000
               minBalance: 10000
               enabled: true
             currency: USD
-            railsId: railsId
+            railsId: BOA_RAIL
             balanceVisible: true
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             notifications:
-              minimumBalance: 6
-          - physicalAccountName: physicalAccountName
+              minimumBalance: 120000
+          - physicalAccountName: VELO_FBO_MYBANKA_USD
             fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            fundingRef: fundingRef
-            balance: 0.8008281904610115
+            fundingRef: a1b2c3d4
+            balance: 1203489
             pooled: true
-            name: name
-            customerId: customerId
+            name: MyAccountName
+            customerId: Joe Customer
             physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             autoTopUpConfig:
               targetBalance: 300000
               minBalance: 10000
               enabled: true
             currency: USD
-            railsId: railsId
+            railsId: BOA_RAIL
             balanceVisible: true
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             notifications:
-              minimumBalance: 6
+              minimumBalance: 120000
       properties:
         page:
-          $ref: '#/components/schemas/PayeeResponse_page'
+          $ref: '#/components/schemas/ListSourceAccountResponseV2_page'
         links:
           items:
-            $ref: '#/components/schemas/PayeeResponse_links'
+            $ref: '#/components/schemas/ListSourceAccountResponse_links'
           type: array
         content:
           items:
@@ -4467,25 +5119,25 @@ components:
       type: object
     SourceAccountResponseV2:
       example:
-        physicalAccountName: physicalAccountName
+        physicalAccountName: VELO_FBO_MYBANKA_USD
         fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        fundingRef: fundingRef
-        balance: 0.8008281904610115
+        fundingRef: a1b2c3d4
+        balance: 1203489
         pooled: true
-        name: name
-        customerId: customerId
+        name: MyAccountName
+        customerId: Joe Customer
         physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         autoTopUpConfig:
           targetBalance: 300000
           minBalance: 10000
           enabled: true
         currency: USD
-        railsId: railsId
+        railsId: BOA_RAIL
         balanceVisible: true
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         notifications:
-          minimumBalance: 6
+          minimumBalance: 120000
       properties:
         id:
           description: Source Account Id
@@ -4493,30 +5145,37 @@ components:
           type: string
         balance:
           description: Decimal implied
+          example: 1203489
           format: int32
           type: number
         currency:
           enum:
             - USD
+          example: USD
           maxLength: 3
           minLength: 3
           type: string
         fundingRef:
+          example: a1b2c3d4
           type: string
         physicalAccountName:
+          example: VELO_FBO_MYBANKA_USD
           type: string
         railsId:
+          example: BOA_RAIL
           type: string
         payorId:
           format: uuid
           type: string
         name:
+          example: MyAccountName
           type: string
         pooled:
           type: boolean
         balanceVisible:
           type: boolean
         customerId:
+          example: Joe Customer
           nullable: true
           type: string
         physicalAccountId:
@@ -4648,11 +5307,15 @@ components:
       description: List Payments for payout
       example:
         summary:
-          totalOnboardedCount: 5
-          totalRegisteredCount: 1
-          totalPayeesCount: 0
-          totalInvitedCount: 6
-          totalOfacFailedCount: 5
+          incompletePayments: 5
+          confirmedPayments: 6
+          releasedPayments: 1
+          submittedDateTime: 2000-01-23T04:56:07.000Z
+          payoutStatus: ACCEPTED
+          totalPayments: 0
+          instructedDateTime: 2000-01-23T04:56:07.000Z
+          payoutMemo: payoutMemo
+          failedPayments: 5
         links:
           - rel: rel
             href: href
@@ -4668,16 +5331,16 @@ components:
           - traceNumber: traceNumber
             accountName: accountName
             paymentMemo: paymentMemo
-            paymentAmount: 6
+            paymentAmount: 7
             fundingStatus: FUNDED
             paymentChannelName: paymentChannelName
             filenameReference: filenameReference
-            rate: 1.4658129805029452
+            rate: 9.301444243932576
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             countryCode: countryCode
             returnReason: returnReason
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 0
+            sourceAmount: 2
             railsId: railsId
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -4705,30 +5368,30 @@ components:
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
-            invertedRate: 5.962133916683182
+            invertedRate: 3.616076749251911
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: individualIdentificationNumber
             accountNumber: accountNumber
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 5
+            returnCost: 2
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
           - traceNumber: traceNumber
             accountName: accountName
             paymentMemo: paymentMemo
-            paymentAmount: 6
+            paymentAmount: 7
             fundingStatus: FUNDED
             paymentChannelName: paymentChannelName
             filenameReference: filenameReference
-            rate: 1.4658129805029452
+            rate: 9.301444243932576
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             countryCode: countryCode
             returnReason: returnReason
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 0
+            sourceAmount: 2
             railsId: railsId
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -4756,20 +5419,20 @@ components:
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
-            invertedRate: 5.962133916683182
+            invertedRate: 3.616076749251911
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: individualIdentificationNumber
             accountNumber: accountNumber
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 5
+            returnCost: 2
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
       properties:
         summary:
-          $ref: '#/components/schemas/PayeeResponse_summary'
+          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_summary'
         page:
           $ref: '#/components/schemas/PayeeResponse_page'
         links:
@@ -4805,16 +5468,16 @@ components:
           - traceNumber: traceNumber
             accountName: accountName
             paymentMemo: paymentMemo
-            paymentAmount: 6
+            paymentAmount: 7
             fundingStatus: FUNDED
             paymentChannelName: paymentChannelName
             filenameReference: filenameReference
-            rate: 1.4658129805029452
+            rate: 9.301444243932576
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             countryCode: countryCode
             returnReason: returnReason
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 0
+            sourceAmount: 2
             railsId: railsId
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -4842,30 +5505,30 @@ components:
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
-            invertedRate: 5.962133916683182
+            invertedRate: 3.616076749251911
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: individualIdentificationNumber
             accountNumber: accountNumber
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 5
+            returnCost: 2
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
           - traceNumber: traceNumber
             accountName: accountName
             paymentMemo: paymentMemo
-            paymentAmount: 6
+            paymentAmount: 7
             fundingStatus: FUNDED
             paymentChannelName: paymentChannelName
             filenameReference: filenameReference
-            rate: 1.4658129805029452
+            rate: 9.301444243932576
             paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             countryCode: countryCode
             returnReason: returnReason
             submittedDateTime: 2000-01-23T04:56:07.000Z
-            sourceAmount: 0
+            sourceAmount: 2
             railsId: railsId
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -4893,14 +5556,14 @@ components:
             payorName: payorName
             sourceAccountName: sourceAccountName
             paymentChannelId: paymentChannelId
-            invertedRate: 5.962133916683182
+            invertedRate: 3.616076749251911
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: individualIdentificationNumber
             accountNumber: accountNumber
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             remoteId: remoteId
             routingNumber: routingNumber
-            returnCost: 5
+            returnCost: 2
             iban: iban
             payorPaymentId: payorPaymentId
             status: ACCEPTED
@@ -4923,16 +5586,16 @@ components:
         traceNumber: traceNumber
         accountName: accountName
         paymentMemo: paymentMemo
-        paymentAmount: 6
+        paymentAmount: 7
         fundingStatus: FUNDED
         paymentChannelName: paymentChannelName
         filenameReference: filenameReference
-        rate: 1.4658129805029452
+        rate: 9.301444243932576
         paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         countryCode: countryCode
         returnReason: returnReason
         submittedDateTime: 2000-01-23T04:56:07.000Z
-        sourceAmount: 0
+        sourceAmount: 2
         railsId: railsId
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -4960,14 +5623,14 @@ components:
         payorName: payorName
         sourceAccountName: sourceAccountName
         paymentChannelId: paymentChannelId
-        invertedRate: 5.962133916683182
+        invertedRate: 3.616076749251911
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         individualIdentificationNumber: individualIdentificationNumber
         accountNumber: accountNumber
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         remoteId: remoteId
         routingNumber: routingNumber
-        returnCost: 5
+        returnCost: 2
         iban: iban
         payorPaymentId: payorPaymentId
         status: ACCEPTED
@@ -5088,6 +5751,402 @@ components:
       required:
         - thisMonthFailedPaymentsCount
         - thisMonthPayoutsCount
+      type: object
+    GetPayoutsResponse_2:
+      description: List Payouts Response
+      example:
+        summary:
+          totalOnboardedCount: 5
+          totalRegisteredCount: 1
+          totalPayeesCount: 0
+          totalInvitedCount: 6
+          totalOfacFailedCount: 5
+        links:
+          - rel: rel
+            href: href
+          - rel: rel
+            href: href
+        page:
+          numberOfElements: 2
+          totalPages: 9
+          pageSize: 2
+          page: 3
+          totalElements: 7
+        content:
+          - dateTime: 2000-01-23T04:56:07.000Z
+            sourceAccountSummary:
+              - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                totalCost: 5.962133916683182
+              - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                totalCost: 5.962133916683182
+            totalReturnedPayments: 1
+            submittedDateTime: submittedDateTime
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            totalIncompletePayments: 6
+            fxSummaries:
+              - invertedRate: 2.3021358869347655
+                rate: 5.637376656633329
+                totalPaymentAmount: 9
+                quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                totalCost: 7
+                fundingStatus: FUNDED
+                creationDateTime: 2000-01-23T04:56:07.000Z
+                status: UNQUOTED
+              - invertedRate: 2.3021358869347655
+                rate: 5.637376656633329
+                totalPaymentAmount: 9
+                quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                totalCost: 7
+                fundingStatus: FUNDED
+                creationDateTime: 2000-01-23T04:56:07.000Z
+                status: UNQUOTED
+            payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            totalPayments: 0
+            instructedDateTime: instructedDateTime
+            payoutMemo: payoutMemo
+          - dateTime: 2000-01-23T04:56:07.000Z
+            sourceAccountSummary:
+              - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                totalCost: 5.962133916683182
+              - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                totalCost: 5.962133916683182
+            totalReturnedPayments: 1
+            submittedDateTime: submittedDateTime
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            totalIncompletePayments: 6
+            fxSummaries:
+              - invertedRate: 2.3021358869347655
+                rate: 5.637376656633329
+                totalPaymentAmount: 9
+                quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                totalCost: 7
+                fundingStatus: FUNDED
+                creationDateTime: 2000-01-23T04:56:07.000Z
+                status: UNQUOTED
+              - invertedRate: 2.3021358869347655
+                rate: 5.637376656633329
+                totalPaymentAmount: 9
+                quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                totalCost: 7
+                fundingStatus: FUNDED
+                creationDateTime: 2000-01-23T04:56:07.000Z
+                status: UNQUOTED
+            payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            totalPayments: 0
+            instructedDateTime: instructedDateTime
+            payoutMemo: payoutMemo
+      properties:
+        summary:
+          $ref: '#/components/schemas/PayeeResponse_summary'
+        page:
+          $ref: '#/components/schemas/PayeeResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/PayeeResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/PayoutSummaryAudit_2'
+          type: array
+      type: object
+    GetPaymentsForPayoutResponse_2:
+      description: List Payments for payout
+      example:
+        summary:
+          incompletePayments: 5
+          confirmedPayments: 6
+          releasedPayments: 1
+          submittedDateTime: 2000-01-23T04:56:07.000Z
+          payoutStatus: ACCEPTED
+          totalPayments: 0
+          returnedPayments: 5
+          instructedDateTime: 2000-01-23T04:56:07.000Z
+          payoutMemo: payoutMemo
+        links:
+          - rel: rel
+            href: href
+          - rel: rel
+            href: href
+        page:
+          numberOfElements: 2
+          totalPages: 9
+          pageSize: 2
+          page: 3
+          totalElements: 7
+        content:
+          - traceNumber: traceNumber
+            accountName: accountName
+            paymentMemo: paymentMemo
+            paymentAmount: 7
+            fundingStatus: FUNDED
+            paymentChannelName: paymentChannelName
+            filenameReference: filenameReference
+            rate: 9.301444243932576
+            paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            countryCode: countryCode
+            returnReason: returnReason
+            submittedDateTime: 2000-01-23T04:56:07.000Z
+            sourceAmount: 2
+            railsId: railsId
+            payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            events:
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+            payorName: payorName
+            sourceAccountName: sourceAccountName
+            paymentChannelId: paymentChannelId
+            invertedRate: 3.616076749251911
+            sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            individualIdentificationNumber: individualIdentificationNumber
+            accountNumber: accountNumber
+            quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            remoteId: remoteId
+            routingNumber: routingNumber
+            returnCost: 2
+            iban: iban
+            payorPaymentId: payorPaymentId
+            status: ACCEPTED
+          - traceNumber: traceNumber
+            accountName: accountName
+            paymentMemo: paymentMemo
+            paymentAmount: 7
+            fundingStatus: FUNDED
+            paymentChannelName: paymentChannelName
+            filenameReference: filenameReference
+            rate: 9.301444243932576
+            paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            countryCode: countryCode
+            returnReason: returnReason
+            submittedDateTime: 2000-01-23T04:56:07.000Z
+            sourceAmount: 2
+            railsId: railsId
+            payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            events:
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+            payorName: payorName
+            sourceAccountName: sourceAccountName
+            paymentChannelId: paymentChannelId
+            invertedRate: 3.616076749251911
+            sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            individualIdentificationNumber: individualIdentificationNumber
+            accountNumber: accountNumber
+            quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            remoteId: remoteId
+            routingNumber: routingNumber
+            returnCost: 2
+            iban: iban
+            payorPaymentId: payorPaymentId
+            status: ACCEPTED
+      properties:
+        summary:
+          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_2_summary'
+        page:
+          $ref: '#/components/schemas/PayeeResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/PayeeResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/PaymentResponse_2'
+          type: array
+      type: object
+    PaymentResponse_2:
+      example:
+        traceNumber: traceNumber
+        accountName: accountName
+        paymentMemo: paymentMemo
+        paymentAmount: 7
+        fundingStatus: FUNDED
+        paymentChannelName: paymentChannelName
+        filenameReference: filenameReference
+        rate: 9.301444243932576
+        paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        countryCode: countryCode
+        returnReason: returnReason
+        submittedDateTime: 2000-01-23T04:56:07.000Z
+        sourceAmount: 2
+        railsId: railsId
+        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        events:
+          - principal: principal
+            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            eventDateTime: 2000-01-23T04:56:07.000Z
+            routingNumber: routingNumber
+            accountName: accountName
+            iban: iban
+            sourceAmount: 1299
+            eventType: PAYOUT_SUBMITTED
+            accountNumber: accountNumber
+            paymentAmount: 1299
+          - principal: principal
+            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            eventDateTime: 2000-01-23T04:56:07.000Z
+            routingNumber: routingNumber
+            accountName: accountName
+            iban: iban
+            sourceAmount: 1299
+            eventType: PAYOUT_SUBMITTED
+            accountNumber: accountNumber
+            paymentAmount: 1299
+        payorName: payorName
+        sourceAccountName: sourceAccountName
+        paymentChannelId: paymentChannelId
+        invertedRate: 3.616076749251911
+        sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        individualIdentificationNumber: individualIdentificationNumber
+        accountNumber: accountNumber
+        quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        remoteId: remoteId
+        routingNumber: routingNumber
+        returnCost: 2
+        iban: iban
+        payorPaymentId: payorPaymentId
+        status: ACCEPTED
+      properties:
+        paymentId:
+          format: uuid
+          type: string
+        payeeId:
+          format: uuid
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        payorName:
+          type: string
+        quoteId:
+          format: uuid
+          type: string
+        sourceAccountId:
+          format: uuid
+          type: string
+        sourceAccountName:
+          type: string
+        remoteId:
+          type: string
+        sourceAmount:
+          type: integer
+        sourceCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        paymentAmount:
+          type: integer
+        paymentCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        rate:
+          format: double
+          type: number
+        invertedRate:
+          format: double
+          type: number
+        submittedDateTime:
+          format: date-time
+          type: string
+        status:
+          enum:
+            - ACCEPTED
+            - AWAITING_FUNDS
+            - FUNDED
+            - UNFUNDED
+            - BANK_PAYMENT_REQUESTED
+            - REJECTED
+            - ACCEPTED_BY_RAILS
+            - CONFIRMED
+            - RETURNED
+            - WITHDRAWN
+          type: string
+        fundingStatus:
+          enum:
+            - FUNDED
+            - INSTRUCTED
+            - UNFUNDED
+          type: string
+        routingNumber:
+          type: string
+        accountNumber:
+          type: string
+        iban:
+          type: string
+        paymentMemo:
+          type: string
+        filenameReference:
+          type: string
+        individualIdentificationNumber:
+          type: string
+        traceNumber:
+          type: string
+        payorPaymentId:
+          type: string
+        paymentChannelId:
+          type: string
+        paymentChannelName:
+          type: string
+        accountName:
+          type: string
+        railsId:
+          type: string
+        countryCode:
+          type: string
+        events:
+          items:
+            $ref: '#/components/schemas/PaymentEventResponse_2'
+          type: array
+        returnCost:
+          type: integer
+        returnReason:
+          type: string
+      required:
+        - events
+        - fundingStatus
+        - payeeId
+        - paymentAmount
+        - paymentId
+        - payorId
+        - quoteId
+        - railsId
+        - sourceAccountId
+        - status
+        - submittedDateTime
       type: object
     CreatePayoutRequest:
       example: |-
@@ -5516,6 +6575,7 @@ components:
       example:
         taxId: taxId
         name: name
+        operatingName: operatingName
       nullable: true
       properties:
         name:
@@ -5526,6 +6586,11 @@ components:
           description: 'Company Tax Id (EIN) must be 9 numeric characters. Must match the regular expression ```[\d]{9}```.'
           nullable: true
           pattern: '^[\d]{9}$'
+          type: string
+        operatingName:
+          maxLength: 100
+          minLength: 1
+          nullable: true
           type: string
       required:
         - name
@@ -5574,6 +6639,44 @@ components:
           format: date-time
           type: string
       type: object
+    PayeeDelta:
+      example:
+        payeeCountry: US
+        displayName: Payee1
+        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        dbaName: Payee DBA Name
+        email: payee1@example.com
+        remoteId: payee_1
+      properties:
+        remoteId:
+          example: payee_1
+          maxLength: 100
+          minLength: 1
+          type: string
+        payeeId:
+          format: uuid
+          readOnly: true
+          type: string
+        displayName:
+          example: Payee1
+          type: string
+        dbaName:
+          example: Payee DBA Name
+          type: string
+        email:
+          example: payee1@example.com
+          format: email
+          nullable: true
+          type: string
+        payeeCountry:
+          example: US
+          type: string
+        onboardedStatus:
+          $ref: '#/components/schemas/OnboardedStatus_2'
+      required:
+        - payeeId
+        - remoteId
+      type: object
     CreatePayee:
       example:
         payorRefs:
@@ -5598,7 +6701,7 @@ components:
             lastName: lastName
             otherNames: otherNames
             title: title
-          nationalIdentification: 0
+          nationalIdentification: nationalIdentification
           dateOfBirth: 2000-01-23T00:00:00.000Z
         challenge:
           description: description
@@ -5606,6 +6709,7 @@ components:
         company:
           taxId: taxId
           name: name
+          operatingName: operatingName
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         email: email
         remoteId: remoteId
@@ -5709,6 +6813,7 @@ components:
           company:
             taxId: taxId
             name: name
+            operatingName: operatingName
           payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           email: email
           acceptTermsAndConditionsTimestamp: 2000-01-23T04:56:07.000Z
@@ -5733,6 +6838,7 @@ components:
             - ACCEPTED
             - PENDING
             - DECLINED
+          example: ACCEPTED
           type: string
         gracePeriodEndDate:
           format: date
@@ -5760,9 +6866,10 @@ components:
       type: object
     Notifications:
       example:
-        minimumBalance: 6
+        minimumBalance: 120000
       properties:
         minimumBalance:
+          example: 120000
           type: integer
       type: object
     AutoTopUpConfig:
@@ -5992,6 +7099,171 @@ components:
         - eventId
         - eventType
       type: object
+    PayoutSummaryAudit_2:
+      example:
+        dateTime: 2000-01-23T04:56:07.000Z
+        sourceAccountSummary:
+          - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            totalCost: 5.962133916683182
+          - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            totalCost: 5.962133916683182
+        totalReturnedPayments: 1
+        submittedDateTime: submittedDateTime
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        totalIncompletePayments: 6
+        fxSummaries:
+          - invertedRate: 2.3021358869347655
+            rate: 5.637376656633329
+            totalPaymentAmount: 9
+            quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            totalCost: 7
+            fundingStatus: FUNDED
+            creationDateTime: 2000-01-23T04:56:07.000Z
+            status: UNQUOTED
+          - invertedRate: 2.3021358869347655
+            rate: 5.637376656633329
+            totalPaymentAmount: 9
+            quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            totalCost: 7
+            fundingStatus: FUNDED
+            creationDateTime: 2000-01-23T04:56:07.000Z
+            status: UNQUOTED
+        payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        totalPayments: 0
+        instructedDateTime: instructedDateTime
+        payoutMemo: payoutMemo
+      properties:
+        payoutId:
+          format: uuid
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        status:
+          $ref: '#/components/schemas/PayoutStatus_2'
+        dateTime:
+          format: date-time
+          type: string
+        submittedDateTime:
+          type: string
+        instructedDateTime:
+          type: string
+        totalPayments:
+          type: integer
+        totalIncompletePayments:
+          type: integer
+        totalReturnedPayments:
+          type: integer
+        sourceAccountSummary:
+          items:
+            $ref: '#/components/schemas/SourceAccountSummary_2'
+          type: array
+        fxSummaries:
+          items:
+            $ref: '#/components/schemas/FxSummary_2'
+          type: array
+        payoutMemo:
+          type: string
+      required:
+        - payoutId
+        - status
+        - submittedDateTime
+      type: object
+    PaymentAuditCurrency_2:
+      description: ISO 3 character currency code
+      enum:
+        - USD
+        - GBP
+        - EUR
+      maxLength: 3
+      minLength: 3
+      type: string
+    PaymentEventResponse_2:
+      example:
+        principal: principal
+        eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        eventDateTime: 2000-01-23T04:56:07.000Z
+        routingNumber: routingNumber
+        accountName: accountName
+        iban: iban
+        sourceAmount: 1299
+        eventType: PAYOUT_SUBMITTED
+        accountNumber: accountNumber
+        paymentAmount: 1299
+      properties:
+        eventId:
+          description: The id of the event.
+          format: uuid
+          type: string
+        eventDateTime:
+          description: The date/time at which the event occurred.
+          format: date-time
+          type: string
+        eventType:
+          description: The type of the event.
+          enum:
+            - PAYOUT_SUBMITTED
+            - PAYOUT_COMPLETED
+            - PAYOUT_INSTRUCTED_V3
+            - BANK_PAYMENT_REQUESTED
+            - SOURCE_AMOUNT_CONFIRMED
+            - PAYMENT_SUBMITTED
+            - PAYMENT_SUBMITTED_ACCEPTED
+            - PAYMENT_SUBMITTED_REJECTED
+            - PAYMENT_CONFIRMED
+            - PAYMENT_AWAITING_FUNDS
+            - PAYMENT_FUNDED
+            - PAYMENT_UNFUNDED
+            - PAYMENT_FAILED
+            - ACH_SUBMITTED_TO_ODFI
+            - PAYMENT_ACCEPTED_BY_RAILS
+            - ACH_RETURN_RECEIVED
+            - RETURN_PAYMENT_FUNDING_REQUESTED
+            - PAYOUT_BATCH_EXECUTED
+            - PAYOUT_BATCH_QUOTE_EXPIRED
+            - PAYOUT_BATCH_FUNDED
+            - PAYOUT_BATCH_FUNDS_RETURN_REQUEST
+            - PAYOUT_BATCH_FUNDS_RETURNED
+            - PAYOUT_FUNDS_REQUEST
+            - PAYOUT_FUNDS_GRANTED
+            - PAYOUT_FUNDS_DENIED
+            - PAYOUT_BATCH_QUOTED
+            - PAYOUT_QUOTED
+            - ACH_PAYMENT_RETURN_CANCELLED
+            - RETURN_PAYMENT_CANCELLATION_REQUESTED
+            - PAYOUT_WITHDRAWN
+          type: string
+        sourceCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        sourceAmount:
+          description: The source amount exposed by the event.
+          example: 1299
+          format: int32
+          type: integer
+        paymentCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        paymentAmount:
+          description: The destination amount exposed by the event.
+          example: 1299
+          format: int32
+          type: integer
+        accountNumber:
+          description: The account number attached to the event.
+          type: string
+        routingNumber:
+          description: The routing number attached to the event.
+          type: string
+        iban:
+          type: string
+        accountName:
+          type: string
+        principal:
+          type: string
+      required:
+        - eventDateTime
+        - eventId
+        - eventType
+      type: object
     QuoteFxSummary:
       example:
         invertedRate: 5.637376656633329
@@ -6183,6 +7455,13 @@ components:
         maxPaymentAmount:
           type: integer
       type: object
+    OnboardedStatus_2:
+      enum:
+        - CREATED
+        - INVITED
+        - REGISTERED
+        - ONBOARDED
+      type: string
     CreatePayeeAddress:
       example:
         country: US
@@ -6547,16 +7826,15 @@ components:
           lastName: lastName
           otherNames: otherNames
           title: title
-        nationalIdentification: 0
+        nationalIdentification: nationalIdentification
         dateOfBirth: 2000-01-23T00:00:00.000Z
       properties:
         name:
           $ref: '#/components/schemas/Individual_name'
         nationalIdentification:
-          description: Must be 9 digits if provided
-          maxLength: 9
-          minLength: 9
-          type: integer
+          maxLength: 30
+          minLength: 6
+          type: string
         dateOfBirth:
           description: Must not be date in future. Example - 1970-05-20
           format: date
@@ -6659,6 +7937,89 @@ components:
         - totalCost
         - totalPaymentAmount
       type: object
+    PayoutStatus_2:
+      enum:
+        - ACCEPTED
+        - REJECTED
+        - SUBMITTED
+        - QUOTED
+        - INSTRUCTED
+        - COMPLETED
+        - INCOMPLETE
+        - CONFIRMED
+        - WITHDRAWN
+      type: string
+    SourceAccountSummary_2:
+      example:
+        sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        totalCost: 5.962133916683182
+      properties:
+        sourceAccountId:
+          format: uuid
+          type: string
+        totalCost:
+          format: int32
+          type: number
+        currency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+      required:
+        - sourceAccountId
+        - totalCost
+      type: object
+    FxSummary_2:
+      example:
+        invertedRate: 2.3021358869347655
+        rate: 5.637376656633329
+        totalPaymentAmount: 9
+        quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        totalCost: 7
+        fundingStatus: FUNDED
+        creationDateTime: 2000-01-23T04:56:07.000Z
+        status: UNQUOTED
+      properties:
+        quoteId:
+          format: uuid
+          type: string
+        creationDateTime:
+          format: date-time
+          type: string
+        rate:
+          format: double
+          type: number
+        invertedRate:
+          format: double
+          type: number
+        totalCost:
+          type: integer
+        totalPaymentAmount:
+          type: integer
+        sourceCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        paymentCurrency:
+          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+        status:
+          enum:
+            - UNQUOTED
+            - QUOTED
+            - EXPIRED
+            - EXECUTED
+          type: string
+        fundingStatus:
+          enum:
+            - FUNDED
+            - INSTRUCTED
+            - UNFUNDED
+          type: string
+      required:
+        - creationDateTime
+        - fundingStatus
+        - invertedRate
+        - quoteId
+        - rate
+        - status
+        - totalCost
+        - totalPaymentAmount
+      type: object
     PaymentChannelRule:
       example:
         displayName: displayName
@@ -6694,6 +8055,54 @@ components:
         - PAYOR_FUNDING_ENTRY_DETAIL_RECEIVED
         - FUNDING_DEALLOCATED
       type: string
+    PayorLinksResponse_links:
+      example:
+        toPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        linkId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        fromPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        linkType: PARENT_OF
+      properties:
+        linkId:
+          format: uuid
+          type: string
+        fromPayorId:
+          format: uuid
+          type: string
+        linkType:
+          enum:
+            - PARENT_OF
+          type: string
+        toPayorId:
+          format: uuid
+          type: string
+      required:
+        - fromPayorId
+        - linkId
+        - linkType
+        - toPayorId
+    PayorLinksResponse_payors:
+      example:
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        kycState: FAILED_KYC
+        primaryContactEmail: primaryContactEmail
+        payorName: payorName
+      properties:
+        payorId:
+          format: uuid
+          type: string
+        payorName:
+          type: string
+        primaryContactEmail:
+          type: string
+        kycState:
+          enum:
+            - FAILED_KYC
+            - PASSED_KYC
+            - REQUIRES_KYC
+          type: string
+      required:
+        - payorId
+        - payorName
     PayeeResponse_summary:
       example:
         totalOnboardedCount: 5
@@ -6739,6 +8148,199 @@ components:
           type: string
         href:
           type: string
+    PayeeDeltaResponse_page:
+      example:
+        numberOfElements: 2
+        totalPages: 1
+        pageSize: 25
+        page: 1
+        totalElements: 2
+      properties:
+        numberOfElements:
+          example: 2
+          type: integer
+        totalElements:
+          example: 2
+          type: integer
+        totalPages:
+          example: 1
+          type: integer
+        page:
+          example: 1
+          type: integer
+        pageSize:
+          example: 25
+          type: integer
+    PayeeDeltaResponse_links:
+      example:
+        rel: first
+        href: 'http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
+      properties:
+        rel:
+          example: first
+          type: string
+        href:
+          example: 'http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
+          type: string
+    ListSourceAccountResponse_page:
+      example:
+        numberOfElements: 1
+        totalPages: 2
+        pageSize: 25
+        page: 1
+        totalElements: 1
+      properties:
+        numberOfElements:
+          example: 1
+          type: integer
+        totalElements:
+          example: 1
+          type: integer
+        totalPages:
+          example: 2
+          type: integer
+        page:
+          example: 1
+          type: integer
+        pageSize:
+          example: 25
+          type: integer
+    ListSourceAccountResponse_links:
+      example:
+        rel: first
+        href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+      properties:
+        rel:
+          example: first
+          type: string
+        href:
+          example: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+          type: string
+    ListSourceAccountResponseV2_page:
+      example:
+        numberOfElements: 12
+        totalPages: 2
+        pageSize: 25
+        page: 1
+        totalElements: 33
+      properties:
+        numberOfElements:
+          example: 12
+          type: integer
+        totalElements:
+          example: 33
+          type: integer
+        totalPages:
+          example: 2
+          type: integer
+        page:
+          example: 1
+          type: integer
+        pageSize:
+          example: 25
+          type: integer
+    GetPaymentsForPayoutResponse_summary:
+      example:
+        incompletePayments: 5
+        confirmedPayments: 6
+        releasedPayments: 1
+        submittedDateTime: 2000-01-23T04:56:07.000Z
+        payoutStatus: ACCEPTED
+        totalPayments: 0
+        instructedDateTime: 2000-01-23T04:56:07.000Z
+        payoutMemo: payoutMemo
+        failedPayments: 5
+      properties:
+        payoutStatus:
+          description: The current status of the payout.
+          enum:
+            - ACCEPTED
+            - REJECTED
+            - SUBMITTED
+            - QUOTED
+            - INSTRUCTED
+            - COMPLETED
+            - INCOMPLETE
+            - CONFIRMED
+            - WITHDRAWN
+          type: string
+        submittedDateTime:
+          description: The date/time at which the payout was submitted.
+          format: date-time
+          type: string
+        instructedDateTime:
+          description: The date/time at which the payout was instructed.
+          format: date-time
+          type: string
+        payoutMemo:
+          description: The memo attached to the payout.
+          type: string
+        totalPayments:
+          description: The count of payments within the payout.
+          type: integer
+        confirmedPayments:
+          description: The count of payments within the payout which have been confirmed.
+          type: integer
+        releasedPayments:
+          description: The count of payments within the payout which have been released.
+          type: integer
+        incompletePayments:
+          description: The count of payments within the payout which are incomplete.
+          type: integer
+        failedPayments:
+          description: The count of payments within the payout which have failed or been returned.
+          type: integer
+    GetPaymentsForPayoutResponse_2_summary:
+      example:
+        incompletePayments: 5
+        confirmedPayments: 6
+        releasedPayments: 1
+        submittedDateTime: 2000-01-23T04:56:07.000Z
+        payoutStatus: ACCEPTED
+        totalPayments: 0
+        returnedPayments: 5
+        instructedDateTime: 2000-01-23T04:56:07.000Z
+        payoutMemo: payoutMemo
+      properties:
+        payoutStatus:
+          description: The current status of the payout.
+          enum:
+            - ACCEPTED
+            - REJECTED
+            - SUBMITTED
+            - QUOTED
+            - INSTRUCTED
+            - COMPLETED
+            - INCOMPLETE
+            - CONFIRMED
+            - WITHDRAWN
+          type: string
+        submittedDateTime:
+          description: The date/time at which the payout was submitted.
+          format: date-time
+          type: string
+        instructedDateTime:
+          description: The date/time at which the payout was instructed.
+          format: date-time
+          type: string
+        payoutMemo:
+          description: The memo attached to the payout.
+          type: string
+        totalPayments:
+          description: The count of payments within the payout.
+          type: integer
+        confirmedPayments:
+          description: The count of payments within the payout which have been confirmed.
+          type: integer
+        releasedPayments:
+          description: The count of payments within the payout which have been released.
+          type: integer
+        incompletePayments:
+          description: The count of payments within the payout which are incomplete.
+          type: integer
+        returnedPayments:
+          description: The count of payments within the payout which have been returned.
+          type: integer
     Individual_name:
       example:
         firstName: firstName
