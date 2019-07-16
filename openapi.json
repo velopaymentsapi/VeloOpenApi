@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.14.86",
+    "version": "2.14.87",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -5063,8 +5063,8 @@
                   "otherNames": "otherNames",
                   "title": "title"
                 },
-                "nationalIdentification": "",
-                "dateOfBirth": ""
+                "nationalIdentification": "nationalIdentification",
+                "dateOfBirth": "dateOfBirth"
               },
               "displayName": "displayName",
               "created": "2000-01-23T04:56:07.000Z",
@@ -5134,8 +5134,8 @@
                   "otherNames": "otherNames",
                   "title": "title"
                 },
-                "nationalIdentification": "",
-                "dateOfBirth": ""
+                "nationalIdentification": "nationalIdentification",
+                "dateOfBirth": "dateOfBirth"
               },
               "displayName": "displayName",
               "created": "2000-01-23T04:56:07.000Z",
@@ -5230,8 +5230,8 @@
               "otherNames": "otherNames",
               "title": "title"
             },
-            "nationalIdentification": "",
-            "dateOfBirth": ""
+            "nationalIdentification": "nationalIdentification",
+            "dateOfBirth": "dateOfBirth"
           },
           "displayName": "displayName",
           "created": "2000-01-23T04:56:07.000Z",
@@ -6031,8 +6031,8 @@
                     "otherNames": "otherNames",
                     "title": "title"
                   },
-                  "nationalIdentification": "",
-                  "dateOfBirth": ""
+                  "nationalIdentification": "nationalIdentification",
+                  "dateOfBirth": "dateOfBirth"
                 },
                 "displayName": "displayName",
                 "created": "2000-01-23T04:56:07.000Z",
@@ -6105,8 +6105,8 @@
                     "otherNames": "otherNames",
                     "title": "title"
                   },
-                  "nationalIdentification": "",
-                  "dateOfBirth": ""
+                  "nationalIdentification": "nationalIdentification",
+                  "dateOfBirth": "dateOfBirth"
                 },
                 "displayName": "displayName",
                 "created": "2000-01-23T04:56:07.000Z",
@@ -6161,11 +6161,11 @@
             "type": "string"
           },
           "failureCount": {
-            "format": "int32",
+            "format": "int64",
             "type": "integer"
           },
           "pendingCount": {
-            "format": "int32",
+            "format": "int64",
             "type": "integer"
           },
           "failures": {
@@ -6375,8 +6375,8 @@
           "balance": {
             "description": "Decimal implied",
             "example": 1203489,
-            "format": "int32",
-            "type": "number"
+            "format": "int64",
+            "type": "integer"
           },
           "currency": {
             "enum": [
@@ -6437,6 +6437,7 @@
         "properties": {
           "amount": {
             "description": "Amount to fund, decimal implied",
+            "format": "int64",
             "maximum": 9999999999,
             "minimum": 1,
             "type": "integer"
@@ -6454,6 +6455,7 @@
         "properties": {
           "minimumBalance": {
             "description": "Amount to set as minimum balance in minor units",
+            "format": "int64",
             "maximum": 9999999999,
             "minimum": 0,
             "type": "integer"
@@ -6468,6 +6470,7 @@
         "properties": {
           "amount": {
             "description": "Amount to fund, decimal implied",
+            "format": "int64",
             "maximum": 9999999999,
             "minimum": 1,
             "type": "integer"
@@ -6599,8 +6602,8 @@
           "balance": {
             "description": "Decimal implied",
             "example": 1203489,
-            "format": "int32",
-            "type": "number"
+            "format": "int64",
+            "type": "integer"
           },
           "currency": {
             "enum": [
@@ -6713,11 +6716,11 @@
               "sourceAccountSummary": [
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 0.8008281904610115
+                  "totalCost": 0
                 },
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 0.8008281904610115
+                  "totalCost": 0
                 }
               ],
               "submittedDateTime": "submittedDateTime",
@@ -6756,11 +6759,11 @@
               "sourceAccountSummary": [
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 0.8008281904610115
+                  "totalCost": 0
                 },
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 0.8008281904610115
+                  "totalCost": 0
                 }
               ],
               "submittedDateTime": "submittedDateTime",
@@ -6858,7 +6861,7 @@
               "fundingStatus": "FUNDED",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 6.027456183070403,
+              "rate": 6.0274563,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
@@ -6896,7 +6899,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 1.4658129805029452,
+              "invertedRate": 1.4658129,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "accountNumber": "123123232323",
@@ -6916,7 +6919,7 @@
               "fundingStatus": "FUNDED",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 6.027456183070403,
+              "rate": 6.0274563,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
@@ -6954,7 +6957,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 1.4658129805029452,
+              "invertedRate": 1.4658129,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "accountNumber": "123123232323",
@@ -7026,7 +7029,7 @@
               "fundingStatus": "FUNDED",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 6.027456183070403,
+              "rate": 6.0274563,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
@@ -7064,7 +7067,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 1.4658129805029452,
+              "invertedRate": 1.4658129,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "accountNumber": "123123232323",
@@ -7084,7 +7087,7 @@
               "fundingStatus": "FUNDED",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 6.027456183070403,
+              "rate": 6.0274563,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
@@ -7122,7 +7125,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 1.4658129805029452,
+              "invertedRate": 1.4658129,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "accountNumber": "123123232323",
@@ -7167,7 +7170,7 @@
           "fundingStatus": "FUNDED",
           "paymentChannelName": "My Payment Channel",
           "filenameReference": "file ref",
-          "rate": 6.027456183070403,
+          "rate": 6.0274563,
           "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "countryCode": "US",
           "returnReason": "Some Reason Value",
@@ -7205,7 +7208,7 @@
           "payorName": "payorName",
           "sourceAccountName": "My Account",
           "paymentChannelId": "123asdf",
-          "invertedRate": 1.4658129805029452,
+          "invertedRate": 1.4658129,
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "individualIdentificationNumber": "1231231adf",
           "accountNumber": "123123232323",
@@ -7263,11 +7266,11 @@
             "$ref": "#/components/schemas/PaymentAuditCurrency"
           },
           "rate": {
-            "format": "decimal",
+            "format": "float",
             "type": "number"
           },
           "invertedRate": {
-            "format": "decimal",
+            "format": "float",
             "type": "number"
           },
           "submittedDateTime": {
@@ -7431,11 +7434,11 @@
               "sourceAccountSummary": [
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 5.962133916683182
+                  "totalCost": 5
                 },
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 5.962133916683182
+                  "totalCost": 5
                 }
               ],
               "totalReturnedPayments": 1,
@@ -7474,11 +7477,11 @@
               "sourceAccountSummary": [
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 5.962133916683182
+                  "totalCost": 5
                 },
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 5.962133916683182
+                  "totalCost": 5
                 }
               ],
               "totalReturnedPayments": 1,
@@ -8548,41 +8551,22 @@
             "otherNames": "otherNames",
             "title": "title"
           },
-          "nationalIdentification": "",
-          "dateOfBirth": ""
+          "nationalIdentification": "nationalIdentification",
+          "dateOfBirth": "dateOfBirth"
         },
         "properties": {
           "name": {
             "$ref": "#/components/schemas/Individual_name"
           },
           "nationalIdentification": {
-            "oneOf": [
-              {
-                "pattern": "^[\\d]{9}$",
-                "type": "string"
-              },
-              {
-                "description": "If not authorized to view, value will be masked. Example: XXXXX1234",
-                "pattern": "^XXXXX[\\d]{4}$",
-                "readOnly": true,
-                "type": "string"
-              }
-            ]
+            "description": "If not authorized to view, value will be masked. Example: XXXXX1234",
+            "readOnly": true,
+            "type": "string"
           },
           "dateOfBirth": {
-            "oneOf": [
-              {
-                "description": "example - 1970-05-20",
-                "format": "date",
-                "type": "string"
-              },
-              {
-                "description": "If not authorized to view, value will be masked. Example: - XXXX-XX-XX",
-                "pattern": "^XXXX-XX-XX$",
-                "readOnly": true,
-                "type": "string"
-              }
-            ]
+            "description": "If not authorized to view, value will be masked. Example: - XXXX-XX-XX",
+            "readOnly": true,
+            "type": "string"
           }
         },
         "required": [
@@ -8801,8 +8785,8 @@
                 "otherNames": "otherNames",
                 "title": "title"
               },
-              "nationalIdentification": "",
-              "dateOfBirth": ""
+              "nationalIdentification": "nationalIdentification",
+              "dateOfBirth": "dateOfBirth"
             },
             "displayName": "displayName",
             "created": "2000-01-23T04:56:07.000Z",
@@ -8934,16 +8918,16 @@
           "minBalance": {
             "description": "When the payor balance falls below this level then auto top-up will be triggered. Note - This is in minor units.",
             "example": 10000,
-            "format": "int32",
+            "format": "int64",
             "nullable": true,
-            "type": "number"
+            "type": "integer"
           },
           "targetBalance": {
             "description": "When the payor balance falls below the min balance then auto top-up will request funds bring the balance to this level. Note - this is in minor units.",
             "example": 300000,
-            "format": "int32",
+            "format": "int64",
             "nullable": true,
-            "type": "number"
+            "type": "integer"
           }
         },
         "required": [
@@ -9011,11 +8995,11 @@
           "sourceAccountSummary": [
             {
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalCost": 0.8008281904610115
+              "totalCost": 0
             },
             {
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalCost": 0.8008281904610115
+              "totalCost": 0
             }
           ],
           "submittedDateTime": "submittedDateTime",
@@ -9183,7 +9167,7 @@
           "sourceAmount": {
             "description": "The source amount exposed by the event.",
             "example": 1299,
-            "format": "int32",
+            "format": "int64",
             "type": "integer"
           },
           "paymentCurrency": {
@@ -9192,7 +9176,7 @@
           "paymentAmount": {
             "description": "The destination amount exposed by the event.",
             "example": 1299,
-            "format": "int32",
+            "format": "int64",
             "type": "integer"
           },
           "accountNumber": {
@@ -9231,11 +9215,11 @@
           "sourceAccountSummary": [
             {
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalCost": 5.962133916683182
+              "totalCost": 5
             },
             {
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalCost": 5.962133916683182
+              "totalCost": 5
             }
           ],
           "totalReturnedPayments": 1,
@@ -9400,7 +9384,7 @@
           "sourceAmount": {
             "description": "The source amount exposed by the event.",
             "example": 1299,
-            "format": "int32",
+            "format": "int64",
             "type": "integer"
           },
           "paymentCurrency": {
@@ -9409,7 +9393,7 @@
           "paymentAmount": {
             "description": "The destination amount exposed by the event.",
             "example": 1299,
-            "format": "int32",
+            "format": "int64",
             "type": "integer"
           },
           "accountNumber": {
@@ -9454,12 +9438,12 @@
         "properties": {
           "rate": {
             "example": 1.12,
-            "format": "decimal",
+            "format": "float",
             "type": "number"
           },
           "invertedRate": {
             "example": 1.12,
-            "format": "decimal",
+            "format": "float",
             "type": "number"
           },
           "creationTime": {
@@ -10165,7 +10149,7 @@
       "SourceAccountSummary": {
         "example": {
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "totalCost": 0.8008281904610115
+          "totalCost": 0
         },
         "properties": {
           "sourceAccountId": {
@@ -10173,8 +10157,8 @@
             "type": "string"
           },
           "totalCost": {
-            "format": "int32",
-            "type": "number"
+            "format": "int64",
+            "type": "integer"
           },
           "currency": {
             "$ref": "#/components/schemas/PaymentAuditCurrency"
@@ -10208,12 +10192,12 @@
           },
           "rate": {
             "example": 1.12,
-            "format": "decimal",
+            "format": "float",
             "type": "number"
           },
           "invertedRate": {
             "example": 1.12,
-            "format": "decimal",
+            "format": "float",
             "type": "number"
           },
           "totalCost": {
@@ -10277,7 +10261,7 @@
       "SourceAccountSummary_2": {
         "example": {
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "totalCost": 5.962133916683182
+          "totalCost": 5
         },
         "properties": {
           "sourceAccountId": {
@@ -10285,8 +10269,8 @@
             "type": "string"
           },
           "totalCost": {
-            "format": "int32",
-            "type": "number"
+            "format": "int64",
+            "type": "integer"
           },
           "currency": {
             "$ref": "#/components/schemas/PaymentAuditCurrency_2"
@@ -11021,23 +11005,23 @@
       "PagedResponse_page": {
         "properties": {
           "numberOfElements": {
-            "format": "int32",
+            "format": "int64",
             "type": "integer"
           },
           "totalElements": {
-            "format": "int32",
+            "format": "int64",
             "type": "integer"
           },
           "totalPages": {
-            "format": "int32",
+            "format": "int64",
             "type": "integer"
           },
           "page": {
-            "format": "int32",
+            "format": "int64",
             "type": "integer"
           },
           "pageSize": {
-            "format": "int32",
+            "format": "int64",
             "type": "integer"
           }
         }
