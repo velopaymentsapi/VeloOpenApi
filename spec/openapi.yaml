@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.0.2
 info:
   description: |
     ## Terms and Definitions
@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.14.85
+  version: 2.14.86
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
@@ -5175,10 +5175,7 @@ components:
     GetFundingsResponse:
       allOf:
       - $ref: '#/components/schemas/PagedResponse'
-      - properties:
-          content:
-            $ref: '#/components/schemas/FundingAudit'
-        type: object
+      - $ref: '#/components/schemas/GetFundingsResponse_allOf'
       type: object
     GetPayoutsResponse:
       description: List Payouts Response
@@ -8302,6 +8299,10 @@ components:
         pageSize:
           example: 25
           type: integer
+    GetFundingsResponse_allOf:
+      properties:
+        content:
+          $ref: '#/components/schemas/FundingAudit'
     GetPayoutsResponse_summary:
       example:
         totalOnboardedCount: 123
