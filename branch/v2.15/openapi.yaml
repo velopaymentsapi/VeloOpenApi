@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.15.12
+  version: 2.15.13
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -2533,7 +2533,7 @@ paths:
           schema:
             format: int32
             type: integer
-        - description: The source currency filter. Filters based on an exact match on the currency.
+        - description: The payment currency filter. Filters based on an exact match on the currency.
           in: query
           name: paymentCurrency
           required: false
@@ -3050,7 +3050,7 @@ paths:
           schema:
             format: int32
             type: integer
-        - description: The source currency filter. Filters based on an exact match on the currency.
+        - description: The payment currency filter. Filters based on an exact match on the currency.
           in: query
           name: paymentCurrency
           required: false
