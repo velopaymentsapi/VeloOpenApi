@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.14.87",
+    "version": "2.14.90",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -54,6 +54,66 @@
     }
   ],
   "paths": {
+    "/v1/authenticate/": {
+      "post": {
+        "description": "Use this endpoint to obtain an access token for calling Velo Payments APIs.",
+        "operationId": "veloAuth",
+        "parameters": [
+          {
+            "description": "String value of Basic and a Base64 endcoded string comprising the API key (e.g. 44a9537d-d55d-4b47-8082-14061c2bcdd8) and API secret\n (e.g. c396b26b-137a-44fd-87f5-34631f8fd529) with a colon between them.\n E.g. Basic 44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529\n",
+            "in": "header",
+            "name": "Authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "OAuth grant type. Should use 'client_credentials'",
+            "in": "query",
+            "name": "grant_type",
+            "schema": {
+              "default": "client_credentials",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            },
+            "description": "Valid Authenication response",
+            "headers": {
+              "Cache-Control": {
+                "description": "Ensure clients do not cache request",
+                "required": true,
+                "schema": {
+                  "default": "no-store",
+                  "type": "string"
+                }
+              },
+              "Pragma": {
+                "description": "Ensure clients do not cache request",
+                "required": true,
+                "schema": {
+                  "default": "no-cache",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "summary": "Authentication endpoint",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/v1/payors/{payorId}": {
       "get": {
         "deprecated": true,
@@ -76,7 +136,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Payor"
+                  "$ref": "#/components/schemas/PayorV1"
                 }
               }
             },
@@ -172,7 +232,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Payor_2"
+                  "$ref": "#/components/schemas/PayorV2"
                 }
               }
             },
@@ -2530,7 +2590,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FundingRequest"
+                "$ref": "#/components/schemas/FundingRequestV1"
               }
             }
           },
@@ -2630,7 +2690,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/FundingRequest_2"
+                "$ref": "#/components/schemas/FundingRequestV2"
               }
             }
           },
@@ -2976,7 +3036,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetPayoutsResponse"
+                  "$ref": "#/components/schemas/GetPayoutsResponseV3"
                 }
               }
             },
@@ -3154,7 +3214,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetPaymentsForPayoutResponse"
+                  "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV3"
                 }
               }
             },
@@ -3435,7 +3495,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaymentResponse"
+                  "$ref": "#/components/schemas/PaymentResponseV3"
                 }
               }
             },
@@ -3670,7 +3730,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetPayoutsResponse_2"
+                  "$ref": "#/components/schemas/GetPayoutsResponseV4"
                 }
               }
             },
@@ -3847,7 +3907,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_2"
+                  "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV4"
                 }
               }
             },
@@ -4126,7 +4186,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaymentResponse_2"
+                  "$ref": "#/components/schemas/PaymentResponseV4"
                 }
               }
             },
@@ -4461,7 +4521,43 @@
   },
   "components": {
     "schemas": {
-      "Payor": {
+      "AuthResponse": {
+        "example": {
+          "access_token": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "refresh_token": "IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk",
+          "scope": "example_scope",
+          "token_type": "bearer",
+          "expires_in": 1799
+        },
+        "properties": {
+          "access_token": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "token_type": {
+            "example": "bearer",
+            "type": "string"
+          },
+          "expires_in": {
+            "example": 1799,
+            "type": "number"
+          },
+          "refresh_token": {
+            "example": "IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk",
+            "type": "string"
+          },
+          "scope": {
+            "example": "example_scope",
+            "type": "string"
+          }
+        },
+        "required": [
+          "access_token",
+          "token_type"
+        ],
+        "type": "object"
+      },
+      "PayorV1": {
         "example": {
           "primaryContactName": "Joe Buck",
           "payeeGracePeriodProcessingEnabled": true,
@@ -4605,7 +4701,7 @@
         ],
         "type": "object"
       },
-      "Payor_2": {
+      "PayorV2": {
         "example": {
           "primaryContactName": "Joe Buck",
           "payeeGracePeriodProcessingEnabled": true,
@@ -6430,7 +6526,7 @@
         },
         "type": "object"
       },
-      "FundingRequest": {
+      "FundingRequestV1": {
         "example": {
           "amount": 800828191
         },
@@ -6466,7 +6562,10 @@
         ],
         "type": "object"
       },
-      "FundingRequest_2": {
+      "FundingRequestV2": {
+        "example": {
+          "amount": 800828191
+        },
         "properties": {
           "amount": {
             "description": "Amount to fund, decimal implied",
@@ -6683,7 +6782,7 @@
         ],
         "type": "object"
       },
-      "GetPayoutsResponse": {
+      "GetPayoutsResponseV3": {
         "description": "List Payouts Response",
         "example": {
           "summary": {
@@ -6801,27 +6900,27 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/GetPayoutsResponse_summary"
+            "$ref": "#/components/schemas/GetPayoutsResponseV3_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/GetPayoutsResponse_page"
+            "$ref": "#/components/schemas/GetPayoutsResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/GetPayoutsResponse_links"
+              "$ref": "#/components/schemas/GetPayoutsResponseV3_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PayoutSummaryAudit"
+              "$ref": "#/components/schemas/PayoutSummaryAuditV3"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "GetPaymentsForPayoutResponse": {
+      "GetPaymentsForPayoutResponseV3": {
         "description": "List Payments for payout",
         "example": {
           "summary": {
@@ -6973,20 +7072,20 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_summary"
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV3_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_page"
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/GetPayoutsResponse_links"
+              "$ref": "#/components/schemas/GetPayoutsResponseV3_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PaymentResponse"
+              "$ref": "#/components/schemas/PaymentResponseV3"
             },
             "type": "array"
           }
@@ -7148,20 +7247,20 @@
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/GetPayoutsResponse_links"
+              "$ref": "#/components/schemas/GetPayoutsResponseV3_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PaymentResponse"
+              "$ref": "#/components/schemas/PaymentResponseV3"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "PaymentResponse": {
+      "PaymentResponseV3": {
         "example": {
           "traceNumber": "abodu123",
           "accountName": "My Account Name",
@@ -7257,13 +7356,13 @@
             "type": "integer"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
           },
           "paymentAmount": {
             "type": "integer"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
           },
           "rate": {
             "format": "float",
@@ -7354,7 +7453,7 @@
           },
           "events": {
             "items": {
-              "$ref": "#/components/schemas/PaymentEventResponse"
+              "$ref": "#/components/schemas/PaymentEventResponseV3"
             },
             "type": "array"
           },
@@ -7401,7 +7500,7 @@
         ],
         "type": "object"
       },
-      "GetPayoutsResponse_2": {
+      "GetPayoutsResponseV4": {
         "description": "List Payouts Response",
         "example": {
           "summary": {
@@ -7532,14 +7631,14 @@
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PayoutSummaryAudit_2"
+              "$ref": "#/components/schemas/PayoutSummaryAuditV4"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "GetPaymentsForPayoutResponse_2": {
+      "GetPaymentsForPayoutResponseV4": {
         "description": "List Payments for payout",
         "example": {
           "summary": {
@@ -7691,7 +7790,7 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_2_summary"
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV4_summary"
           },
           "page": {
             "$ref": "#/components/schemas/PayeeResponse_page"
@@ -7704,14 +7803,14 @@
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PaymentResponse_2"
+              "$ref": "#/components/schemas/PaymentResponseV4"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "PaymentResponse_2": {
+      "PaymentResponseV4": {
         "example": {
           "traceNumber": "traceNumber",
           "accountName": "accountName",
@@ -7804,13 +7903,13 @@
             "type": "integer"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
           },
           "paymentAmount": {
             "type": "integer"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
           },
           "rate": {
             "format": "double",
@@ -7888,7 +7987,7 @@
           },
           "events": {
             "items": {
-              "$ref": "#/components/schemas/PaymentEventResponse_2"
+              "$ref": "#/components/schemas/PaymentEventResponseV4"
             },
             "type": "array"
           },
@@ -8631,7 +8730,7 @@
             "type": "string"
           },
           "onboardedStatus": {
-            "$ref": "#/components/schemas/OnboardedStatus_2"
+            "$ref": "#/components/schemas/OnboardedStatus"
           }
         },
         "required": [
@@ -8989,7 +9088,7 @@
         },
         "type": "object"
       },
-      "PayoutSummaryAudit": {
+      "PayoutSummaryAuditV3": {
         "example": {
           "dateTime": "2000-01-23T04:56:07.000Z",
           "sourceAccountSummary": [
@@ -9043,7 +9142,7 @@
             "type": "string"
           },
           "status": {
-            "$ref": "#/components/schemas/PayoutStatus"
+            "$ref": "#/components/schemas/PayoutStatusV3"
           },
           "dateTime": {
             "format": "date-time",
@@ -9069,13 +9168,13 @@
           },
           "sourceAccountSummary": {
             "items": {
-              "$ref": "#/components/schemas/SourceAccountSummary"
+              "$ref": "#/components/schemas/SourceAccountSummaryV3"
             },
             "type": "array"
           },
           "fxSummaries": {
             "items": {
-              "$ref": "#/components/schemas/FxSummary"
+              "$ref": "#/components/schemas/FxSummaryV3"
             },
             "type": "array"
           },
@@ -9090,7 +9189,7 @@
         ],
         "type": "object"
       },
-      "PaymentAuditCurrency": {
+      "PaymentAuditCurrencyV3": {
         "description": "ISO 3 character currency code",
         "enum": [
           "USD",
@@ -9101,7 +9200,7 @@
         "minLength": 3,
         "type": "string"
       },
-      "PaymentEventResponse": {
+      "PaymentEventResponseV3": {
         "example": {
           "principal": "Prinicple example",
           "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -9162,7 +9261,7 @@
             "type": "string"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
           },
           "sourceAmount": {
             "description": "The source amount exposed by the event.",
@@ -9171,7 +9270,7 @@
             "type": "integer"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
           },
           "paymentAmount": {
             "description": "The destination amount exposed by the event.",
@@ -9209,7 +9308,7 @@
         ],
         "type": "object"
       },
-      "PayoutSummaryAudit_2": {
+      "PayoutSummaryAuditV4": {
         "example": {
           "dateTime": "2000-01-23T04:56:07.000Z",
           "sourceAccountSummary": [
@@ -9263,7 +9362,7 @@
             "type": "string"
           },
           "status": {
-            "$ref": "#/components/schemas/PayoutStatus_2"
+            "$ref": "#/components/schemas/PayoutStatusV4"
           },
           "dateTime": {
             "format": "date-time",
@@ -9286,13 +9385,13 @@
           },
           "sourceAccountSummary": {
             "items": {
-              "$ref": "#/components/schemas/SourceAccountSummary_2"
+              "$ref": "#/components/schemas/SourceAccountSummaryV4"
             },
             "type": "array"
           },
           "fxSummaries": {
             "items": {
-              "$ref": "#/components/schemas/FxSummary_2"
+              "$ref": "#/components/schemas/FxSummaryV4"
             },
             "type": "array"
           },
@@ -9307,7 +9406,7 @@
         ],
         "type": "object"
       },
-      "PaymentAuditCurrency_2": {
+      "PaymentAuditCurrencyV4": {
         "description": "ISO 3 character currency code",
         "enum": [
           "USD",
@@ -9318,7 +9417,7 @@
         "minLength": 3,
         "type": "string"
       },
-      "PaymentEventResponse_2": {
+      "PaymentEventResponseV4": {
         "example": {
           "principal": "principal",
           "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -9379,7 +9478,7 @@
             "type": "string"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
           },
           "sourceAmount": {
             "description": "The source amount exposed by the event.",
@@ -9388,7 +9487,7 @@
             "type": "integer"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
           },
           "paymentAmount": {
             "description": "The destination amount exposed by the event.",
@@ -9692,15 +9791,6 @@
           }
         },
         "type": "object"
-      },
-      "OnboardedStatus_2": {
-        "enum": [
-          "CREATED",
-          "INVITED",
-          "REGISTERED",
-          "ONBOARDED"
-        ],
-        "type": "string"
       },
       "CreatePayeeAddress": {
         "example": {
@@ -10132,7 +10222,7 @@
         },
         "type": "object"
       },
-      "PayoutStatus": {
+      "PayoutStatusV3": {
         "enum": [
           "ACCEPTED",
           "REJECTED",
@@ -10146,7 +10236,7 @@
         ],
         "type": "string"
       },
-      "SourceAccountSummary": {
+      "SourceAccountSummaryV3": {
         "example": {
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalCost": 0
@@ -10161,7 +10251,7 @@
             "type": "integer"
           },
           "currency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
           }
         },
         "required": [
@@ -10170,7 +10260,7 @@
         ],
         "type": "object"
       },
-      "FxSummary": {
+      "FxSummaryV3": {
         "example": {
           "invertedRate": 1.12,
           "rate": 1.12,
@@ -10209,10 +10299,10 @@
             "type": "integer"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
           },
           "status": {
             "enum": [
@@ -10244,7 +10334,7 @@
         ],
         "type": "object"
       },
-      "PayoutStatus_2": {
+      "PayoutStatusV4": {
         "enum": [
           "ACCEPTED",
           "REJECTED",
@@ -10258,7 +10348,7 @@
         ],
         "type": "string"
       },
-      "SourceAccountSummary_2": {
+      "SourceAccountSummaryV4": {
         "example": {
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalCost": 5
@@ -10273,7 +10363,7 @@
             "type": "integer"
           },
           "currency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
           }
         },
         "required": [
@@ -10282,7 +10372,7 @@
         ],
         "type": "object"
       },
-      "FxSummary_2": {
+      "FxSummaryV4": {
         "example": {
           "invertedRate": 2.3021358869347655,
           "rate": 5.637376656633329,
@@ -10317,10 +10407,10 @@
             "type": "integer"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
+            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
           },
           "status": {
             "enum": [
@@ -10663,7 +10753,7 @@
           }
         }
       },
-      "GetPayoutsResponse_summary": {
+      "GetPayoutsResponseV3_summary": {
         "example": {
           "totalOnboardedCount": 123,
           "totalRegisteredCount": 123,
@@ -10694,7 +10784,7 @@
           }
         }
       },
-      "GetPayoutsResponse_page": {
+      "GetPayoutsResponseV3_page": {
         "example": {
           "numberOfElements": 12,
           "totalPages": 123,
@@ -10725,7 +10815,7 @@
           }
         }
       },
-      "GetPayoutsResponse_links": {
+      "GetPayoutsResponseV3_links": {
         "example": {
           "rel": "first",
           "href": "https://example.com"
@@ -10741,7 +10831,7 @@
           }
         }
       },
-      "GetPaymentsForPayoutResponse_summary": {
+      "GetPaymentsForPayoutResponseV3_summary": {
         "example": {
           "incompletePayments": 123,
           "confirmedPayments": 123,
@@ -10811,7 +10901,7 @@
           }
         }
       },
-      "GetPaymentsForPayoutResponse_page": {
+      "GetPaymentsForPayoutResponseV3_page": {
         "example": {
           "numberOfElements": 12,
           "totalPages": 10,
@@ -10904,7 +10994,7 @@
           }
         }
       },
-      "GetPaymentsForPayoutResponse_2_summary": {
+      "GetPaymentsForPayoutResponseV4_summary": {
         "example": {
           "incompletePayments": 5,
           "confirmedPayments": 6,
@@ -11084,7 +11174,8 @@
       "name": "API Utilities",
       "tags": [
         "Currencies",
-        "Countries"
+        "Countries",
+        "Auth"
       ]
     },
     {
