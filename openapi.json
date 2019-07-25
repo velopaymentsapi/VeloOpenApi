@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.14.90",
+    "version": "2.14.91",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -16,6 +16,10 @@
     {
       "description": "Velo Payments Sandbox for testing",
       "url": "https://api.sandbox.velopayments.com/"
+    },
+    {
+      "description": "Velo Payments Production URL",
+      "url": "https://api.payouts.velopayments.com"
     }
   ],
   "security": [
@@ -6815,16 +6819,13 @@
               "sourceAccountSummary": [
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 0
+                  "totalCost": 3434
                 },
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 0
+                  "totalCost": 3434
                 }
               ],
-              "submittedDateTime": "submittedDateTime",
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalIncompletePayments": 123,
               "fxSummaries": [
                 {
                   "invertedRate": 1.12,
@@ -6849,8 +6850,12 @@
               ],
               "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalPayments": 123,
-              "instructedDateTime": "instructedDateTime",
               "totalFailedPayments": 123,
+              "submittedDateTime": "submittedDateTime",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalIncompletePayments": 123,
+              "withdrawnDateTime": "withdrawnDateTime",
+              "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo"
             },
             {
@@ -6858,16 +6863,13 @@
               "sourceAccountSummary": [
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 0
+                  "totalCost": 3434
                 },
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 0
+                  "totalCost": 3434
                 }
               ],
-              "submittedDateTime": "submittedDateTime",
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalIncompletePayments": 123,
               "fxSummaries": [
                 {
                   "invertedRate": 1.12,
@@ -6892,8 +6894,12 @@
               ],
               "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalPayments": 123,
-              "instructedDateTime": "instructedDateTime",
               "totalFailedPayments": 123,
+              "submittedDateTime": "submittedDateTime",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalIncompletePayments": 123,
+              "withdrawnDateTime": "withdrawnDateTime",
+              "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo"
             }
           ]
@@ -7533,34 +7539,31 @@
               "sourceAccountSummary": [
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 5
+                  "totalCost": 3344
                 },
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 5
+                  "totalCost": 3344
                 }
               ],
               "totalReturnedPayments": 1,
-              "submittedDateTime": "submittedDateTime",
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalIncompletePayments": 6,
               "fxSummaries": [
                 {
-                  "invertedRate": 2.3021358869347655,
-                  "rate": 5.637376656633329,
-                  "totalPaymentAmount": 9,
+                  "invertedRate": 123.23,
+                  "rate": 123.23,
+                  "totalPaymentAmount": 34235,
                   "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 7,
+                  "totalCost": 5,
                   "fundingStatus": "FUNDED",
                   "creationDateTime": "2000-01-23T04:56:07.000Z",
                   "status": "UNQUOTED"
                 },
                 {
-                  "invertedRate": 2.3021358869347655,
-                  "rate": 5.637376656633329,
-                  "totalPaymentAmount": 9,
+                  "invertedRate": 123.23,
+                  "rate": 123.23,
+                  "totalPaymentAmount": 34235,
                   "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 7,
+                  "totalCost": 5,
                   "fundingStatus": "FUNDED",
                   "creationDateTime": "2000-01-23T04:56:07.000Z",
                   "status": "UNQUOTED"
@@ -7568,6 +7571,10 @@
               ],
               "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalPayments": 0,
+              "submittedDateTime": "submittedDateTime",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalIncompletePayments": 6,
+              "withdrawnDateTime": "withdrawnDateTime",
               "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo"
             },
@@ -7576,34 +7583,31 @@
               "sourceAccountSummary": [
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 5
+                  "totalCost": 3344
                 },
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 5
+                  "totalCost": 3344
                 }
               ],
               "totalReturnedPayments": 1,
-              "submittedDateTime": "submittedDateTime",
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalIncompletePayments": 6,
               "fxSummaries": [
                 {
-                  "invertedRate": 2.3021358869347655,
-                  "rate": 5.637376656633329,
-                  "totalPaymentAmount": 9,
+                  "invertedRate": 123.23,
+                  "rate": 123.23,
+                  "totalPaymentAmount": 34235,
                   "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 7,
+                  "totalCost": 5,
                   "fundingStatus": "FUNDED",
                   "creationDateTime": "2000-01-23T04:56:07.000Z",
                   "status": "UNQUOTED"
                 },
                 {
-                  "invertedRate": 2.3021358869347655,
-                  "rate": 5.637376656633329,
-                  "totalPaymentAmount": 9,
+                  "invertedRate": 123.23,
+                  "rate": 123.23,
+                  "totalPaymentAmount": 34235,
                   "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "totalCost": 7,
+                  "totalCost": 5,
                   "fundingStatus": "FUNDED",
                   "creationDateTime": "2000-01-23T04:56:07.000Z",
                   "status": "UNQUOTED"
@@ -7611,6 +7615,10 @@
               ],
               "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalPayments": 0,
+              "submittedDateTime": "submittedDateTime",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "totalIncompletePayments": 6,
+              "withdrawnDateTime": "withdrawnDateTime",
               "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo"
             }
@@ -9094,16 +9102,13 @@
           "sourceAccountSummary": [
             {
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalCost": 0
+              "totalCost": 3434
             },
             {
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalCost": 0
+              "totalCost": 3434
             }
           ],
-          "submittedDateTime": "submittedDateTime",
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "totalIncompletePayments": 123,
           "fxSummaries": [
             {
               "invertedRate": 1.12,
@@ -9128,8 +9133,12 @@
           ],
           "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalPayments": 123,
-          "instructedDateTime": "instructedDateTime",
           "totalFailedPayments": 123,
+          "submittedDateTime": "submittedDateTime",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "totalIncompletePayments": 123,
+          "withdrawnDateTime": "withdrawnDateTime",
+          "instructedDateTime": "instructedDateTime",
           "payoutMemo": "payoutMemo"
         },
         "properties": {
@@ -9152,6 +9161,9 @@
             "type": "string"
           },
           "instructedDateTime": {
+            "type": "string"
+          },
+          "withdrawnDateTime": {
             "type": "string"
           },
           "totalPayments": {
@@ -9314,34 +9326,31 @@
           "sourceAccountSummary": [
             {
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalCost": 5
+              "totalCost": 3344
             },
             {
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalCost": 5
+              "totalCost": 3344
             }
           ],
           "totalReturnedPayments": 1,
-          "submittedDateTime": "submittedDateTime",
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "totalIncompletePayments": 6,
           "fxSummaries": [
             {
-              "invertedRate": 2.3021358869347655,
-              "rate": 5.637376656633329,
-              "totalPaymentAmount": 9,
+              "invertedRate": 123.23,
+              "rate": 123.23,
+              "totalPaymentAmount": 34235,
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalCost": 7,
+              "totalCost": 5,
               "fundingStatus": "FUNDED",
               "creationDateTime": "2000-01-23T04:56:07.000Z",
               "status": "UNQUOTED"
             },
             {
-              "invertedRate": 2.3021358869347655,
-              "rate": 5.637376656633329,
-              "totalPaymentAmount": 9,
+              "invertedRate": 123.23,
+              "rate": 123.23,
+              "totalPaymentAmount": 34235,
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalCost": 7,
+              "totalCost": 5,
               "fundingStatus": "FUNDED",
               "creationDateTime": "2000-01-23T04:56:07.000Z",
               "status": "UNQUOTED"
@@ -9349,6 +9358,10 @@
           ],
           "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalPayments": 0,
+          "submittedDateTime": "submittedDateTime",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "totalIncompletePayments": 6,
+          "withdrawnDateTime": "withdrawnDateTime",
           "instructedDateTime": "instructedDateTime",
           "payoutMemo": "payoutMemo"
         },
@@ -9372,6 +9385,9 @@
             "type": "string"
           },
           "instructedDateTime": {
+            "type": "string"
+          },
+          "withdrawnDateTime": {
             "type": "string"
           },
           "totalPayments": {
@@ -10239,7 +10255,7 @@
       "SourceAccountSummaryV3": {
         "example": {
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "totalCost": 0
+          "totalCost": 3434
         },
         "properties": {
           "sourceAccountId": {
@@ -10247,6 +10263,7 @@
             "type": "string"
           },
           "totalCost": {
+            "example": 3434,
             "format": "int64",
             "type": "integer"
           },
@@ -10351,7 +10368,7 @@
       "SourceAccountSummaryV4": {
         "example": {
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "totalCost": 5
+          "totalCost": 3344
         },
         "properties": {
           "sourceAccountId": {
@@ -10359,6 +10376,7 @@
             "type": "string"
           },
           "totalCost": {
+            "example": 3344,
             "format": "int64",
             "type": "integer"
           },
@@ -10374,11 +10392,11 @@
       },
       "FxSummaryV4": {
         "example": {
-          "invertedRate": 2.3021358869347655,
-          "rate": 5.637376656633329,
-          "totalPaymentAmount": 9,
+          "invertedRate": 123.23,
+          "rate": 123.23,
+          "totalPaymentAmount": 34235,
           "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "totalCost": 7,
+          "totalCost": 5,
           "fundingStatus": "FUNDED",
           "creationDateTime": "2000-01-23T04:56:07.000Z",
           "status": "UNQUOTED"
@@ -10393,10 +10411,12 @@
             "type": "string"
           },
           "rate": {
+            "example": 123.23,
             "format": "double",
             "type": "number"
           },
           "invertedRate": {
+            "example": 123.23,
             "format": "double",
             "type": "number"
           },
@@ -10404,6 +10424,7 @@
             "type": "integer"
           },
           "totalPaymentAmount": {
+            "example": 34235,
             "type": "integer"
           },
           "sourceCurrency": {
