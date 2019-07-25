@@ -78,12 +78,14 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.14.90
+  version: 2.14.91
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
 - description: Velo Payments Sandbox for testing
   url: https://api.sandbox.velopayments.com/
+- description: Velo Payments Production URL
+  url: https://api.payouts.velopayments.com
 security:
 - OAuth2: []
 tags:
@@ -5277,12 +5279,9 @@ components:
         - dateTime: 2000-01-23T04:56:07.000+00:00
           sourceAccountSummary:
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 0
+            totalCost: 3434
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 0
-          submittedDateTime: submittedDateTime
-          payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          totalIncompletePayments: 123
+            totalCost: 3434
           fxSummaries:
           - invertedRate: 1.12
             rate: 1.12
@@ -5302,18 +5301,19 @@ components:
             status: UNQUOTED
           payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalPayments: 123
-          instructedDateTime: instructedDateTime
           totalFailedPayments: 123
+          submittedDateTime: submittedDateTime
+          payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          totalIncompletePayments: 123
+          withdrawnDateTime: withdrawnDateTime
+          instructedDateTime: instructedDateTime
           payoutMemo: payoutMemo
         - dateTime: 2000-01-23T04:56:07.000+00:00
           sourceAccountSummary:
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 0
+            totalCost: 3434
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 0
-          submittedDateTime: submittedDateTime
-          payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          totalIncompletePayments: 123
+            totalCost: 3434
           fxSummaries:
           - invertedRate: 1.12
             rate: 1.12
@@ -5333,8 +5333,12 @@ components:
             status: UNQUOTED
           payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalPayments: 123
-          instructedDateTime: instructedDateTime
           totalFailedPayments: 123
+          submittedDateTime: submittedDateTime
+          payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          totalIncompletePayments: 123
+          withdrawnDateTime: withdrawnDateTime
+          instructedDateTime: instructedDateTime
           payoutMemo: payoutMemo
       properties:
         summary:
@@ -5841,63 +5845,65 @@ components:
         - dateTime: 2000-01-23T04:56:07.000+00:00
           sourceAccountSummary:
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 5
+            totalCost: 3344
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 5
+            totalCost: 3344
           totalReturnedPayments: 1
-          submittedDateTime: submittedDateTime
-          payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          totalIncompletePayments: 6
           fxSummaries:
-          - invertedRate: 2.3021358869347655
-            rate: 5.637376656633329
-            totalPaymentAmount: 9
+          - invertedRate: 123.23
+            rate: 123.23
+            totalPaymentAmount: 34235
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 7
+            totalCost: 5
             fundingStatus: FUNDED
             creationDateTime: 2000-01-23T04:56:07.000+00:00
             status: UNQUOTED
-          - invertedRate: 2.3021358869347655
-            rate: 5.637376656633329
-            totalPaymentAmount: 9
+          - invertedRate: 123.23
+            rate: 123.23
+            totalPaymentAmount: 34235
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 7
+            totalCost: 5
             fundingStatus: FUNDED
             creationDateTime: 2000-01-23T04:56:07.000+00:00
             status: UNQUOTED
           payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalPayments: 0
+          submittedDateTime: submittedDateTime
+          payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          totalIncompletePayments: 6
+          withdrawnDateTime: withdrawnDateTime
           instructedDateTime: instructedDateTime
           payoutMemo: payoutMemo
         - dateTime: 2000-01-23T04:56:07.000+00:00
           sourceAccountSummary:
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 5
+            totalCost: 3344
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 5
+            totalCost: 3344
           totalReturnedPayments: 1
-          submittedDateTime: submittedDateTime
-          payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          totalIncompletePayments: 6
           fxSummaries:
-          - invertedRate: 2.3021358869347655
-            rate: 5.637376656633329
-            totalPaymentAmount: 9
+          - invertedRate: 123.23
+            rate: 123.23
+            totalPaymentAmount: 34235
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 7
+            totalCost: 5
             fundingStatus: FUNDED
             creationDateTime: 2000-01-23T04:56:07.000+00:00
             status: UNQUOTED
-          - invertedRate: 2.3021358869347655
-            rate: 5.637376656633329
-            totalPaymentAmount: 9
+          - invertedRate: 123.23
+            rate: 123.23
+            totalPaymentAmount: 34235
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            totalCost: 7
+            totalCost: 5
             fundingStatus: FUNDED
             creationDateTime: 2000-01-23T04:56:07.000+00:00
             status: UNQUOTED
           payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalPayments: 0
+          submittedDateTime: submittedDateTime
+          payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          totalIncompletePayments: 6
+          withdrawnDateTime: withdrawnDateTime
           instructedDateTime: instructedDateTime
           payoutMemo: payoutMemo
       properties:
@@ -7030,12 +7036,9 @@ components:
         dateTime: 2000-01-23T04:56:07.000+00:00
         sourceAccountSummary:
         - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          totalCost: 0
+          totalCost: 3434
         - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          totalCost: 0
-        submittedDateTime: submittedDateTime
-        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalIncompletePayments: 123
+          totalCost: 3434
         fxSummaries:
         - invertedRate: 1.12
           rate: 1.12
@@ -7055,8 +7058,12 @@ components:
           status: UNQUOTED
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalPayments: 123
-        instructedDateTime: instructedDateTime
         totalFailedPayments: 123
+        submittedDateTime: submittedDateTime
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        totalIncompletePayments: 123
+        withdrawnDateTime: withdrawnDateTime
+        instructedDateTime: instructedDateTime
         payoutMemo: payoutMemo
       properties:
         payoutId:
@@ -7073,6 +7080,8 @@ components:
         submittedDateTime:
           type: string
         instructedDateTime:
+          type: string
+        withdrawnDateTime:
           type: string
         totalPayments:
           example: 123
@@ -7203,32 +7212,33 @@ components:
         dateTime: 2000-01-23T04:56:07.000+00:00
         sourceAccountSummary:
         - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          totalCost: 5
+          totalCost: 3344
         - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          totalCost: 5
+          totalCost: 3344
         totalReturnedPayments: 1
-        submittedDateTime: submittedDateTime
-        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalIncompletePayments: 6
         fxSummaries:
-        - invertedRate: 2.3021358869347655
-          rate: 5.637376656633329
-          totalPaymentAmount: 9
+        - invertedRate: 123.23
+          rate: 123.23
+          totalPaymentAmount: 34235
           quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          totalCost: 7
+          totalCost: 5
           fundingStatus: FUNDED
           creationDateTime: 2000-01-23T04:56:07.000+00:00
           status: UNQUOTED
-        - invertedRate: 2.3021358869347655
-          rate: 5.637376656633329
-          totalPaymentAmount: 9
+        - invertedRate: 123.23
+          rate: 123.23
+          totalPaymentAmount: 34235
           quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          totalCost: 7
+          totalCost: 5
           fundingStatus: FUNDED
           creationDateTime: 2000-01-23T04:56:07.000+00:00
           status: UNQUOTED
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalPayments: 0
+        submittedDateTime: submittedDateTime
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        totalIncompletePayments: 6
+        withdrawnDateTime: withdrawnDateTime
         instructedDateTime: instructedDateTime
         payoutMemo: payoutMemo
       properties:
@@ -7246,6 +7256,8 @@ components:
         submittedDateTime:
           type: string
         instructedDateTime:
+          type: string
+        withdrawnDateTime:
           type: string
         totalPayments:
           type: integer
@@ -7985,12 +7997,13 @@ components:
     SourceAccountSummaryV3:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalCost: 0
+        totalCost: 3434
       properties:
         sourceAccountId:
           format: uuid
           type: string
         totalCost:
+          example: 3434
           format: int64
           type: integer
         currency:
@@ -8072,12 +8085,13 @@ components:
     SourceAccountSummaryV4:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalCost: 5
+        totalCost: 3344
       properties:
         sourceAccountId:
           format: uuid
           type: string
         totalCost:
+          example: 3344
           format: int64
           type: integer
         currency:
@@ -8088,11 +8102,11 @@ components:
       type: object
     FxSummaryV4:
       example:
-        invertedRate: 2.3021358869347655
-        rate: 5.637376656633329
-        totalPaymentAmount: 9
+        invertedRate: 123.23
+        rate: 123.23
+        totalPaymentAmount: 34235
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        totalCost: 7
+        totalCost: 5
         fundingStatus: FUNDED
         creationDateTime: 2000-01-23T04:56:07.000+00:00
         status: UNQUOTED
@@ -8104,14 +8118,17 @@ components:
           format: date-time
           type: string
         rate:
+          example: 123.23
           format: double
           type: number
         invertedRate:
+          example: 123.23
           format: double
           type: number
         totalCost:
           type: integer
         totalPaymentAmount:
+          example: 34235
           type: integer
         sourceCurrency:
           $ref: '#/components/schemas/PaymentAuditCurrencyV4'
