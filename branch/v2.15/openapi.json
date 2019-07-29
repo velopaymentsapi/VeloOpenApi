@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.15.14",
+    "version": "2.15.15",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -8363,9 +8363,10 @@
           "rejectedPayments": [
             {
               "currencyType": "USD",
-              "reason": "PAYEE_NOT_ONBOARDED",
+              "reason": "The payee has not been onboarded",
               "amount": 1234,
               "payorPaymentId": "paymenIdVal123123",
+              "reasonCode": "PAYMENT_VALUE_TOO_HIGH",
               "lineNumber": 10,
               "message": "Payment cannot be processed because of the Payee's OFAC or Compliance Status",
               "remoteId": "remoteIdVal123",
@@ -8373,9 +8374,10 @@
             },
             {
               "currencyType": "USD",
-              "reason": "PAYEE_NOT_ONBOARDED",
+              "reason": "The payee has not been onboarded",
               "amount": 1234,
               "payorPaymentId": "paymenIdVal123123",
+              "reasonCode": "PAYMENT_VALUE_TOO_HIGH",
               "lineNumber": 10,
               "message": "Payment cannot be processed because of the Payee's OFAC or Compliance Status",
               "remoteId": "remoteIdVal123",
@@ -9904,9 +9906,10 @@
       "RejectedPayment": {
         "example": {
           "currencyType": "USD",
-          "reason": "PAYEE_NOT_ONBOARDED",
+          "reason": "The payee has not been onboarded",
           "amount": 1234,
           "payorPaymentId": "paymenIdVal123123",
+          "reasonCode": "PAYMENT_VALUE_TOO_HIGH",
           "lineNumber": 10,
           "message": "Payment cannot be processed because of the Payee's OFAC or Compliance Status",
           "remoteId": "remoteIdVal123",
@@ -9919,6 +9922,8 @@
           },
           "currencyType": {
             "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
             "type": "string"
           },
           "amount": {
@@ -9934,23 +9939,11 @@
             "type": "string"
           },
           "reason": {
-            "enum": [
-              "UNKNOWN_REMOTE_ID",
-              "UNKNOWN_SOURCE_ACCOUNT",
-              "UNSUPPORTED_CURRENCY",
-              "PAYMENT_VALUE_TOO_HIGH",
-              "UNSUPPORTED_COUNTRY",
-              "UNSUPPORTED_CURRENCY_FOR_COUNTRY",
-              "PAYEE_NOT_ONBOARDED",
-              "COMPLIANCE_ISSUE",
-              "DUPLICATE_PAYOR_PAYMENT_ID",
-              "CURRENCY_MISMATCH",
-              "DECLINED_INVITE",
-              "PENDING_INVITE",
-              "BADLY_FORMED_DATA_ROW",
-              "OTHER"
-            ],
-            "example": "PAYEE_NOT_ONBOARDED",
+            "example": "The payee has not been onboarded",
+            "type": "string"
+          },
+          "reasonCode": {
+            "example": "PAYMENT_VALUE_TOO_HIGH",
             "type": "string"
           },
           "lineNumber": {
