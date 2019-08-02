@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.14.92",
+    "version": "2.14.93",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -58,20 +58,11 @@
     }
   ],
   "paths": {
-    "/v1/authenticate/": {
+    "/v1/authenticate": {
       "post": {
-        "description": "Use this endpoint to obtain an access token for calling Velo Payments APIs.",
+        "description": "Use this endpoint to obtain an access token for calling Velo Payments APIs. Use HTTP Basic Auth. String value of\nBasic and a Base64 endcoded string comprising the API key (e.g. 44a9537d-d55d-4b47-8082-14061c2bcdd8) and API\nsecret  (e.g. c396b26b-137a-44fd-87f5-34631f8fd529) with a colon between them. E.g. Basic 44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529\n",
         "operationId": "veloAuth",
         "parameters": [
-          {
-            "description": "String value of Basic and a Base64 endcoded string comprising the API key (e.g. 44a9537d-d55d-4b47-8082-14061c2bcdd8) and API secret\n (e.g. c396b26b-137a-44fd-87f5-34631f8fd529) with a colon between them.\n E.g. Basic 44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529\n",
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "OAuth grant type. Should use 'client_credentials'",
             "in": "query",
@@ -112,6 +103,11 @@
             }
           }
         },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
         "summary": "Authentication endpoint",
         "tags": [
           "Auth"
@@ -4531,7 +4527,11 @@
           "refresh_token": "IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk",
           "scope": "example_scope",
           "token_type": "bearer",
-          "expires_in": 1799
+          "expires_in": 1799,
+          "entityIds": [
+            "entityIds",
+            "entityIds"
+          ]
         },
         "properties": {
           "access_token": {
@@ -4553,6 +4553,12 @@
           "scope": {
             "example": "example_scope",
             "type": "string"
+          },
+          "entityIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -9094,6 +9100,13 @@
               "$ref": "#/components/schemas/FundingEvent"
             },
             "type": "array"
+          },
+          "topupType": {
+            "enum": [
+              "AUTOMATIC",
+              "MANUAL"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
@@ -10227,6 +10240,9 @@
           },
           "fundingEventType": {
             "$ref": "#/components/schemas/FundingEventType"
+          },
+          "principal": {
+            "type": "string"
           }
         },
         "type": "object"
@@ -10763,7 +10779,10 @@
       "GetFundingsResponse_allOf": {
         "properties": {
           "content": {
-            "$ref": "#/components/schemas/FundingAudit"
+            "items": {
+              "$ref": "#/components/schemas/FundingAudit"
+            },
+            "type": "array"
           }
         }
       },
@@ -11143,6 +11162,10 @@
           }
         },
         "type": "oauth2"
+      },
+      "basicAuth": {
+        "scheme": "basic",
+        "type": "http"
       }
     }
   },
