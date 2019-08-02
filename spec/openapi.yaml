@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.14.92
+  version: 2.14.93
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
@@ -111,21 +111,14 @@ tags:
     <p>&copy; Velo Payments, Inc.</p>
   name: Legal
 paths:
-  /v1/authenticate/:
+  /v1/authenticate:
     post:
-      description: Use this endpoint to obtain an access token for calling Velo Payments
-        APIs.
+      description: |
+        Use this endpoint to obtain an access token for calling Velo Payments APIs. Use HTTP Basic Auth. String value of
+        Basic and a Base64 endcoded string comprising the API key (e.g. 44a9537d-d55d-4b47-8082-14061c2bcdd8) and API
+        secret  (e.g. c396b26b-137a-44fd-87f5-34631f8fd529) with a colon between them. E.g. Basic 44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529
       operationId: veloAuth
       parameters:
-      - description: |
-          String value of Basic and a Base64 endcoded string comprising the API key (e.g. 44a9537d-d55d-4b47-8082-14061c2bcdd8) and API secret
-           (e.g. c396b26b-137a-44fd-87f5-34631f8fd529) with a colon between them.
-           E.g. Basic 44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529
-        in: header
-        name: Authorization
-        required: true
-        schema:
-          type: string
       - description: OAuth grant type. Should use 'client_credentials'
         in: query
         name: grant_type
@@ -152,6 +145,8 @@ paths:
               schema:
                 default: no-cache
                 type: string
+      security:
+      - basicAuth: []
       summary: Authentication endpoint
       tags:
       - Auth
@@ -3501,6 +3496,9 @@ components:
         scope: example_scope
         token_type: bearer
         expires_in: 1799
+        entityIds:
+        - entityIds
+        - entityIds
       properties:
         access_token:
           format: uuid
@@ -3517,6 +3515,10 @@ components:
         scope:
           example: example_scope
           type: string
+        entityIds:
+          items:
+            type: string
+          type: array
       required:
       - access_token
       - token_type
@@ -7032,6 +7034,11 @@ components:
           items:
             $ref: '#/components/schemas/FundingEvent'
           type: array
+        topupType:
+          enum:
+          - AUTOMATIC
+          - MANUAL
+          type: string
       type: object
     PayoutSummaryAuditV3:
       example:
@@ -7974,6 +7981,8 @@ components:
           type: string
         fundingEventType:
           $ref: '#/components/schemas/FundingEventType'
+        principal:
+          type: string
       type: object
     PayoutStatusV3:
       enum:
@@ -8372,7 +8381,9 @@ components:
     GetFundingsResponse_allOf:
       properties:
         content:
-          $ref: '#/components/schemas/FundingAudit'
+          items:
+            $ref: '#/components/schemas/FundingAudit'
+          type: array
     GetPayoutsResponseV3_summary:
       example:
         totalOnboardedCount: 123
@@ -8661,6 +8672,9 @@ components:
             ' ': Scopes not required
           tokenUrl: https://api.sandbox.velopayments.com/v1/login
       type: oauth2
+    basicAuth:
+      scheme: basic
+      type: http
 x-tagGroups:
 - name: Payor Operations
   tags:
