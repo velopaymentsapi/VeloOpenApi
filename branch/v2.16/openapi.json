@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.16.3",
+    "version": "2.16.4",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -1285,7 +1285,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PayeeResponse"
+                  "$ref": "#/components/schemas/PagedPayeeResponse"
                 }
               }
             },
@@ -5247,7 +5247,7 @@
         ],
         "type": "string"
       },
-      "PayeeResponse": {
+      "PagedPayeeResponse": {
         "description": "List Payees Response Object",
         "example": {
           "summary": {
@@ -5306,9 +5306,7 @@
                   "lastName": "lastName",
                   "otherNames": "otherNames",
                   "title": "title"
-                },
-                "nationalIdentification": "nationalIdentification",
-                "dateOfBirth": "dateOfBirth"
+                }
               },
               "displayName": "displayName",
               "created": "2000-01-23T04:56:07.000Z",
@@ -5338,7 +5336,6 @@
                 "value": "value"
               },
               "company": {
-                "taxId": "taxId",
                 "name": "name",
                 "operatingName": "operatingName"
               },
@@ -5377,9 +5374,7 @@
                   "lastName": "lastName",
                   "otherNames": "otherNames",
                   "title": "title"
-                },
-                "nationalIdentification": "nationalIdentification",
-                "dateOfBirth": "dateOfBirth"
+                }
               },
               "displayName": "displayName",
               "created": "2000-01-23T04:56:07.000Z",
@@ -5409,7 +5404,6 @@
                 "value": "value"
               },
               "company": {
-                "taxId": "taxId",
                 "name": "name",
                 "operatingName": "operatingName"
               },
@@ -5421,20 +5415,20 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/PayeeResponse_summary"
+            "$ref": "#/components/schemas/PagedPayeeResponse_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/Payee"
+              "$ref": "#/components/schemas/PayeeResponse"
             },
             "type": "array"
           }
@@ -6505,11 +6499,11 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
             },
             "type": "array"
           },
@@ -7770,14 +7764,14 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/PayeeResponse_summary"
+            "$ref": "#/components/schemas/PagedPayeeResponse_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
             },
             "type": "array"
           },
@@ -7945,11 +7939,11 @@
             "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV4_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
             },
             "type": "array"
           },
@@ -8208,11 +8202,11 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
             },
             "type": "array"
           },
@@ -8702,6 +8696,162 @@
           "country",
           "line1"
         ],
+        "type": "object"
+      },
+      "PayeeResponse": {
+        "example": {
+          "payorRefs": [
+            {
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+              "invitationStatus": "invitationStatus",
+              "remoteId": "uniqueIdForRemoteEntity"
+            },
+            {
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+              "invitationStatus": "invitationStatus",
+              "remoteId": "uniqueIdForRemoteEntity"
+            }
+          ],
+          "country": "country",
+          "cellphoneNumber": "cellphoneNumber",
+          "address": {
+            "country": "US",
+            "countyOrProvince": "FL",
+            "line4": "line4",
+            "city": "Key West",
+            "line3": "line3",
+            "line2": "line2",
+            "line1": "500 Duval St",
+            "zipOrPostcode": "33945"
+          },
+          "individual": {
+            "name": {
+              "firstName": "firstName",
+              "lastName": "lastName",
+              "otherNames": "otherNames",
+              "title": "title"
+            }
+          },
+          "displayName": "displayName",
+          "created": "2000-01-23T04:56:07.000Z",
+          "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
+          "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
+          "paymentChannel": {
+            "paymentChannelName": "paymentChannelName",
+            "routingNo": "routingNo",
+            "accountName": "accountName",
+            "countryCode": "countryCode",
+            "iban": "iban",
+            "currency": "USD",
+            "accountNumber": "accountNumber"
+          },
+          "marketingOptIns": [
+            {
+              "optedIn": true,
+              "timestamp": "2000-01-23T04:56:07.000Z"
+            },
+            {
+              "optedIn": true,
+              "timestamp": "2000-01-23T04:56:07.000Z"
+            }
+          ],
+          "challenge": {
+            "description": "description",
+            "value": "value"
+          },
+          "company": {
+            "name": "name",
+            "operatingName": "operatingName"
+          },
+          "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "email": "email",
+          "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
+        },
+        "properties": {
+          "payeeId": {
+            "format": "uuid",
+            "readOnly": true,
+            "type": "string"
+          },
+          "payorRefs": {
+            "items": {
+              "$ref": "#/components/schemas/PayorRef"
+            },
+            "nullable": true,
+            "readOnly": true,
+            "type": "array"
+          },
+          "email": {
+            "format": "email",
+            "nullable": true,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "country": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "paymentChannel": {
+            "$ref": "#/components/schemas/PaymentChannel"
+          },
+          "challenge": {
+            "$ref": "#/components/schemas/Challenge"
+          },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "acceptTermsAndConditionsTimestamp": {
+            "description": "The timestamp when the payee last accepted T&Cs",
+            "format": "date-time",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "cellphoneNumber": {
+            "type": "string"
+          },
+          "payeeType": {
+            "$ref": "#/components/schemas/PayeeType"
+          },
+          "company": {
+            "$ref": "#/components/schemas/CompanyResponse"
+          },
+          "individual": {
+            "$ref": "#/components/schemas/IndividualResponse"
+          },
+          "created": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "gracePeriodEndDate": {
+            "format": "date",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "lastOfacCheckTimestamp": {
+            "format": "date_time",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "marketingOptIns": {
+            "items": {
+              "$ref": "#/components/schemas/MarketingOptIn"
+            },
+            "type": "array"
+          },
+          "ofacStatus": {
+            "$ref": "#/components/schemas/OfacStatus"
+          },
+          "onboardedStatus": {
+            "$ref": "#/components/schemas/OnboardedStatus"
+          }
+        },
         "type": "object"
       },
       "PayorRef": {
@@ -10056,6 +10206,49 @@
         },
         "type": "object"
       },
+      "CompanyResponse": {
+        "example": {
+          "name": "name",
+          "operatingName": "operatingName"
+        },
+        "nullable": true,
+        "properties": {
+          "name": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "operatingName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "IndividualResponse": {
+        "example": {
+          "name": {
+            "firstName": "firstName",
+            "lastName": "lastName",
+            "otherNames": "otherNames",
+            "title": "title"
+          }
+        },
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/Individual_name"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
       "CreatePayeeAddress": {
         "example": {
           "country": "US",
@@ -10838,7 +11031,7 @@
           "payorName"
         ]
       },
-      "PayeeResponse_summary": {
+      "PagedPayeeResponse_summary": {
         "example": {
           "totalOnboardedCount": 5,
           "totalRegisteredCount": 1,
@@ -10864,7 +11057,7 @@
           }
         }
       },
-      "PayeeResponse_page": {
+      "PagedPayeeResponse_page": {
         "example": {
           "numberOfElements": 2,
           "totalPages": 9,
@@ -10890,7 +11083,7 @@
           }
         }
       },
-      "PayeeResponse_links": {
+      "PagedPayeeResponse_links": {
         "example": {
           "rel": "rel",
           "href": "href"
