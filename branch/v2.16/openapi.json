@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.16.5",
+    "version": "2.16.6",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -58,20 +58,11 @@
     }
   ],
   "paths": {
-    "/v1/authenticate/": {
+    "/v1/authenticate": {
       "post": {
-        "description": "Use this endpoint to obtain an access token for calling Velo Payments APIs.",
+        "description": "Use this endpoint to obtain an access token for calling Velo Payments APIs. Use HTTP Basic Auth. String value of\nBasic and a Base64 endcoded string comprising the API key (e.g. 44a9537d-d55d-4b47-8082-14061c2bcdd8) and API\nsecret  (e.g. c396b26b-137a-44fd-87f5-34631f8fd529) with a colon between them. E.g. Basic 44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529\n",
         "operationId": "veloAuth",
         "parameters": [
-          {
-            "description": "String value of Basic and a Base64 endcoded string comprising the API key (e.g. 44a9537d-d55d-4b47-8082-14061c2bcdd8) and API secret\n (e.g. c396b26b-137a-44fd-87f5-34631f8fd529) with a colon between them.\n E.g. Basic 44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529\n",
-            "in": "header",
-            "name": "Authorization",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "description": "OAuth grant type. Should use 'client_credentials'",
             "in": "query",
@@ -112,6 +103,11 @@
             }
           }
         },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
         "summary": "Authentication endpoint",
         "tags": [
           "Auth"
@@ -306,110 +302,6 @@
             "contractId": 2,
             "name": "Test Payor Not Found V2",
             "contractPath": "/v2/payors/00000000-0000-0000-0000-000000000000",
-            "serviceName": "payor-service"
-          }
-        ]
-      }
-    },
-    "/v1/payors/{payorId}/payorFundingBankDetailsUpdate": {
-      "post": {
-        "description": "This API allows you to set or update the funding details for the given Payor ID.\n",
-        "operationId": "setPayorFundingBankDetails",
-        "parameters": [
-          {
-            "description": "The account owner Payor ID",
-            "in": "path",
-            "name": "payorId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PayorFundingBankDetailsUpdate"
-              }
-            }
-          },
-          "description": "Update Funding bank details of given Payor Id",
-          "required": true,
-          "x-contracts": [
-            {
-              "contractId": 1,
-              "headers": {
-                "Content-Type": "application/json"
-              },
-              "body": {
-                "routingNumber": "123456789",
-                "accountNumber": "12345",
-                "accountName": "Robert C. Smith"
-              },
-              "matchers": {
-                "headers": [
-                  {
-                    "key": "Content-Type",
-                    "regex": "application/json.*"
-                  }
-                ],
-                "body": [
-                  {
-                    "path": "$.routingNumber",
-                    "type": "by_regex",
-                    "predefined": "non_empty"
-                  },
-                  {
-                    "path": "$.accountNumber",
-                    "type": "by_regex",
-                    "predefined": "non_empty"
-                  },
-                  {
-                    "path": "$.accountName",
-                    "type": "by_regex",
-                    "predefined": "non_empty"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        "responses": {
-          "202": {
-            "description": "HTTP Accepted",
-            "x-contracts": [
-              {
-                "contractId": 1
-              }
-            ]
-          },
-          "400": {
-            "description": "Invalid Request Body"
-          },
-          "403": {
-            "description": "Not Authorized"
-          },
-          "404": {
-            "description": "Payor Id Not Found"
-          }
-        },
-        "summary": "Set Funding Bank Details",
-        "tags": [
-          "Funding Manager"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payors/c64b31d1-d553-4205-ac22-b57020a9c7db/payorFundingBankDetailsUpdate' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 1d1e3d28-0d6a-4d45-b250-9962a2c545db' \\\n -d '{\"routingNumber\":\"123456789\",\"accountNumber\":\"12345\",\"accountName\":\"Robert C. Smith\"}'\n"
-          }
-        ],
-        "x-contracts": [
-          {
-            "contractId": 1,
-            "name": "Set Funding Bank Details",
-            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb/payorFundingBankDetailsUpdate",
             "serviceName": "payor-service"
           }
         ]
@@ -4675,7 +4567,11 @@
           "refresh_token": "IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk",
           "scope": "example_scope",
           "token_type": "bearer",
-          "expires_in": 1799
+          "expires_in": 1799,
+          "entityIds": [
+            "entityIds",
+            "entityIds"
+          ]
         },
         "properties": {
           "access_token": {
@@ -4697,6 +4593,12 @@
           "scope": {
             "example": "example_scope",
             "type": "string"
+          },
+          "entityIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -4972,42 +4874,6 @@
         },
         "required": [
           "payorName"
-        ],
-        "type": "object"
-      },
-      "PayorFundingBankDetailsUpdate": {
-        "example": {
-          "routingNumber": "123123123",
-          "accountName": "Bank of America",
-          "accountNumber": "123456789012345"
-        },
-        "properties": {
-          "routingNumber": {
-            "description": "Routing number for the payor’s bank",
-            "example": "123123123",
-            "maxLength": 9,
-            "minLength": 9,
-            "type": "string"
-          },
-          "accountNumber": {
-            "description": "Payor’s bank account number.",
-            "example": "123456789012345",
-            "maxLength": 17,
-            "minLength": 4,
-            "type": "string"
-          },
-          "accountName": {
-            "description": "Payor’s bank account name.",
-            "example": "Bank of America",
-            "maxLength": 22,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "required": [
-          "accountName",
-          "accountNumber",
-          "routingNumber"
         ],
         "type": "object"
       },
@@ -9448,6 +9314,13 @@
               "$ref": "#/components/schemas/FundingEvent"
             },
             "type": "array"
+          },
+          "topupType": {
+            "enum": [
+              "AUTOMATIC",
+              "MANUAL"
+            ],
+            "type": "string"
           }
         },
         "type": "object"
@@ -10675,6 +10548,9 @@
           },
           "fundingEventType": {
             "$ref": "#/components/schemas/FundingEventType"
+          },
+          "principal": {
+            "type": "string"
           }
         },
         "type": "object"
@@ -11225,7 +11101,10 @@
       "GetFundingsResponse_allOf": {
         "properties": {
           "content": {
-            "$ref": "#/components/schemas/FundingAudit"
+            "items": {
+              "$ref": "#/components/schemas/FundingAudit"
+            },
+            "type": "array"
           }
         }
       },
@@ -11605,6 +11484,10 @@
           }
         },
         "type": "oauth2"
+      },
+      "basicAuth": {
+        "scheme": "basic",
+        "type": "http"
       }
     }
   },
