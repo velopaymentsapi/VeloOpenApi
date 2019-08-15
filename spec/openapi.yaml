@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.14.94
+  version: 2.15.95
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
@@ -651,7 +651,14 @@ paths:
       - description: The Payor ID from which to start the query to show all descendants
         in: query
         name: descendantsOfPayor
-        required: true
+        required: false
+        schema:
+          format: uuid
+          type: string
+      - description: Look for the parent payor details for this payor id
+        in: query
+        name: parentOfPayor
+        required: false
         schema:
           format: uuid
           type: string
@@ -2424,8 +2431,8 @@ paths:
         schema:
           format: int32
           type: integer
-      - description: The source currency filter. Filters based on an exact match on
-          the currency.
+      - description: The payment currency filter. Filters based on an exact match
+          on the currency.
         in: query
         name: paymentCurrency
         required: false
@@ -2574,7 +2581,9 @@ paths:
         and end dates.
       operationId: exportTransactionsCSV
       parameters:
-      - description: The account owner Payor ID
+      - description: |
+          The Payor ID for whom you wish to run the report.
+          For a Payor requesting the report, this could be their exact Payor, or it could be a child/descendant Payor.
         in: query
         name: payorId
         required: false
@@ -2594,6 +2603,21 @@ paths:
         required: false
         schema:
           format: date
+          type: string
+      - description: |
+          Mode to determine whether to include other Payor's data in the results.
+          May only be used if payorId is specified.
+          Can be omitted or set to 'payorOnly' or 'payorAndDescendants'.
+          payorOnly: Only include results for the specified Payor. This is the default if 'include' is omitted.
+          payorAndDescendants: Aggregate results for all descendant Payors of the specified Payor. Should only be used if the Payor with the specified payorId has at least one child Payor.
+                               Note when a Payor requests the report and include=payorAndDescendants is used, the following additional columns are included in the CSV: Payor Name, Payor Id
+        in: query
+        name: include
+        required: false
+        schema:
+          enum:
+          - payorOnly
+          - payorAndDescendants
           type: string
       responses:
         200:
@@ -2939,8 +2963,8 @@ paths:
         schema:
           format: int32
           type: integer
-      - description: The source currency filter. Filters based on an exact match on
-          the currency.
+      - description: The payment currency filter. Filters based on an exact match
+          on the currency.
         in: query
         name: paymentCurrency
         required: false
@@ -3050,6 +3074,126 @@ paths:
         source: |
           $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/payments/c3a422c2-12ac-4416-84fe-964221bd9815' -i \
               -H 'Authorization: Bearer 67a1b299-69b1-4fdf-a576-96b81199a2b9'
+  /v1/deltas/payments:
+    get:
+      description: Get a paginated response listing payment changes.
+      operationId: listPaymentChanges
+      parameters:
+      - description: The Payor ID to find associated Payments
+        in: query
+        name: payorId
+        required: true
+        schema:
+          format: uuid
+          type: string
+        x-contracts:
+        - contractId: 1
+          value: 0a818933-087d-47f2-ad83-2f986ed087eb
+          matchers:
+          - type: equal_to
+            value: 0a818933-087d-47f2-ad83-2f986ed087eb
+      - description: The updatedSince filter in the format YYYY-MM-DDThh:mm:ss+hh:mm
+        in: query
+        name: updatedSince
+        required: true
+        schema:
+          format: date-time
+          type: string
+        x-contracts:
+        - contractId: 1
+          value: 2019-01-20T09:00:00+00:00
+          matchers:
+          - type: equal_to
+            value: 2019-01-20T09:00:00+00:00
+      - description: Page number. Default is 1.
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      - description: Page size. Default is 100. Max allowable is 1000.
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          type: integer
+      responses:
+        200:
+          content:
+            application/json:
+              example: |
+                {
+                    "page": {
+                        "numberOfElements": 2,
+                        "totalElements": 2,
+                        "totalPages": 1,
+                        "page": 1,
+                        "pageSize": 1000
+                    },
+                    "content": [
+                        {
+                                    "paymentId" : "c6ebc017-f519-4198-b34c-70c9d6bbec79",
+                                    "payoutId":"3725bd24-daca-4531-a8c4-8ea1e630463f",
+                                    "payorPaymentId":"PBJ190610",
+                                    "status":"ACCEPTED_BY_RAILS",
+                                    "paymentCurrency":"USD",
+                                    "paymentAmount":"10000",
+                                    "sourceAmount":"10000",
+                                    "sourceCurrency":"USD"
+                        },
+                        {
+                                    "paymentId" : "87edda1c-7f34-4c1a-a0db-6d2638a3619b",
+                                    "payoutId":"3725bd24-daca-4531-a8c4-8ea1e630463f",
+                                    "status":"SUBMITTED",
+                                    "paymentCurrency":"USD",
+                                    "paymentAmount":"2000",
+                        }
+                    ],
+                    "links": [
+                        {
+                            "rel": "first",
+                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+                        },
+                        {
+                            "rel": "last",
+                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+                        },
+                        {
+                            "rel": "self",
+                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+                        }
+                    ]
+                }
+              schema:
+                $ref: '#/components/schemas/PaymentDeltaResponse'
+          description: Details of Payment Changes
+          x-contracts: null
+        400:
+          description: Bad Request
+      summary: List Payment Changes
+      tags:
+      - Payment Audit Service
+      x-contracts:
+      - contractId: 1
+        name: Test List Payment Changes
+        ignored: true
+        request:
+          queryParameters:
+          - key: page
+            value: 1
+          - key: pageSize
+            value: 30
+        serviceName: payment-audit-service
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v1/deltas/payments?pageSize=2&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \
+              -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \
+              -H 'Content-Type: application/json'
   /v3/payouts:
     post:
       description: |
@@ -6124,6 +6268,47 @@ components:
       - status
       - submittedDateTime
       type: object
+    PaymentDeltaResponse:
+      description: List Payment Changes Response Object
+      example:
+        links:
+        - rel: rel
+          href: href
+        - rel: rel
+          href: href
+        page:
+          numberOfElements: 2
+          totalPages: 9
+          pageSize: 2
+          page: 3
+          totalElements: 7
+        content:
+        - paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          payorPaymentId: payorPaymentId
+          sourceCurrency: sourceCurrency
+          sourceAmount: 6
+          payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          paymentCurrency: paymentCurrency
+          paymentAmount: 0
+        - paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          payorPaymentId: payorPaymentId
+          sourceCurrency: sourceCurrency
+          sourceAmount: 6
+          payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          paymentCurrency: paymentCurrency
+          paymentAmount: 0
+      properties:
+        page:
+          $ref: '#/components/schemas/PayeeResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/PayeeResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/PaymentDelta'
+          type: array
+      type: object
     CreatePayoutRequest:
       example:
         payments:
@@ -7287,6 +7472,45 @@ components:
       - eventId
       - eventType
       type: object
+    PaymentDelta:
+      example:
+        paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payorPaymentId: payorPaymentId
+        sourceCurrency: sourceCurrency
+        sourceAmount: 6
+        payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        paymentCurrency: paymentCurrency
+        paymentAmount: 0
+      properties:
+        paymentId:
+          format: uuid
+          readOnly: true
+          type: string
+        payoutId:
+          format: uuid
+          readOnly: true
+          type: string
+        payorPaymentId:
+          nullable: true
+          type: string
+        paymentCurrency:
+          nullable: true
+          type: string
+        paymentAmount:
+          nullable: true
+          type: integer
+        status:
+          $ref: '#/components/schemas/PaymentStatus'
+        sourceCurrency:
+          nullable: true
+          type: string
+        sourceAmount:
+          nullable: true
+          type: integer
+      required:
+      - paymentId
+      - payoutId
+      type: object
     QuoteFxSummary:
       example:
         invertedRate: 1.12
@@ -8062,6 +8286,18 @@ components:
       - totalCost
       - totalPaymentAmount
       type: object
+    PaymentStatus:
+      enum:
+      - SUBMITTED
+      - ACCEPTED
+      - AWAITING_FUNDS
+      - ACCEPTED_BY_RAILS
+      - CONFIRMED
+      - REJECTED
+      - RETURNED
+      - WITHDRAWN
+      nullable: true
+      type: string
     PaymentChannelRule:
       example:
         displayName: displayName
