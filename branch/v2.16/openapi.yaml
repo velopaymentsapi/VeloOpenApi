@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.16.8
+  version: 2.16.9
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -743,6 +743,7 @@ paths:
         - Payors
       x-contracts:
         - contractId: 1
+          ignored: true
           name: Test List Payor Links - default Payor fields
           request:
             queryParameters:
@@ -750,6 +751,7 @@ paths:
                 value: 0a818933-087d-47f2-ad83-2f986ed087eb
           serviceName: payor-service
         - contractId: 2
+          ignored: true
           name: Test List Payor Links - all Payor fields requested
           request:
             queryParameters:
