@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.16.9
+  version: 2.16.11
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -198,8 +198,6 @@ paths:
           description: Payor Id Not Found
           x-contracts:
             - contractId: 2
-              headers:
-                Content-Length: '0'
       summary: Get Payor
       tags:
         - Payors
@@ -267,8 +265,6 @@ paths:
           description: Payor Id Not Found
           x-contracts:
             - contractId: 2
-              headers:
-                Content-Length: '0'
       summary: Get Payor
       tags:
         - Payors
@@ -485,11 +481,6 @@ paths:
               Content-Type: application/json
             body:
               reminderEmailsOptOut: true
-          - contractId: 3
-            headers:
-              Content-Type: application/json
-            body:
-              reminderEmailsOptOut_BadRequest: true
       responses:
         '202':
           description: HTTP Accepted
@@ -497,8 +488,6 @@ paths:
             - contractId: 1
         '400':
           description: Invalid Request Body
-          x-contracts:
-            - contractId: 3
         '404':
           description: Payor Id Not Found
           x-contracts:
@@ -522,10 +511,6 @@ paths:
           name: Test Not Found
           serviceName: payor-service
           contractPath: /v1/payors/00000000-0000-0000-0000-000000000000/reminderEmailsUpdate
-        - contractId: 3
-          name: Test Email Opt-Out Bad Request
-          serviceName: payor-service
-          contractPath: /v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb/reminderEmailsUpdate
   '/v1/payors/{payorId}/branding/logos':
     post:
       description: 'Add Payor Logo. Logo file is used in your branding, and emails sent to payees.'
@@ -664,7 +649,6 @@ paths:
             Example: ```fields=primaryContactEmail,kycState``` - will include payorId+payorName+primaryContactEmail+kycState for each Payor
             Default if not specified is to include only payorId and payorName.
             The supported fields are any combination of: primaryContactEmail,kycState
-                        
           in: query
           name: fields
           required: false
@@ -3731,7 +3715,7 @@ components:
           example: 'Example, Corp'
           type: string
         address:
-          $ref: '#/components/schemas/Address'
+          $ref: '#/components/schemas/PayorAddress'
         primaryContactName:
           description: Name of primary contact for the payor.
           example: Joe Buck
@@ -3845,7 +3829,7 @@ components:
           example: 'Example, Corp'
           type: string
         address:
-          $ref: '#/components/schemas/Address'
+          $ref: '#/components/schemas/PayorAddressV2'
         primaryContactName:
           description: Name of primary contact for the payor.
           example: Joe Buck
@@ -6731,7 +6715,68 @@ components:
             $ref: '#/components/schemas/SupportedCurrency'
           type: array
       type: object
-    Address:
+    PayorAddress:
+      example:
+        country: US
+        countyOrProvince: FL
+        line4: line4
+        city: Key West
+        line3: line3
+        line2: line2
+        line1: 500 Duval St
+        zipOrPostcode: '33945'
+      properties:
+        line1:
+          example: 500 Duval St
+          maxLength: 255
+          minLength: 2
+          nullable: false
+          type: string
+        line2:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        line3:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        line4:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        city:
+          example: Key West
+          maxLength: 100
+          minLength: 2
+          nullable: false
+          type: string
+        countyOrProvince:
+          example: FL
+          maxLength: 100
+          minLength: 2
+          nullable: true
+          type: string
+        zipOrPostcode:
+          example: '33945'
+          maxLength: 30
+          minLength: 2
+          nullable: true
+          type: string
+        country:
+          example: US
+          maxLength: 50
+          minLength: 2
+          nullable: false
+          type: string
+      required:
+        - city
+        - country
+        - line1
+      type: object
+    PayorAddressV2:
       example:
         country: US
         countyOrProvince: FL
@@ -6922,6 +6967,67 @@ components:
           type: string
         invitationStatus:
           type: string
+      type: object
+    Address:
+      example:
+        country: US
+        countyOrProvince: FL
+        line4: line4
+        city: Key West
+        line3: line3
+        line2: line2
+        line1: 500 Duval St
+        zipOrPostcode: '33945'
+      properties:
+        line1:
+          example: 500 Duval St
+          maxLength: 255
+          minLength: 2
+          nullable: false
+          type: string
+        line2:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        line3:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        line4:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        city:
+          example: Key West
+          maxLength: 100
+          minLength: 2
+          nullable: false
+          type: string
+        countyOrProvince:
+          example: FL
+          maxLength: 100
+          minLength: 2
+          nullable: true
+          type: string
+        zipOrPostcode:
+          example: '33945'
+          maxLength: 30
+          minLength: 2
+          nullable: true
+          type: string
+        country:
+          example: US
+          maxLength: 50
+          minLength: 2
+          nullable: false
+          type: string
+      required:
+        - city
+        - country
+        - line1
       type: object
     PaymentChannel:
       example:
