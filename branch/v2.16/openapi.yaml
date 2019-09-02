@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.16.11
+  version: 2.16.12
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -7930,17 +7930,29 @@ components:
           minLength: 3
           type: string
         fundingStatus:
+          enum:
+            - UNFUNDED
+            - INSTRUCTED
+            - FUNDED
           example: FUNDED
           type: string
         status:
+          enum:
+            - UNQUOTED
+            - QUOTED
+            - EXPIRED
+            - EXECUTED
+            - REJECTED
           example: QUOTED
           type: string
       required:
         - creationTime
+        - fundingStatus
         - paymentCurrency
         - quoteId
         - rate
         - sourceCurrency
+        - status
         - totalPaymentAmount
         - totalSourceAmount
       type: object
