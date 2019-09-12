@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.16.13",
+    "version": "2.16.14",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -7687,7 +7687,7 @@
               "submittedDateTime": "submittedDateTime",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalIncompletePayments": 6,
-              "withdrawnDateTime": "withdrawnDateTime",
+              "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
               "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo"
             },
@@ -7731,7 +7731,7 @@
               "submittedDateTime": "submittedDateTime",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalIncompletePayments": 6,
-              "withdrawnDateTime": "withdrawnDateTime",
+              "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
               "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo"
             }
@@ -7763,12 +7763,46 @@
         "description": "List Payments for payout",
         "example": {
           "summary": {
-            "incompletePayments": 5,
+            "submitting": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "dbaName": "dbaName",
+              "payorName": "payorName"
+            },
             "confirmedPayments": 6,
             "releasedPayments": 1,
-            "submittedDateTime": "2000-01-23T04:56:07.000Z",
+            "withdrawn": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+            },
             "payoutStatus": "ACCEPTED",
+            "payoutFrom": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "dbaName": "dbaName",
+              "payorName": "payorName"
+            },
+            "payoutTo": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "dbaName": "dbaName",
+              "payorName": "payorName"
+            },
             "totalPayments": 0,
+            "quoted": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+            },
+            "instructed": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+            },
+            "incompletePayments": 5,
+            "submittedDateTime": "2000-01-23T04:56:07.000Z",
+            "quotedDateTime": "2000-01-23T04:56:07.000Z",
             "returnedPayments": 5,
             "instructedDateTime": "2000-01-23T04:56:07.000Z",
             "payoutMemo": "payoutMemo"
@@ -7794,6 +7828,15 @@
             {
               "traceNumber": "traceNumber",
               "accountName": "accountName",
+              "payout": {
+                "payoutFrom": {
+                  "principal": "principal",
+                  "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "dbaName": "dbaName",
+                  "payorName": "payorName"
+                }
+              },
               "paymentMemo": "paymentMemo",
               "paymentAmount": 7,
               "fundingStatus": "FUNDED",
@@ -7852,6 +7895,15 @@
             {
               "traceNumber": "traceNumber",
               "accountName": "accountName",
+              "payout": {
+                "payoutFrom": {
+                  "principal": "principal",
+                  "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "dbaName": "dbaName",
+                  "payorName": "payorName"
+                }
+              },
               "paymentMemo": "paymentMemo",
               "paymentAmount": 7,
               "fundingStatus": "FUNDED",
@@ -7935,6 +7987,15 @@
         "example": {
           "traceNumber": "traceNumber",
           "accountName": "accountName",
+          "payout": {
+            "payoutFrom": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "dbaName": "dbaName",
+              "payorName": "payorName"
+            }
+          },
           "paymentMemo": "paymentMemo",
           "paymentAmount": 7,
           "fundingStatus": "FUNDED",
@@ -8000,6 +8061,8 @@
             "type": "string"
           },
           "payorId": {
+            "deprecated": true,
+            "description": "Deprecated in v2.16. Will be populated with submitting payor ID until removed in a later release.",
             "format": "uuid",
             "type": "string"
           },
@@ -8117,6 +8180,9 @@
           },
           "returnReason": {
             "type": "string"
+          },
+          "payout": {
+            "$ref": "#/components/schemas/PaymentResponseV4_payout"
           }
         },
         "required": [
@@ -9913,7 +9979,7 @@
           "submittedDateTime": "submittedDateTime",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalIncompletePayments": 6,
-          "withdrawnDateTime": "withdrawnDateTime",
+          "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
           "instructedDateTime": "instructedDateTime",
           "payoutMemo": "payoutMemo"
         },
@@ -9923,6 +9989,8 @@
             "type": "string"
           },
           "payorId": {
+            "deprecated": true,
+            "description": "Deprecated in v2.16. Will be populated with submitting payor ID until removed in a later release.",
             "format": "uuid",
             "type": "string"
           },
@@ -9940,6 +10008,7 @@
             "type": "string"
           },
           "withdrawnDateTime": {
+            "format": "date-time",
             "type": "string"
           },
           "totalPayments": {
@@ -9965,12 +10034,90 @@
           },
           "payoutMemo": {
             "type": "string"
+          },
+          "payoutType": {
+            "$ref": "#/components/schemas/PayoutTypeV4"
           }
         },
         "required": [
           "payoutId",
+          "payoutType",
           "status",
           "submittedDateTime"
+        ],
+        "type": "object"
+      },
+      "PayoutTypeV4": {
+        "description": "The type of payout.",
+        "enum": [
+          "STANDARD",
+          "AS",
+          "ON_BEHALF_OF"
+        ],
+        "type": "string"
+      },
+      "PayoutPayorV4": {
+        "description": "Details of payor and principal participating in a payout.",
+        "example": {
+          "principal": "principal",
+          "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "dbaName": "dbaName",
+          "payorName": "payorName"
+        },
+        "properties": {
+          "payorId": {
+            "description": "The id of the payor.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "payorName": {
+            "description": "The name of the payor.",
+            "type": "string"
+          },
+          "dbaName": {
+            "description": "The alternate name of the payor.",
+            "type": "string"
+          },
+          "principal": {
+            "description": "Email address if principal is a user or ID if application.",
+            "type": "string"
+          },
+          "principalId": {
+            "description": "The id of the principal.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dbaName",
+          "payorId",
+          "payorName",
+          "principal",
+          "principalId"
+        ],
+        "type": "object"
+      },
+      "PayoutPrincipalV4": {
+        "description": "Details of principal participating in a payout.",
+        "example": {
+          "principal": "principal",
+          "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties": {
+          "principal": {
+            "description": "Email address if principal is a user or ID if application.",
+            "type": "string"
+          },
+          "principalId": {
+            "description": "The id of the principal.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "principal",
+          "principalId"
         ],
         "type": "object"
       },
@@ -11728,12 +11875,46 @@
       },
       "GetPaymentsForPayoutResponseV4_summary": {
         "example": {
-          "incompletePayments": 5,
+          "submitting": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "dbaName": "dbaName",
+            "payorName": "payorName"
+          },
           "confirmedPayments": 6,
           "releasedPayments": 1,
-          "submittedDateTime": "2000-01-23T04:56:07.000Z",
+          "withdrawn": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          },
           "payoutStatus": "ACCEPTED",
+          "payoutFrom": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "dbaName": "dbaName",
+            "payorName": "payorName"
+          },
+          "payoutTo": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "dbaName": "dbaName",
+            "payorName": "payorName"
+          },
           "totalPayments": 0,
+          "quoted": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          },
+          "instructed": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          },
+          "incompletePayments": 5,
+          "submittedDateTime": "2000-01-23T04:56:07.000Z",
+          "quotedDateTime": "2000-01-23T04:56:07.000Z",
           "returnedPayments": 5,
           "instructedDateTime": "2000-01-23T04:56:07.000Z",
           "payoutMemo": "payoutMemo"
@@ -11768,6 +11949,32 @@
             "description": "The memo attached to the payout.",
             "type": "string"
           },
+          "payoutType": {
+            "$ref": "#/components/schemas/PayoutTypeV4"
+          },
+          "quotedDateTime": {
+            "description": "The date/time at which the payout was quoted.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "submitting": {
+            "$ref": "#/components/schemas/PayoutPayorV4"
+          },
+          "payoutFrom": {
+            "$ref": "#/components/schemas/PayoutPayorV4"
+          },
+          "payoutTo": {
+            "$ref": "#/components/schemas/PayoutPayorV4"
+          },
+          "quoted": {
+            "$ref": "#/components/schemas/PayoutPrincipalV4"
+          },
+          "instructed": {
+            "$ref": "#/components/schemas/PayoutPrincipalV4"
+          },
+          "withdrawn": {
+            "$ref": "#/components/schemas/PayoutPrincipalV4"
+          },
           "totalPayments": {
             "description": "The count of payments within the payout.",
             "type": "integer"
@@ -11787,6 +11994,22 @@
           "returnedPayments": {
             "description": "The count of payments within the payout which have been returned.",
             "type": "integer"
+          }
+        }
+      },
+      "PaymentResponseV4_payout": {
+        "example": {
+          "payoutFrom": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "dbaName": "dbaName",
+            "payorName": "payorName"
+          }
+        },
+        "properties": {
+          "payoutFrom": {
+            "$ref": "#/components/schemas/PayoutPayorV4"
           }
         }
       },
