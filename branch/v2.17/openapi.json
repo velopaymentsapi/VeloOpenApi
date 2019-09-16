@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.17.1",
+    "version": "2.17.2",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -168,7 +168,8 @@
                   "reminderEmailsOptOut": false,
                   "language": "EN",
                   "supportContact": "support@example.com",
-                  "collectiveAlias": "MyAlias"
+                  "collectiveAlias": "MyAlias",
+                  "maxMasterPayorAdmins": 2
                 }
               }
             ]
@@ -261,7 +262,8 @@
                   "reminderEmailsOptOut": false,
                   "language": "EN",
                   "supportContact": "support@example.com",
-                  "collectiveAlias": "MyAlias"
+                  "collectiveAlias": "MyAlias",
+                  "maxMasterPayorAdmins": 2
                 }
               }
             ]
@@ -1730,7 +1732,6 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "{\n    \"page\": {\n        \"numberOfElements\": 2,\n        \"totalElements\": 2,\n        \"totalPages\": 1,\n        \"page\": 1,\n        \"pageSize\": 1000\n    },\n    \"content\": [\n        {\n            \"remoteId\":\"payeeA\",\n            \"payeeId\":\"ee2cc9a1-34dd-4ab6-91e3-db111d08d995\",\n            \"displayName\":\"pA\"\n        },{\n            \"remoteId\" : \"payeeB\",\n            \"payeeId\":\"e904966e-ae6a-4ddd-879c-fd1167c21849\",\n            \"onboardedStatus\":\"INVITED\",\n            \"email\":\"payeeB@example.com\",\n            \"displayName\":\"P AyeeB\"\n        }\n    ],\n    \"links\": [\n        {\n            \"rel\": \"first\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        },\n        {\n            \"rel\": \"last\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        },\n        {\n            \"rel\": \"self\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        }\n    ]\n}\n",
                 "schema": {
                   "$ref": "#/components/schemas/PayeeDeltaResponse"
                 }
@@ -2194,7 +2195,6 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "{\n    \"page\" : {\n        \"numberOfElements\" : 1,\n        \"totalElements\" : 1,\n        \"totalPages\" : 1,\n        \"page\" : 1,\n        \"pageSize\" : 25\n    },\n    \"content\" : [ {\n                      \"payeeId\" : \"c3d60e1f-a4d0-4273-b501-bfa81c70d56b\",\n                      \"invitationStatus\" : \"ACCEPTED\",\n                      \"gracePeriodEndDate\" : \"2019-06-25\"\n                  } ],\n    \"links\" : [ {\n                    \"rel\" : \"first\",\n                    \"href\" : \"http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25\"\n                }, {\n                    \"rel\" : \"last\",\n                    \"href\" : \"http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25\"\n                }, {\n                    \"rel\" : \"self\",\n                    \"href\" : \"http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25\"\n                } ]\n}\n",
                 "schema": {
                   "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse"
                 }
@@ -4179,7 +4179,6 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "{\n    \"page\": {\n        \"numberOfElements\": 2,\n        \"totalElements\": 2,\n        \"totalPages\": 1,\n        \"page\": 1,\n        \"pageSize\": 1000\n    },\n    \"content\": [\n        {\n                    \"paymentId\" : \"c6ebc017-f519-4198-b34c-70c9d6bbec79\",\n                    \"payoutId\":\"3725bd24-daca-4531-a8c4-8ea1e630463f\",\n                    \"payorPaymentId\":\"PBJ190610\",\n                    \"status\":\"ACCEPTED_BY_RAILS\",\n                    \"paymentCurrency\":\"USD\",\n                    \"paymentAmount\":\"10000\",\n                    \"sourceAmount\":\"10000\",\n                    \"sourceCurrency\":\"USD\"\n        },\n        {\n                    \"paymentId\" : \"87edda1c-7f34-4c1a-a0db-6d2638a3619b\",\n                    \"payoutId\":\"3725bd24-daca-4531-a8c4-8ea1e630463f\",\n                    \"status\":\"SUBMITTED\",\n                    \"paymentCurrency\":\"USD\",\n                    \"paymentAmount\":\"2000\",\n        }\n    ],\n    \"links\": [\n        {\n            \"rel\": \"first\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        },\n        {\n            \"rel\": \"last\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        },\n        {\n            \"rel\": \"self\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        }\n    ]\n}\n",
                 "schema": {
                   "$ref": "#/components/schemas/PaymentDeltaResponse"
                 }
@@ -4300,7 +4299,6 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "{\n    \"page\": {\n        \"numberOfElements\": 3,\n        \"totalElements\": 3,\n        \"totalPages\": 1,\n        \"page\": 1,\n        \"pageSize\": 0\n    },\n    \"content\": [\n    {\n        \"fundingId\": \"63386b0d-123b-43c9-bd40-bd8992464fd0\",\n        \"amount\": 100000,\n        \"currency\": \"USD\",\n        \"status\": \"ALLOCATED\"\n    },\n    {\n        \"fundingId\": \"7f9c43fb-c636-4c6f-a056-500d855590c8\",\n        \"amount\": null,\n        \"currency\": null,\n        \"status\": \"RETURNED\"\n    },\n    {\n        \"fundingId\": \"f72d5042-6bdb-4ced-9a5f-8890dfe3dffb\",\n        \"amount\": null,\n        \"currency\": null,\n        \"status\": \"UNALLOCATED\"\n    }\n    ],\n    \"links\": [\n    {\n        \"rel\": \"first\",\n        \"href\": \"https://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=a76a372c-42ad-43de-8075-a4280db09825&updatedSince=2019-05-01T00:00:00Z&page=1&pageSize=0\"\n    },\n    {\n        \"rel\": \"last\",\n        \"href\": \"https://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=a76a372c-42ad-43de-8075-a4280db09825&updatedSince=2019-05-01T00:00:00Z&page=1&pageSize=0\"\n    },\n    {\n        \"rel\": \"self\",\n        \"href\": \"https://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=a76a372c-42ad-43de-8075-a4280db09825&updatedSince=2019-05-01T00:00:00Z&page=1&pageSize=0\"\n    }\n    ]\n}\n",
                 "schema": {
                   "$ref": "#/components/schemas/FundingDeltaResponse"
                 }
@@ -4741,6 +4739,7 @@
           "payeeGracePeriodDays": 0,
           "fundingAccountRoutingNumber": "123456789",
           "reminderEmailsOptOut": true,
+          "maxMasterPayorAdmins": 6,
           "manualLockout": true,
           "collectiveAlias": "Payee",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -4853,6 +4852,9 @@
           },
           "includesReports": {
             "type": "boolean"
+          },
+          "maxMasterPayorAdmins": {
+            "type": "integer"
           }
         },
         "required": [
@@ -4882,6 +4884,7 @@
           "primaryContactPhone": "123-123-1234",
           "payeeGracePeriodDays": 0,
           "reminderEmailsOptOut": true,
+          "maxMasterPayorAdmins": 6,
           "manualLockout": true,
           "collectiveAlias": "Payee",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -4979,6 +4982,9 @@
           },
           "includesReports": {
             "type": "boolean"
+          },
+          "maxMasterPayorAdmins": {
+            "type": "integer"
           }
         },
         "required": [
@@ -5490,7 +5496,7 @@
           },
           "payorRefs": {
             "items": {
-              "$ref": "#/components/schemas/PayorRef"
+              "$ref": "#/components/schemas/PayeePayorRef"
             },
             "nullable": true,
             "readOnly": true,
@@ -5502,7 +5508,7 @@
             "type": "string"
           },
           "address": {
-            "$ref": "#/components/schemas/Address"
+            "$ref": "#/components/schemas/PayeeAddress"
           },
           "country": {
             "type": "string"
@@ -5511,7 +5517,7 @@
             "type": "string"
           },
           "paymentChannel": {
-            "$ref": "#/components/schemas/PaymentChannel"
+            "$ref": "#/components/schemas/PayeePaymentChannel"
           },
           "challenge": {
             "$ref": "#/components/schemas/Challenge"
@@ -5533,10 +5539,10 @@
             "$ref": "#/components/schemas/PayeeType"
           },
           "company": {
-            "$ref": "#/components/schemas/Company"
+            "$ref": "#/components/schemas/CompanyV1"
           },
           "individual": {
-            "$ref": "#/components/schemas/Individual"
+            "$ref": "#/components/schemas/IndividualV1"
           },
           "created": {
             "format": "date-time",
@@ -8957,7 +8963,7 @@
           },
           "payorRefs": {
             "items": {
-              "$ref": "#/components/schemas/PayorRef"
+              "$ref": "#/components/schemas/PayeePayorRef"
             },
             "nullable": true,
             "readOnly": true,
@@ -8969,7 +8975,7 @@
             "type": "string"
           },
           "address": {
-            "$ref": "#/components/schemas/Address"
+            "$ref": "#/components/schemas/PayeeAddress"
           },
           "country": {
             "type": "string"
@@ -8978,7 +8984,7 @@
             "type": "string"
           },
           "paymentChannel": {
-            "$ref": "#/components/schemas/PaymentChannel"
+            "$ref": "#/components/schemas/PayeePaymentChannel"
           },
           "challenge": {
             "$ref": "#/components/schemas/Challenge"
@@ -9036,7 +9042,7 @@
         },
         "type": "object"
       },
-      "PayorRef": {
+      "PayeePayorRef": {
         "example": {
           "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
           "invitationStatus": "invitationStatus",
@@ -9058,7 +9064,7 @@
         },
         "type": "object"
       },
-      "Address": {
+      "PayeeAddress": {
         "example": {
           "country": "US",
           "countyOrProvince": "FL",
@@ -9131,7 +9137,7 @@
         ],
         "type": "object"
       },
-      "PaymentChannel": {
+      "PayeePaymentChannel": {
         "example": {
           "paymentChannelName": "paymentChannelName",
           "routingNo": "routingNo",
@@ -9230,7 +9236,7 @@
         ],
         "type": "string"
       },
-      "Company": {
+      "CompanyV1": {
         "example": {
           "taxId": "taxId",
           "name": "name",
@@ -9261,7 +9267,7 @@
         ],
         "type": "object"
       },
-      "Individual": {
+      "IndividualV1": {
         "example": {
           "name": {
             "firstName": "firstName",
@@ -9274,7 +9280,7 @@
         },
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/Individual_name"
+            "$ref": "#/components/schemas/IndividualV1_name"
           },
           "nationalIdentification": {
             "description": "If not authorized to view, value will be masked. Example: XXXXX1234",
@@ -9422,7 +9428,7 @@
           },
           "payorRefs": {
             "items": {
-              "$ref": "#/components/schemas/PayorRef"
+              "$ref": "#/components/schemas/PayeePayorRefV2"
             },
             "nullable": true,
             "readOnly": true,
@@ -9455,7 +9461,7 @@
             "$ref": "#/components/schemas/Language"
           },
           "company": {
-            "$ref": "#/components/schemas/Company"
+            "$ref": "#/components/schemas/CompanyV1"
           },
           "individual": {
             "$ref": "#/components/schemas/CreateIndividual"
@@ -10638,12 +10644,34 @@
         },
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/Individual_name"
+            "$ref": "#/components/schemas/IndividualV1_name"
           }
         },
         "required": [
           "name"
         ],
+        "type": "object"
+      },
+      "PayeePayorRefV2": {
+        "example": {
+          "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+          "invitationStatus": "invitationStatus",
+          "remoteId": "uniqueIdForRemoteEntity"
+        },
+        "properties": {
+          "payorId": {
+            "example": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+            "format": "uuid",
+            "type": "string"
+          },
+          "remoteId": {
+            "example": "uniqueIdForRemoteEntity",
+            "type": "string"
+          },
+          "invitationStatus": {
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "CreatePayeeAddress": {
@@ -11041,7 +11069,7 @@
         },
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/Individual_name"
+            "$ref": "#/components/schemas/IndividualV1_name"
           },
           "nationalIdentification": {
             "maxLength": 30,
@@ -12029,7 +12057,7 @@
           }
         }
       },
-      "Individual_name": {
+      "IndividualV1_name": {
         "example": {
           "firstName": "firstName",
           "lastName": "lastName",

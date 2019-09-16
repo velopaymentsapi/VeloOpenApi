@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.17.1
+  version: 2.17.2
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -194,6 +194,7 @@ paths:
                 language: EN
                 supportContact: support@example.com
                 collectiveAlias: MyAlias
+                maxMasterPayorAdmins: 2
         '404':
           description: Payor Id Not Found
           x-contracts:
@@ -261,6 +262,7 @@ paths:
                 language: EN
                 supportContact: support@example.com
                 collectiveAlias: MyAlias
+                maxMasterPayorAdmins: 2
         '404':
           description: Payor Id Not Found
           x-contracts:
@@ -1207,43 +1209,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                {
-                    "page": {
-                        "numberOfElements": 2,
-                        "totalElements": 2,
-                        "totalPages": 1,
-                        "page": 1,
-                        "pageSize": 1000
-                    },
-                    "content": [
-                        {
-                            "remoteId":"payeeA",
-                            "payeeId":"ee2cc9a1-34dd-4ab6-91e3-db111d08d995",
-                            "displayName":"pA"
-                        },{
-                            "remoteId" : "payeeB",
-                            "payeeId":"e904966e-ae6a-4ddd-879c-fd1167c21849",
-                            "onboardedStatus":"INVITED",
-                            "email":"payeeB@example.com",
-                            "displayName":"P AyeeB"
-                        }
-                    ],
-                    "links": [
-                        {
-                            "rel": "first",
-                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
-                        },
-                        {
-                            "rel": "last",
-                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
-                        },
-                        {
-                            "rel": "self",
-                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
-                        }
-                    ]
-                }
               schema:
                 $ref: '#/components/schemas/PayeeDeltaResponse'
           description: Details of Payee Changes
@@ -1575,31 +1540,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                {
-                    "page" : {
-                        "numberOfElements" : 1,
-                        "totalElements" : 1,
-                        "totalPages" : 1,
-                        "page" : 1,
-                        "pageSize" : 25
-                    },
-                    "content" : [ {
-                                      "payeeId" : "c3d60e1f-a4d0-4273-b501-bfa81c70d56b",
-                                      "invitationStatus" : "ACCEPTED",
-                                      "gracePeriodEndDate" : "2019-06-25"
-                                  } ],
-                    "links" : [ {
-                                    "rel" : "first",
-                                    "href" : "http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25"
-                                }, {
-                                    "rel" : "last",
-                                    "href" : "http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25"
-                                }, {
-                                    "rel" : "self",
-                                    "href" : "http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25"
-                                } ]
-                }
               schema:
                 $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse'
           description: Get Payees with Invitaion status - filters of payeeId and invitationStatus
@@ -3073,49 +3013,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                {
-                    "page": {
-                        "numberOfElements": 2,
-                        "totalElements": 2,
-                        "totalPages": 1,
-                        "page": 1,
-                        "pageSize": 1000
-                    },
-                    "content": [
-                        {
-                                    "paymentId" : "c6ebc017-f519-4198-b34c-70c9d6bbec79",
-                                    "payoutId":"3725bd24-daca-4531-a8c4-8ea1e630463f",
-                                    "payorPaymentId":"PBJ190610",
-                                    "status":"ACCEPTED_BY_RAILS",
-                                    "paymentCurrency":"USD",
-                                    "paymentAmount":"10000",
-                                    "sourceAmount":"10000",
-                                    "sourceCurrency":"USD"
-                        },
-                        {
-                                    "paymentId" : "87edda1c-7f34-4c1a-a0db-6d2638a3619b",
-                                    "payoutId":"3725bd24-daca-4531-a8c4-8ea1e630463f",
-                                    "status":"SUBMITTED",
-                                    "paymentCurrency":"USD",
-                                    "paymentAmount":"2000",
-                        }
-                    ],
-                    "links": [
-                        {
-                            "rel": "first",
-                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
-                        },
-                        {
-                            "rel": "last",
-                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
-                        },
-                        {
-                            "rel": "self",
-                            "href": "http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
-                        }
-                    ]
-                }
               schema:
                 $ref: '#/components/schemas/PaymentDeltaResponse'
           description: Details of Payment Changes
@@ -3193,50 +3090,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                {
-                    "page": {
-                        "numberOfElements": 3,
-                        "totalElements": 3,
-                        "totalPages": 1,
-                        "page": 1,
-                        "pageSize": 0
-                    },
-                    "content": [
-                    {
-                        "fundingId": "63386b0d-123b-43c9-bd40-bd8992464fd0",
-                        "amount": 100000,
-                        "currency": "USD",
-                        "status": "ALLOCATED"
-                    },
-                    {
-                        "fundingId": "7f9c43fb-c636-4c6f-a056-500d855590c8",
-                        "amount": null,
-                        "currency": null,
-                        "status": "RETURNED"
-                    },
-                    {
-                        "fundingId": "f72d5042-6bdb-4ced-9a5f-8890dfe3dffb",
-                        "amount": null,
-                        "currency": null,
-                        "status": "UNALLOCATED"
-                    }
-                    ],
-                    "links": [
-                    {
-                        "rel": "first",
-                        "href": "https://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=a76a372c-42ad-43de-8075-a4280db09825&updatedSince=2019-05-01T00:00:00Z&page=1&pageSize=0"
-                    },
-                    {
-                        "rel": "last",
-                        "href": "https://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=a76a372c-42ad-43de-8075-a4280db09825&updatedSince=2019-05-01T00:00:00Z&page=1&pageSize=0"
-                    },
-                    {
-                        "rel": "self",
-                        "href": "https://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=a76a372c-42ad-43de-8075-a4280db09825&updatedSince=2019-05-01T00:00:00Z&page=1&pageSize=0"
-                    }
-                    ]
-                }
               schema:
                 $ref: '#/components/schemas/FundingDeltaResponse'
           description: Details of Funding changes
@@ -3699,6 +3552,7 @@ components:
         payeeGracePeriodDays: 0
         fundingAccountRoutingNumber: '123456789'
         reminderEmailsOptOut: true
+        maxMasterPayorAdmins: 6
         manualLockout: true
         collectiveAlias: Payee
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -3789,6 +3643,8 @@ components:
           type: string
         includesReports:
           type: boolean
+        maxMasterPayorAdmins:
+          type: integer
       required:
         - payorName
       type: object
@@ -3813,6 +3669,7 @@ components:
         primaryContactPhone: 123-123-1234
         payeeGracePeriodDays: 0
         reminderEmailsOptOut: true
+        maxMasterPayorAdmins: 6
         manualLockout: true
         collectiveAlias: Payee
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -3891,6 +3748,8 @@ components:
           type: string
         includesReports:
           type: boolean
+        maxMasterPayorAdmins:
+          type: integer
       required:
         - payorName
       type: object
@@ -4265,7 +4124,7 @@ components:
           type: string
         payorRefs:
           items:
-            $ref: '#/components/schemas/PayorRef'
+            $ref: '#/components/schemas/PayeePayorRef'
           nullable: true
           readOnly: true
           type: array
@@ -4274,13 +4133,13 @@ components:
           nullable: true
           type: string
         address:
-          $ref: '#/components/schemas/Address'
+          $ref: '#/components/schemas/PayeeAddress'
         country:
           type: string
         displayName:
           type: string
         paymentChannel:
-          $ref: '#/components/schemas/PaymentChannel'
+          $ref: '#/components/schemas/PayeePaymentChannel'
         challenge:
           $ref: '#/components/schemas/Challenge'
         language:
@@ -4296,9 +4155,9 @@ components:
         payeeType:
           $ref: '#/components/schemas/PayeeType'
         company:
-          $ref: '#/components/schemas/Company'
+          $ref: '#/components/schemas/CompanyV1'
         individual:
-          $ref: '#/components/schemas/Individual'
+          $ref: '#/components/schemas/IndividualV1'
         created:
           format: date-time
           type: string
@@ -6949,7 +6808,7 @@ components:
           type: string
         payorRefs:
           items:
-            $ref: '#/components/schemas/PayorRef'
+            $ref: '#/components/schemas/PayeePayorRef'
           nullable: true
           readOnly: true
           type: array
@@ -6958,13 +6817,13 @@ components:
           nullable: true
           type: string
         address:
-          $ref: '#/components/schemas/Address'
+          $ref: '#/components/schemas/PayeeAddress'
         country:
           type: string
         displayName:
           type: string
         paymentChannel:
-          $ref: '#/components/schemas/PaymentChannel'
+          $ref: '#/components/schemas/PayeePaymentChannel'
         challenge:
           $ref: '#/components/schemas/Challenge'
         language:
@@ -7005,7 +6864,7 @@ components:
         onboardedStatus:
           $ref: '#/components/schemas/OnboardedStatus'
       type: object
-    PayorRef:
+    PayeePayorRef:
       example:
         payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
         invitationStatus: invitationStatus
@@ -7021,7 +6880,7 @@ components:
         invitationStatus:
           type: string
       type: object
-    Address:
+    PayeeAddress:
       example:
         country: US
         countyOrProvince: FL
@@ -7082,7 +6941,7 @@ components:
         - country
         - line1
       type: object
-    PaymentChannel:
+    PayeePaymentChannel:
       example:
         paymentChannelName: paymentChannelName
         routingNo: routingNo
@@ -7161,7 +7020,7 @@ components:
         - UR
         - ZH
       type: string
-    Company:
+    CompanyV1:
       example:
         taxId: taxId
         name: name
@@ -7185,7 +7044,7 @@ components:
       required:
         - name
       type: object
-    Individual:
+    IndividualV1:
       example:
         name:
           firstName: firstName
@@ -7196,7 +7055,7 @@ components:
         dateOfBirth: dateOfBirth
       properties:
         name:
-          $ref: '#/components/schemas/Individual_name'
+          $ref: '#/components/schemas/IndividualV1_name'
         nationalIdentification:
           description: 'If not authorized to view, value will be masked. Example: XXXXX1234'
           readOnly: true
@@ -7309,7 +7168,7 @@ components:
           type: string
         payorRefs:
           items:
-            $ref: '#/components/schemas/PayorRef'
+            $ref: '#/components/schemas/PayeePayorRefV2'
           nullable: true
           readOnly: true
           type: array
@@ -7333,7 +7192,7 @@ components:
         language:
           $ref: '#/components/schemas/Language'
         company:
-          $ref: '#/components/schemas/Company'
+          $ref: '#/components/schemas/CompanyV1'
         individual:
           $ref: '#/components/schemas/CreateIndividual'
       required:
@@ -8238,9 +8097,25 @@ components:
           title: title
       properties:
         name:
-          $ref: '#/components/schemas/Individual_name'
+          $ref: '#/components/schemas/IndividualV1_name'
       required:
         - name
+      type: object
+    PayeePayorRefV2:
+      example:
+        payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+        invitationStatus: invitationStatus
+        remoteId: uniqueIdForRemoteEntity
+      properties:
+        payorId:
+          example: ba08877f-9d96-41e4-9c26-44a872d856ae
+          format: uuid
+          type: string
+        remoteId:
+          example: uniqueIdForRemoteEntity
+          type: string
+        invitationStatus:
+          type: string
       type: object
     CreatePayeeAddress:
       example:
@@ -8610,7 +8485,7 @@ components:
         dateOfBirth: 2000-01-23T00:00:00.000Z
       properties:
         name:
-          $ref: '#/components/schemas/Individual_name'
+          $ref: '#/components/schemas/IndividualV1_name'
         nationalIdentification:
           maxLength: 30
           minLength: 6
@@ -9350,7 +9225,7 @@ components:
         href:
           example: 'http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
           type: string
-    Individual_name:
+    IndividualV1_name:
       example:
         firstName: firstName
         lastName: lastName
