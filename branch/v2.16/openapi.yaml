@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.16.15
+  version: 2.16.16
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -194,6 +194,7 @@ paths:
                 language: EN
                 supportContact: support@example.com
                 collectiveAlias: MyAlias
+                maxMasterPayorAdmins: 2
         '404':
           description: Payor Id Not Found
           x-contracts:
@@ -261,6 +262,7 @@ paths:
                 language: EN
                 supportContact: support@example.com
                 collectiveAlias: MyAlias
+                maxMasterPayorAdmins: 2
         '404':
           description: Payor Id Not Found
           x-contracts:
@@ -3550,6 +3552,7 @@ components:
         payeeGracePeriodDays: 0
         fundingAccountRoutingNumber: '123456789'
         reminderEmailsOptOut: true
+        maxMasterPayorAdmins: 6
         manualLockout: true
         collectiveAlias: Payee
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -3640,6 +3643,8 @@ components:
           type: string
         includesReports:
           type: boolean
+        maxMasterPayorAdmins:
+          type: integer
       required:
         - payorName
       type: object
@@ -3664,6 +3669,7 @@ components:
         primaryContactPhone: 123-123-1234
         payeeGracePeriodDays: 0
         reminderEmailsOptOut: true
+        maxMasterPayorAdmins: 6
         manualLockout: true
         collectiveAlias: Payee
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -3742,6 +3748,8 @@ components:
           type: string
         includesReports:
           type: boolean
+        maxMasterPayorAdmins:
+          type: integer
       required:
         - payorName
       type: object
