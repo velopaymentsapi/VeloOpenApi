@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.17.2",
+    "version": "2.17.3",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -7841,6 +7841,13 @@
                   "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "dbaName": "dbaName",
                   "payorName": "payorName"
+                },
+                "payoutTo": {
+                  "principal": "principal",
+                  "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "dbaName": "dbaName",
+                  "payorName": "payorName"
                 }
               },
               "paymentMemo": "paymentMemo",
@@ -7903,6 +7910,13 @@
               "accountName": "accountName",
               "payout": {
                 "payoutFrom": {
+                  "principal": "principal",
+                  "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "dbaName": "dbaName",
+                  "payorName": "payorName"
+                },
+                "payoutTo": {
                   "principal": "principal",
                   "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -7995,6 +8009,13 @@
           "accountName": "accountName",
           "payout": {
             "payoutFrom": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "dbaName": "dbaName",
+              "payorName": "payorName"
+            },
+            "payoutTo": {
               "principal": "principal",
               "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -12033,10 +12054,20 @@
             "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
             "dbaName": "dbaName",
             "payorName": "payorName"
+          },
+          "payoutTo": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "dbaName": "dbaName",
+            "payorName": "payorName"
           }
         },
         "properties": {
           "payoutFrom": {
+            "$ref": "#/components/schemas/PayoutPayorV4"
+          },
+          "payoutTo": {
             "$ref": "#/components/schemas/PayoutPayorV4"
           }
         }
