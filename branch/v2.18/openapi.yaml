@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.18.3
+  version: 2.18.4
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -2917,7 +2917,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListPaymentsResponse'
+                $ref: '#/components/schemas/ListPaymentsResponse_2'
           description: Details of Payee
         '400':
           description: Bad Request Parameter
@@ -6082,6 +6082,169 @@ components:
         links:
           items:
             $ref: '#/components/schemas/PagedPayeeResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/PaymentResponseV4'
+          type: array
+      type: object
+    ListPaymentsResponse_2:
+      description: List Payments Response Object
+      example:
+        summary:
+          totalOnboardedCount: 123
+          totalRegisteredCount: 123
+          totalPayeesCount: 123
+          totalInvitedCount: 123
+          totalOfacFailedCount: 123
+        links:
+          - rel: first
+            href: 'https://example.com'
+          - rel: first
+            href: 'https://example.com'
+        page:
+          numberOfElements: 12
+          totalPages: 12
+          pageSize: 25
+          page: 1
+          totalElements: 12
+        content:
+          - traceNumber: traceNumber
+            accountName: accountName
+            payout:
+              payoutFrom:
+                principal: principal
+                principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                dbaName: dbaName
+                payorName: payorName
+              payoutTo:
+                principal: principal
+                principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                dbaName: dbaName
+                payorName: payorName
+            paymentMemo: paymentMemo
+            paymentAmount: 7
+            fundingStatus: FUNDED
+            paymentChannelName: paymentChannelName
+            filenameReference: filenameReference
+            rate: 9.301444243932576
+            paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            countryCode: countryCode
+            returnReason: returnReason
+            submittedDateTime: 2000-01-23T04:56:07.000Z
+            sourceAmount: 2
+            railsId: railsId
+            payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            events:
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+            payorName: payorName
+            sourceAccountName: sourceAccountName
+            paymentChannelId: paymentChannelId
+            invertedRate: 3.616076749251911
+            sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            individualIdentificationNumber: individualIdentificationNumber
+            accountNumber: accountNumber
+            quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            remoteId: remoteId
+            routingNumber: routingNumber
+            returnCost: 2
+            iban: iban
+            payorPaymentId: payorPaymentId
+            status: ACCEPTED
+          - traceNumber: traceNumber
+            accountName: accountName
+            payout:
+              payoutFrom:
+                principal: principal
+                principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                dbaName: dbaName
+                payorName: payorName
+              payoutTo:
+                principal: principal
+                principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                dbaName: dbaName
+                payorName: payorName
+            paymentMemo: paymentMemo
+            paymentAmount: 7
+            fundingStatus: FUNDED
+            paymentChannelName: paymentChannelName
+            filenameReference: filenameReference
+            rate: 9.301444243932576
+            paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            countryCode: countryCode
+            returnReason: returnReason
+            submittedDateTime: 2000-01-23T04:56:07.000Z
+            sourceAmount: 2
+            railsId: railsId
+            payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            events:
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+              - principal: principal
+                eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                eventDateTime: 2000-01-23T04:56:07.000Z
+                routingNumber: routingNumber
+                accountName: accountName
+                iban: iban
+                sourceAmount: 1299
+                eventType: PAYOUT_SUBMITTED
+                accountNumber: accountNumber
+                paymentAmount: 1299
+            payorName: payorName
+            sourceAccountName: sourceAccountName
+            paymentChannelId: paymentChannelId
+            invertedRate: 3.616076749251911
+            sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            individualIdentificationNumber: individualIdentificationNumber
+            accountNumber: accountNumber
+            quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            remoteId: remoteId
+            routingNumber: routingNumber
+            returnCost: 2
+            iban: iban
+            payorPaymentId: payorPaymentId
+            status: ACCEPTED
+      properties:
+        summary:
+          $ref: '#/components/schemas/ListPaymentsResponse_summary'
+        page:
+          $ref: '#/components/schemas/ListPaymentsResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/GetPayoutsResponseV3_links'
           type: array
         content:
           items:
