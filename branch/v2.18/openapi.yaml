@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.18.5
+  version: 2.18.6
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -1963,6 +1963,42 @@ paths:
             $ curl 'https://api.sandbox.velopayments.com/v2/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \
                 -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
     summary: Get Source Account
+  '/v2/sourceAccounts/{sourceAccountId}/transfers':
+    post:
+      description: 'Transfer funds between source accounts for a Payor. The ''from'' source account is identified in the URL, and is the account which will be debited. The ''to'' (destination) source account is in the body, and is the account which will be credited. Both source accounts must belong to the same Payor. There must be sufficient balance in the ''from'' source account, otherwise the transfer attempt will fail. The authorisation token used must be allowed to access that Payor i.e. it is associated with the same Payor as the source accounts, or a parent or ancestor Payor. (204 - no content, 400 - invalid request body, 404 - from or to source account not found).'
+      operationId: transferFunds
+      parameters:
+        - description: 'The ''from'' source account id, which will be debited'
+          in: path
+          name: sourceAccountId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest'
+        description: Body
+        required: true
+      responses:
+        '204':
+          description: Request Processed
+        '400':
+          description: Invalid Request Body
+        '404':
+          description: Source Account Not Found
+      summary: Transfer Funds between source accounts
+      tags:
+        - Funding Manager
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/transfers' -i -X POST \
+                -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \
+                -H 'Content-Type: application/json' \
+                -d '{ "toSourceAccountId": "a99f93f9-6845-451d-a1f5-f3c841599dd7", "amount": 10000, "currency": "USD" }'
   /v1/paymentaudit/fundings:
     get:
       description: |
@@ -5222,6 +5258,32 @@ components:
         - physicalAccountName
         - pooled
         - railsId
+      type: object
+    TransferRequest:
+      example:
+        amount: 800828191
+        currency: USD
+        toSourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        toSourceAccountId:
+          description: 'The ''to'' source account id, which will be credited'
+          format: uuid
+          type: string
+        amount:
+          description: 'Amount to transfer, in minor units'
+          format: int64
+          maximum: 9999999999
+          minimum: 1
+          type: integer
+        currency:
+          example: USD
+          maxLength: 3
+          minLength: 3
+          type: string
+      required:
+        - amount
+        - currency
+        - toSourceAccountId
       type: object
     GetFundingsResponse:
       allOf:
