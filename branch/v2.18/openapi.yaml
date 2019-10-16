@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.18.6
+  version: 2.18.7
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -3440,13 +3440,32 @@ paths:
   /v1/supportedCountries:
     get:
       description: List the supported countries.
-      operationId: listSupportedCountries
+      operationId: listSupportedCountriesV1
       responses:
         '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SupportedCountriesResponse'
+          description: List of Supported Countries
+      summary: List Supported Countries
+      tags:
+        - Countries
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/supportedCountries' -i -X GET \
+                -H 'Authorization: Bearer 9a7c9010-547f-410e-ac3c-fd6f6701c745'
+  /v2/supportedCountries:
+    get:
+      description: List the supported countries.
+      operationId: listSupportedCountries
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SupportedCountriesResponse_2'
           description: List of Supported Countries
       summary: List Supported Countries
       tags:
@@ -6857,6 +6876,21 @@ components:
             $ref: '#/components/schemas/SupportedCountry'
           type: array
       type: object
+    SupportedCountriesResponse_2:
+      example:
+        countries:
+          - isoCountryCode: US
+            currencies:
+              - USD
+          - isoCountryCode: US
+            currencies:
+              - USD
+      properties:
+        countries:
+          items:
+            $ref: '#/components/schemas/SupportedCountry_2'
+          type: array
+      type: object
     SupportedCurrencyResponse:
       example:
         currencies:
@@ -8275,6 +8309,34 @@ components:
           type: array
       type: object
     SupportedCountry:
+      example:
+        isoCountryCode: US
+        currencies:
+          - USD
+      properties:
+        isoCountryCode:
+          enum:
+            - US
+            - GB
+            - FR
+            - CA
+            - JP
+          example: US
+          type: string
+        currencies:
+          example:
+            - USD
+          items:
+            enum:
+              - USD
+              - GBP
+              - EUR
+              - CAD
+              - JPY
+            type: string
+          type: array
+      type: object
+    SupportedCountry_2:
       example:
         isoCountryCode: US
         currencies:
