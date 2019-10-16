@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.18.7",
+    "version": "2.18.8",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -9053,12 +9053,20 @@
         "example": {
           "countries": [
             {
+              "regions": [
+                "regions",
+                "regions"
+              ],
               "isoCountryCode": "US",
               "currencies": [
                 "USD"
               ]
             },
             {
+              "regions": [
+                "regions",
+                "regions"
+              ],
               "isoCountryCode": "US",
               "currencies": [
                 "USD"
@@ -10954,6 +10962,10 @@
       },
       "SupportedCountry_2": {
         "example": {
+          "regions": [
+            "regions",
+            "regions"
+          ],
           "isoCountryCode": "US",
           "currencies": [
             "USD"
@@ -10986,6 +10998,9 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "regions": {
+            "$ref": "#/components/schemas/Region"
           }
         },
         "type": "object"
@@ -11774,6 +11789,19 @@
           },
           "displayOrder": {
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "Region": {
+        "properties": {
+          "name": {
+            "example": "California",
+            "type": "string"
+          },
+          "abbreviation": {
+            "example": "CA",
+            "type": "string"
           }
         },
         "type": "object"

@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.18.7
+  version: 2.18.8
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -6879,10 +6879,16 @@ components:
     SupportedCountriesResponse_2:
       example:
         countries:
-          - isoCountryCode: US
+          - regions:
+              - regions
+              - regions
+            isoCountryCode: US
             currencies:
               - USD
-          - isoCountryCode: US
+          - regions:
+              - regions
+              - regions
+            isoCountryCode: US
             currencies:
               - USD
       properties:
@@ -8338,6 +8344,9 @@ components:
       type: object
     SupportedCountry_2:
       example:
+        regions:
+          - regions
+          - regions
         isoCountryCode: US
         currencies:
           - USD
@@ -8363,6 +8372,8 @@ components:
               - JPY
             type: string
           type: array
+        regions:
+          $ref: '#/components/schemas/Region'
       type: object
     SupportedCurrency:
       example:
@@ -9027,6 +9038,15 @@ components:
           type: string
         displayOrder:
           type: integer
+      type: object
+    Region:
+      properties:
+        name:
+          example: California
+          type: string
+        abbreviation:
+          example: CA
+          type: string
       type: object
     FundingEventType:
       enum:
