@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.18.8",
+    "version": "2.18.11",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -3580,10 +3580,10 @@
         "operationId": "getPayoutsForPayorV4",
         "parameters": [
           {
-            "description": "The account owner Payor ID",
+            "description": "The id (UUID) of the payor funding the payout or the payor whose payees are being paid.",
             "in": "query",
             "name": "payorId",
-            "required": true,
+            "required": false,
             "schema": {
               "format": "uuid",
               "type": "string"
@@ -3635,6 +3635,15 @@
             "required": false,
             "schema": {
               "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The name of the payor whose payees are being paid. This filters via a case insensitive substring match.",
+            "in": "query",
+            "name": "fromPayorName",
+            "required": false,
+            "schema": {
               "type": "string"
             }
           },
@@ -7806,7 +7815,8 @@
               "totalIncompletePayments": 6,
               "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
               "instructedDateTime": "instructedDateTime",
-              "payoutMemo": "payoutMemo"
+              "payoutMemo": "payoutMemo",
+              "payorName": "payorName"
             },
             {
               "dateTime": "2000-01-23T04:56:07.000Z",
@@ -7850,7 +7860,8 @@
               "totalIncompletePayments": 6,
               "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
               "instructedDateTime": "instructedDateTime",
-              "payoutMemo": "payoutMemo"
+              "payoutMemo": "payoutMemo",
+              "payorName": "payorName"
             }
           ]
         },
@@ -10354,7 +10365,8 @@
           "totalIncompletePayments": 6,
           "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
           "instructedDateTime": "instructedDateTime",
-          "payoutMemo": "payoutMemo"
+          "payoutMemo": "payoutMemo",
+          "payorName": "payorName"
         },
         "properties": {
           "payoutId": {
@@ -10362,8 +10374,6 @@
             "type": "string"
           },
           "payorId": {
-            "deprecated": true,
-            "description": "Deprecated in v2.16. Will be populated with submitting payor ID until removed in a later release.",
             "format": "uuid",
             "type": "string"
           },
@@ -10410,10 +10420,13 @@
           },
           "payoutType": {
             "$ref": "#/components/schemas/PayoutTypeV4"
+          },
+          "payorName": {
+            "type": "string"
           }
         },
         "required": [
-          "payoutId",
+          "payorName",
           "payoutType",
           "status",
           "submittedDateTime"

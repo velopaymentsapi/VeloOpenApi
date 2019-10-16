@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.18.8
+  version: 2.18.11
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -2581,10 +2581,10 @@ paths:
         Get List of payouts for payor
       operationId: getPayoutsForPayorV4
       parameters:
-        - description: The account owner Payor ID
+        - description: The id (UUID) of the payor funding the payout or the payor whose payees are being paid.
           in: query
           name: payorId
-          required: true
+          required: false
           schema:
             format: uuid
             type: string
@@ -2623,6 +2623,12 @@ paths:
           required: false
           schema:
             format: date
+            type: string
+        - description: The name of the payor whose payees are being paid. This filters via a case insensitive substring match.
+          in: query
+          name: fromPayorName
+          required: false
+          schema:
             type: string
         - description: Page number. Default is 1.
           in: query
@@ -5928,6 +5934,7 @@ components:
             withdrawnDateTime: 2000-01-23T04:56:07.000Z
             instructedDateTime: instructedDateTime
             payoutMemo: payoutMemo
+            payorName: payorName
           - dateTime: 2000-01-23T04:56:07.000Z
             sourceAccountSummary:
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -5960,6 +5967,7 @@ components:
             withdrawnDateTime: 2000-01-23T04:56:07.000Z
             instructedDateTime: instructedDateTime
             payoutMemo: payoutMemo
+            payorName: payorName
       properties:
         summary:
           $ref: '#/components/schemas/PagedPayeeResponse_summary'
@@ -7872,13 +7880,12 @@ components:
         withdrawnDateTime: 2000-01-23T04:56:07.000Z
         instructedDateTime: instructedDateTime
         payoutMemo: payoutMemo
+        payorName: payorName
       properties:
         payoutId:
           format: uuid
           type: string
         payorId:
-          deprecated: true
-          description: Deprecated in v2.16. Will be populated with submitting payor ID until removed in a later release.
           format: uuid
           type: string
         status:
@@ -7911,8 +7918,10 @@ components:
           type: string
         payoutType:
           $ref: '#/components/schemas/PayoutTypeV4'
+        payorName:
+          type: string
       required:
-        - payoutId
+        - payorName
         - payoutType
         - status
         - submittedDateTime
