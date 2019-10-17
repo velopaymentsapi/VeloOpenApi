@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.15.95",
+    "version": "2.16.100",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -168,7 +168,8 @@
                   "reminderEmailsOptOut": false,
                   "language": "EN",
                   "supportContact": "support@example.com",
-                  "collectiveAlias": "MyAlias"
+                  "collectiveAlias": "MyAlias",
+                  "maxMasterPayorAdmins": 2
                 }
               }
             ]
@@ -177,10 +178,7 @@
             "description": "Payor Id Not Found",
             "x-contracts": [
               {
-                "contractId": 2,
-                "headers": {
-                  "Content-Length": "0"
-                }
+                "contractId": 2
               }
             ]
           }
@@ -264,7 +262,8 @@
                   "reminderEmailsOptOut": false,
                   "language": "EN",
                   "supportContact": "support@example.com",
-                  "collectiveAlias": "MyAlias"
+                  "collectiveAlias": "MyAlias",
+                  "maxMasterPayorAdmins": 2
                 }
               }
             ]
@@ -273,10 +272,7 @@
             "description": "Payor Id Not Found",
             "x-contracts": [
               {
-                "contractId": 2,
-                "headers": {
-                  "Content-Length": "0"
-                }
+                "contractId": 2
               }
             ]
           }
@@ -612,15 +608,6 @@
               "body": {
                 "reminderEmailsOptOut": true
               }
-            },
-            {
-              "contractId": 3,
-              "headers": {
-                "Content-Type": "application/json"
-              },
-              "body": {
-                "reminderEmailsOptOut_BadRequest": true
-              }
             }
           ]
         },
@@ -634,12 +621,7 @@
             ]
           },
           "400": {
-            "description": "Invalid Request Body",
-            "x-contracts": [
-              {
-                "contractId": 3
-              }
-            ]
+            "description": "Invalid Request Body"
           },
           "404": {
             "description": "Payor Id Not Found",
@@ -672,12 +654,6 @@
             "name": "Test Not Found",
             "serviceName": "payor-service",
             "contractPath": "/v1/payors/00000000-0000-0000-0000-000000000000/reminderEmailsUpdate"
-          },
-          {
-            "contractId": 3,
-            "name": "Test Email Opt-Out Bad Request",
-            "serviceName": "payor-service",
-            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb/reminderEmailsUpdate"
           }
         ]
       }
@@ -877,7 +853,7 @@
             }
           },
           {
-            "description": "List of additional Payor fields to include in the response for each Payor.\nThe values of payorId and payorName and always included for each Payor - 'fields' allows you to add to this.\nExample: ```fields=primaryContactEmail,kycState``` - will include payorId+payorName+primaryContactEmail+kycState for each Payor\nDefault if not specified is to include only payorId and payorName.\nThe supported fields are any combination of: primaryContactEmail,kycState\n            \n",
+            "description": "List of additional Payor fields to include in the response for each Payor.\nThe values of payorId and payorName and always included for each Payor - 'fields' allows you to add to this.\nExample: ```fields=primaryContactEmail,kycState``` - will include payorId+payorName+primaryContactEmail+kycState for each Payor\nDefault if not specified is to include only payorId and payorName.\nThe supported fields are any combination of: primaryContactEmail,kycState\n",
             "in": "query",
             "name": "fields",
             "required": false,
@@ -1010,6 +986,7 @@
         "x-contracts": [
           {
             "contractId": 1,
+            "ignored": true,
             "name": "Test List Payor Links - default Payor fields",
             "request": {
               "queryParameters": [
@@ -1023,6 +1000,7 @@
           },
           {
             "contractId": 2,
+            "ignored": true,
             "name": "Test List Payor Links - all Payor fields requested",
             "request": {
               "queryParameters": [
@@ -1177,7 +1155,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PayeeResponse"
+                  "$ref": "#/components/schemas/PagedPayeeResponse"
                 }
               }
             },
@@ -1754,7 +1732,6 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "{\n    \"page\": {\n        \"numberOfElements\": 2,\n        \"totalElements\": 2,\n        \"totalPages\": 1,\n        \"page\": 1,\n        \"pageSize\": 1000\n    },\n    \"content\": [\n        {\n            \"remoteId\":\"payeeA\",\n            \"payeeId\":\"ee2cc9a1-34dd-4ab6-91e3-db111d08d995\",\n            \"displayName\":\"pA\"\n        },{\n            \"remoteId\" : \"payeeB\",\n            \"payeeId\":\"e904966e-ae6a-4ddd-879c-fd1167c21849\",\n            \"onboardedStatus\":\"INVITED\",\n            \"email\":\"payeeB@example.com\",\n            \"displayName\":\"P AyeeB\"\n        }\n    ],\n    \"links\": [\n        {\n            \"rel\": \"first\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        },\n        {\n            \"rel\": \"last\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        },\n        {\n            \"rel\": \"self\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        }\n    ]\n}\n",
                 "schema": {
                   "$ref": "#/components/schemas/PayeeDeltaResponse"
                 }
@@ -2218,7 +2195,6 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "{\n    \"page\" : {\n        \"numberOfElements\" : 1,\n        \"totalElements\" : 1,\n        \"totalPages\" : 1,\n        \"page\" : 1,\n        \"pageSize\" : 25\n    },\n    \"content\" : [ {\n                      \"payeeId\" : \"c3d60e1f-a4d0-4273-b501-bfa81c70d56b\",\n                      \"invitationStatus\" : \"ACCEPTED\",\n                      \"gracePeriodEndDate\" : \"2019-06-25\"\n                  } ],\n    \"links\" : [ {\n                    \"rel\" : \"first\",\n                    \"href\" : \"http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25\"\n                }, {\n                    \"rel\" : \"last\",\n                    \"href\" : \"http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25\"\n                }, {\n                    \"rel\" : \"self\",\n                    \"href\" : \"http://localhost:62142/v2/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25\"\n                } ]\n}\n",
                 "schema": {
                   "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse"
                 }
@@ -4203,7 +4179,6 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "{\n    \"page\": {\n        \"numberOfElements\": 2,\n        \"totalElements\": 2,\n        \"totalPages\": 1,\n        \"page\": 1,\n        \"pageSize\": 1000\n    },\n    \"content\": [\n        {\n                    \"paymentId\" : \"c6ebc017-f519-4198-b34c-70c9d6bbec79\",\n                    \"payoutId\":\"3725bd24-daca-4531-a8c4-8ea1e630463f\",\n                    \"payorPaymentId\":\"PBJ190610\",\n                    \"status\":\"ACCEPTED_BY_RAILS\",\n                    \"paymentCurrency\":\"USD\",\n                    \"paymentAmount\":\"10000\",\n                    \"sourceAmount\":\"10000\",\n                    \"sourceCurrency\":\"USD\"\n        },\n        {\n                    \"paymentId\" : \"87edda1c-7f34-4c1a-a0db-6d2638a3619b\",\n                    \"payoutId\":\"3725bd24-daca-4531-a8c4-8ea1e630463f\",\n                    \"status\":\"SUBMITTED\",\n                    \"paymentCurrency\":\"USD\",\n                    \"paymentAmount\":\"2000\",\n        }\n    ],\n    \"links\": [\n        {\n            \"rel\": \"first\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        },\n        {\n            \"rel\": \"last\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        },\n        {\n            \"rel\": \"self\",\n            \"href\": \"http://api.sandbox.velopayments.com/v1/deltas/payments?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000\"\n        }\n    ]\n}\n",
                 "schema": {
                   "$ref": "#/components/schemas/PaymentDeltaResponse"
                 }
@@ -4248,6 +4223,126 @@
         ]
       }
     },
+    "/v1/deltas/fundings": {
+      "get": {
+        "description": "Get a paginated response listing funding changes.",
+        "operationId": "listFundingAuditDeltas",
+        "parameters": [
+          {
+            "description": "The Payor ID to find associated funding records",
+            "in": "query",
+            "name": "payorId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "x-contracts": [
+              {
+                "contractId": 1,
+                "value": "0a818933-087d-47f2-ad83-2f986ed087eb",
+                "matchers": [
+                  {
+                    "type": "equal_to",
+                    "value": "0a818933-087d-47f2-ad83-2f986ed087eb"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "The updatedSince filter in the format YYYY-MM-DDThh:mm:ss+hh:mm",
+            "in": "query",
+            "name": "updatedSince",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "x-contracts": [
+              {
+                "contractId": 1,
+                "value": "2019-01-20T09:00:00.000Z",
+                "matchers": [
+                  {
+                    "type": "equal_to",
+                    "value": "2019-01-20T09:00:00.000Z"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page size. Default is 100. Max allowable is 1000.",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FundingDeltaResponse"
+                }
+              }
+            },
+            "description": "Details of Funding changes",
+            "x-contracts": null
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "summary": "List Funding changes",
+        "tags": [
+          "Funding Manager"
+        ],
+        "x-contracts": [
+          {
+            "contractId": 1,
+            "name": "Test List funding changes",
+            "ignored": true,
+            "request": {
+              "queryParameters": [
+                {
+                  "key": "page",
+                  "value": 1
+                },
+                {
+                  "key": "pageSize",
+                  "value": 30
+                }
+              ]
+            },
+            "serviceName": "funding-manager-service"
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/deltas/fundings?pageSize=10&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \\\n    -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \\\n    -H 'Content-Type: application/json'\n"
+          }
+        ]
+      }
+    },
     "/v3/payouts": {
       "post": {
         "description": "Create a new payout and return a location header with a link to get the payout. Basic validation of the payout\nis performed before returning but more comprehensive validation is done asynchronously, the results of which\ncan be obtained by issuing a HTTP GET to the URL returned in the location header.\n**NOTE:** amount values in payments must be in 'minor units' format. E.g. cents for USD, pence for GBP etc.\n with no decimal places.\n",
@@ -4264,6 +4359,18 @@
               "schema": {
                 "properties": {
                   "payorId": {
+                    "deprecated": true,
+                    "description": "Deprecated in v2.16. Any value supplied here will be ignored.",
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "payoutFromPayorId": {
+                    "description": "The id of the payor whose source account(s) will be debited. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.",
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "payoutToPayorId": {
+                    "description": "The id of the payor whose payees will be paid. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.",
                     "format": "uuid",
                     "type": "string"
                   },
@@ -4312,7 +4419,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/payouts' -i -X POST \\\n-H 'Authorization: Bearer 63e4d691-847b-46b5-893d-fd15c54dd4bf' \\\n-H 'Content-Type: application/json' \\\n-d '{\"payorId\":\"ef7da492-e5a5-4086-b1ed-6d27323fc669\",\"payments\":[{\"remoteId\":\"myRemoteId01\",\"currency\":\"USD\",\"amount\":12345,\"sourceAccountName\":\"PAYOR_SRC_ACCT\",\"payorPaymentId\":\"1111\"},{\"remoteId\":\"myRemoteId02\",\"currency\":\"USD\",\"amount\":23456,\"sourceAccountName\":\"PAYOR_SRC_ACCT\",\"payorPaymentId\":\"2222\"},{\"remoteId\":\"myRemoteId01\",\"currency\":\"USD\",\"amount\":1020,\"sourceAccountName\":\"PAYOR_SRC_ACCT\",\"payorPaymentId\":\"3333\"},{\"remoteId\":\"myRemoteId03\",\"currency\":\"USD\",\"amount\":3456,\"sourceAccountName\":\"PAYOR_SRC_ACCT\",\"payorPaymentId\":\"4444\"},{\"remoteId\":\"myRemoteId04\",\"currency\":\"USD\",\"amount\":8765,\"sourceAccountName\":\"PAYOR_SRC_ACCT\",\"payorPaymentId\":\"5555\"}]}'\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/payouts' -i -X POST \\\n-H 'Authorization: Bearer 63e4d691-847b-46b5-893d-fd15c54dd4bf' \\\n-H 'Content-Type: application/json' \\\n-d '{\"payments\":[{\"remoteId\":\"myRemoteId01\",\"currency\":\"USD\",\"amount\":12345,\"sourceAccountName\":\"PAYOR_SRC_ACCT\",\"payorPaymentId\":\"1111\"},{\"remoteId\":\"myRemoteId02\",\"currency\":\"USD\",\"amount\":23456,\"sourceAccountName\":\"PAYOR_SRC_ACCT\",\"payorPaymentId\":\"2222\"},{\"remoteId\":\"myRemoteId01\",\"currency\":\"USD\",\"amount\":1020,\"sourceAccountName\":\"PAYOR_SRC_ACCT\",\"payorPaymentId\":\"3333\"},{\"remoteId\":\"myRemoteId03\",\"currency\":\"USD\",\"amount\":3456,\"sourceAccountName\":\"PAYOR_SRC_ACCT\",\"payorPaymentId\":\"4444\"},{\"remoteId\":\"myRemoteId04\",\"currency\":\"USD\",\"amount\":8765,\"sourceAccountName\":\"PAYOR_SRC_ACCT\",\"payorPaymentId\":\"5555\"}]}'\n"
           }
         ]
       }
@@ -4632,6 +4739,7 @@
           "payeeGracePeriodDays": 0,
           "fundingAccountRoutingNumber": "123456789",
           "reminderEmailsOptOut": true,
+          "maxMasterPayorAdmins": 6,
           "manualLockout": true,
           "collectiveAlias": "Payee",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -4651,7 +4759,7 @@
             "type": "string"
           },
           "address": {
-            "$ref": "#/components/schemas/Address"
+            "$ref": "#/components/schemas/PayorAddress"
           },
           "primaryContactName": {
             "description": "Name of primary contact for the payor.",
@@ -4744,6 +4852,9 @@
           },
           "includesReports": {
             "type": "boolean"
+          },
+          "maxMasterPayorAdmins": {
+            "type": "integer"
           }
         },
         "required": [
@@ -4773,6 +4884,7 @@
           "primaryContactPhone": "123-123-1234",
           "payeeGracePeriodDays": 0,
           "reminderEmailsOptOut": true,
+          "maxMasterPayorAdmins": 6,
           "manualLockout": true,
           "collectiveAlias": "Payee",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -4792,7 +4904,7 @@
             "type": "string"
           },
           "address": {
-            "$ref": "#/components/schemas/Address"
+            "$ref": "#/components/schemas/PayorAddressV2"
           },
           "primaryContactName": {
             "description": "Name of primary contact for the payor.",
@@ -4870,6 +4982,9 @@
           },
           "includesReports": {
             "type": "boolean"
+          },
+          "maxMasterPayorAdmins": {
+            "type": "integer"
           }
         },
         "required": [
@@ -5113,7 +5228,7 @@
         ],
         "type": "string"
       },
-      "PayeeResponse": {
+      "PagedPayeeResponse": {
         "description": "List Payees Response Object",
         "example": {
           "summary": {
@@ -5172,9 +5287,7 @@
                   "lastName": "lastName",
                   "otherNames": "otherNames",
                   "title": "title"
-                },
-                "nationalIdentification": "nationalIdentification",
-                "dateOfBirth": "dateOfBirth"
+                }
               },
               "displayName": "displayName",
               "created": "2000-01-23T04:56:07.000Z",
@@ -5204,7 +5317,6 @@
                 "value": "value"
               },
               "company": {
-                "taxId": "taxId",
                 "name": "name",
                 "operatingName": "operatingName"
               },
@@ -5243,9 +5355,7 @@
                   "lastName": "lastName",
                   "otherNames": "otherNames",
                   "title": "title"
-                },
-                "nationalIdentification": "nationalIdentification",
-                "dateOfBirth": "dateOfBirth"
+                }
               },
               "displayName": "displayName",
               "created": "2000-01-23T04:56:07.000Z",
@@ -5275,7 +5385,6 @@
                 "value": "value"
               },
               "company": {
-                "taxId": "taxId",
                 "name": "name",
                 "operatingName": "operatingName"
               },
@@ -5287,20 +5396,20 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/PayeeResponse_summary"
+            "$ref": "#/components/schemas/PagedPayeeResponse_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/Payee"
+              "$ref": "#/components/schemas/PayeeResponse"
             },
             "type": "array"
           }
@@ -5387,7 +5496,7 @@
           },
           "payorRefs": {
             "items": {
-              "$ref": "#/components/schemas/PayorRef"
+              "$ref": "#/components/schemas/PayeePayorRef"
             },
             "nullable": true,
             "readOnly": true,
@@ -5399,7 +5508,7 @@
             "type": "string"
           },
           "address": {
-            "$ref": "#/components/schemas/Address"
+            "$ref": "#/components/schemas/PayeeAddress"
           },
           "country": {
             "type": "string"
@@ -5408,7 +5517,7 @@
             "type": "string"
           },
           "paymentChannel": {
-            "$ref": "#/components/schemas/PaymentChannel"
+            "$ref": "#/components/schemas/PayeePaymentChannel"
           },
           "challenge": {
             "$ref": "#/components/schemas/Challenge"
@@ -5430,10 +5539,10 @@
             "$ref": "#/components/schemas/PayeeType"
           },
           "company": {
-            "$ref": "#/components/schemas/Company"
+            "$ref": "#/components/schemas/CompanyV1"
           },
           "individual": {
-            "$ref": "#/components/schemas/Individual"
+            "$ref": "#/components/schemas/IndividualV1"
           },
           "created": {
             "format": "date-time",
@@ -6371,11 +6480,11 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
             },
             "type": "array"
           },
@@ -7584,7 +7693,7 @@
               "submittedDateTime": "submittedDateTime",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalIncompletePayments": 6,
-              "withdrawnDateTime": "withdrawnDateTime",
+              "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
               "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo"
             },
@@ -7628,7 +7737,7 @@
               "submittedDateTime": "submittedDateTime",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalIncompletePayments": 6,
-              "withdrawnDateTime": "withdrawnDateTime",
+              "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
               "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo"
             }
@@ -7636,14 +7745,14 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/PayeeResponse_summary"
+            "$ref": "#/components/schemas/PagedPayeeResponse_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
             },
             "type": "array"
           },
@@ -7660,12 +7769,46 @@
         "description": "List Payments for payout",
         "example": {
           "summary": {
-            "incompletePayments": 5,
+            "submitting": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "dbaName": "dbaName",
+              "payorName": "payorName"
+            },
             "confirmedPayments": 6,
             "releasedPayments": 1,
-            "submittedDateTime": "2000-01-23T04:56:07.000Z",
+            "withdrawn": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+            },
             "payoutStatus": "ACCEPTED",
+            "payoutFrom": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "dbaName": "dbaName",
+              "payorName": "payorName"
+            },
+            "payoutTo": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "dbaName": "dbaName",
+              "payorName": "payorName"
+            },
             "totalPayments": 0,
+            "quoted": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+            },
+            "instructed": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+            },
+            "incompletePayments": 5,
+            "submittedDateTime": "2000-01-23T04:56:07.000Z",
+            "quotedDateTime": "2000-01-23T04:56:07.000Z",
             "returnedPayments": 5,
             "instructedDateTime": "2000-01-23T04:56:07.000Z",
             "payoutMemo": "payoutMemo"
@@ -7691,6 +7834,22 @@
             {
               "traceNumber": "traceNumber",
               "accountName": "accountName",
+              "payout": {
+                "payoutFrom": {
+                  "principal": "principal",
+                  "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "dbaName": "dbaName",
+                  "payorName": "payorName"
+                },
+                "payoutTo": {
+                  "principal": "principal",
+                  "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "dbaName": "dbaName",
+                  "payorName": "payorName"
+                }
+              },
               "paymentMemo": "paymentMemo",
               "paymentAmount": 7,
               "fundingStatus": "FUNDED",
@@ -7749,6 +7908,22 @@
             {
               "traceNumber": "traceNumber",
               "accountName": "accountName",
+              "payout": {
+                "payoutFrom": {
+                  "principal": "principal",
+                  "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "dbaName": "dbaName",
+                  "payorName": "payorName"
+                },
+                "payoutTo": {
+                  "principal": "principal",
+                  "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "dbaName": "dbaName",
+                  "payorName": "payorName"
+                }
+              },
               "paymentMemo": "paymentMemo",
               "paymentAmount": 7,
               "fundingStatus": "FUNDED",
@@ -7811,11 +7986,11 @@
             "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV4_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
             },
             "type": "array"
           },
@@ -7832,6 +8007,22 @@
         "example": {
           "traceNumber": "traceNumber",
           "accountName": "accountName",
+          "payout": {
+            "payoutFrom": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "dbaName": "dbaName",
+              "payorName": "payorName"
+            },
+            "payoutTo": {
+              "principal": "principal",
+              "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "dbaName": "dbaName",
+              "payorName": "payorName"
+            }
+          },
           "paymentMemo": "paymentMemo",
           "paymentAmount": 7,
           "fundingStatus": "FUNDED",
@@ -7897,6 +8088,8 @@
             "type": "string"
           },
           "payorId": {
+            "deprecated": true,
+            "description": "Deprecated in v2.16. Will be populated with submitting payor ID until removed in a later release.",
             "format": "uuid",
             "type": "string"
           },
@@ -8014,6 +8207,9 @@
           },
           "returnReason": {
             "type": "string"
+          },
+          "payout": {
+            "$ref": "#/components/schemas/PaymentResponseV4_payout"
           }
         },
         "required": [
@@ -8074,11 +8270,11 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
             },
             "type": "array"
           },
@@ -8091,8 +8287,64 @@
         },
         "type": "object"
       },
+      "FundingDeltaResponse": {
+        "description": "List Funding changes response object",
+        "example": {
+          "links": [
+            {
+              "rel": "first",
+              "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+            },
+            {
+              "rel": "first",
+              "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+            }
+          ],
+          "page": {
+            "numberOfElements": 2,
+            "totalPages": 1,
+            "pageSize": 25,
+            "page": 1,
+            "totalElements": 2
+          },
+          "content": [
+            {
+              "amount": 100000,
+              "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "currency": "USD",
+              "status": "ALLOCATED"
+            },
+            {
+              "amount": 100000,
+              "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "currency": "USD",
+              "status": "ALLOCATED"
+            }
+          ]
+        },
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PayeeDeltaResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/FundingDeltaResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/FundingDelta"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "CreatePayoutRequest": {
         "example": {
+          "payoutFromPayorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payoutToPayorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "payments": [
             {
               "amount": 1299,
@@ -8140,10 +8392,23 @@
         },
         "properties": {
           "payorId": {
+            "deprecated": true,
+            "description": "Deprecated in v2.16. Any value supplied here will be ignored.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "payoutFromPayorId": {
+            "description": "The id of the payor whose source account(s) will be debited. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "payoutToPayorId": {
+            "description": "The id of the payor whose payees will be paid. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.",
             "format": "uuid",
             "type": "string"
           },
           "payoutMemo": {
+            "description": "Text applied to all payment memos unless specified explicitly on a payment. This should be the reference field on the statement seen by the payee (but not via ACH)",
             "example": "A memo",
             "type": "string"
           },
@@ -8157,8 +8422,7 @@
           }
         },
         "required": [
-          "payments",
-          "payorId"
+          "payments"
         ],
         "type": "object"
       },
@@ -8497,7 +8761,7 @@
         },
         "type": "object"
       },
-      "Address": {
+      "PayorAddress": {
         "example": {
           "country": "US",
           "countyOrProvince": "FL",
@@ -8570,7 +8834,236 @@
         ],
         "type": "object"
       },
-      "PayorRef": {
+      "PayorAddressV2": {
+        "example": {
+          "country": "US",
+          "countyOrProvince": "FL",
+          "line4": "line4",
+          "city": "Key West",
+          "line3": "line3",
+          "line2": "line2",
+          "line1": "500 Duval St",
+          "zipOrPostcode": "33945"
+        },
+        "properties": {
+          "line1": {
+            "example": "500 Duval St",
+            "maxLength": 255,
+            "minLength": 2,
+            "nullable": false,
+            "type": "string"
+          },
+          "line2": {
+            "maxLength": 255,
+            "minLength": 0,
+            "nullable": true,
+            "type": "string"
+          },
+          "line3": {
+            "maxLength": 255,
+            "minLength": 0,
+            "nullable": true,
+            "type": "string"
+          },
+          "line4": {
+            "maxLength": 255,
+            "minLength": 0,
+            "nullable": true,
+            "type": "string"
+          },
+          "city": {
+            "example": "Key West",
+            "maxLength": 100,
+            "minLength": 2,
+            "nullable": false,
+            "type": "string"
+          },
+          "countyOrProvince": {
+            "example": "FL",
+            "maxLength": 100,
+            "minLength": 2,
+            "nullable": true,
+            "type": "string"
+          },
+          "zipOrPostcode": {
+            "example": "33945",
+            "maxLength": 30,
+            "minLength": 2,
+            "nullable": true,
+            "type": "string"
+          },
+          "country": {
+            "example": "US",
+            "maxLength": 50,
+            "minLength": 2,
+            "nullable": false,
+            "type": "string"
+          }
+        },
+        "required": [
+          "city",
+          "country",
+          "line1"
+        ],
+        "type": "object"
+      },
+      "PayeeResponse": {
+        "example": {
+          "payorRefs": [
+            {
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+              "invitationStatus": "invitationStatus",
+              "remoteId": "uniqueIdForRemoteEntity"
+            },
+            {
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+              "invitationStatus": "invitationStatus",
+              "remoteId": "uniqueIdForRemoteEntity"
+            }
+          ],
+          "country": "country",
+          "cellphoneNumber": "cellphoneNumber",
+          "address": {
+            "country": "US",
+            "countyOrProvince": "FL",
+            "line4": "line4",
+            "city": "Key West",
+            "line3": "line3",
+            "line2": "line2",
+            "line1": "500 Duval St",
+            "zipOrPostcode": "33945"
+          },
+          "individual": {
+            "name": {
+              "firstName": "firstName",
+              "lastName": "lastName",
+              "otherNames": "otherNames",
+              "title": "title"
+            }
+          },
+          "displayName": "displayName",
+          "created": "2000-01-23T04:56:07.000Z",
+          "lastOfacCheckTimestamp": "lastOfacCheckTimestamp",
+          "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
+          "paymentChannel": {
+            "paymentChannelName": "paymentChannelName",
+            "routingNo": "routingNo",
+            "accountName": "accountName",
+            "countryCode": "countryCode",
+            "iban": "iban",
+            "currency": "USD",
+            "accountNumber": "accountNumber"
+          },
+          "marketingOptIns": [
+            {
+              "optedIn": true,
+              "timestamp": "2000-01-23T04:56:07.000Z"
+            },
+            {
+              "optedIn": true,
+              "timestamp": "2000-01-23T04:56:07.000Z"
+            }
+          ],
+          "challenge": {
+            "description": "description",
+            "value": "value"
+          },
+          "company": {
+            "name": "name",
+            "operatingName": "operatingName"
+          },
+          "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "email": "email",
+          "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
+        },
+        "properties": {
+          "payeeId": {
+            "format": "uuid",
+            "readOnly": true,
+            "type": "string"
+          },
+          "payorRefs": {
+            "items": {
+              "$ref": "#/components/schemas/PayeePayorRef"
+            },
+            "nullable": true,
+            "readOnly": true,
+            "type": "array"
+          },
+          "email": {
+            "format": "email",
+            "nullable": true,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/PayeeAddress"
+          },
+          "country": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "paymentChannel": {
+            "$ref": "#/components/schemas/PayeePaymentChannel"
+          },
+          "challenge": {
+            "$ref": "#/components/schemas/Challenge"
+          },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "acceptTermsAndConditionsTimestamp": {
+            "description": "The timestamp when the payee last accepted T&Cs",
+            "format": "date-time",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "cellphoneNumber": {
+            "type": "string"
+          },
+          "payeeType": {
+            "$ref": "#/components/schemas/PayeeType"
+          },
+          "company": {
+            "$ref": "#/components/schemas/CompanyResponse"
+          },
+          "individual": {
+            "$ref": "#/components/schemas/IndividualResponse"
+          },
+          "created": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "gracePeriodEndDate": {
+            "format": "date",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "lastOfacCheckTimestamp": {
+            "format": "date_time",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "marketingOptIns": {
+            "items": {
+              "$ref": "#/components/schemas/MarketingOptIn"
+            },
+            "type": "array"
+          },
+          "ofacStatus": {
+            "$ref": "#/components/schemas/OfacStatus"
+          },
+          "onboardedStatus": {
+            "$ref": "#/components/schemas/OnboardedStatus"
+          }
+        },
+        "type": "object"
+      },
+      "PayeePayorRef": {
         "example": {
           "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
           "invitationStatus": "invitationStatus",
@@ -8592,7 +9085,80 @@
         },
         "type": "object"
       },
-      "PaymentChannel": {
+      "PayeeAddress": {
+        "example": {
+          "country": "US",
+          "countyOrProvince": "FL",
+          "line4": "line4",
+          "city": "Key West",
+          "line3": "line3",
+          "line2": "line2",
+          "line1": "500 Duval St",
+          "zipOrPostcode": "33945"
+        },
+        "properties": {
+          "line1": {
+            "example": "500 Duval St",
+            "maxLength": 255,
+            "minLength": 2,
+            "nullable": false,
+            "type": "string"
+          },
+          "line2": {
+            "maxLength": 255,
+            "minLength": 0,
+            "nullable": true,
+            "type": "string"
+          },
+          "line3": {
+            "maxLength": 255,
+            "minLength": 0,
+            "nullable": true,
+            "type": "string"
+          },
+          "line4": {
+            "maxLength": 255,
+            "minLength": 0,
+            "nullable": true,
+            "type": "string"
+          },
+          "city": {
+            "example": "Key West",
+            "maxLength": 100,
+            "minLength": 2,
+            "nullable": false,
+            "type": "string"
+          },
+          "countyOrProvince": {
+            "example": "FL",
+            "maxLength": 100,
+            "minLength": 2,
+            "nullable": true,
+            "type": "string"
+          },
+          "zipOrPostcode": {
+            "example": "33945",
+            "maxLength": 30,
+            "minLength": 2,
+            "nullable": true,
+            "type": "string"
+          },
+          "country": {
+            "example": "US",
+            "maxLength": 50,
+            "minLength": 2,
+            "nullable": false,
+            "type": "string"
+          }
+        },
+        "required": [
+          "city",
+          "country",
+          "line1"
+        ],
+        "type": "object"
+      },
+      "PayeePaymentChannel": {
         "example": {
           "paymentChannelName": "paymentChannelName",
           "routingNo": "routingNo",
@@ -8691,7 +9257,7 @@
         ],
         "type": "string"
       },
-      "Company": {
+      "CompanyV1": {
         "example": {
           "taxId": "taxId",
           "name": "name",
@@ -8722,7 +9288,7 @@
         ],
         "type": "object"
       },
-      "Individual": {
+      "IndividualV1": {
         "example": {
           "name": {
             "firstName": "firstName",
@@ -8735,7 +9301,7 @@
         },
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/Individual_name"
+            "$ref": "#/components/schemas/IndividualV1_name"
           },
           "nationalIdentification": {
             "description": "If not authorized to view, value will be masked. Example: XXXXX1234",
@@ -8883,7 +9449,7 @@
           },
           "payorRefs": {
             "items": {
-              "$ref": "#/components/schemas/PayorRef"
+              "$ref": "#/components/schemas/PayeePayorRefV2"
             },
             "nullable": true,
             "readOnly": true,
@@ -8916,7 +9482,7 @@
             "$ref": "#/components/schemas/Language"
           },
           "company": {
-            "$ref": "#/components/schemas/Company"
+            "$ref": "#/components/schemas/CompanyV1"
           },
           "individual": {
             "$ref": "#/components/schemas/CreateIndividual"
@@ -9440,7 +10006,7 @@
           "submittedDateTime": "submittedDateTime",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalIncompletePayments": 6,
-          "withdrawnDateTime": "withdrawnDateTime",
+          "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
           "instructedDateTime": "instructedDateTime",
           "payoutMemo": "payoutMemo"
         },
@@ -9450,6 +10016,8 @@
             "type": "string"
           },
           "payorId": {
+            "deprecated": true,
+            "description": "Deprecated in v2.16. Will be populated with submitting payor ID until removed in a later release.",
             "format": "uuid",
             "type": "string"
           },
@@ -9467,6 +10035,7 @@
             "type": "string"
           },
           "withdrawnDateTime": {
+            "format": "date-time",
             "type": "string"
           },
           "totalPayments": {
@@ -9492,12 +10061,90 @@
           },
           "payoutMemo": {
             "type": "string"
+          },
+          "payoutType": {
+            "$ref": "#/components/schemas/PayoutTypeV4"
           }
         },
         "required": [
           "payoutId",
+          "payoutType",
           "status",
           "submittedDateTime"
+        ],
+        "type": "object"
+      },
+      "PayoutTypeV4": {
+        "description": "The type of payout.",
+        "enum": [
+          "STANDARD",
+          "AS",
+          "ON_BEHALF_OF"
+        ],
+        "type": "string"
+      },
+      "PayoutPayorV4": {
+        "description": "Details of payor and principal participating in a payout.",
+        "example": {
+          "principal": "principal",
+          "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "dbaName": "dbaName",
+          "payorName": "payorName"
+        },
+        "properties": {
+          "payorId": {
+            "description": "The id of the payor.",
+            "format": "uuid",
+            "type": "string"
+          },
+          "payorName": {
+            "description": "The name of the payor.",
+            "type": "string"
+          },
+          "dbaName": {
+            "description": "The alternate name of the payor.",
+            "type": "string"
+          },
+          "principal": {
+            "description": "Email address if principal is a user or ID if application.",
+            "type": "string"
+          },
+          "principalId": {
+            "description": "The id of the principal.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dbaName",
+          "payorId",
+          "payorName",
+          "principal",
+          "principalId"
+        ],
+        "type": "object"
+      },
+      "PayoutPrincipalV4": {
+        "description": "Details of principal participating in a payout.",
+        "example": {
+          "principal": "principal",
+          "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties": {
+          "principal": {
+            "description": "Email address if principal is a user or ID if application.",
+            "type": "string"
+          },
+          "principalId": {
+            "description": "The id of the principal.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "principal",
+          "principalId"
         ],
         "type": "object"
       },
@@ -9666,6 +10313,46 @@
         ],
         "type": "object"
       },
+      "FundingDelta": {
+        "example": {
+          "amount": 100000,
+          "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "currency": "USD",
+          "status": "ALLOCATED"
+        },
+        "properties": {
+          "status": {
+            "example": "ALLOCATED",
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string"
+          },
+          "fundingId": {
+            "format": "uuid",
+            "readOnly": true,
+            "type": "string"
+          },
+          "amount": {
+            "description": "Amount to fund in minor units",
+            "example": 100000,
+            "format": "int64",
+            "maximum": 9999999999,
+            "minimum": 1,
+            "nullable": true,
+            "type": "integer"
+          },
+          "currency": {
+            "example": "USD",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "fundingId",
+          "status"
+        ],
+        "type": "object"
+      },
       "QuoteFxSummary": {
         "example": {
           "invertedRate": 1.12,
@@ -9724,20 +10411,34 @@
             "type": "string"
           },
           "fundingStatus": {
+            "enum": [
+              "UNFUNDED",
+              "INSTRUCTED",
+              "FUNDED"
+            ],
             "example": "FUNDED",
             "type": "string"
           },
           "status": {
+            "enum": [
+              "UNQUOTED",
+              "QUOTED",
+              "EXPIRED",
+              "EXECUTED",
+              "REJECTED"
+            ],
             "example": "QUOTED",
             "type": "string"
           }
         },
         "required": [
           "creationTime",
+          "fundingStatus",
           "paymentCurrency",
           "quoteId",
           "rate",
           "sourceCurrency",
+          "status",
           "totalPaymentAmount",
           "totalSourceAmount"
         ],
@@ -9925,6 +10626,71 @@
           },
           "maxPaymentAmount": {
             "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "CompanyResponse": {
+        "example": {
+          "name": "name",
+          "operatingName": "operatingName"
+        },
+        "nullable": true,
+        "properties": {
+          "name": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "operatingName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "IndividualResponse": {
+        "example": {
+          "name": {
+            "firstName": "firstName",
+            "lastName": "lastName",
+            "otherNames": "otherNames",
+            "title": "title"
+          }
+        },
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/IndividualV1_name"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "PayeePayorRefV2": {
+        "example": {
+          "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+          "invitationStatus": "invitationStatus",
+          "remoteId": "uniqueIdForRemoteEntity"
+        },
+        "properties": {
+          "payorId": {
+            "example": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+            "format": "uuid",
+            "type": "string"
+          },
+          "remoteId": {
+            "example": "uniqueIdForRemoteEntity",
+            "type": "string"
+          },
+          "invitationStatus": {
+            "type": "string"
           }
         },
         "type": "object"
@@ -10324,7 +11090,7 @@
         },
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/Individual_name"
+            "$ref": "#/components/schemas/IndividualV1_name"
           },
           "nationalIdentification": {
             "maxLength": 30,
@@ -10714,7 +11480,7 @@
           "payorName"
         ]
       },
-      "PayeeResponse_summary": {
+      "PagedPayeeResponse_summary": {
         "example": {
           "totalOnboardedCount": 5,
           "totalRegisteredCount": 1,
@@ -10740,7 +11506,7 @@
           }
         }
       },
-      "PayeeResponse_page": {
+      "PagedPayeeResponse_page": {
         "example": {
           "numberOfElements": 2,
           "totalPages": 9,
@@ -10766,7 +11532,7 @@
           }
         }
       },
-      "PayeeResponse_links": {
+      "PagedPayeeResponse_links": {
         "example": {
           "rel": "rel",
           "href": "href"
@@ -11158,12 +11924,46 @@
       },
       "GetPaymentsForPayoutResponseV4_summary": {
         "example": {
-          "incompletePayments": 5,
+          "submitting": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "dbaName": "dbaName",
+            "payorName": "payorName"
+          },
           "confirmedPayments": 6,
           "releasedPayments": 1,
-          "submittedDateTime": "2000-01-23T04:56:07.000Z",
+          "withdrawn": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          },
           "payoutStatus": "ACCEPTED",
+          "payoutFrom": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "dbaName": "dbaName",
+            "payorName": "payorName"
+          },
+          "payoutTo": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "dbaName": "dbaName",
+            "payorName": "payorName"
+          },
           "totalPayments": 0,
+          "quoted": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          },
+          "instructed": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          },
+          "incompletePayments": 5,
+          "submittedDateTime": "2000-01-23T04:56:07.000Z",
+          "quotedDateTime": "2000-01-23T04:56:07.000Z",
           "returnedPayments": 5,
           "instructedDateTime": "2000-01-23T04:56:07.000Z",
           "payoutMemo": "payoutMemo"
@@ -11198,6 +11998,32 @@
             "description": "The memo attached to the payout.",
             "type": "string"
           },
+          "payoutType": {
+            "$ref": "#/components/schemas/PayoutTypeV4"
+          },
+          "quotedDateTime": {
+            "description": "The date/time at which the payout was quoted.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "submitting": {
+            "$ref": "#/components/schemas/PayoutPayorV4"
+          },
+          "payoutFrom": {
+            "$ref": "#/components/schemas/PayoutPayorV4"
+          },
+          "payoutTo": {
+            "$ref": "#/components/schemas/PayoutPayorV4"
+          },
+          "quoted": {
+            "$ref": "#/components/schemas/PayoutPrincipalV4"
+          },
+          "instructed": {
+            "$ref": "#/components/schemas/PayoutPrincipalV4"
+          },
+          "withdrawn": {
+            "$ref": "#/components/schemas/PayoutPrincipalV4"
+          },
           "totalPayments": {
             "description": "The count of payments within the payout.",
             "type": "integer"
@@ -11220,7 +12046,49 @@
           }
         }
       },
-      "Individual_name": {
+      "PaymentResponseV4_payout": {
+        "example": {
+          "payoutFrom": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "dbaName": "dbaName",
+            "payorName": "payorName"
+          },
+          "payoutTo": {
+            "principal": "principal",
+            "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "dbaName": "dbaName",
+            "payorName": "payorName"
+          }
+        },
+        "properties": {
+          "payoutFrom": {
+            "$ref": "#/components/schemas/PayoutPayorV4"
+          },
+          "payoutTo": {
+            "$ref": "#/components/schemas/PayoutPayorV4"
+          }
+        }
+      },
+      "FundingDeltaResponse_links": {
+        "example": {
+          "rel": "first",
+          "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+        },
+        "properties": {
+          "rel": {
+            "example": "first",
+            "type": "string"
+          },
+          "href": {
+            "example": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000",
+            "type": "string"
+          }
+        }
+      },
+      "IndividualV1_name": {
         "example": {
           "firstName": "firstName",
           "lastName": "lastName",
