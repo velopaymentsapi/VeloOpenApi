@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.18.13
+  version: 2.18.14
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -3445,6 +3445,7 @@ paths:
                 -H 'Authorization: Bearer 63fa49a0-1eeb-4756-b4fb-7cdd94ae80c1'
   /v1/supportedCountries:
     get:
+      deprecated: true
       description: List the supported countries.
       operationId: listSupportedCountriesV1
       responses:
