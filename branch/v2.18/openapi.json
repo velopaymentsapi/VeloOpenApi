@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.18.14",
+    "version": "2.18.15",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -7958,6 +7958,7 @@
               "traceNumber": "traceNumber",
               "accountName": "accountName",
               "payout": {
+                "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "payoutFrom": {
                   "principal": "principal",
                   "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -8032,6 +8033,7 @@
               "traceNumber": "traceNumber",
               "accountName": "accountName",
               "payout": {
+                "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "payoutFrom": {
                   "principal": "principal",
                   "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -8158,6 +8160,7 @@
               "traceNumber": "traceNumber",
               "accountName": "accountName",
               "payout": {
+                "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "payoutFrom": {
                   "principal": "principal",
                   "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -8232,6 +8235,7 @@
               "traceNumber": "traceNumber",
               "accountName": "accountName",
               "payout": {
+                "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "payoutFrom": {
                   "principal": "principal",
                   "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -8331,6 +8335,7 @@
           "traceNumber": "traceNumber",
           "accountName": "accountName",
           "payout": {
+            "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
             "payoutFrom": {
               "principal": "principal",
               "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -12466,6 +12471,7 @@
       },
       "PaymentResponseV4_payout": {
         "example": {
+          "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "payoutFrom": {
             "principal": "principal",
             "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -12482,6 +12488,10 @@
           }
         },
         "properties": {
+          "payoutId": {
+            "format": "uuid",
+            "type": "string"
+          },
           "payoutFrom": {
             "$ref": "#/components/schemas/PayoutPayorV4"
           },
