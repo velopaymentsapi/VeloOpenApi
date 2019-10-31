@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.18.15
+  version: 2.18.16
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -6768,6 +6768,19 @@ components:
             totalPayoutCost: 1231200
             sourceAccountName: AccountName
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        acceptedPayments:
+          - currencyType: USD
+            amount: 1234
+            payorPaymentId: paymenIdVal123123
+            paymentMemo: Payment memo
+            remoteId: remoteIdVal123
+            sourceAccountName: Chase
+          - currencyType: USD
+            amount: 1234
+            payorPaymentId: paymenIdVal123123
+            paymentMemo: Payment memo
+            remoteId: remoteIdVal123
+            sourceAccountName: Chase
         status: COMPLETED
         paymentsAccepted: 10
       properties:
@@ -6794,11 +6807,16 @@ components:
           items:
             $ref: '#/components/schemas/SourceAccount'
           type: array
+        acceptedPayments:
+          items:
+            $ref: '#/components/schemas/AcceptedPayment'
+          type: array
         rejectedPayments:
           items:
             $ref: '#/components/schemas/RejectedPayment'
           type: array
       required:
+        - acceptedPayments
         - accounts
         - fxSummaries
         - rejectedPayments
@@ -8253,6 +8271,42 @@ components:
         - sourceAccountId
         - sourceAccountName
         - totalPayoutCost
+      type: object
+    AcceptedPayment:
+      example:
+        currencyType: USD
+        amount: 1234
+        payorPaymentId: paymenIdVal123123
+        paymentMemo: Payment memo
+        remoteId: remoteIdVal123
+        sourceAccountName: Chase
+      properties:
+        remoteId:
+          example: remoteIdVal123
+          type: string
+        currencyType:
+          example: USD
+          maxLength: 3
+          minLength: 3
+          type: string
+        amount:
+          example: 1234
+          type: integer
+        sourceAccountName:
+          example: Chase
+          type: string
+        payorPaymentId:
+          example: paymenIdVal123123
+          type: string
+        paymentMemo:
+          example: Payment memo
+          type: string
+      required:
+        - amount
+        - currencyType
+        - payorPaymentId
+        - remoteId
+        - sourceAccountName
       type: object
     RejectedPayment:
       example:
