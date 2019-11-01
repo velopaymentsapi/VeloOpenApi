@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.18.16
+  version: 2.18.17
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -195,7 +195,19 @@ paths:
                 supportContact: support@example.com
                 collectiveAlias: MyAlias
                 maxMasterPayorAdmins: 2
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
           description: Payor Id Not Found
           x-contracts:
             - contractId: 2
@@ -263,7 +275,25 @@ paths:
                 supportContact: support@example.com
                 collectiveAlias: MyAlias
                 maxMasterPayorAdmins: 2
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
           description: Payor Id Not Found
           x-contracts:
             - contractId: 2
@@ -337,14 +367,35 @@ paths:
                   - key: Location
                     predefined: non_blank
         '400':
-          description: invalid request body or payor in invalid state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         '404':
-          description: Payor not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
         '409':
-          description: Application name conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request contained data that would reult in a duplicate value
       summary: Create Application
       tags:
-        - Payor Applications
+        - Payors
       x-code-samples:
         - lang: shell
           source: |
@@ -432,12 +483,28 @@ paths:
                     type: by_regex
                     predefined: non_empty
         '400':
-          description: Invalid Request Body or Payor in Invalid State
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         '404':
-          description: Payor Id Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
       summary: Create API Key
       tags:
-        - Payor Applications
+        - Payors
       x-code-samples:
         - lang: shell
           source: |
@@ -489,8 +556,24 @@ paths:
           x-contracts:
             - contractId: 1
         '400':
-          description: Invalid Request Body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
           description: Payor Id Not Found
           x-contracts:
             - contractId: 2
@@ -536,9 +619,25 @@ paths:
         '204':
           description: No Content
         '400':
-          description: Invalid Request Body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         '404':
-          description: Payor Id Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
       summary: Add Logo
       tags:
         - Payors
@@ -596,8 +695,24 @@ paths:
                     type: by_regex
                     predefined: non_empty
         '400':
-          description: Invalid Request Body or Payor in invalid state
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
           description: Payor Id Not Found
           x-contracts:
             - contractId: 2
@@ -719,11 +834,25 @@ paths:
                   - key: Content-Type
                     regex: application/json.*
         '400':
-          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
         '403':
-          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         '404':
-          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
       summary: List Payor Links
       tags:
         - Payors
@@ -752,6 +881,50 @@ paths:
             $ curl 'https://api.sandbox.velopayments.com/v1/payorLinks?descendantsOfPayor=0a818933-087d-47f2-ad83-2f986ed087eb' -i -X GET \
                 -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \
                 -H 'Content-Type: application/json'
+    post:
+      description: This endpoint allows you to create a payor link.
+      operationId: createPayorLinks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePayorLinkRequest'
+        description: Request to create a payor link
+        required: true
+      responses:
+        '201':
+          description: HTTP Creeated
+          headers:
+            Location:
+              description: URI to location of created resource
+              schema:
+                example: 'http://example.com/resourcepath/123123123'
+                type: string
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      security:
+        - oAuthVeloBackOffice: []
+      summary: Create a Payor Link
+      tags:
+        - Payors Private
   /v1/payees:
     get:
       description: Get a paginated response listing the payees for a payor.
@@ -3658,14 +3831,7 @@ components:
           example: Example Corp BOA
           type: string
         kycState:
-          description: The kyc state of the payor.
-          enum:
-            - FAILED_KYC
-            - PASSED_KYC
-            - REQUIRES_KYC
-          example: PASSED_KYC
-          readOnly: true
-          type: string
+          $ref: '#/components/schemas/KycState'
         manualLockout:
           description: Whether or not the payor has been manually locked by the backoffice.
           type: boolean
@@ -3710,6 +3876,23 @@ components:
       required:
         - payorName
       type: object
+    ErrorResponse:
+      description: Error response returned by all error conditions in Velo Services
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/Error'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
+      type: object
     PayorV2:
       example:
         primaryContactName: Joe Buck
@@ -3736,6 +3919,7 @@ components:
         collectiveAlias: Payee
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         kycState: PASSED_KYC
+        wuCustomerId: wuCustomerId
         primaryContactEmail: joe.buck@example.com
         payorName: 'Example, Corp'
       properties:
@@ -3763,14 +3947,7 @@ components:
           format: email
           type: string
         kycState:
-          description: The kyc state of the payor.
-          enum:
-            - FAILED_KYC
-            - PASSED_KYC
-            - REQUIRES_KYC
-          example: PASSED_KYC
-          readOnly: true
-          type: string
+          $ref: '#/components/schemas/KycState'
         manualLockout:
           description: Whether or not the payor has been manually locked by the backoffice.
           type: boolean
@@ -3810,9 +3987,14 @@ components:
           type: string
         includesReports:
           type: boolean
+        wuCustomerId:
+          type: string
         maxMasterPayorAdmins:
           type: integer
+        paymentRails:
+          $ref: '#/components/schemas/PaymentRails'
       required:
+        - payorId
         - payorName
       type: object
     PayorCreateApplicationRequest:
@@ -3970,6 +4152,27 @@ components:
           items:
             $ref: '#/components/schemas/PayorLinksResponse_payors'
           type: array
+      type: object
+    CreatePayorLinkRequest:
+      example:
+        toPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        fromPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        linkType: PARENT_OF
+      properties:
+        fromPayorId:
+          format: uuid
+          type: string
+        linkType:
+          enum:
+            - PARENT_OF
+          type: string
+        toPayorId:
+          format: uuid
+          type: string
+      required:
+        - fromPayorId
+        - linkType
+        - toPayorId
       type: object
     OfacStatus:
       enum:
@@ -7003,6 +7206,42 @@ components:
         - country
         - line1
       type: object
+    KycState:
+      description: The kyc state of the payor.
+      enum:
+        - FAILED_KYC
+        - PASSED_KYC
+        - REQUIRES_KYC
+      example: PASSED_KYC
+      readOnly: true
+      type: string
+    Error:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: smsNumber must be in the E.164 format e.g. +15551231234
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: smsNumber
+          type: string
+        locationType:
+          description: |
+            the location type in the request that was the cause of the error
+          enum:
+            - requestBody
+            - queryParam
+            - header
+            - pathParam
+          example: requestBody
+          type: string
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise client error messages
+          example: validationError
+          type: string
+      type: object
     PayorAddressV2:
       example:
         country: US
@@ -7064,6 +7303,11 @@ components:
         - country
         - line1
       type: object
+    PaymentRails:
+      enum:
+        - WU
+        - BOFA
+      type: string
     PayeeResponse:
       example:
         payorRefs:
@@ -9686,13 +9930,18 @@ components:
     basicAuth:
       scheme: basic
       type: http
+    oAuthVeloBackOffice:
+      description: 'This API uses OAuth 2 with the implicit grant flow. Authenticated user must have backoffice role [More info](https://api.example.com/docs/auth)'
+      flows:
+        clientCredentials:
+          scopes:
+            ' ': Scopes not required
+          tokenUrl: 'https://api.sandbox.velopayments.com/oauth/token'
+      type: oauth2
 x-tagGroups:
   - name: Payor Operations
     tags:
       - Payors
-      - Payor Branding
-      - Payor Applications
-      - Payor Information
       - Funding Manager
   - name: Payee Operations
     tags:
