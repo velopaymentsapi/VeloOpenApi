@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.18.22",
+    "version": "2.18.25",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -3928,7 +3928,7 @@
             }
           },
           {
-            "description": "The country of the payees.",
+            "description": "The country of the payee - 2 letter ISO 3166-1 country code (upper case)",
             "in": "query",
             "name": "payeeCountry",
             "required": false,
@@ -4735,7 +4735,7 @@
                   {
                     "paramName": "file",
                     "fileName": "filename.csv",
-                    "fileContent": "type,remoteId,email,addressLine1,addressLine2,addressLine3,addressLine4,addressCity,addressCountyOrProvince,addressZipOrPostcode,addressCountry,individualNationalIdentification,individualDateOfBirth,individualTitle,individualFirstName,individualOtherNames,individualLastName,companyName,companyEIN,paymentChannelAccountNumber,paymentChannelRoutingNumber,paymentChannelIban,paymentChannelAccountName,paymentChannelCountryCode,paymentChannelCurrency,challengeDescription,challengeValue,payeeLanguage\\n Individual,remoteId123,bob@example.com,Address line 1,Address line 2,Address line 3,Address line 4,The City,The County,The Zip,The Country,123456789,1970-02-25,Mr,Bob,Hungry,Wiggins,,,12345678,123456789,,Account name,US,USD,Challenge Description,Challenge Value,EN\\n Company,remoteId1234,jim@example.com,Address line 1,Address line 2,Address line 3,Address line 4,The City,The County,The Zip,The Country,,,,,,,ABC Corp,987654321,,,1234567890123456789012345678901234,Account name,US,USD,,,FR\\n\n"
+                    "fileContent": "type,remoteId,email,addressLine1,addressLine2,addressLine3,addressLine4,addressCity,addressCountyOrProvince,addressZipOrPostcode,addressCountry,individualNationalIdentification,individualDateOfBirth,individualTitle,individualFirstName,individualOtherNames,individualLastName,companyName,companyEIN,paymentChannelAccountNumber,paymentChannelRoutingNumber,paymentChannelIban,paymentChannelAccountName,paymentChannelCountryCode,paymentChannelCurrency,challengeDescription,challengeValue,payeeLanguage\\n Individual,remoteId123,bob@example.com,Address line 1,Address line 2,Address line 3,Address line 4,The City,The County,The Zip,GB,123456789,1970-02-25,Mr,Bob,Hungry,Wiggins,,,12345678,123456789,,Account name,US,USD,Challenge Description,Challenge Value,EN\\n Company,remoteId1234,jim@example.com,Address line 1,Address line 2,Address line 3,Address line 4,The City,The County,The Zip,GB,,,,,,,ABC Corp,987654321,,,1234567890123456789012345678901234,Account name,US,USD,,,FR\\n\n"
                   }
                 ]
               }
@@ -4794,7 +4794,7 @@
             "description": "Bad Request"
           }
         },
-        "summary": "Intiate Payee Creation",
+        "summary": "Intiate Payee Creation V2",
         "tags": [
           "Payee Invitation"
         ],
@@ -4813,7 +4813,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/payees' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 829d8ec0-00a3-4c95-8234-ad09500bb627' \\\n    -d '{\"payorId\":\"7ddebfed-0624-4bce-848d-40ffe818a2df\",\"payees\":[{\"type\":\"Individual\",\"remoteId\":\"remoteId\",\n    \"email\":\"bob@example.com\",\"address\":{\"line1\":\"100 Battery Street\",\"line2\":\"line2\",\"line3\":\"line3\",\n    \"line4\":\"line4\",\"city\":\"San Francisco\",\"countyOrProvince\":\"California\",\"zipOrPostcode\":\"94018\",\"country\":\"US\"},\n    \"paymentChannel\":{\"paymentChannelName\":\"My Payment Channel\",\"accountNumber\":\"12345678\",\"routingNumber\":\"123456789\",\n    \"countryCode\":\"US\",\"currency\":\"USD\",\"accountName\":\"Foo Account\"},\"individual\":{\"name\":{\"title\":\"Mr\",\n    \"firstName\":\"Barney\",\"otherNames\":\"Grubb\",\"lastName\":\"Cuthbert\"},\"nationalIdentification\":\"987654321\",\n    \"dateOfBirth\":\"1970-05-20\"},\"ofacOverride\":false,\"language\":\"FR\"},{\"type\":\"Company\",\"remoteId\":\"remoteId\",\n    \"email\":\"bob@example.com\",\"address\":{\"line1\":\"100 Battery Street\",\"line2\":\"line2\",\"line3\":\"line3\",\n    \"line4\":\"line4\",\"city\":\"San Francisco\",\"countyOrProvince\":\"California\",\"zipOrPostcode\":\"94018\",\"country\":\"US\"},\n    \"paymentChannel\":{\"paymentChannelName\":\"My Payment Channel\",\"accountNumber\":\"12345678\",\"routingNumber\":\"123456789\",\n    \"countryCode\":\"US\",\"currency\":\"USD\",\"accountName\":\"Foo Account\"},\"company\":{\"name\":\"ABC Payee Corp\",\n    \"taxId\":\"223344556\"},\"ofacOverride\":false,\"language\":\"FR\"}]}'\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/payees' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 829d8ec0-00a3-4c95-8234-ad09500bb627' \\\n    -d '{\"payorId\":\"7ddebfed-0624-4bce-848d-40ffe818a2df\",\"payees\":[{\"type\":\"Individual\",\"remoteId\":\"remoteId\",\n    \"email\":\"bob@example.com\",\"address\":{\"line1\":\"100 Battery Street\",\"line2\":\"line2\",\"line3\":\"line3\",\n    \"line4\":\"line4\",\"city\":\"San Francisco\",\"countyOrProvince\":\"California\",\"zipOrPostcode\":\"94018\",\"country\":\"US\"},\n    \"paymentChannel\":{\"paymentChannelName\":\"My Payment Channel\",\"accountNumber\":\"12345678\",\"routingNumber\":\"123456789\",\n    \"countryCode\":\"US\",\"currency\":\"USD\",\"accountName\":\"Foo Account\"},\"individual\":{\"name\":{\"title\":\"Mr\",\n    \"firstName\":\"Barney\",\"otherNames\":\"Grubb\",\"lastName\":\"Cuthbert\"},\"nationalIdentification\":\"987654321\",\n    \"dateOfBirth\":\"1970-05-20\"},\"language\":\"FR\"},{\"type\":\"Company\",\"remoteId\":\"remoteId\",\n    \"email\":\"bob@example.com\",\"address\":{\"line1\":\"100 Battery Street\",\"line2\":\"line2\",\"line3\":\"line3\",\n    \"line4\":\"line4\",\"city\":\"San Francisco\",\"countyOrProvince\":\"California\",\"zipOrPostcode\":\"94018\",\"country\":\"US\"},\n    \"paymentChannel\":{\"paymentChannelName\":\"My Payment Channel\",\"accountNumber\":\"12345678\",\"routingNumber\":\"123456789\",\n    \"countryCode\":\"US\",\"currency\":\"USD\",\"accountName\":\"Foo Account\"},\"company\":{\"name\":\"ABC Payee Corp\",\n    \"taxId\":\"223344556\"},\"language\":\"FR\"}]}'\n"
           }
         ]
       }
@@ -4822,6 +4822,570 @@
       "get": {
         "description": "Fetch the status of a specific batch of payees. The batch is fully processed when status is ACCEPTED and pendingCount is 0 ( 200 - OK, 404 - batch not found ).\n",
         "operationId": "v2QueryBatchStatus",
+        "parameters": [
+          {
+            "description": "Batch Id",
+            "in": "path",
+            "name": "batchId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueryBatchResponse"
+                }
+              }
+            },
+            "description": "Get Batch Status"
+          }
+        },
+        "summary": "Query Batch Status",
+        "tags": [
+          "Payee Invitation"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/payees/batch/6a84cb4c-9e6e-4499-8964-2ce5fd051de2' -i -X GET \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer f01caad1-5ae5-454d-9467-5053e459fe45'\n"
+          }
+        ]
+      }
+    },
+    "/v3/payees": {
+      "get": {
+        "description": "Get a paginated response listing the payees for a payor.",
+        "operationId": "listPayeesV3",
+        "parameters": [
+          {
+            "description": "The account owner Payor ID",
+            "in": "query",
+            "name": "payorId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "x-contracts": [
+              {
+                "contractId": 1,
+                "value": "0a818933-087d-47f2-ad83-2f986ed087eb",
+                "matchers": [
+                  {
+                    "type": "equal_to",
+                    "value": "0a818933-087d-47f2-ad83-2f986ed087eb"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "The watchlistStatus of the payees.",
+            "in": "query",
+            "name": "ofacStatus",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/WatchlistStatus"
+            }
+          },
+          {
+            "description": "The onboarded status of the payees.",
+            "in": "query",
+            "name": "onboardedStatus",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/OnboardedStatus"
+            }
+          },
+          {
+            "description": "Email address",
+            "in": "query",
+            "name": "Email",
+            "required": false,
+            "schema": {
+              "format": "email",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The display name of the payees.",
+            "in": "query",
+            "name": "displayName",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The remote id of the payees.",
+            "in": "query",
+            "name": "remoteId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The onboarded status of the payees.",
+            "in": "query",
+            "name": "payeeType",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PayeeType"
+            }
+          },
+          {
+            "description": "The country of the payee - 2 letter ISO 3166-1 country code (upper case)",
+            "in": "query",
+            "name": "payeeCountry",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page size. Default is 25. Max allowable is 100.",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "List of sort fields (e.g. ?sort=onboardedStatus:asc,name:asc) Default is name:asc 'name' is treated as company name for companies - last name + ',' + firstName for individuals The supported sort fields are - payeeId, displayName, payoutStatus, onboardedStatus.\n",
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "displayName:asc",
+              "pattern": "[a-zA-Z]+[:desc|:asc]",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedPayeeResponse_2"
+                }
+              }
+            },
+            "description": "Details of Payee",
+            "x-contracts": [
+              {
+                "contractId": 1,
+                "headers": {
+                  "Content-Type": "application/json"
+                },
+                "body": {
+                  "page": {
+                    "numberOfElements": 1,
+                    "totalElements": 1,
+                    "totalPages": 23,
+                    "page": "9,",
+                    "pageSize": 2
+                  },
+                  "links": [
+                    {
+                      "rel": "first",
+                      "href": "https://api.sandbox.velopayments.com/v1/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=1&pageSize=2&sort=displayName:asc"
+                    }
+                  ],
+                  "content": [
+                    {
+                      "payeeId": "ee2cc9a1-34dd-4ab6-91e3-db111d08d995"
+                    }
+                  ]
+                },
+                "matchers": {
+                  "headers": [
+                    {
+                      "key": "Content-Type",
+                      "regex": "application/json.*"
+                    }
+                  ],
+                  "body": [
+                    {
+                      "path": "$.page.numberOfElements",
+                      "type": "by_regex",
+                      "predefined": "number"
+                    },
+                    {
+                      "path": "$.page.totalElements",
+                      "type": "by_regex",
+                      "predefined": "number"
+                    },
+                    {
+                      "path": "$.page.totalPages",
+                      "type": "by_regex",
+                      "predefined": "number"
+                    },
+                    {
+                      "path": "$.page.page",
+                      "type": "by_regex",
+                      "predefined": "number"
+                    },
+                    {
+                      "path": "$.page.pageSize",
+                      "type": "by_regex",
+                      "predefined": "number"
+                    },
+                    {
+                      "path": "$.links",
+                      "type": "by_type",
+                      "minOccurrence": 1,
+                      "maxOccurrence": 5
+                    },
+                    {
+                      "path": "$.links[0].href",
+                      "type": "by_regex",
+                      "predefined": "url"
+                    },
+                    {
+                      "path": "$.content",
+                      "type": "by_type",
+                      "minOccurrence": 1
+                    },
+                    {
+                      "path": "$.content[0].payeeId",
+                      "type": "by_regex",
+                      "predefined": "uuid"
+                    },
+                    {
+                      "path": "$.content[0].email",
+                      "type": "by_regex",
+                      "predefined": "email"
+                    },
+                    {
+                      "path": "$.content[0].created",
+                      "type": "by_regex",
+                      "value": "([\\d]{4})-([\\d]{2})-([\\d]{2})T([\\d]{2}):([\\d]{2}):([\\d]{2}).([\\d]{1,3})Z"
+                    },
+                    {
+                      "path": "$.content[0].payorRefs[0].payorId",
+                      "type": "by_regex",
+                      "predefined": "uuid"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "summary": "List Payees",
+        "tags": [
+          "Payees"
+        ],
+        "x-contracts": [
+          {
+            "contractId": 1,
+            "name": "Test List Payees All params",
+            "headers": {
+              "Content-Type": "application/json"
+            },
+            "request": {
+              "queryParameters": [
+                {
+                  "key": "page",
+                  "value": 1
+                },
+                {
+                  "key": "pageSize",
+                  "value": 30
+                },
+                {
+                  "key": "watchlistStatus",
+                  "value": "PASSED"
+                },
+                {
+                  "key": "onboardedStatus",
+                  "value": "CREATED"
+                },
+                {
+                  "key": "email",
+                  "value": "testemail@example.com"
+                },
+                {
+                  "key": "displayName",
+                  "value": "foo"
+                },
+                {
+                  "key": "remoteId",
+                  "value": "123123123asdf"
+                },
+                {
+                  "key": "payeeType",
+                  "value": "Individual"
+                },
+                {
+                  "key": "payeeCountry",
+                  "value": "US"
+                }
+              ]
+            },
+            "serviceName": "payee-service"
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/payees?pageSize=2&page=8&payorId=9cade13d-0c55-41a7-9e6d-164e8b138b40&watchlistStatus=PASSED&onboardedStatus=INVITED&email=foo@example.com&displayName=Bar&remoteId=remote&payeeCountry=US&payeeType=Individual' -i -X GET \\\n    -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \\\n    -H 'Content-Type: application/json'\n"
+          }
+        ]
+      },
+      "post": {
+        "description": "Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query\nfor status (201 - Created, 400 - invalid request body, 409 - if there is a duplicate remote id within the\nbatch / if there is a duplicate email within the batch).\n",
+        "operationId": "v3CreatePayee",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePayeesRequest_2"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "payorId": {
+                    "format": "uuid",
+                    "type": "string"
+                  },
+                  "file": {
+                    "description": "CSV File of payee data",
+                    "items": {
+                      "$ref": "#/components/schemas/CreatePayeesCSVRequest_2"
+                    },
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "description": "Post payees to create.",
+          "required": true,
+          "x-contracts": [
+            {
+              "contractId": 1,
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": {
+                "payorId": "0a818933-087d-47f2-ad83-2f986ed087eb",
+                "payees": [
+                  {
+                    "type": "Individual",
+                    "remoteId": "remoteId",
+                    "email": "bob@example.com",
+                    "address": {
+                      "line1": "100 Battery Street",
+                      "line2": "line2",
+                      "line3": "line3",
+                      "line4": "line4",
+                      "city": "San Francisco",
+                      "countyOrProvince": "California",
+                      "zipOrPostcode": "94018",
+                      "country": "US"
+                    },
+                    "paymentChannel": {
+                      "paymentChannelName": "My Payment Channel",
+                      "accountNumber": "12345678",
+                      "routingNumber": "123456789",
+                      "countryCode": "US",
+                      "currency": "USD",
+                      "accountName": "Foo Account"
+                    },
+                    "individual": {
+                      "name": {
+                        "title": "Mr",
+                        "firstName": "Barney",
+                        "otherNames": "Grubb",
+                        "lastName": "Cuthbert"
+                      },
+                      "nationalIdentification": "987654321",
+                      "dateOfBirth": "1970-05-20T00:00:00.000Z"
+                    },
+                    "language": "FR"
+                  },
+                  {
+                    "type": "Company",
+                    "remoteId": "remoteId",
+                    "email": "bob@example.com",
+                    "address": {
+                      "line1": "100 Battery Street",
+                      "line2": "line2",
+                      "line3": "line3",
+                      "line4": "line4",
+                      "city": "San Francisco",
+                      "countyOrProvince": "California",
+                      "zipOrPostcode": "94018",
+                      "country": "US"
+                    },
+                    "paymentChannel": {
+                      "paymentChannelName": "My Payment Channel",
+                      "accountNumber": "12345678",
+                      "routingNumber": "123456789",
+                      "countryCode": "US",
+                      "currency": "USD",
+                      "accountName": "Foo Account"
+                    },
+                    "company": {
+                      "name": "ABC Payee Corp",
+                      "taxId": "223344556"
+                    },
+                    "language": "FR"
+                  }
+                ]
+              },
+              "matchers": {
+                "headers": [
+                  {
+                    "key": "Content-Type",
+                    "regex": "application/json.*"
+                  }
+                ],
+                "body": [
+                  {
+                    "path": "$.payorId",
+                    "type": "by_regex",
+                    "predefined": "uuid"
+                  },
+                  {
+                    "path": "$.payees",
+                    "type": "by_regex",
+                    "predefined": "non_empty"
+                  }
+                ]
+              }
+            },
+            {
+              "contractId": 2,
+              "headers": {
+                "Content-Type": "multipart/form-data"
+              },
+              "multipart": {
+                "params": {
+                  "payorId": "0a818933-087d-47f2-ad83-2f986ed087eb"
+                },
+                "named": [
+                  {
+                    "paramName": "file",
+                    "fileName": "filename.csv",
+                    "fileContent": "type,remoteId,email,addressLine1,addressLine2,addressLine3,addressLine4,addressCity,addressCountyOrProvince,addressZipOrPostcode,addressCountry,individualNationalIdentification,individualDateOfBirth,individualTitle,individualFirstName,individualOtherNames,individualLastName,companyName,companyEIN,paymentChannelAccountNumber,paymentChannelRoutingNumber,paymentChannelIban,paymentChannelAccountName,paymentChannelCountryCode,paymentChannelCurrency,challengeDescription,challengeValue,payeeLanguage\\n Individual,remoteId123,bob@example.com,Address line 1,Address line 2,Address line 3,Address line 4,The City,The County,The Zip,GB,123456789,1970-02-25,Mr,Bob,Hungry,Wiggins,,,12345678,123456789,,Account name,US,USD,Challenge Description,Challenge Value,EN\\n Company,remoteId1234,jim@example.com,Address line 1,Address line 2,Address line 3,Address line 4,The City,The County,The Zip,GB,,,,,,,ABC Corp,987654321,,,1234567890123456789012345678901234,Account name,US,USD,,,FR\\n\n"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreatePayeesCSVResponse_2"
+                }
+              }
+            },
+            "description": "HTTP Created. Body created only on CSV requests",
+            "x-contracts": [
+              {
+                "contractId": 1,
+                "headers": {
+                  "Location": "https://api.sandbox.velopayments.com/v3/payees/batch/dbe7df3a-6b75-4bcb-97c5-45d25f828267"
+                },
+                "matchers": {
+                  "headers": [
+                    {
+                      "key": "Location",
+                      "type": "by_regex",
+                      "predefined": "url"
+                    }
+                  ]
+                }
+              },
+              {
+                "contractId": 2,
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Location": "https://api.sandbox.velopayments.com/v3/payees/batch/dbe7df3a-6b75-4bcb-97c5-45d25f828267"
+                },
+                "matchers": {
+                  "headers": [
+                    {
+                      "key": "Location",
+                      "type": "by_regex",
+                      "predefined": "url"
+                    },
+                    {
+                      "key": "Content-Type",
+                      "regex": "application/json.*"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "summary": "Intiate Payee Creation V3",
+        "tags": [
+          "Payee Invitation"
+        ],
+        "x-contracts": [
+          {
+            "contractId": 1,
+            "name": "Create Payees by JSON",
+            "serviceName": "payee-service"
+          },
+          {
+            "contractId": 2,
+            "name": "Create Payees by CSV",
+            "serviceName": "payee-service"
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/payees' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 829d8ec0-00a3-4c95-8234-ad09500bb627' \\\n    -d '{\"payorId\":\"7ddebfed-0624-4bce-848d-40ffe818a2df\",\"payees\":[{\"type\":\"Individual\",\"remoteId\":\"remoteId\",\n    \"email\":\"bob@example.com\",\"address\":{\"line1\":\"100 Battery Street\",\"line2\":\"line2\",\"line3\":\"line3\",\n    \"line4\":\"line4\",\"city\":\"San Francisco\",\"countyOrProvince\":\"California\",\"zipOrPostcode\":\"94018\",\"country\":\"US\"},\n    \"paymentChannel\":{\"paymentChannelName\":\"My Payment Channel\",\"accountNumber\":\"12345678\",\"routingNumber\":\"123456789\",\n    \"countryCode\":\"US\",\"currency\":\"USD\",\"accountName\":\"Foo Account\"},\"individual\":{\"name\":{\"title\":\"Mr\",\n    \"firstName\":\"Barney\",\"otherNames\":\"Grubb\",\"lastName\":\"Cuthbert\"},\"nationalIdentification\":\"987654321\",\n    \"dateOfBirth\":\"1970-05-20\"},\"ofacOverride\":false,\"language\":\"FR\"},{\"type\":\"Company\",\"remoteId\":\"remoteId\",\n    \"email\":\"bob@example.com\",\"address\":{\"line1\":\"100 Battery Street\",\"line2\":\"line2\",\"line3\":\"line3\",\n    \"line4\":\"line4\",\"city\":\"San Francisco\",\"countyOrProvince\":\"California\",\"zipOrPostcode\":\"94018\",\"country\":\"US\"},\n    \"paymentChannel\":{\"paymentChannelName\":\"My Payment Channel\",\"accountNumber\":\"12345678\",\"routingNumber\":\"123456789\",\n    \"countryCode\":\"US\",\"currency\":\"USD\",\"accountName\":\"Foo Account\"},\"company\":{\"name\":\"ABC Payee Corp\",\n    \"taxId\":\"223344556\"},\"ofacOverride\":false,\"language\":\"FR\"}]}'\n"
+          }
+        ]
+      }
+    },
+    "/v3/payees/batch/{batchId}": {
+      "get": {
+        "description": "Fetch the status of a specific batch of payees. The batch is fully processed when status is ACCEPTED and pendingCount is 0 ( 200 - OK, 404 - batch not found ).\n",
+        "operationId": "v3QueryBatchStatus",
         "parameters": [
           {
             "description": "Batch Id",
@@ -5205,6 +5769,16 @@
           "400": {
             "description": "Invalid Request Parameters"
           },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
           "404": {
             "description": "Not Found"
           }
@@ -5254,8 +5828,25 @@
           "400": {
             "description": "Bad Request, Invalid path parameter"
           },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
           "404": {
-            "description": "Not found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
           }
         },
         "summary": "Get details about given source account.",
@@ -5274,7 +5865,7 @@
     "/v1/sourceAccounts/{sourceAccountId}/achFundingRequest": {
       "post": {
         "deprecated": true,
-        "description": "Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).",
+        "description": "Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo.",
         "operationId": "createAchFundingRequest",
         "parameters": [
           {
@@ -5304,10 +5895,34 @@
             "description": "Request Accepted"
           },
           "400": {
-            "description": "Invalid Request Body"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
           "404": {
-            "description": "Source Account Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
           }
         },
         "summary": "Create Funding Request",
@@ -5354,10 +5969,44 @@
             "description": "Request Fulfilled"
           },
           "400": {
-            "description": "Invalid Request Body"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Source Account Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
           }
         },
         "summary": "Set notifications",
@@ -5404,10 +6053,44 @@
             "description": "Request Accepted"
           },
           "400": {
-            "description": "Invalid Request Body"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Source Account Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
           }
         },
         "summary": "Create Funding Request",
@@ -5483,7 +6166,6 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "HTTP/1.1 200 OK\nContent-Length: 1455\nContent-Type: application/json;charset=UTF-8\n\n{\n  \"page\" : {\n    \"numberOfElements\" : 2,\n    \"totalElements\" : 2,\n    \"totalPages\" : 1,\n    \"page\" : 1,\n    \"pageSize\" : 0\n  },\n  \"links\" : [ {\n    \"rel\" : \"first\",\n    \"href\" : \"https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc\"\n  }, {\n    \"rel\" : \"last\",\n    \"href\" : \"https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc\"\n  }, {\n    \"rel\" : \"self\",\n    \"href\" : \"https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc\"\n  } ],\n  \"content\" : [ {\n    \"id\" : \"ee53e01d-c078-43fd-abd4-47e92f4a06cf\",\n    \"balance\" : 1203489,\n    \"currency\" : \"USD\",\n    \"fundingRef\" : \"a1b2c3d4\",\n    \"physicalAccountName\" : \"VELO_FBO_MYBANKA_USD\",\n    \"railsId\" : \"SIM\",\n    \"payorId\" : \"a2967711-df07-41e5-b5ea-f563088911c6\",\n    \"name\" : \"mySourceAccount\",\n    \"pooled\" : true,\n    \"balanceVisible\" : true,\n    \"customerId\" : null,\n    \"notifications\" : {\n       \"minimumBalance\": 900\n    }\n  }, {\n    \"id\" : \"a587c938-e497-4349-8817-129a5e801f30\",\n    \"balance\" : 1203489,\n    \"currency\" : \"USD\",\n    \"fundingRef\" : \"a1b2c3d4\",\n    \"physicalAccountName\" : \"VELO_FBO_MYBANKA_USD\",\n    \"railsId\" : \"SIM\",\n    \"payorId\" : \"a2967711-df07-41e5-b5ea-f563088911c6\",\n    \"name\" : \"mySourceAccount\",\n    \"pooled\" : true,\n    \"balanceVisible\" : true,\n    \"customerId\" : null,\n    \"notifications\" : {\n      \"minimumBalance\": 900\n    }\n  } ]\n}\n",
                 "schema": {
                   "$ref": "#/components/schemas/ListSourceAccountResponseV2"
                 }
@@ -5492,10 +6174,44 @@
             "description": "List Source Account response"
           },
           "400": {
-            "description": "Invalid Request Parameters"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
           }
         },
         "summary": "Get list of source accounts",
@@ -5540,10 +6256,44 @@
             "description": "Source account response"
           },
           "400": {
-            "description": "Bad Request, Invalid path parameter"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Not found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
           }
         },
         "summary": "Get details about given source account.",
@@ -5561,7 +6311,7 @@
     },
     "/v2/sourceAccounts/{sourceAccountId}/transfers": {
       "post": {
-        "description": "Transfer funds between source accounts for a Payor. The 'from' source account is identified in the URL, and is the account which will be debited. The 'to' (destination) source account is in the body, and is the account which will be credited. Both source accounts must belong to the same Payor. There must be sufficient balance in the 'from' source account, otherwise the transfer attempt will fail. The authorisation token used must be allowed to access that Payor i.e. it is associated with the same Payor as the source accounts, or a parent or ancestor Payor. (204 - no content, 400 - invalid request body, 404 - from or to source account not found).",
+        "description": "Transfer funds between source accounts for a Payor. The 'from' source account is identified in the URL, and is the account which will be debited. The 'to' (destination) source account is in the body, and is the account which will be credited. Both source accounts must belong to the same Payor. There must be sufficient balance in the 'from' source account, otherwise the transfer attempt will fail.",
         "operationId": "transferFunds",
         "parameters": [
           {
@@ -5591,10 +6341,44 @@
             "description": "Request Processed"
           },
           "400": {
-            "description": "Invalid Request Body"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Source Account Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
           }
         },
         "summary": "Transfer Funds between source accounts",
@@ -5609,10 +6393,365 @@
         ]
       }
     },
+    "/v1/fundingAccounts": {
+      "get": {
+        "description": "Get the source accounts.",
+        "operationId": "getFundingAccounts",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "payorId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sourceAccountId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page size. Default is 25. Max allowable is 100.",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "accountName:asc",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sensitive",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListFundingAccountsResponse"
+                }
+              }
+            },
+            "description": "Get Funding Accounts Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "Get Funding Accounts",
+        "tags": [
+          "Funding Manager"
+        ]
+      },
+      "post": {
+        "description": "Create Funding Account",
+        "operationId": "createFundingAccount",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFundingAccountRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Funding Account Created",
+            "headers": {
+              "Location": {
+                "description": "Reference to created accout",
+                "schema": {
+                  "format": "uri",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "Create Funding Account"
+      }
+    },
+    "/v1/fundingAccounts/{fundingAccountId}": {
+      "get": {
+        "description": "Get Funding Account by ID",
+        "operationId": "getFundingAccount",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fundingAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sensitive",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FundingAccountResponse"
+                }
+              }
+            },
+            "description": "Funding Account Response"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "summary": "Get Funding Account",
+        "tags": [
+          "Funding Manager"
+        ]
+      }
+    },
+    "/v1/deltas/fundings": {
+      "get": {
+        "description": "Get a paginated response listing funding changes.",
+        "operationId": "listFundingAuditDeltas",
+        "parameters": [
+          {
+            "description": "The Payor ID to find associated funding records",
+            "in": "query",
+            "name": "payorId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "x-contracts": [
+              {
+                "contractId": 1,
+                "value": "0a818933-087d-47f2-ad83-2f986ed087eb",
+                "matchers": [
+                  {
+                    "type": "equal_to",
+                    "value": "0a818933-087d-47f2-ad83-2f986ed087eb"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "The updatedSince filter in the format YYYY-MM-DDThh:mm:ss+hh:mm",
+            "in": "query",
+            "name": "updatedSince",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            },
+            "x-contracts": [
+              {
+                "contractId": 1,
+                "value": "2019-01-20T09:00:00.000Z",
+                "matchers": [
+                  {
+                    "type": "equal_to",
+                    "value": "2019-01-20T09:00:00.000Z"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page size. Default is 100. Max allowable is 1000.",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FundingDeltaResponse"
+                }
+              }
+            },
+            "description": "Details of Funding changes",
+            "x-contracts": null
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "summary": "List Funding changes",
+        "tags": [
+          "Funding Manager"
+        ],
+        "x-contracts": [
+          {
+            "contractId": 1,
+            "name": "Test List funding changes",
+            "ignored": true,
+            "request": {
+              "queryParameters": [
+                {
+                  "key": "page",
+                  "value": 1
+                },
+                {
+                  "key": "pageSize",
+                  "value": 30
+                }
+              ]
+            },
+            "serviceName": "funding-manager-service"
+          }
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/deltas/fundings?pageSize=10&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \\\n    -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \\\n    -H 'Content-Type: application/json'\n"
+          }
+        ]
+      }
+    },
     "/v1/paymentaudit/fundings": {
       "get": {
         "description": "Get a list of Fundings for a payor.\n",
-        "operationId": "getFundings",
+        "operationId": "getFundingsAudit",
         "parameters": [
           {
             "description": "The account owner Payor ID",
@@ -7102,126 +8241,6 @@
         ]
       }
     },
-    "/v1/deltas/fundings": {
-      "get": {
-        "description": "Get a paginated response listing funding changes.",
-        "operationId": "listFundingAuditDeltas",
-        "parameters": [
-          {
-            "description": "The Payor ID to find associated funding records",
-            "in": "query",
-            "name": "payorId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "x-contracts": [
-              {
-                "contractId": 1,
-                "value": "0a818933-087d-47f2-ad83-2f986ed087eb",
-                "matchers": [
-                  {
-                    "type": "equal_to",
-                    "value": "0a818933-087d-47f2-ad83-2f986ed087eb"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "The updatedSince filter in the format YYYY-MM-DDThh:mm:ss+hh:mm",
-            "in": "query",
-            "name": "updatedSince",
-            "required": true,
-            "schema": {
-              "format": "date-time",
-              "type": "string"
-            },
-            "x-contracts": [
-              {
-                "contractId": 1,
-                "value": "2019-01-20T09:00:00.000Z",
-                "matchers": [
-                  {
-                    "type": "equal_to",
-                    "value": "2019-01-20T09:00:00.000Z"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "description": "Page number. Default is 1.",
-            "in": "query",
-            "name": "page",
-            "required": false,
-            "schema": {
-              "default": 1,
-              "format": "int32",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "Page size. Default is 100. Max allowable is 1000.",
-            "in": "query",
-            "name": "pageSize",
-            "required": false,
-            "schema": {
-              "default": 100,
-              "format": "int32",
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FundingDeltaResponse"
-                }
-              }
-            },
-            "description": "Details of Funding changes",
-            "x-contracts": null
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        },
-        "summary": "List Funding changes",
-        "tags": [
-          "Funding Manager"
-        ],
-        "x-contracts": [
-          {
-            "contractId": 1,
-            "name": "Test List funding changes",
-            "ignored": true,
-            "request": {
-              "queryParameters": [
-                {
-                  "key": "page",
-                  "value": 1
-                },
-                {
-                  "key": "pageSize",
-                  "value": 30
-                }
-              ]
-            },
-            "serviceName": "funding-manager-service"
-          }
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/deltas/fundings?pageSize=10&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \\\n    -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \\\n    -H 'Content-Type: application/json'\n"
-          }
-        ]
-      }
-    },
     "/v3/payouts": {
       "post": {
         "description": "Create a new payout and return a location header with a link to get the payout. Basic validation of the payout\nis performed before returning but more comprehensive validation is done asynchronously, the results of which\ncan be obtained by issuing a HTTP GET to the URL returned in the location header.\n**NOTE:** amount values in payments must be in 'minor units' format. E.g. cents for USD, pence for GBP etc.\n with no decimal places.\n",
@@ -7743,7 +8762,7 @@
       },
       "CheckTokenResponse": {
         "example": {
-          "expiryDate": "2000-01-23T04:56:07.000Z",
+          "expiryDate": "2019-10-25T14:08:25.701Z",
           "mfaStatus": "REGISTERED",
           "mfaType": "TOTP",
           "mfaVerified": true,
@@ -7752,6 +8771,7 @@
         "properties": {
           "expiryDate": {
             "description": "the timestamp when the token will expire",
+            "example": "2019-10-25T14:08:25.701Z",
             "format": "date-time",
             "type": "string"
           },
@@ -9797,6 +10817,7 @@
             "type": "string"
           },
           "addressCountry": {
+            "description": "Ideally a 2 letter ISO 3166-1 country code.  But a limited set of additional values will be corrected.  See Java Locale.getISOCountries() and Locale.getDisplayCountry()",
             "maxLength": 50,
             "minLength": 2,
             "type": "string"
@@ -10375,6 +11396,922 @@
         },
         "type": "object"
       },
+      "WatchlistStatus": {
+        "enum": [
+          "NONE",
+          "PENDING",
+          "REVIEW",
+          "PASSED",
+          "FAILED"
+        ],
+        "type": "string"
+      },
+      "PagedPayeeResponse_2": {
+        "description": "List Payees Response Object",
+        "example": {
+          "summary": {
+            "totalOnboardedCount": 5,
+            "totalRegisteredCount": 1,
+            "totalPayeesCount": 0,
+            "totalInvitedCount": 6,
+            "totalWatchlistFailedCount": 5
+          },
+          "links": [
+            {
+              "rel": "rel",
+              "href": "href"
+            },
+            {
+              "rel": "rel",
+              "href": "href"
+            }
+          ],
+          "page": {
+            "numberOfElements": 2,
+            "totalPages": 9,
+            "pageSize": 2,
+            "page": 3,
+            "totalElements": 7
+          },
+          "content": [
+            {
+              "payorRefs": [
+                {
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                  "invitationStatus": "invitationStatus",
+                  "remoteId": "uniqueIdForRemoteEntity"
+                },
+                {
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                  "invitationStatus": "invitationStatus",
+                  "remoteId": "uniqueIdForRemoteEntity"
+                }
+              ],
+              "country": "country",
+              "cellphoneNumber": "cellphoneNumber",
+              "address": {
+                "country": "US",
+                "countyOrProvince": "FL",
+                "line4": "line4",
+                "city": "Key West",
+                "line3": "line3",
+                "line2": "line2",
+                "line1": "500 Duval St",
+                "zipOrPostcode": "33945"
+              },
+              "individual": {
+                "name": {
+                  "firstName": "firstName",
+                  "lastName": "lastName",
+                  "otherNames": "otherNames",
+                  "title": "title"
+                }
+              },
+              "displayName": "displayName",
+              "created": "2000-01-23T04:56:07.000Z",
+              "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
+              "paymentChannel": {
+                "paymentChannelName": "paymentChannelName",
+                "routingNo": "routingNo",
+                "accountName": "accountName",
+                "countryCode": "countryCode",
+                "iban": "iban",
+                "currency": "USD",
+                "accountNumber": "accountNumber"
+              },
+              "marketingOptIns": [
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                },
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                }
+              ],
+              "watchlistStatusUpdatedTimestamp": "watchlistStatusUpdatedTimestamp",
+              "challenge": {
+                "description": "description",
+                "value": "value"
+              },
+              "company": {
+                "name": "name",
+                "operatingName": "operatingName"
+              },
+              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "email": "email",
+              "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
+            },
+            {
+              "payorRefs": [
+                {
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                  "invitationStatus": "invitationStatus",
+                  "remoteId": "uniqueIdForRemoteEntity"
+                },
+                {
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                  "invitationStatus": "invitationStatus",
+                  "remoteId": "uniqueIdForRemoteEntity"
+                }
+              ],
+              "country": "country",
+              "cellphoneNumber": "cellphoneNumber",
+              "address": {
+                "country": "US",
+                "countyOrProvince": "FL",
+                "line4": "line4",
+                "city": "Key West",
+                "line3": "line3",
+                "line2": "line2",
+                "line1": "500 Duval St",
+                "zipOrPostcode": "33945"
+              },
+              "individual": {
+                "name": {
+                  "firstName": "firstName",
+                  "lastName": "lastName",
+                  "otherNames": "otherNames",
+                  "title": "title"
+                }
+              },
+              "displayName": "displayName",
+              "created": "2000-01-23T04:56:07.000Z",
+              "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
+              "paymentChannel": {
+                "paymentChannelName": "paymentChannelName",
+                "routingNo": "routingNo",
+                "accountName": "accountName",
+                "countryCode": "countryCode",
+                "iban": "iban",
+                "currency": "USD",
+                "accountNumber": "accountNumber"
+              },
+              "marketingOptIns": [
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                },
+                {
+                  "optedIn": true,
+                  "timestamp": "2000-01-23T04:56:07.000Z"
+                }
+              ],
+              "watchlistStatusUpdatedTimestamp": "watchlistStatusUpdatedTimestamp",
+              "challenge": {
+                "description": "description",
+                "value": "value"
+              },
+              "company": {
+                "name": "name",
+                "operatingName": "operatingName"
+              },
+              "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "email": "email",
+              "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
+            }
+          ]
+        },
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/PagedPayeeResponse_2_summary"
+          },
+          "page": {
+            "$ref": "#/components/schemas/PagedPayeeResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/PayeeResponse_2"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CreatePayeesRequest_2": {
+        "properties": {
+          "payorId": {
+            "type": "string"
+          },
+          "payees": {
+            "items": {
+              "$ref": "#/components/schemas/CreatePayee_2"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "payees",
+          "payorId"
+        ],
+        "type": "object"
+      },
+      "CreatePayeesCSVRequest_2": {
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/PayeeType"
+          },
+          "remoteId": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "format": "email",
+            "maxLength": 255,
+            "minLength": 3,
+            "type": "string"
+          },
+          "addressLine1": {
+            "maxLength": 100,
+            "minLength": 2,
+            "type": "string"
+          },
+          "addressLine2": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "addressLine3": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "addressLine4": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "addressCity": {
+            "maxLength": 50,
+            "minLength": 2,
+            "type": "string"
+          },
+          "addressCountyOrProvince": {
+            "maxLength": 50,
+            "minLength": 1,
+            "type": "string"
+          },
+          "addressZipOrPostcode": {
+            "maxLength": 60,
+            "minLength": 1,
+            "type": "string"
+          },
+          "addressCountry": {
+            "description": "Must be a 2 character country code - per ISO 3166-1",
+            "enum": [
+              "AF",
+              "AX",
+              "AL",
+              "DZ",
+              "AS",
+              "AD",
+              "AO",
+              "AI",
+              "AQ",
+              "AG",
+              "AR",
+              "AM",
+              "AW",
+              "AU",
+              "AT",
+              "AZ",
+              "BS",
+              "BH",
+              "BD",
+              "BB",
+              "BY",
+              "BE",
+              "BZ",
+              "BJ",
+              "BM",
+              "BT",
+              "BO",
+              "BQ",
+              "BA",
+              "BW",
+              "BV",
+              "BR",
+              "IO",
+              "BN",
+              "BG",
+              "BF",
+              "BI",
+              "KH",
+              "CM",
+              "CA",
+              "CV",
+              "KY",
+              "CF",
+              "TD",
+              "CL",
+              "CN",
+              "CX",
+              "CC",
+              "CO",
+              "KM",
+              "CG",
+              "CD",
+              "CK",
+              "CR",
+              "CI",
+              "HR",
+              "CU",
+              "CW",
+              "CY",
+              "CZ",
+              "DK",
+              "DJ",
+              "DM",
+              "DO",
+              "EC",
+              "EG",
+              "SV",
+              "GQ",
+              "ER",
+              "EE",
+              "ET",
+              "FK",
+              "FO",
+              "FJ",
+              "FI",
+              "FR",
+              "GF",
+              "PF",
+              "TF",
+              "GA",
+              "GM",
+              "GE",
+              "DE",
+              "GH",
+              "GI",
+              "GR",
+              "GL",
+              "GD",
+              "GP",
+              "GU",
+              "GT",
+              "GG",
+              "GN",
+              "GW",
+              "GY",
+              "HT",
+              "HM",
+              "VA",
+              "HN",
+              "HK",
+              "HU",
+              "IS",
+              "IN",
+              "ID",
+              "IR",
+              "IQ",
+              "IE",
+              "IM",
+              "IL",
+              "IT",
+              "JM",
+              "JP",
+              "JE",
+              "JO",
+              "KZ",
+              "KE",
+              "KI",
+              "KP",
+              "KR",
+              "KW",
+              "KG",
+              "LA",
+              "LV",
+              "LB",
+              "LS",
+              "LR",
+              "LY",
+              "LI",
+              "LT",
+              "LU",
+              "MO",
+              "MK",
+              "MG",
+              "MW",
+              "MY",
+              "MV",
+              "ML",
+              "MT",
+              "MH",
+              "MQ",
+              "MR",
+              "MU",
+              "YT",
+              "MX",
+              "FM",
+              "MD",
+              "MC",
+              "MN",
+              "ME",
+              "MS",
+              "MA",
+              "MZ",
+              "MM",
+              "NA",
+              "NR",
+              "NP",
+              "NL",
+              "NC",
+              "NZ",
+              "NI",
+              "NE",
+              "NG",
+              "NU",
+              "NF",
+              "MP",
+              "NO",
+              "OM",
+              "PK",
+              "PW",
+              "PS",
+              "PA",
+              "PG",
+              "PY",
+              "PE",
+              "PH",
+              "PN",
+              "PL",
+              "PT",
+              "PR",
+              "QA",
+              "RE",
+              "RO",
+              "RU",
+              "RW",
+              "BL",
+              "SH",
+              "KN",
+              "LC",
+              "MF",
+              "PM",
+              "VC",
+              "WS",
+              "SM",
+              "ST",
+              "SA",
+              "SN",
+              "RS",
+              "SC",
+              "SL",
+              "SG",
+              "SX",
+              "SK",
+              "SI",
+              "SB",
+              "SO",
+              "ZA",
+              "GS",
+              "SS",
+              "ES",
+              "LK",
+              "SD",
+              "SR",
+              "SJ",
+              "SZ",
+              "SE",
+              "CH",
+              "SY",
+              "TW",
+              "TJ",
+              "TZ",
+              "TH",
+              "TL",
+              "TG",
+              "TK",
+              "TO",
+              "TT",
+              "TN",
+              "TR",
+              "TM",
+              "TC",
+              "TV",
+              "UG",
+              "UA",
+              "AE",
+              "GB",
+              "US",
+              "UM",
+              "UY",
+              "UZ",
+              "VU",
+              "VE",
+              "VN",
+              "VG",
+              "VI",
+              "WF",
+              "EH",
+              "YE",
+              "ZM",
+              "ZW"
+            ],
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string"
+          },
+          "individualNationalIdentification": {
+            "maxLength": 30,
+            "minLength": 6,
+            "type": "string"
+          },
+          "individualDateOfBirth": {
+            "description": "Must not be date in future. Example - 1970-05-20",
+            "format": "date",
+            "type": "string"
+          },
+          "individualTitle": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "individualFirstName": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "individualOtherNames": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "individualLastName": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "companyName": {
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "companyEIN": {
+            "description": "Company Tax Id (EIN) must be 9 numeric characters. Must match the regular expression ```[\\d]{9}```.",
+            "pattern": "[\\\\d]{9}",
+            "type": "string"
+          },
+          "companyOperatingName": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "paymentChannelAccountNumber": {
+            "description": "Either routing number and account number or only iban must be set",
+            "maxLength": 17,
+            "minLength": 6,
+            "type": "string"
+          },
+          "paymentChannelRoutingNumber": {
+            "description": "Either routing number and account number or only iban must be set",
+            "maxLength": 9,
+            "minLength": 9,
+            "type": "string"
+          },
+          "paymentChannelAccountName": {
+            "type": "string"
+          },
+          "paymentChannelIban": {
+            "description": "Must match the regular expression ```^[A-Za-z0-9]+$```.",
+            "maxLength": 34,
+            "minLength": 15,
+            "pattern": "^[A-Za-z0-9]+$",
+            "type": "string"
+          },
+          "paymentChannelCountryCode": {
+            "description": "Must be a 2 character country code - per ISO 3166-1",
+            "enum": [
+              "AF",
+              "AX",
+              "AL",
+              "DZ",
+              "AS",
+              "AD",
+              "AO",
+              "AI",
+              "AQ",
+              "AG",
+              "AR",
+              "AM",
+              "AW",
+              "AU",
+              "AT",
+              "AZ",
+              "BS",
+              "BH",
+              "BD",
+              "BB",
+              "BY",
+              "BE",
+              "BZ",
+              "BJ",
+              "BM",
+              "BT",
+              "BO",
+              "BQ",
+              "BA",
+              "BW",
+              "BV",
+              "BR",
+              "IO",
+              "BN",
+              "BG",
+              "BF",
+              "BI",
+              "KH",
+              "CM",
+              "CA",
+              "CV",
+              "KY",
+              "CF",
+              "TD",
+              "CL",
+              "CN",
+              "CX",
+              "CC",
+              "CO",
+              "KM",
+              "CG",
+              "CD",
+              "CK",
+              "CR",
+              "CI",
+              "HR",
+              "CU",
+              "CW",
+              "CY",
+              "CZ",
+              "DK",
+              "DJ",
+              "DM",
+              "DO",
+              "EC",
+              "EG",
+              "SV",
+              "GQ",
+              "ER",
+              "EE",
+              "ET",
+              "FK",
+              "FO",
+              "FJ",
+              "FI",
+              "FR",
+              "GF",
+              "PF",
+              "TF",
+              "GA",
+              "GM",
+              "GE",
+              "DE",
+              "GH",
+              "GI",
+              "GR",
+              "GL",
+              "GD",
+              "GP",
+              "GU",
+              "GT",
+              "GG",
+              "GN",
+              "GW",
+              "GY",
+              "HT",
+              "HM",
+              "VA",
+              "HN",
+              "HK",
+              "HU",
+              "IS",
+              "IN",
+              "ID",
+              "IR",
+              "IQ",
+              "IE",
+              "IM",
+              "IL",
+              "IT",
+              "JM",
+              "JP",
+              "JE",
+              "JO",
+              "KZ",
+              "KE",
+              "KI",
+              "KP",
+              "KR",
+              "KW",
+              "KG",
+              "LA",
+              "LV",
+              "LB",
+              "LS",
+              "LR",
+              "LY",
+              "LI",
+              "LT",
+              "LU",
+              "MO",
+              "MK",
+              "MG",
+              "MW",
+              "MY",
+              "MV",
+              "ML",
+              "MT",
+              "MH",
+              "MQ",
+              "MR",
+              "MU",
+              "YT",
+              "MX",
+              "FM",
+              "MD",
+              "MC",
+              "MN",
+              "ME",
+              "MS",
+              "MA",
+              "MZ",
+              "MM",
+              "NA",
+              "NR",
+              "NP",
+              "NL",
+              "NC",
+              "NZ",
+              "NI",
+              "NE",
+              "NG",
+              "NU",
+              "NF",
+              "MP",
+              "NO",
+              "OM",
+              "PK",
+              "PW",
+              "PS",
+              "PA",
+              "PG",
+              "PY",
+              "PE",
+              "PH",
+              "PN",
+              "PL",
+              "PT",
+              "PR",
+              "QA",
+              "RE",
+              "RO",
+              "RU",
+              "RW",
+              "BL",
+              "SH",
+              "KN",
+              "LC",
+              "MF",
+              "PM",
+              "VC",
+              "WS",
+              "SM",
+              "ST",
+              "SA",
+              "SN",
+              "RS",
+              "SC",
+              "SL",
+              "SG",
+              "SX",
+              "SK",
+              "SI",
+              "SB",
+              "SO",
+              "ZA",
+              "GS",
+              "SS",
+              "ES",
+              "LK",
+              "SD",
+              "SR",
+              "SJ",
+              "SZ",
+              "SE",
+              "CH",
+              "SY",
+              "TW",
+              "TJ",
+              "TZ",
+              "TH",
+              "TL",
+              "TG",
+              "TK",
+              "TO",
+              "TT",
+              "TN",
+              "TR",
+              "TM",
+              "TC",
+              "TV",
+              "UG",
+              "UA",
+              "AE",
+              "GB",
+              "US",
+              "UM",
+              "UY",
+              "UZ",
+              "VU",
+              "VE",
+              "VN",
+              "VG",
+              "VI",
+              "WF",
+              "EH",
+              "YE",
+              "ZM",
+              "ZW"
+            ],
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string"
+          },
+          "paymentChannelCurrency": {
+            "enum": [
+              "USD",
+              "GBP",
+              "EUR"
+            ],
+            "type": "string"
+          },
+          "challengeDescription": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "challengeValue": {
+            "maxLength": 20,
+            "minLength": 3,
+            "type": "string"
+          },
+          "payeeLanguage": {
+            "enum": [
+              "AR",
+              "EN",
+              "ES",
+              "FR",
+              "HE",
+              "HI",
+              "JA",
+              "PT",
+              "RU",
+              "UR",
+              "ZH"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "addressCity",
+          "addressCountry",
+          "addressLine1",
+          "addressZipOrPostcode",
+          "email",
+          "remoteId",
+          "type"
+        ],
+        "type": "object"
+      },
+      "CreatePayeesCSVResponse_2": {
+        "example": {
+          "batchId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "rejectedCsvRows": [
+            "rejectedCsvRows",
+            "rejectedCsvRows"
+          ]
+        },
+        "properties": {
+          "batchId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "rejectedCsvRows": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "InvitePayeeRequest": {
         "example": {
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
@@ -10395,12 +12332,12 @@
           "payeeInvitationStatuses": [
             {
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
+              "gracePeriodEndDate": "2019-02-03T00:00:00.000+0000",
               "invitationStatus": "ACCEPTED"
             },
             {
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
+              "gracePeriodEndDate": "2019-02-03T00:00:00.000+0000",
               "invitationStatus": "ACCEPTED"
             }
           ]
@@ -10904,6 +12841,201 @@
           "currency",
           "toSourceAccountId"
         ],
+        "type": "object"
+      },
+      "ListFundingAccountsResponse": {
+        "description": "List Source Accounts Response Object",
+        "example": {
+          "links": [
+            {
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+            },
+            {
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+            }
+          ],
+          "page": {
+            "numberOfElements": 1,
+            "totalPages": 2,
+            "pageSize": 25,
+            "page": 1,
+            "totalElements": 1
+          },
+          "content": [
+            {
+              "routingNumber": "routingNumber",
+              "accountName": "accountName",
+              "sourceAccountIds": [
+                "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+              ],
+              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "accountNumber": "accountNumber"
+            },
+            {
+              "routingNumber": "routingNumber",
+              "accountName": "accountName",
+              "sourceAccountIds": [
+                "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+              ],
+              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "accountNumber": "accountNumber"
+            }
+          ]
+        },
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/ListSourceAccountResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/ListSourceAccountResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/FundingAccountResponse"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CreateFundingAccountRequest": {
+        "example": {
+          "routingNumber": "routingNumber",
+          "accountName": "accountName",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "accountNumber": "accountNumber"
+        },
+        "properties": {
+          "accountName": {
+            "maxLength": 22,
+            "minLength": 1,
+            "type": "string"
+          },
+          "accountNumber": {
+            "maxLength": 17,
+            "minLength": 4,
+            "type": "string"
+          },
+          "routingNumber": {
+            "maxLength": 9,
+            "minLength": 9,
+            "type": "string"
+          },
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountName",
+          "accountNumber",
+          "payorId",
+          "routingNumber"
+        ],
+        "type": "object"
+      },
+      "FundingAccountResponse": {
+        "example": {
+          "routingNumber": "routingNumber",
+          "accountName": "accountName",
+          "sourceAccountIds": [
+            "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          ],
+          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "accountNumber": "accountNumber"
+        },
+        "properties": {
+          "id": {
+            "description": "Funding Account Id",
+            "format": "uuid",
+            "type": "string"
+          },
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "accountName": {
+            "type": "string"
+          },
+          "accountNumber": {
+            "type": "string"
+          },
+          "routingNumber": {
+            "type": "string"
+          },
+          "sourceAccountIds": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "FundingDeltaResponse": {
+        "description": "List Funding changes response object",
+        "example": {
+          "links": [
+            {
+              "rel": "first",
+              "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+            },
+            {
+              "rel": "first",
+              "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+            }
+          ],
+          "page": {
+            "numberOfElements": 2,
+            "totalPages": 1,
+            "pageSize": 25,
+            "page": 1,
+            "totalElements": 2
+          },
+          "content": [
+            {
+              "amount": 100000,
+              "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "currency": "USD",
+              "status": "ALLOCATED"
+            },
+            {
+              "amount": 100000,
+              "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "currency": "USD",
+              "status": "ALLOCATED"
+            }
+          ]
+        },
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PayeeDeltaResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/FundingDeltaResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/FundingDelta"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "GetFundingsResponse": {
@@ -12506,60 +14638,6 @@
         },
         "type": "object"
       },
-      "FundingDeltaResponse": {
-        "description": "List Funding changes response object",
-        "example": {
-          "links": [
-            {
-              "rel": "first",
-              "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
-            },
-            {
-              "rel": "first",
-              "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
-            }
-          ],
-          "page": {
-            "numberOfElements": 2,
-            "totalPages": 1,
-            "pageSize": 25,
-            "page": 1,
-            "totalElements": 2
-          },
-          "content": [
-            {
-              "amount": 100000,
-              "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "currency": "USD",
-              "status": "ALLOCATED"
-            },
-            {
-              "amount": 100000,
-              "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "currency": "USD",
-              "status": "ALLOCATED"
-            }
-          ]
-        },
-        "properties": {
-          "page": {
-            "$ref": "#/components/schemas/PayeeDeltaResponse_page"
-          },
-          "links": {
-            "items": {
-              "$ref": "#/components/schemas/FundingDeltaResponse_links"
-            },
-            "type": "array"
-          },
-          "content": {
-            "items": {
-              "$ref": "#/components/schemas/FundingDelta"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
       "CreatePayoutRequest": {
         "example": {
           "payoutFromPayorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -13853,7 +15931,7 @@
           },
           "payorRefs": {
             "items": {
-              "$ref": "#/components/schemas/PayeePayorRefV2"
+              "$ref": "#/components/schemas/PayeePayorRef_2"
             },
             "nullable": true,
             "readOnly": true,
@@ -13985,10 +16063,222 @@
         },
         "type": "object"
       },
+      "PayeeResponse_2": {
+        "example": {
+          "payorRefs": [
+            {
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+              "invitationStatus": "invitationStatus",
+              "remoteId": "uniqueIdForRemoteEntity"
+            },
+            {
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+              "invitationStatus": "invitationStatus",
+              "remoteId": "uniqueIdForRemoteEntity"
+            }
+          ],
+          "country": "country",
+          "cellphoneNumber": "cellphoneNumber",
+          "address": {
+            "country": "US",
+            "countyOrProvince": "FL",
+            "line4": "line4",
+            "city": "Key West",
+            "line3": "line3",
+            "line2": "line2",
+            "line1": "500 Duval St",
+            "zipOrPostcode": "33945"
+          },
+          "individual": {
+            "name": {
+              "firstName": "firstName",
+              "lastName": "lastName",
+              "otherNames": "otherNames",
+              "title": "title"
+            }
+          },
+          "displayName": "displayName",
+          "created": "2000-01-23T04:56:07.000Z",
+          "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
+          "paymentChannel": {
+            "paymentChannelName": "paymentChannelName",
+            "routingNo": "routingNo",
+            "accountName": "accountName",
+            "countryCode": "countryCode",
+            "iban": "iban",
+            "currency": "USD",
+            "accountNumber": "accountNumber"
+          },
+          "marketingOptIns": [
+            {
+              "optedIn": true,
+              "timestamp": "2000-01-23T04:56:07.000Z"
+            },
+            {
+              "optedIn": true,
+              "timestamp": "2000-01-23T04:56:07.000Z"
+            }
+          ],
+          "watchlistStatusUpdatedTimestamp": "watchlistStatusUpdatedTimestamp",
+          "challenge": {
+            "description": "description",
+            "value": "value"
+          },
+          "company": {
+            "name": "name",
+            "operatingName": "operatingName"
+          },
+          "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "email": "email",
+          "acceptTermsAndConditionsTimestamp": "2000-01-23T04:56:07.000Z"
+        },
+        "properties": {
+          "payeeId": {
+            "format": "uuid",
+            "readOnly": true,
+            "type": "string"
+          },
+          "payorRefs": {
+            "items": {
+              "$ref": "#/components/schemas/PayeePayorRef"
+            },
+            "nullable": true,
+            "readOnly": true,
+            "type": "array"
+          },
+          "email": {
+            "format": "email",
+            "nullable": true,
+            "type": "string"
+          },
+          "address": {
+            "$ref": "#/components/schemas/PayeeAddress"
+          },
+          "country": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "paymentChannel": {
+            "$ref": "#/components/schemas/PayeePaymentChannel"
+          },
+          "challenge": {
+            "$ref": "#/components/schemas/Challenge"
+          },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "acceptTermsAndConditionsTimestamp": {
+            "description": "The timestamp when the payee last accepted T&Cs",
+            "format": "date-time",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "cellphoneNumber": {
+            "type": "string"
+          },
+          "payeeType": {
+            "$ref": "#/components/schemas/PayeeType"
+          },
+          "company": {
+            "$ref": "#/components/schemas/CompanyResponse"
+          },
+          "individual": {
+            "$ref": "#/components/schemas/IndividualResponse"
+          },
+          "created": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "gracePeriodEndDate": {
+            "format": "date",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "watchlistStatusUpdatedTimestamp": {
+            "format": "date_time",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "marketingOptIns": {
+            "items": {
+              "$ref": "#/components/schemas/MarketingOptIn"
+            },
+            "type": "array"
+          },
+          "watchlistStatus": {
+            "$ref": "#/components/schemas/WatchlistStatus"
+          },
+          "onboardedStatus": {
+            "$ref": "#/components/schemas/OnboardedStatus"
+          }
+        },
+        "type": "object"
+      },
+      "CreatePayee_2": {
+        "properties": {
+          "payeeId": {
+            "format": "uuid",
+            "readOnly": true,
+            "type": "string"
+          },
+          "payorRefs": {
+            "items": {
+              "$ref": "#/components/schemas/PayeePayorRef_2"
+            },
+            "nullable": true,
+            "readOnly": true,
+            "type": "array"
+          },
+          "email": {
+            "format": "email",
+            "maxLength": 255,
+            "minLength": 3,
+            "type": "string"
+          },
+          "remoteId": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/PayeeType"
+          },
+          "address": {
+            "$ref": "#/components/schemas/CreatePayeeAddress_2"
+          },
+          "paymentChannel": {
+            "$ref": "#/components/schemas/CreatePaymentChannel_2"
+          },
+          "challenge": {
+            "$ref": "#/components/schemas/Challenge"
+          },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          },
+          "company": {
+            "$ref": "#/components/schemas/CompanyV1"
+          },
+          "individual": {
+            "$ref": "#/components/schemas/CreateIndividual_2"
+          }
+        },
+        "required": [
+          "address",
+          "email",
+          "remoteId",
+          "type"
+        ],
+        "type": "object"
+      },
       "PayeeInvitationStatus": {
         "example": {
           "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "gracePeriodEndDate": "2000-01-23T00:00:00.000Z",
+          "gracePeriodEndDate": "2019-02-03T00:00:00.000+0000",
           "invitationStatus": "ACCEPTED"
         },
         "properties": {
@@ -14006,6 +16296,7 @@
             "type": "string"
           },
           "gracePeriodEndDate": {
+            "example": "2019-02-03T00:00:00.000Z",
             "format": "date",
             "type": "string"
           }
@@ -14081,6 +16372,46 @@
         },
         "required": [
           "enabled"
+        ],
+        "type": "object"
+      },
+      "FundingDelta": {
+        "example": {
+          "amount": 100000,
+          "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "currency": "USD",
+          "status": "ALLOCATED"
+        },
+        "properties": {
+          "status": {
+            "example": "ALLOCATED",
+            "maxLength": 20,
+            "minLength": 1,
+            "type": "string"
+          },
+          "fundingId": {
+            "format": "uuid",
+            "readOnly": true,
+            "type": "string"
+          },
+          "amount": {
+            "description": "Amount to fund in minor units",
+            "example": 100000,
+            "format": "int64",
+            "maximum": 9999999999,
+            "minimum": 1,
+            "nullable": true,
+            "type": "integer"
+          },
+          "currency": {
+            "example": "USD",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "fundingId",
+          "status"
         ],
         "type": "object"
       },
@@ -14719,46 +17050,6 @@
         ],
         "type": "object"
       },
-      "FundingDelta": {
-        "example": {
-          "amount": 100000,
-          "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "currency": "USD",
-          "status": "ALLOCATED"
-        },
-        "properties": {
-          "status": {
-            "example": "ALLOCATED",
-            "maxLength": 20,
-            "minLength": 1,
-            "type": "string"
-          },
-          "fundingId": {
-            "format": "uuid",
-            "readOnly": true,
-            "type": "string"
-          },
-          "amount": {
-            "description": "Amount to fund in minor units",
-            "example": 100000,
-            "format": "int64",
-            "maximum": 9999999999,
-            "minimum": 1,
-            "nullable": true,
-            "type": "integer"
-          },
-          "currency": {
-            "example": "USD",
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "fundingId",
-          "status"
-        ],
-        "type": "object"
-      },
       "QuoteFxSummary": {
         "example": {
           "invertedRate": 1.12,
@@ -15196,7 +17487,7 @@
         ],
         "type": "object"
       },
-      "PayeePayorRefV2": {
+      "PayeePayorRef_2": {
         "example": {
           "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
           "invitationStatus": "invitationStatus",
@@ -15277,6 +17568,7 @@
             "type": "string"
           },
           "country": {
+            "description": "Ideally a 2 letter ISO 3166-1 country code.  But a limited set of additional values will be corrected.  See Java Locale.getISOCountries() and Locale.getDisplayCountry()",
             "example": "US",
             "maxLength": 50,
             "minLength": 2,
@@ -15611,6 +17903,643 @@
           "nationalIdentification": "nationalIdentification",
           "dateOfBirth": "2000-01-23T00:00:00.000Z"
         },
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/IndividualV1_name"
+          },
+          "nationalIdentification": {
+            "maxLength": 30,
+            "minLength": 6,
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "description": "Must not be date in future. Example - 1970-05-20",
+            "format": "date",
+            "type": "string"
+          }
+        },
+        "required": [
+          "dateOfBirth",
+          "name"
+        ],
+        "type": "object"
+      },
+      "CreatePayeeAddress_2": {
+        "properties": {
+          "line1": {
+            "example": "500 Duval St",
+            "maxLength": 100,
+            "minLength": 1,
+            "nullable": false,
+            "type": "string"
+          },
+          "line2": {
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true,
+            "type": "string"
+          },
+          "line3": {
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true,
+            "type": "string"
+          },
+          "line4": {
+            "maxLength": 100,
+            "minLength": 0,
+            "nullable": true,
+            "type": "string"
+          },
+          "city": {
+            "example": "Key West",
+            "maxLength": 50,
+            "minLength": 2,
+            "nullable": false,
+            "type": "string"
+          },
+          "countyOrProvince": {
+            "example": "FL",
+            "maxLength": 50,
+            "minLength": 2,
+            "nullable": true,
+            "type": "string"
+          },
+          "zipOrPostcode": {
+            "example": "33945",
+            "maxLength": 60,
+            "minLength": 2,
+            "nullable": true,
+            "type": "string"
+          },
+          "country": {
+            "description": "2 letter ISO 3166-1 country code",
+            "enum": [
+              "AF",
+              "AX",
+              "AL",
+              "DZ",
+              "AS",
+              "AD",
+              "AO",
+              "AI",
+              "AQ",
+              "AG",
+              "AR",
+              "AM",
+              "AW",
+              "AU",
+              "AT",
+              "AZ",
+              "BS",
+              "BH",
+              "BD",
+              "BB",
+              "BY",
+              "BE",
+              "BZ",
+              "BJ",
+              "BM",
+              "BT",
+              "BO",
+              "BQ",
+              "BA",
+              "BW",
+              "BV",
+              "BR",
+              "IO",
+              "BN",
+              "BG",
+              "BF",
+              "BI",
+              "KH",
+              "CM",
+              "CA",
+              "CV",
+              "KY",
+              "CF",
+              "TD",
+              "CL",
+              "CN",
+              "CX",
+              "CC",
+              "CO",
+              "KM",
+              "CG",
+              "CD",
+              "CK",
+              "CR",
+              "CI",
+              "HR",
+              "CU",
+              "CW",
+              "CY",
+              "CZ",
+              "DK",
+              "DJ",
+              "DM",
+              "DO",
+              "EC",
+              "EG",
+              "SV",
+              "GQ",
+              "ER",
+              "EE",
+              "ET",
+              "FK",
+              "FO",
+              "FJ",
+              "FI",
+              "FR",
+              "GF",
+              "PF",
+              "TF",
+              "GA",
+              "GM",
+              "GE",
+              "DE",
+              "GH",
+              "GI",
+              "GR",
+              "GL",
+              "GD",
+              "GP",
+              "GU",
+              "GT",
+              "GG",
+              "GN",
+              "GW",
+              "GY",
+              "HT",
+              "HM",
+              "VA",
+              "HN",
+              "HK",
+              "HU",
+              "IS",
+              "IN",
+              "ID",
+              "IR",
+              "IQ",
+              "IE",
+              "IM",
+              "IL",
+              "IT",
+              "JM",
+              "JP",
+              "JE",
+              "JO",
+              "KZ",
+              "KE",
+              "KI",
+              "KP",
+              "KR",
+              "KW",
+              "KG",
+              "LA",
+              "LV",
+              "LB",
+              "LS",
+              "LR",
+              "LY",
+              "LI",
+              "LT",
+              "LU",
+              "MO",
+              "MK",
+              "MG",
+              "MW",
+              "MY",
+              "MV",
+              "ML",
+              "MT",
+              "MH",
+              "MQ",
+              "MR",
+              "MU",
+              "YT",
+              "MX",
+              "FM",
+              "MD",
+              "MC",
+              "MN",
+              "ME",
+              "MS",
+              "MA",
+              "MZ",
+              "MM",
+              "NA",
+              "NR",
+              "NP",
+              "NL",
+              "NC",
+              "NZ",
+              "NI",
+              "NE",
+              "NG",
+              "NU",
+              "NF",
+              "MP",
+              "NO",
+              "OM",
+              "PK",
+              "PW",
+              "PS",
+              "PA",
+              "PG",
+              "PY",
+              "PE",
+              "PH",
+              "PN",
+              "PL",
+              "PT",
+              "PR",
+              "QA",
+              "RE",
+              "RO",
+              "RU",
+              "RW",
+              "BL",
+              "SH",
+              "KN",
+              "LC",
+              "MF",
+              "PM",
+              "VC",
+              "WS",
+              "SM",
+              "ST",
+              "SA",
+              "SN",
+              "RS",
+              "SC",
+              "SL",
+              "SG",
+              "SX",
+              "SK",
+              "SI",
+              "SB",
+              "SO",
+              "ZA",
+              "GS",
+              "SS",
+              "ES",
+              "LK",
+              "SD",
+              "SR",
+              "SJ",
+              "SZ",
+              "SE",
+              "CH",
+              "SY",
+              "TW",
+              "TJ",
+              "TZ",
+              "TH",
+              "TL",
+              "TG",
+              "TK",
+              "TO",
+              "TT",
+              "TN",
+              "TR",
+              "TM",
+              "TC",
+              "TV",
+              "UG",
+              "UA",
+              "AE",
+              "GB",
+              "US",
+              "UM",
+              "UY",
+              "UZ",
+              "VU",
+              "VE",
+              "VN",
+              "VG",
+              "VI",
+              "WF",
+              "EH",
+              "YE",
+              "ZM",
+              "ZW"
+            ],
+            "example": "US",
+            "maxLength": 2,
+            "minLength": 2,
+            "nullable": false,
+            "type": "string"
+          }
+        },
+        "required": [
+          "city",
+          "country",
+          "line1"
+        ],
+        "type": "object"
+      },
+      "CreatePaymentChannel_2": {
+        "properties": {
+          "paymentChannelName": {
+            "type": "string"
+          },
+          "iban": {
+            "description": "Must match the regular expression ```^[A-Za-z0-9]+$```. Either routing number and account number or only iban must be set",
+            "maxLength": 34,
+            "minLength": 15,
+            "pattern": "^[A-Za-z0-9]+$",
+            "type": "string"
+          },
+          "accountNumber": {
+            "description": "Either routing number and account number or only iban must be set",
+            "maxLength": 17,
+            "minLength": 6,
+            "type": "string"
+          },
+          "routingNumber": {
+            "description": "Either routing number and account number or only iban must be set",
+            "maxLength": 9,
+            "minLength": 9,
+            "type": "string"
+          },
+          "countryCode": {
+            "description": "Two character country code",
+            "enum": [
+              "AF",
+              "AX",
+              "AL",
+              "DZ",
+              "AS",
+              "AD",
+              "AO",
+              "AI",
+              "AQ",
+              "AG",
+              "AR",
+              "AM",
+              "AW",
+              "AU",
+              "AT",
+              "AZ",
+              "BS",
+              "BH",
+              "BD",
+              "BB",
+              "BY",
+              "BE",
+              "BZ",
+              "BJ",
+              "BM",
+              "BT",
+              "BO",
+              "BQ",
+              "BA",
+              "BW",
+              "BV",
+              "BR",
+              "IO",
+              "BN",
+              "BG",
+              "BF",
+              "BI",
+              "KH",
+              "CM",
+              "CA",
+              "CV",
+              "KY",
+              "CF",
+              "TD",
+              "CL",
+              "CN",
+              "CX",
+              "CC",
+              "CO",
+              "KM",
+              "CG",
+              "CD",
+              "CK",
+              "CR",
+              "CI",
+              "HR",
+              "CU",
+              "CW",
+              "CY",
+              "CZ",
+              "DK",
+              "DJ",
+              "DM",
+              "DO",
+              "EC",
+              "EG",
+              "SV",
+              "GQ",
+              "ER",
+              "EE",
+              "ET",
+              "FK",
+              "FO",
+              "FJ",
+              "FI",
+              "FR",
+              "GF",
+              "PF",
+              "TF",
+              "GA",
+              "GM",
+              "GE",
+              "DE",
+              "GH",
+              "GI",
+              "GR",
+              "GL",
+              "GD",
+              "GP",
+              "GU",
+              "GT",
+              "GG",
+              "GN",
+              "GW",
+              "GY",
+              "HT",
+              "HM",
+              "VA",
+              "HN",
+              "HK",
+              "HU",
+              "IS",
+              "IN",
+              "ID",
+              "IR",
+              "IQ",
+              "IE",
+              "IM",
+              "IL",
+              "IT",
+              "JM",
+              "JP",
+              "JE",
+              "JO",
+              "KZ",
+              "KE",
+              "KI",
+              "KP",
+              "KR",
+              "KW",
+              "KG",
+              "LA",
+              "LV",
+              "LB",
+              "LS",
+              "LR",
+              "LY",
+              "LI",
+              "LT",
+              "LU",
+              "MO",
+              "MK",
+              "MG",
+              "MW",
+              "MY",
+              "MV",
+              "ML",
+              "MT",
+              "MH",
+              "MQ",
+              "MR",
+              "MU",
+              "YT",
+              "MX",
+              "FM",
+              "MD",
+              "MC",
+              "MN",
+              "ME",
+              "MS",
+              "MA",
+              "MZ",
+              "MM",
+              "NA",
+              "NR",
+              "NP",
+              "NL",
+              "NC",
+              "NZ",
+              "NI",
+              "NE",
+              "NG",
+              "NU",
+              "NF",
+              "MP",
+              "NO",
+              "OM",
+              "PK",
+              "PW",
+              "PS",
+              "PA",
+              "PG",
+              "PY",
+              "PE",
+              "PH",
+              "PN",
+              "PL",
+              "PT",
+              "PR",
+              "QA",
+              "RE",
+              "RO",
+              "RU",
+              "RW",
+              "BL",
+              "SH",
+              "KN",
+              "LC",
+              "MF",
+              "PM",
+              "VC",
+              "WS",
+              "SM",
+              "ST",
+              "SA",
+              "SN",
+              "RS",
+              "SC",
+              "SL",
+              "SG",
+              "SX",
+              "SK",
+              "SI",
+              "SB",
+              "SO",
+              "ZA",
+              "GS",
+              "SS",
+              "ES",
+              "LK",
+              "SD",
+              "SR",
+              "SJ",
+              "SZ",
+              "SE",
+              "CH",
+              "SY",
+              "TW",
+              "TJ",
+              "TZ",
+              "TH",
+              "TL",
+              "TG",
+              "TK",
+              "TO",
+              "TT",
+              "TN",
+              "TR",
+              "TM",
+              "TC",
+              "TV",
+              "UG",
+              "UA",
+              "AE",
+              "GB",
+              "US",
+              "UM",
+              "UY",
+              "UZ",
+              "VU",
+              "VE",
+              "VN",
+              "VG",
+              "VI",
+              "WF",
+              "EH",
+              "YE",
+              "ZM",
+              "ZW"
+            ],
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string"
+          },
+          "currency": {
+            "enum": [
+              "USD",
+              "GBP",
+              "EUR"
+            ],
+            "type": "string"
+          },
+          "accountName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountName",
+          "countryCode",
+          "currency"
+        ],
+        "type": "object"
+      },
+      "CreateIndividual_2": {
         "properties": {
           "name": {
             "$ref": "#/components/schemas/IndividualV1_name"
@@ -16183,6 +19112,32 @@
           }
         }
       },
+      "PagedPayeeResponse_2_summary": {
+        "example": {
+          "totalOnboardedCount": 5,
+          "totalRegisteredCount": 1,
+          "totalPayeesCount": 0,
+          "totalInvitedCount": 6,
+          "totalWatchlistFailedCount": 5
+        },
+        "properties": {
+          "totalPayeesCount": {
+            "type": "integer"
+          },
+          "totalInvitedCount": {
+            "type": "integer"
+          },
+          "totalRegisteredCount": {
+            "type": "integer"
+          },
+          "totalOnboardedCount": {
+            "type": "integer"
+          },
+          "totalWatchlistFailedCount": {
+            "type": "integer"
+          }
+        }
+      },
       "ListSourceAccountResponse_page": {
         "example": {
           "numberOfElements": 1,
@@ -16226,6 +19181,22 @@
           },
           "href": {
             "example": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc",
+            "type": "string"
+          }
+        }
+      },
+      "FundingDeltaResponse_links": {
+        "example": {
+          "rel": "first",
+          "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+        },
+        "properties": {
+          "rel": {
+            "example": "first",
+            "type": "string"
+          },
+          "href": {
+            "example": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000",
             "type": "string"
           }
         }
@@ -16633,22 +19604,6 @@
           },
           "payoutTo": {
             "$ref": "#/components/schemas/PayoutPayorV4"
-          }
-        }
-      },
-      "FundingDeltaResponse_links": {
-        "example": {
-          "rel": "first",
-          "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
-        },
-        "properties": {
-          "rel": {
-            "example": "first",
-            "type": "string"
-          },
-          "href": {
-            "example": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000",
-            "type": "string"
           }
         }
       },
