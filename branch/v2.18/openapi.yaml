@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.18.20
+  version: 2.18.21
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -12743,6 +12743,7 @@ x-tagGroups:
   - name: Auth
     tags:
       - Login
+      - Users
       - Tokens
   - name: API Utilities
     tags:
