@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.18.21",
+    "version": "2.18.22",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -393,6 +393,50 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/3637fbb0-1fdb-4d2d-a635-e4001ba94212/otp' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"type\":\"SMS\"}'\n"
+          }
+        ]
+      }
+    },
+    "/v1/tokens/{tokenId}/otp/generate": {
+      "post": {
+        "description": "<p>Generate an OTP and send to the SMS device if the user</p>\n<p>Only users who have SMS as their registered MFA device will receive an OTP</p>\n<p>Used in conjuction with endpoints that require the Velo-OTP header</p>\n",
+        "operationId": "generateOTPForSMS",
+        "parameters": [
+          {
+            "description": "The UUID of the Token",
+            "in": "path",
+            "name": "tokenId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "the request was handled"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "security": [],
+        "summary": "Send an OTP to SMS Users",
+        "tags": [
+          "Tokens"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/3637fbb0-1fdb-4d2d-a635-e4001ba94212/otp/generate' -i -X POST \\\n    -H 'Content-Type: application/json'\n"
           }
         ]
       }
