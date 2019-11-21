@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.18.19
+  version: 2.18.20
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -102,6 +102,10 @@ tags:
     name: Payments
   - description: APIs which allows you to work with payees invited to the Velo Platform.
     name: Invites
+  - description: |
+      <p>Verification tokens allow users to complete authenitcation flows such as user invite, MFA registration ad password reset</p>
+      <p>Tokens have an expiry and are one-time use only</p>
+    name: Tokens
   - description: |
       <p>This document, including all counts herein, and the Velo Payments API are the intellectual property
       of Velo Payments. The Velo Payment API and your use of the Velo Payment API, is goverend by and subject to the
@@ -147,7 +151,1840 @@ paths:
         - basicAuth: []
       summary: Authentication endpoint
       tags:
-        - Auth
+        - Login
+  /v1/logout:
+    post:
+      description: |
+        <p>Given a valid access token in the header then log out the authenticated user or client </p>
+        <p>Will revoke the token</p>
+      operationId: logout
+      responses:
+        '204':
+          description: User has been logged out
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Logout
+      tags:
+        - Login
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/logout' -i -X POST \
+                -H 'Content-Type: application/json' \
+                -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8'
+  /v1/password/reset:
+    post:
+      description: |
+        <p>Reset password </p>
+        <p>An email with an embedded link will be sent to the receipient of the email address </p>
+        <p>The link will contain a token to be used for resetting the password </p>
+      operationId: resetPassword
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+        description: An Email address to send the reset password link to
+        required: true
+      responses:
+        '204':
+          description: the request was accepted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+      security: []
+      summary: Reset password
+      tags:
+        - Login
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/password/reset' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"email":"foo@example.com"}'
+  /v1/validate:
+    post:
+      description: |
+        <p>The second part of login involves validating using an MFA device</p>
+        <p>An access token with PRE_AUTH authorities is required</p>
+      operationId: validateAccessToken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessTokenValidationRequest'
+        description: |
+          An OTP from the user's registered MFA Device
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenResponse'
+          description: User request has been validated
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: validate
+      tags:
+        - Login
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/validate' -i -X POST \
+                -H 'Content-Type: application/json' \
+                -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8' \
+                -d '{"otp":"123456"}'
+  '/v1/tokens/{tokenId}':
+    get:
+      description: |
+        Get a Single Verification Token by Id.
+      operationId: getVerificationTokenById
+      parameters:
+        - description: The UUID of the Token
+          in: path
+          name: tokenId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckTokenResponse'
+          description: Get Verification Token
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request could not be completed as a precondition was not met
+      security: []
+      summary: Get Token
+      tags:
+        - Tokens
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/tokens/b898887c-6565-4b67-a1fd-31e3d87cb9ca' -i -X GET \
+                -H 'Content-Type: application/json'
+  '/v1/tokens/{tokenId}/otp':
+    post:
+      description: |
+        Generate an OTP and send to the MFA type specified in the request body
+      operationId: generateOTP
+      parameters:
+        - description: The UUID of the Token
+          in: path
+          name: tokenId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateOTPRequest'
+        description: The MFA type to send the generated OTP to
+        required: true
+      responses:
+        '204':
+          description: the request was handled
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request could not be completed as a precondition was not met
+      security: []
+      summary: Generate an OTP
+      tags:
+        - Tokens
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/tokens/3637fbb0-1fdb-4d2d-a635-e4001ba94212/otp' -i -X POST \
+                -H 'Content-Type: application/json' \
+                -d '{"type":"SMS"}'
+  '/v1/tokens/{tokenId}/otp/validate':
+    post:
+      description: |
+        <p>Validate the OTP </p>
+        <p>The token that was used in the request will be revoked and a new token issued </p>
+        <p>The new token link will be returned in a location header</p>
+        <p>If there are too many invalid OTP requests the token may be disabled</p>
+      operationId: validateOTP
+      parameters:
+        - description: The UUID of the Token
+          in: path
+          name: tokenId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateOTPRequest'
+        description: The OTP generated and sent to the device
+        required: true
+      responses:
+        '201':
+          description: the OTP was valid and a new token has been issued
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request could not be completed as a precondition was not met
+      security: []
+      summary: Validate an OTP
+      tags:
+        - Tokens
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/tokens/3fe871d6-5a15-49c2-9797-f484c87f7950/otp/validate' -i -X POST \
+                -H 'Content-Type: application/json' \
+                -d '{"otp":"123456"}'
+  '/v1/tokens/{tokenId}/mfa/qrcode':
+    get:
+      description: |
+        <p>Get a QR Code for an MFA device that supports it </p>
+        <p>The device must have first been registered</p>
+      operationId: getQRCodeForMFA
+      parameters:
+        - description: The UUID of the Token
+          in: path
+          name: tokenId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: |
+            The width of the image
+          in: query
+          name: width
+          schema:
+            description: The width of the image to be returned
+            format: int32
+            maximum: 1024
+            minimum: 1
+            type: integer
+        - description: |
+            The height of the image
+          in: query
+          name: height
+          schema:
+            description: The height of the image to be returned
+            format: int32
+            maximum: 1024
+            minimum: 1
+            type: integer
+      responses:
+        '200':
+          content:
+            image/png:
+              schema:
+                format: binary
+                type: string
+          description: success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request could not be completed as a precondition was not met
+      security: []
+      summary: Get a QR Code image
+      tags:
+        - Tokens
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/tokens/abbf55b4-5fc0-4b84-9ac0-3060250e6d9c/mfa/qrcode?width=300&height=400' -i -X GET
+  '/v1/tokens/{tokenId}/mfa/register':
+    post:
+      description: |
+        <p>Some MFA Devices based on TOTP require a registration step (Authy, Authenticator) </p>
+        <p>Registering the device will create a shared secret that the MFA device uses to generate OTPs</p>
+      operationId: registerMFA
+      parameters:
+        - description: The UUID of the Token
+          in: path
+          name: tokenId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterMFARequest'
+        description: The MFA Type to register
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterMFAResponse'
+          description: the device was registered
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request could not be completed as a precondition was not met
+      security: []
+      summary: Register an MFA Device
+      tags:
+        - Tokens
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/tokens/0b58f127-957b-4b49-bf23-95f83ecd0b98/mfa/register' -i -X POST \
+                -H 'Content-Type: application/json' \
+                -d '{"mfaType":"TOTP"}'
+  '/v1/tokens/{tokenId}/mfa/validate':
+    post:
+      description: |
+        <p>Validate the user's registered MFA device with an OTP </p>
+        <p>The response will be different based on the token type against which the MFA is validated </p>
+        <p>For INVITE_MFA_USER tokens the response will be 200 and an access token will be returned i the response </p>
+        <p>For MFA_REGISTRATION tokens the response will be 204</p>
+      operationId: validateMFA
+      parameters:
+        - description: The UUID of the Token
+          in: path
+          name: tokenId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateMFARequest'
+        description: The OTP generated or received by the device
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenResponse'
+          description: the OTP was valid
+        '204':
+          description: the MFA device was validated
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request could not be completed as a precondition was not met
+      security: []
+      summary: Validate an MFA Device
+      tags:
+        - Tokens
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/tokens/0b58f127-957b-4b49-bf23-95f83ecd0b98/mfa/validate' -i -X POST \
+                -H 'Content-Type: application/json' \
+                -d '{"otp":"123456"}'
+  '/v1/tokens/{tokenId}/password':
+    post:
+      description: |
+        Submit a password
+      operationId: submitPassword
+      parameters:
+        - description: The UUID of the Token
+          in: path
+          name: tokenId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: |
+            required when updating password using reset password <P>
+            The OTP is supplied by the users MFA device
+          in: header
+          name: Velo-OTP
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordRequest'
+        description: The password
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenResponse'
+          description: response when the token is for invite and thers MFA tyope is SMS
+        '204':
+          description: the password was submitted and accepted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request could not be completed as a precondition was not met
+      security: []
+      summary: Submit a password
+      tags:
+        - Tokens
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/tokens/d6208463-d1df-4446-bcbf-638d7f876bb0/password' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"password":"abcd_12345"}'
+  '/v1/tokens/{tokenId}/password/lockout':
+    post:
+      description: |
+        <p>When a user is locked out of their account due to execeding the limit of login attempts</p>
+        <p>They can use a token to unlock their account </p>
+        <p>Submitting the token will unlock the account associated with the token</p>
+      operationId: unlockAccountWithToken
+      parameters:
+        - description: The UUID of the Token
+          in: path
+          name: tokenId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: the token was accepted and the user is unlocked
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      security: []
+      summary: Unlock the user
+      tags:
+        - Tokens
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/tokens/d6208463-d1df-4446-bcbf-638d7f876bb0/password/lockout' -i -X POST \
+                  -H 'Content-Type: application/json'
+  '/v1/tokens/{tokenId}/password/validate':
+    post:
+      description: |
+        validate the password and return a score
+      operationId: validatePassword
+      parameters:
+        - description: The UUID of the Token
+          in: path
+          name: tokenId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordRequest'
+        description: The password
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidatePasswordResponse'
+          description: the password was checked and a score returned
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request could not be completed as a precondition was not met
+      security: []
+      summary: Validate the proposed password
+      tags:
+        - Tokens
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/tokens/d6208463-d1df-4446-bcbf-638d7f876bb0/password/validate' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"password":"abcd_12345"}'
+  /v2/users:
+    get:
+      description: Get a paginated response listing the Users
+      operationId: listUsers
+      parameters:
+        - description: The Type of the User.
+          in: query
+          name: type
+          required: false
+          schema:
+            $ref: '#/components/schemas/UserType'
+        - description: The status of the User.
+          in: query
+          name: status
+          required: false
+          schema:
+            $ref: '#/components/schemas/UserStatus'
+        - description: The entityId of the User.
+          in: query
+          name: entityId
+          required: false
+          schema:
+            format: uuid
+            type: string
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            type: integer
+        - description: |
+            List of sort fields (e.g. ?sort=email:asc,lastName:asc)
+            Default is email:asc 'name'
+            The supported sort fields are - email, lastNmae.
+          in: query
+          name: sort
+          required: false
+          schema:
+            default: 'email:asc'
+            pattern: '[a-zA-Z]+[:desc|:asc]'
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedUserResponse'
+          description: Paginated list of Users filtered by query parameters
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: List Users
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users?pageSize=2&page=8&status=DISABLED' -i -X GET \
+                -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \
+                -H 'Content-Type: application/json'
+  '/v2/users/{userId}':
+    delete:
+      description: |
+        Delete User by Id.
+      operationId: deleteUserByIdV2
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: request completed okay
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Delete a User
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/d4ca564-f2ee-4725-97c2-7193a093f0f1' -i -X DELETE \
+                -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \
+                -H 'Content-Type: application/json'
+    get:
+      description: |
+        Get a Single User by Id.
+      operationId: getUserByIdV2
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+          description: Get User Details
+          x-contracts:
+            - contractId: 1
+              headers:
+                Content-Type: application/json
+              body:
+                id: 5782f21b-03ab-4f4c-a2ca-ca1e1141eeee
+                email: foo@example.com
+                firstName: Foo
+                lastName: Bar
+                status: ENABLED
+                smsNumber: 44123555000
+                primaryContactNumber: 44123555001
+                secondaryContactNumber: 44123555002
+                entityId: 93742f58-d584-4527-b187-19a90a70fe89
+                roles:
+                  - payor.admin
+                mfaStatus: REGISTERED
+                mfaType: TOTP
+                lockedOut: false
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Get User
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/d4ca564-f2ee-4725-97c2-7193a093f0f1' -i -X GET \
+                -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \
+                -H 'Content-Type: application/json'
+  '/v2/users/{userId}/disable':
+    post:
+      description: |
+        <p>If a user is enabled this endpoint will disable them </p>
+        <p>The invoker must have the appropriate permission </p>
+        <p>A user cannot disable themself </p>
+        <p>When a user is disabled any active access tokens will be revoked and the user will not be able to log in</p>
+      operationId: disableUserV2
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Success the user was disabled or was already disabled
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Disable a User
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/disable' -i -X POST \
+                -H 'Content-Type: application/json' \
+                -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8'
+  '/v2/users/{userId}/emailUpdate':
+    post:
+      description: |
+        <p>Update the user's email address </p>
+        <p>If the email address is already in use a 409 will be returned</p>
+      operationId: emailUpdate
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailUpdateRequest'
+        description: a new email address
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request contained data that would reult in a duplicate value
+      summary: Update Email Address
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/emailUpdate' -i -X POST \
+                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                  -H 'Content-Type: application/json' \
+                  -d '{"email":"foo@example.com", \
+                      "verificationCode":"123456", \
+                      }'
+  '/v2/users/{userId}/enable':
+    post:
+      description: |
+        <p>If a user has been disabled this endpoints will enable them </p>
+        <p>The invoker must have the appropriate permission </p>
+        <p>A user cannot enable themself </p>
+        <p>If the user is a payor user and the payor is disabled this operation is not allowed</p>
+        <p>If enabling a payor user would breach the limit for master admin payor users the request will be rejected </p>
+      operationId: enableUserV2
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Success the user was enabled or was already enabled
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Enable a User
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/enable' -i -X POST \
+                -H 'Content-Type: application/json' \
+                -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8'
+  /v2/users/invite:
+    post:
+      description: |
+        Create a User and invite them to the system
+      operationId: inviteUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteUserRequest'
+        description: Details of User to invite
+        required: true
+      responses:
+        '204':
+          description: No Content. The user was invited successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request contained data that would reult in a duplicate value
+        '412':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request could not be completed as a precondition was not met
+      summary: Invite a User
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/invite' -i -X POST \
+                -H 'Content-Type: application/json' \
+                -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8' \
+                -d '{"email":"foo@example.com", \
+                    "mfaType":"YUBIKEY", \
+                    "smsNumber":"+4411223344556", \
+                    "primaryContactNumber":"+4411223344556", \
+                    "secondaryContactNumber":null, \
+                    "roles":["payor.admin"], \
+                    "firstName":"Foo", \
+                    "lastName":"Bar", \
+                    "entityId":"f84e437a-50a4-4e45-9223-e0601e370a79", \
+                    "verificationCode":null \
+                    }'
+  '/v2/users/{userId}/mfaUpdate':
+    post:
+      description: |
+        <p>Update the user's MFA Device type  </p>
+        <p>This will unregister their current device and generate a token for registering a new device</p>
+      operationId: mfaUpdate
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MFATypeUpdateRequest'
+        description: The MFA Type to change to
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Update MFA Type
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/mfaUpdate' -i -X POST \
+                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                  -H 'Content-Type: application/json' \
+                  -d '{"mfaType":"TOTP", \
+                      "verificationCode":"123456", \
+                      }'
+  '/v2/users/{userId}/mfa/unregister':
+    post:
+      description: |
+        <p>Unregister the MFA device for the user </p>
+        <p>If the user does not require further verification then a register new MFA device token will be sent to them via their email address</p>
+      operationId: unregisterMFA
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnregisterMFARequest'
+        description: The MFA Type to unregister
+        required: true
+      responses:
+        '204':
+          description: the MFA Type to unregister
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Unregister MFA for the user
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/mfa/unregister' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"mfaType":"TOTP", \
+                    "verificationCode":"123456", \
+                    }'
+  '/v2/users/{userId}/profileUpdate':
+    post:
+      description: |
+        Update the profile details for the given user
+      operationId: userProfileUpdate
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateRequest'
+        description: The details of the user to update
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Update User Details
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/profileUpdate' -i -X POST \
+                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                  -H 'Content-Type: application/json' \
+                  -d '{"primaryContactNumber":"+4411223233445", \
+                      "secondaryContactNumber":null, \
+                      "firstName":"Bob", \
+                      "lastName":"Smith"}'
+  '/v2/users/{userId}/roleUpdate':
+    post:
+      description: |
+        <p>Update the user's Role</p>
+        <p>optionally change the MFA type if the role requires it</p>
+      operationId: roleUpdate
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleUpdateRequest'
+        description: The Role to change to
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Update User Role
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/roleUpdate' -i -X POST \
+                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                  -H 'Content-Type: application/json' \
+                  -d '{"role":"payor.admin", \
+                      }'
+  '/v2/users/{userId}/smsUpdate':
+    post:
+      description: Update the user's SMS number
+      operationId: smsNumberUpdate
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SmsNumberUpdateRequest'
+        description: a new SMS Number
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request contained data that would reult in a duplicate value
+      summary: Update SMS Number
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/smsNumberUpdate' -i -X POST \
+                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                  -H 'Content-Type: application/json' \
+                  -d '{"smsNumber":"+4411223344556", \
+                      "verificationCode":"123456", \
+                      }'
+  '/v2/users/{userId}/tokens':
+    post:
+      description: |
+        <p>Resend the specified token </p>
+        <p>The token to resend must already exist for the user </p>
+        <p>It will be revoked and a new one issued</p>
+      operationId: resendToken
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendTokenRequest'
+        description: The type of token to resend
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Resend a token
+      tags:
+        - Tokens
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/tokens' -i -X POST \
+                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                  -H 'Content-Type: application/json' \
+                  -d '{"tokenType":"MFA_REGISTRATION"}'
+  '/v2/users/{userId}/unlock':
+    post:
+      description: |
+        If a user is locked this endpoint will unlock them
+      operationId: unlockUserV2
+      parameters:
+        - description: The UUID of the User.
+          in: path
+          name: userId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Success the user was unlocked or was already unlocked
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Unlock a User
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/unlock' -i -X POST \
+                -H 'Content-Type: application/json' \
+                -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8'
+  /v2/users/registration/sms:
+    post:
+      description: |
+        <p>Register an Sms number and send an OTP to it </p>
+        <p>Used for manual verification of a user </p>
+        <p>The backoffice user initiates the request to send the OTP to the user's sms </p>
+        <p>The user then reads back the OTP which the backoffice user enters in the verifactionCode property for requests that require it</p>
+      operationId: registerSms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterSmsRequest'
+        description: a SMS Number to send an OTP to
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Register SMS Number
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/registration/sms' -i -X POST \
+                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                  -H 'Content-Type: application/json' \
+                  -d '{"smsNumber":"+4411223344556"}'
+  /v2/users/self:
+    get:
+      description: |
+        Get the user's details
+      operationId: getSelf
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse_2'
+          description: Get User Details
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Get Self
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/self' -i -X GET \
+                -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \
+                -H 'Content-Type: application/json'
+  /v2/users/self/emailUpdate:
+    post:
+      description: |
+        <p>Update email address for self </p>
+        <p>If the email address is already in use a 409 will be returned</p>
+      operationId: emailUpdateForSelf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelfEmailUpdateRequest'
+        description: a new email address
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request contained data that would reult in a duplicate value
+      summary: Update Email Address for self
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/self/emailUpdate' -i -X POST \
+                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                  -H 'Content-Type: application/json' \
+                  -d '{"email":"foo@example.com", \
+                      }'
+  /v2/users/self/mfa/unregister:
+    post:
+      description: |
+        <p>Unregister the MFA device for the user </p>
+        <p>If the user does not require further verification then a register new MFA device token will be sent to them via their email address</p>
+      operationId: unregisterMFAForSelf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelfMFATypeUnregisterRequest'
+        description: The MFA Type to unregister
+        required: true
+      responses:
+        '204':
+          description: the MFA Type to unregister
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Unregister MFA for Self
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/self/mfa/unregister' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"mfaType":"TOTP"}'
+  /v2/users/self/password:
+    post:
+      description: |
+        Update password for self
+      operationId: updatePasswordSelf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelfUpdatePasswordRequest'
+        description: The password
+        required: true
+      responses:
+        '204':
+          description: the password was submitted and accepted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Update Password for self
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/users/self/password' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"oldpassword":"abcd_12345", \
+                      "newPassword": "myNewPassword"}'
+  /v2/users/self/password/validate:
+    post:
+      description: |
+        validate the password and return a score
+      operationId: validatePasswordSelf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordRequest'
+        description: The password
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidatePasswordResponse'
+          description: the password was checked and a score returned
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Validate the proposed password
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/self/password/validate' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"password":"abcd_12345"}'
+  /v2/users/self/profileUpdate:
+    post:
+      description: upate the profile details for self
+      operationId: selfDetailsUpdate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileUpdateRequest'
+        description: The details to update
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Update User Details for self
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/self/profileUpdate' -i -X POST \
+                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                  -H 'Content-Type: application/json' \
+                  -d '{"primaryContactNumber":"+4411223233445", \
+                      "secondaryContactNumber":null, \
+                      "firstName":"Bob", \
+                      "lastName":"Smith"}'
+  /v2/users/self/smsUpdate:
+    post:
+      description: update SMS Number for self
+      operationId: smsNumberUpdateForSelf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SelfSmsNumberUpdateRequest'
+        description: a new SMS Number
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Update SMS Number for self
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/self/smsNumberUpdate' -i -X POST \
+                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                  -H 'Content-Type: application/json' \
+                  -d '{"smsNumber":"+441235550000", \
+                      }'
   '/v1/payors/{payorId}':
     get:
       deprecated: true
@@ -3763,6 +5600,874 @@ components:
         - access_token
         - token_type
       type: object
+    ErrorResponse:
+      description: Error response returned by all error conditions in Velo Services
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/Error'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
+      type: object
+    ResetPasswordRequest:
+      example:
+        email: foo@example.com
+      properties:
+        email:
+          description: the email address of the user requesting the reset password
+          example: foo@example.com
+          format: email
+          type: string
+      required:
+        - email
+      type: object
+    AccessTokenValidationRequest:
+      example:
+        otp: '123456'
+      properties:
+        otp:
+          description: an OTP either sent via sms or generated by a registered MFA device
+          example: '123456'
+          maxLength: 64
+          minLength: 6
+          type: string
+      required:
+        - otp
+      type: object
+    AccessTokenResponse:
+      example:
+        access_token: 9b58410b-e1b7-4f90-bebb-7e09c5427020
+        refresh_token: c3d0f771-0997-4814-84e3-09690208545a
+        user_info:
+          mfa_details:
+            mfa_type: TOTP
+            verified: true
+          user_id: 39976ee5-dc4c-4b21-a966-a04fa71ef9e1
+          userType: PAYOR
+        scope: 'https://api.velopayments.com/scopes/auth/users'
+        token_type: bearer
+        expires_in: 1800
+        entityIds:
+          - ed89eaa0-4450-4916-a4ff-62a328d60bd6
+      properties:
+        access_token:
+          description: |
+            Bearer token used in headers to access secure endpoints
+          example: 9b58410b-e1b7-4f90-bebb-7e09c5427020
+          type: string
+        token_type:
+          default: bearer
+          description: the type of the token
+          example: bearer
+          type: string
+        refresh_token:
+          description: can be used to obtain a new access token
+          example: c3d0f771-0997-4814-84e3-09690208545a
+          type: string
+        expires_in:
+          description: The lifetime in seconds of the access token
+          example: 1800
+          type: integer
+        scope:
+          description: the scope of the access token
+          example: 'https://api.velopayments.com/scopes/auth/users'
+          type: string
+        user_info:
+          $ref: '#/components/schemas/UserInfo'
+        entityIds:
+          description: |
+            If the user is a payee then the payeeId<P>
+            If the user is a payor then the payorId
+          example:
+            - ed89eaa0-4450-4916-a4ff-62a328d60bd6
+          items:
+            type: string
+          type: array
+      type: object
+    CheckTokenResponse:
+      example:
+        expiryDate: 2000-01-23T04:56:07.000Z
+        mfaStatus: REGISTERED
+        mfaType: TOTP
+        mfaVerified: true
+        tokenType: INVITE_MFA_USER
+      properties:
+        expiryDate:
+          description: the timestamp when the token will expire
+          format: date-time
+          type: string
+        mfaType:
+          $ref: '#/components/schemas/MFAType'
+        tokenType:
+          $ref: '#/components/schemas/TokenType'
+        mfaVerified:
+          description: has the user verified their MFA device by logging in
+          type: boolean
+        mfaStatus:
+          $ref: '#/components/schemas/MFAStatus'
+      type: object
+    GenerateOTPRequest:
+      example:
+        type: SMS
+      properties:
+        type:
+          $ref: '#/components/schemas/OTPType'
+      required:
+        - type
+      type: object
+    ValidateOTPRequest:
+      example:
+        otp: '123456'
+      properties:
+        otp:
+          description: An OTP value that has been received by the user on their registered device
+          example: '123456'
+          maxLength: 6
+          minLength: 6
+          type: string
+      required:
+        - otp
+      type: object
+    RegisterMFARequest:
+      example:
+        mfaType: TOTP
+      properties:
+        mfaType:
+          $ref: '#/components/schemas/MFAType'
+      required:
+        - mfaType
+      type: object
+    RegisterMFAResponse:
+      example:
+        totpUrl: 'otpauth://totp/Velo%20Payments:stephen.smith@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Velo%20Payments'
+        totpSharedSecret: JBSWY3DPEHPK3PXP
+      properties:
+        totpUrl:
+          description: A TOTP Url thaty can be parsed by the TOTP device
+          example: 'otpauth://totp/Velo%20Payments:stephen.smith@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Velo%20Payments'
+          type: string
+        totpSharedSecret:
+          description: The shared secret between the TOTP app and the server
+          example: JBSWY3DPEHPK3PXP
+          type: string
+      type: object
+    ValidateMFARequest:
+      example:
+        otp: '123456'
+      properties:
+        otp:
+          description: An OTP value that can be verified by the MFA type registered with the user
+          example: '123456'
+          maxLength: 64
+          minLength: 6
+          type: string
+      required:
+        - otp
+      type: object
+    PasswordRequest:
+      example:
+        password: My_strong_password
+      properties:
+        password:
+          description: a password that passes validation
+          example: My_strong_password
+          maxLength: 128
+          minLength: 8
+          type: string
+      required:
+        - password
+      type: object
+    ValidatePasswordResponse:
+      example:
+        valid: true
+        score: 2
+        warning: Historic Password
+        suggestions:
+          - '[password has been used before]'
+          - '[password has been used before]'
+      properties:
+        score:
+          description: |
+            More secure passwords are given a higher score. <P>
+            For a password to be acceptable for use in Velo, it must score at least 3
+          example: 2
+          format: int32
+          maximum: 4
+          minimum: 0
+          type: integer
+        valid:
+          description: if true then the password can be accepted
+          type: boolean
+        warning:
+          description: Any warning message as a reason for the given score.
+          example: Historic Password
+          type: string
+        suggestions:
+          items:
+            description: |
+              Any suggested changes to password text which would make the password more secure
+            example: '[password has been used before]'
+            type: string
+          type: array
+      type: object
+    UserType:
+      enum:
+        - BACKOFFICE
+        - PAYOR
+        - PAYEE
+      example: PAYOR
+      type: string
+    UserStatus:
+      description: |
+        The status of the user
+        when the user has been invited but not yet enrolled they will have a PENDING status
+      enum:
+        - ENABLED
+        - DISABLED
+        - PENDING
+      example: ENABLED
+      type: string
+    PagedUserResponse:
+      description: List Users Response Object
+      example:
+        links:
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v2/users??type=PAYOR&page=1&pageSize=10'
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v2/users??type=PAYOR&page=1&pageSize=10'
+        page:
+          numberOfElements: 12
+          totalPages: 2
+          pageSize: 25
+          page: 1
+          totalElements: 33
+        content:
+          - lastName: Doe
+            roles:
+              - payor.admin
+            lockedOutTimestamp: 2000-01-23T04:56:07.000Z
+            smsNumber: '11235555555'
+            entityId: 7fffa261-ac68-49e6-b605-d24a444d9206
+            mfaStatus: REGISTERED
+            firstName: John
+            primaryContactNumber: '11235555555'
+            mfaType: TOTP
+            lockedOut: true
+            id: 8bbf301c-948f-4445-b411-357eec53e441
+            email: foo@example.com
+            secondaryContactNumber: '11235555550'
+            status: ENABLED
+          - lastName: Doe
+            roles:
+              - payor.admin
+            lockedOutTimestamp: 2000-01-23T04:56:07.000Z
+            smsNumber: '11235555555'
+            entityId: 7fffa261-ac68-49e6-b605-d24a444d9206
+            mfaStatus: REGISTERED
+            firstName: John
+            primaryContactNumber: '11235555555'
+            mfaType: TOTP
+            lockedOut: true
+            id: 8bbf301c-948f-4445-b411-357eec53e441
+            email: foo@example.com
+            secondaryContactNumber: '11235555550'
+            status: ENABLED
+      properties:
+        page:
+          $ref: '#/components/schemas/PagedUserResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/PagedUserResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/UserResponse'
+          type: array
+      type: object
+    UserResponse:
+      example:
+        lastName: Doe
+        roles:
+          - payor.admin
+        lockedOutTimestamp: 2000-01-23T04:56:07.000Z
+        smsNumber: '11235555555'
+        entityId: 7fffa261-ac68-49e6-b605-d24a444d9206
+        mfaStatus: REGISTERED
+        firstName: John
+        primaryContactNumber: '11235555555'
+        mfaType: TOTP
+        lockedOut: true
+        id: 8bbf301c-948f-4445-b411-357eec53e441
+        email: foo@example.com
+        secondaryContactNumber: '11235555550'
+        status: ENABLED
+      properties:
+        id:
+          description: The id of the user
+          example: 8bbf301c-948f-4445-b411-357eec53e441
+          format: uuid
+          type: string
+        status:
+          description: |
+            The status of the user
+            when the user has been invited but not yet enrolled they will have a PENDING status
+          enum:
+            - ENABLED
+            - DISABLED
+            - PENDING
+          example: ENABLED
+          type: string
+        email:
+          description: the email address of the user
+          example: foo@example.com
+          format: email
+          type: string
+        smsNumber:
+          description: |
+            The phone number of a device that the user can receive sms messages on
+          example: '11235555555'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        primaryContactNumber:
+          description: |
+            The main contact number for the user
+          example: '11235555555'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        secondaryContactNumber:
+          description: |
+            The secondary contact number for the user
+          example: '11235555550'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        firstName:
+          example: John
+          maxLength: 128
+          minLength: 1
+          type: string
+        lastName:
+          example: Doe
+          maxLength: 128
+          minLength: 1
+          type: string
+        entityId:
+          description: |
+            The payorId or payeeId or null if the user is not a payor or payee user
+          example: 7fffa261-ac68-49e6-b605-d24a444d9206
+          format: uuid
+          type: string
+        roles:
+          description: |
+            The role(s) for the user
+          example:
+            - payor.admin
+          items:
+            $ref: '#/components/schemas/Role'
+          minItems: 1
+          type: array
+        mfaType:
+          description: The type of the MFA device
+          enum:
+            - SMS
+            - YUBIKEY
+            - TOTP
+          example: TOTP
+          type: string
+        mfaStatus:
+          description: The status of the MFA device
+          enum:
+            - REGISTERED
+            - UNREGISTERED
+          example: REGISTERED
+          type: string
+        lockedOut:
+          description: If true the user is currently locked out and unable to log in
+          example: true
+          type: boolean
+        lockedOutTimestamp:
+          description: |
+            A timestamp showing when the user was locked out
+            If null then the user is not currently locked out
+          format: date-time
+          nullable: true
+          type: string
+      type: object
+    EmailUpdateRequest:
+      example:
+        email: foo@example.com
+        verificationCode: '123456'
+      properties:
+        email:
+          description: the email address of the invited user
+          example: foo@example.com
+          format: email
+          type: string
+        verificationCode:
+          description: |
+            Optional property that MUST be suppied when manually verifying a user
+            The user's smsNumber is registered via a separate endpoint and an OTP sent to them
+          example: '123456'
+          maxLength: 6
+          minLength: 6
+          type: string
+      required:
+        - email
+      type: object
+    InviteUserRequest:
+      example:
+        firstName: John
+        lastName: Doe
+        primaryContactNumber: '11235555555'
+        mfaType: SMS
+        roles:
+          - payor.admin
+        smsNumber: '11235555555'
+        entityId: 7fffa261-ac68-49e6-b605-d24a444d9206
+        email: foo@example.com
+        secondaryContactNumber: '11235555550'
+        verificationCode: '123456'
+      properties:
+        email:
+          description: the email address of the invited user
+          example: foo@example.com
+          format: email
+          type: string
+        mfaType:
+          description: |
+            The MFA type that the user will use
+            The type may be conditional on the role(s) the user has
+          enum:
+            - SMS
+            - YUBIKEY
+            - TOTP
+          type: string
+        smsNumber:
+          description: |
+            The phone number of a device that the user can receive sms messages on
+          example: '11235555555'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        primaryContactNumber:
+          description: |
+            The main contact number for the user
+          example: '11235555555'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        secondaryContactNumber:
+          description: |
+            The secondary contact number for the user
+          example: '11235555550'
+          nullable: true
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        roles:
+          description: |
+            The role(s) for the user
+            The role must exist
+            The role can be a custom role or a system role but the invoker must have the permissions to assign the role
+            System roles are: backoffice.admin, payor.master_admin, payor.admin, payor.support
+          example:
+            - payor.admin
+          items:
+            type: string
+          type: array
+        firstName:
+          example: John
+          maxLength: 128
+          minLength: 1
+          type: string
+        lastName:
+          example: Doe
+          maxLength: 128
+          minLength: 1
+          type: string
+        entityId:
+          description: |
+            The payorId or null if the user is not a payor user
+          example: 7fffa261-ac68-49e6-b605-d24a444d9206
+          format: uuid
+          nullable: true
+          type: string
+        verificationCode:
+          description: |
+            Optional property that MUST be suppied when manually verifying a user
+            The user's smsNumber is registered via a separate endpoint and an OTP sent to them
+          example: '123456'
+          maxLength: 6
+          minLength: 6
+          nullable: true
+          type: string
+      required:
+        - email
+        - mfaType
+        - primaryContactNumber
+        - roles
+        - smsNumber
+      type: object
+    MFATypeUpdateRequest:
+      example:
+        mfaType: TOTP
+        verificationCode: '123456'
+      properties:
+        mfaType:
+          description: The type of the MFA device
+          enum:
+            - SMS
+            - YUBIKEY
+            - TOTP
+          example: TOTP
+          type: string
+        verificationCode:
+          description: |
+            Optional property that MUST be suppied when manually verifying a user
+            The user's smsNumber is registered via a separate endpoint and an OTP sent to them
+          example: '123456'
+          maxLength: 6
+          minLength: 6
+          type: string
+      required:
+        - mfaType
+      type: object
+    UnregisterMFARequest:
+      example:
+        mfaType: TOTP
+        verificationCode: '123456'
+      properties:
+        mfaType:
+          description: The type of the MFA device
+          enum:
+            - SMS
+            - YUBIKEY
+            - TOTP
+          example: TOTP
+          type: string
+        verificationCode:
+          description: |
+            Optional property that MUST be suppied when manually verifying a user
+            The user's smsNumber is registered via a separate endpoint and an OTP sent to them
+          example: '123456'
+          maxLength: 6
+          minLength: 6
+          type: string
+      required:
+        - mfaType
+      type: object
+    ProfileUpdateRequest:
+      description: |
+        All properties are optional
+        Only provided properties will be updated
+        Use null to null out a property that is allowed to be nullable
+      example:
+        firstName: John
+        lastName: Doe
+        primaryContactNumber: '11235555555'
+        secondaryContactNumber: '11235555550'
+      properties:
+        primaryContactNumber:
+          description: |
+            The main contact number for the user
+          example: '11235555555'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        secondaryContactNumber:
+          description: |
+            The secondary contact number for the user
+          example: '11235555550'
+          nullable: true
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        firstName:
+          example: John
+          maxLength: 128
+          minLength: 1
+          type: string
+        lastName:
+          example: Doe
+          maxLength: 128
+          minLength: 1
+          type: string
+      type: object
+    RoleUpdateRequest:
+      example:
+        mfaType: TOTP
+        roles:
+          - payor.admin
+        verificationCode: '123456'
+      properties:
+        roles:
+          description: |
+            The role(s) for the user
+            The role must exist
+            The role can be a custom role or a system role but the invoker must have the permissions to assign the role
+            System roles are: backoffice.admin, payor.master_admin, payor.admin, payor.support
+          example:
+            - payor.admin
+          items:
+            type: string
+          type: array
+        mfaType:
+          description: The type of the MFA device
+          enum:
+            - SMS
+            - YUBIKEY
+            - TOTP
+          example: TOTP
+          nullable: true
+          type: string
+        verificationCode:
+          description: |
+            Optional property that MUST be suppied when manually verifying a user
+            The user's smsNumber is registered via a separate endpoint and an OTP sent to them
+          example: '123456'
+          maxLength: 6
+          minLength: 6
+          nullable: true
+          type: string
+      required:
+        - roles
+      type: object
+    SmsNumberUpdateRequest:
+      example:
+        smsNumber: '11235555555'
+        verificationCode: '123456'
+      properties:
+        smsNumber:
+          description: |
+            The phone number of a device that the user can receive sms messages on
+          example: '11235555555'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        verificationCode:
+          description: |
+            Optional property that MUST be suppied when manually verifying a user
+            The user's smsNumber is registered via a separate endpoint and an OTP sent to them
+          example: '123456'
+          maxLength: 6
+          minLength: 6
+          nullable: true
+          type: string
+      required:
+        - smsNumber
+      type: object
+    ResendTokenRequest:
+      example:
+        tokenType: INVITE_MFA_USER
+        verificationCode: '123456'
+      properties:
+        tokenType:
+          description: The type of the token to resend
+          enum:
+            - INVITE_MFA_USER
+            - MFA_REGISTRATION
+          example: INVITE_MFA_USER
+          type: string
+        verificationCode:
+          description: |
+            Optional property that MUST be suppied when manually verifying a user <P>
+            The user's smsNumber is registered via a separate endpoint and an OTP sent to them
+          example: '123456'
+          maxLength: 6
+          minLength: 6
+          type: string
+      required:
+        - tokenType
+      type: object
+    RegisterSmsRequest:
+      example:
+        smsNumber: '11235555555'
+      properties:
+        smsNumber:
+          description: |
+            The phone number of a device that the user can receive sms messages on
+          example: '11235555555'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+      required:
+        - smsNumber
+      type: object
+    UserResponse_2:
+      example:
+        lastName: Doe
+        roles:
+          - payor.admin
+        lockedOutTimestamp: 2000-01-23T04:56:07.000Z
+        smsNumber: '11235555555'
+        entityId: 7fffa261-ac68-49e6-b605-d24a444d9206
+        mfaStatus: REGISTERED
+        firstName: John
+        primaryContactNumber: '11235555555'
+        mfaType: TOTP
+        lockedOut: true
+        id: 8bbf301c-948f-4445-b411-357eec53e441
+        mfaVerified: false
+        email: foo@example.com
+        secondaryContactNumber: '11235555550'
+        status: ENABLED
+      properties:
+        id:
+          description: The id of the user
+          example: 8bbf301c-948f-4445-b411-357eec53e441
+          format: uuid
+          type: string
+        status:
+          description: |
+            The status of the user
+            when the user has been invited but not yet enrolled they will have a PENDING status
+          enum:
+            - ENABLED
+            - DISABLED
+            - PENDING
+          example: ENABLED
+          type: string
+        email:
+          description: the email address of the user
+          example: foo@example.com
+          format: email
+          type: string
+        smsNumber:
+          description: |
+            The phone number of a device that the user can receive sms messages on
+          example: '11235555555'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        primaryContactNumber:
+          description: |
+            The main contact number for the user
+          example: '11235555555'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        secondaryContactNumber:
+          description: |
+            The secondary contact number for the user
+          example: '11235555550'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+        firstName:
+          example: John
+          maxLength: 128
+          minLength: 1
+          type: string
+        lastName:
+          example: Doe
+          maxLength: 128
+          minLength: 1
+          type: string
+        entityId:
+          description: |
+            The payorId or payeeId or null if the user is not a payor or payee user
+          example: 7fffa261-ac68-49e6-b605-d24a444d9206
+          format: uuid
+          type: string
+        roles:
+          description: |
+            The role(s) for the user
+          example:
+            - payor.admin
+          items:
+            $ref: '#/components/schemas/UserResponse_2_roles'
+          minItems: 1
+          type: array
+        mfaType:
+          description: The type of the MFA device
+          enum:
+            - SMS
+            - YUBIKEY
+            - TOTP
+          example: TOTP
+          type: string
+        mfaVerified:
+          description: |
+            Will be true if the user has logged in successfully using the MFA Device
+          example: false
+          type: boolean
+        mfaStatus:
+          description: The status of the MFA device
+          enum:
+            - REGISTERED
+            - UNREGISTERED
+          example: REGISTERED
+          type: string
+        lockedOut:
+          description: If true the user is currently locked out and unable to log in
+          example: true
+          type: boolean
+        lockedOutTimestamp:
+          description: |
+            A timestamp showing when the user was locked out
+            If null then the user is not currently locked out
+          format: date-time
+          nullable: true
+          type: string
+      type: object
+    SelfEmailUpdateRequest:
+      example:
+        email: foo@example.com
+      properties:
+        email:
+          description: the email address of the invited user
+          example: foo@example.com
+          format: email
+          type: string
+      required:
+        - email
+      type: object
+    SelfMFATypeUnregisterRequest:
+      example:
+        mfaType: TOTP
+      properties:
+        mfaType:
+          description: The type of the MFA device
+          enum:
+            - SMS
+            - YUBIKEY
+            - TOTP
+          example: TOTP
+          type: string
+      required:
+        - mfaType
+      type: object
+    SelfUpdatePasswordRequest:
+      example:
+        oldPassword: My_current_password
+        newPassword: My_new_password
+      properties:
+        oldPassword:
+          description: The user's current password
+          example: My_current_password
+          maxLength: 128
+          minLength: 8
+          type: string
+        newPassword:
+          description: The new password
+          example: My_new_password
+          maxLength: 128
+          minLength: 8
+          type: string
+      required:
+        - newPassword
+        - oldPassword
+      type: object
+    SelfSmsNumberUpdateRequest:
+      example:
+        smsNumber: '11235555555'
+      properties:
+        smsNumber:
+          description: |
+            The phone number of a device that the user can receive sms messages on
+          example: '11235555555'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+      required:
+        - smsNumber
+      type: object
     PayorV1:
       example:
         primaryContactName: Joe Buck
@@ -3875,23 +6580,6 @@ components:
           type: integer
       required:
         - payorName
-      type: object
-    ErrorResponse:
-      description: Error response returned by all error conditions in Velo Services
-      properties:
-        errors:
-          description: one or more errors
-          items:
-            $ref: '#/components/schemas/Error'
-          minItems: 1
-          nullable: true
-          type: array
-        correlationId:
-          description: a unique identifier to track a request or related sequence of requests
-          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
-          format: uuid
-          nullable: true
-          type: string
       type: object
     PayorV2:
       example:
@@ -5397,7 +8085,7 @@ components:
               minimumBalance: 120000
       properties:
         page:
-          $ref: '#/components/schemas/ListSourceAccountResponseV2_page'
+          $ref: '#/components/schemas/PagedUserResponse_page'
         links:
           items:
             $ref: '#/components/schemas/ListSourceAccountResponse_links'
@@ -7145,6 +9833,90 @@ components:
             $ref: '#/components/schemas/SupportedCurrency'
           type: array
       type: object
+    Error:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: smsNumber must be in the E.164 format e.g. +15551231234
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: smsNumber
+          type: string
+        locationType:
+          description: |
+            the location type in the request that was the cause of the error
+          enum:
+            - requestBody
+            - queryParam
+            - header
+            - pathParam
+          example: requestBody
+          type: string
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise client error messages
+          example: validationError
+          type: string
+      type: object
+    UserInfo:
+      example:
+        mfa_details:
+          mfa_type: TOTP
+          verified: true
+        user_id: 39976ee5-dc4c-4b21-a966-a04fa71ef9e1
+        userType: PAYOR
+      properties:
+        user_id:
+          description: the id of the user
+          example: 39976ee5-dc4c-4b21-a966-a04fa71ef9e1
+          format: uuid
+          type: string
+        userType:
+          $ref: '#/components/schemas/UserType_2'
+        mfa_details:
+          $ref: '#/components/schemas/MFADetails'
+      type: object
+    MFAType:
+      description: The type of the MFA device
+      enum:
+        - SMS
+        - YUBIKEY
+        - TOTP
+      example: TOTP
+      type: string
+    TokenType:
+      description: The type of the token
+      enum:
+        - INVITE_MFA_USER
+        - MFA_REGISTRATION
+        - RESET_PASSWORD
+        - ACCOUNT_LOCKED
+      example: INVITE_MFA_USER
+      type: string
+    MFAStatus:
+      description: The status of the MFA device
+      enum:
+        - REGISTERED
+        - UNREGISTERED
+      example: REGISTERED
+      type: string
+    OTPType:
+      description: The MFA type to send an OTP to
+      enum:
+        - SMS
+      example: SMS
+      type: string
+    Role:
+      properties:
+        name:
+          description: the name of the role
+          example: payor.admin
+          type: string
+      required:
+        - name
+      type: object
     PayorAddress:
       example:
         country: US
@@ -7215,33 +9987,6 @@ components:
       example: PASSED_KYC
       readOnly: true
       type: string
-    Error:
-      properties:
-        errorMessage:
-          description: |
-            verbose message indicating the nature of the error
-            Will be localised
-          example: smsNumber must be in the E.164 format e.g. +15551231234
-          type: string
-        location:
-          description: the property or object that caused the error
-          example: smsNumber
-          type: string
-        locationType:
-          description: |
-            the location type in the request that was the cause of the error
-          enum:
-            - requestBody
-            - queryParam
-            - header
-            - pathParam
-          example: requestBody
-          type: string
-        reasonCode:
-          description: a camel-cased string that can be used by clients to localise client error messages
-          example: validationError
-          type: string
-      type: object
     PayorAddressV2:
       example:
         country: US
@@ -8699,6 +11444,25 @@ components:
         maxPaymentAmount:
           type: integer
       type: object
+    UserType_2:
+      enum:
+        - BACKOFFICE
+        - PAYOR
+        - PAYEE
+      example: PAYOR
+      type: string
+    MFADetails:
+      example:
+        mfa_type: TOTP
+        verified: true
+      properties:
+        mfa_type:
+          $ref: '#/components/schemas/MFAType'
+        verified:
+          description: true if the user has used the MFA device for login
+          example: true
+          type: boolean
+      type: object
     CompanyResponse:
       example:
         name: name
@@ -9371,6 +12135,44 @@ components:
         - PAYOR_FUNDING_ENTRY_DETAIL_RECEIVED
         - FUNDING_DEALLOCATED
       type: string
+    PagedUserResponse_page:
+      example:
+        numberOfElements: 12
+        totalPages: 2
+        pageSize: 25
+        page: 1
+        totalElements: 33
+      properties:
+        numberOfElements:
+          example: 12
+          type: integer
+        totalElements:
+          example: 33
+          type: integer
+        totalPages:
+          example: 2
+          type: integer
+        page:
+          example: 1
+          type: integer
+        pageSize:
+          example: 25
+          type: integer
+    PagedUserResponse_links:
+      example:
+        rel: first
+        href: 'https://api.sandbox.velopayments.com/v2/users??type=PAYOR&page=1&pageSize=10'
+      properties:
+        rel:
+          example: first
+          type: string
+        href:
+          example: 'https://api.sandbox.velopayments.com/v2/users??type=PAYOR&page=1&pageSize=10'
+          type: string
+    UserResponse_2_roles:
+      properties:
+        name:
+          type: string
     PayorLinksResponse_links:
       example:
         toPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -9532,29 +12334,6 @@ components:
         href:
           example: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
           type: string
-    ListSourceAccountResponseV2_page:
-      example:
-        numberOfElements: 12
-        totalPages: 2
-        pageSize: 25
-        page: 1
-        totalElements: 33
-      properties:
-        numberOfElements:
-          example: 12
-          type: integer
-        totalElements:
-          example: 33
-          type: integer
-        totalPages:
-          example: 2
-          type: integer
-        page:
-          example: 1
-          type: integer
-        pageSize:
-          example: 25
-          type: integer
     GetFundingsResponse_allOf:
       properties:
         content:
@@ -9961,11 +12740,14 @@ x-tagGroups:
     tags:
       - Payments
       - Payment Audit Service
+  - name: Auth
+    tags:
+      - Login
+      - Tokens
   - name: API Utilities
     tags:
       - Currencies
       - Countries
-      - Auth
   - name: Legal
     tags:
       - Legal
