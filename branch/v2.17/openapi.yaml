@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.17.7
+  version: 2.17.8
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -1158,6 +1158,63 @@ paths:
           name: Get Payee sensitve true
           serviceName: payee-service
           contractPath: /v1/payees/026cc3c8-3a0c-4083-a05b-e908048c1b08
+  '/v1/payees/{payeeId}/remoteIdUpdate':
+    post:
+      description: Update the remote Id for the given Payee Id.
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRemoteIdRequest'
+        description: Request to update payee remote id
+        required: true
+      responses:
+        '202':
+          description: 'Accepted, No Content'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request contained data that would reult in a duplicate value
+      summary: Update Payee Remote Id
+      tags:
+        - Payees
   /v1/deltas/payees:
     get:
       description: Get a paginated response listing payee changes.
@@ -1237,6 +1294,7 @@ paths:
                 -H 'Content-Type: application/json'
   /v2/payees:
     post:
+      deprecated: true
       description: |
         Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query
         for status (201 - Created, 400 - invalid request body, 409 - if there is a duplicate remote id within the
@@ -1849,6 +1907,7 @@ paths:
                 -d '{"payorId":"545e29bd-75a8-4354-8192-ae68bab59d7b"}'
   '/v1/payees/payors/{payorId}/invitationStatus':
     get:
+      deprecated: true
       description: |
         Returns a list of payees associated with a payor, along with invitation status and grace period end date.
       operationId: getPayeesInvitationStatus
@@ -4560,6 +4619,41 @@ components:
           $ref: '#/components/schemas/OfacStatus'
         onboardedStatus:
           $ref: '#/components/schemas/OnboardedStatus'
+      type: object
+    UpdateRemoteIdRequest:
+      example:
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        remoteId: remoteId
+      properties:
+        payorId:
+          format: uuid
+          nullable: false
+          type: string
+        remoteId:
+          maxLength: 100
+          minLength: 1
+          nullable: false
+          type: string
+      required:
+        - payorId
+        - remoteId
+      type: object
+    ErrorResponse:
+      description: Error response returned by all error conditions in Velo Services
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/Error'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
       type: object
     PayeeDeltaResponse:
       description: List Payee Changes Response Object
@@ -8289,6 +8383,33 @@ components:
           type: boolean
         timestamp:
           format: date-time
+          type: string
+      type: object
+    Error:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: smsNumber must be in the E.164 format e.g. +15551231234
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: smsNumber
+          type: string
+        locationType:
+          description: |
+            the location type in the request that was the cause of the error
+          enum:
+            - requestBody
+            - queryParam
+            - header
+            - pathParam
+          example: requestBody
+          type: string
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise client error messages
+          example: validationError
           type: string
       type: object
     PayeeDelta:
