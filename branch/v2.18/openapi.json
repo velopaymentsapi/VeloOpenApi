@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.18.25",
+    "version": "2.18.26",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -6630,52 +6630,26 @@
     },
     "/v1/deltas/fundings": {
       "get": {
-        "description": "Get a paginated response listing funding changes.",
+        "description": "Get funding audit deltas for a payor",
         "operationId": "listFundingAuditDeltas",
         "parameters": [
           {
-            "description": "The Payor ID to find associated funding records",
             "in": "query",
             "name": "payorId",
             "required": true,
             "schema": {
               "format": "uuid",
               "type": "string"
-            },
-            "x-contracts": [
-              {
-                "contractId": 1,
-                "value": "0a818933-087d-47f2-ad83-2f986ed087eb",
-                "matchers": [
-                  {
-                    "type": "equal_to",
-                    "value": "0a818933-087d-47f2-ad83-2f986ed087eb"
-                  }
-                ]
-              }
-            ]
+            }
           },
           {
-            "description": "The updatedSince filter in the format YYYY-MM-DDThh:mm:ss+hh:mm",
             "in": "query",
             "name": "updatedSince",
             "required": true,
             "schema": {
               "format": "date-time",
               "type": "string"
-            },
-            "x-contracts": [
-              {
-                "contractId": 1,
-                "value": "2019-01-20T09:00:00.000Z",
-                "matchers": [
-                  {
-                    "type": "equal_to",
-                    "value": "2019-01-20T09:00:00.000Z"
-                  }
-                ]
-              }
-            ]
+            }
           },
           {
             "description": "Page number. Default is 1.",
@@ -6689,12 +6663,12 @@
             }
           },
           {
-            "description": "Page size. Default is 100. Max allowable is 1000.",
+            "description": "Page size. Default is 25. Max allowable is 100.",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
-              "default": 100,
+              "default": 25,
               "format": "int32",
               "type": "integer"
             }
@@ -6705,46 +6679,46 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FundingDeltaResponse"
+                  "$ref": "#/components/schemas/PageResourceFundingPayorStatusAuditResponseFundingPayorStatusAuditResponse"
                 }
               }
             },
-            "description": "Details of Funding changes",
-            "x-contracts": null
+            "description": "Funding Account Deltas"
           },
           "400": {
-            "description": "Bad Request"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           }
         },
-        "summary": "List Funding changes",
+        "summary": "Get Funding Audit Delta",
         "tags": [
           "Funding Manager"
-        ],
-        "x-contracts": [
-          {
-            "contractId": 1,
-            "name": "Test List funding changes",
-            "ignored": true,
-            "request": {
-              "queryParameters": [
-                {
-                  "key": "page",
-                  "value": 1
-                },
-                {
-                  "key": "pageSize",
-                  "value": 30
-                }
-              ]
-            },
-            "serviceName": "funding-manager-service"
-          }
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/deltas/fundings?pageSize=10&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \\\n    -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \\\n    -H 'Content-Type: application/json'\n"
-          }
         ]
       }
     },
@@ -12984,54 +12958,61 @@
         },
         "type": "object"
       },
-      "FundingDeltaResponse": {
-        "description": "List Funding changes response object",
+      "PageResourceFundingPayorStatusAuditResponseFundingPayorStatusAuditResponse": {
         "example": {
           "links": [
             {
-              "rel": "first",
-              "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+              "rel": "rel",
+              "href": "href"
             },
             {
-              "rel": "first",
-              "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
+              "rel": "rel",
+              "href": "href"
             }
           ],
           "page": {
-            "numberOfElements": 2,
+            "numberOfElements": 0,
             "totalPages": 1,
-            "pageSize": 25,
-            "page": 1,
-            "totalElements": 2
+            "pageSize": 5,
+            "page": 5,
+            "totalElements": 6
           },
           "content": [
             {
-              "amount": 100000,
+              "amount": 2,
               "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "currency": "USD",
-              "status": "ALLOCATED"
+              "currency": {
+                "currencyCode": "currencyCode"
+              },
+              "status": "status"
             },
             {
-              "amount": 100000,
+              "amount": 2,
               "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "currency": "USD",
-              "status": "ALLOCATED"
+              "currency": {
+                "currencyCode": "currencyCode"
+              },
+              "status": "status"
             }
           ]
         },
         "properties": {
-          "page": {
-            "$ref": "#/components/schemas/PayeeDeltaResponse_page"
-          },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/FundingDeltaResponse_links"
+              "$ref": "#/components/schemas/LinkForResponse"
             },
-            "type": "array"
+            "type": "array",
+            "xml": {
+              "name": "link",
+              "namespace": "http://www.w3.org/2005/Atom"
+            }
+          },
+          "page": {
+            "$ref": "#/components/schemas/PageForResponse"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/FundingDelta"
+              "$ref": "#/components/schemas/FundingPayorStatusAuditResponse"
             },
             "type": "array"
           }
@@ -16375,44 +16356,78 @@
         ],
         "type": "object"
       },
-      "FundingDelta": {
+      "LinkForResponse": {
         "example": {
-          "amount": 100000,
-          "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "currency": "USD",
-          "status": "ALLOCATED"
+          "rel": "rel",
+          "href": "href"
         },
         "properties": {
-          "status": {
-            "example": "ALLOCATED",
-            "maxLength": 20,
-            "minLength": 1,
+          "rel": {
             "type": "string"
           },
-          "fundingId": {
-            "format": "uuid",
-            "readOnly": true,
-            "type": "string"
-          },
-          "amount": {
-            "description": "Amount to fund in minor units",
-            "example": 100000,
-            "format": "int64",
-            "maximum": 9999999999,
-            "minimum": 1,
-            "nullable": true,
-            "type": "integer"
-          },
-          "currency": {
-            "example": "USD",
-            "nullable": true,
+          "href": {
             "type": "string"
           }
         },
-        "required": [
-          "fundingId",
-          "status"
-        ],
+        "type": "object"
+      },
+      "PageForResponse": {
+        "example": {
+          "numberOfElements": 0,
+          "totalPages": 1,
+          "pageSize": 5,
+          "page": 5,
+          "totalElements": 6
+        },
+        "properties": {
+          "numberOfElements": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "totalElements": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "totalPages": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "page": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "pageSize": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "FundingPayorStatusAuditResponse": {
+        "example": {
+          "amount": 2,
+          "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "currency": {
+            "currencyCode": "currencyCode"
+          },
+          "status": "status"
+        },
+        "properties": {
+          "fundingId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "amount": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyType"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "PagedResponse": {
@@ -18561,6 +18576,22 @@
         ],
         "type": "object"
       },
+      "CurrencyType": {
+        "example": {
+          "currencyCode": "currencyCode"
+        },
+        "properties": {
+          "currencyCode": {
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          }
+        },
+        "required": [
+          "currencyCode"
+        ],
+        "type": "object"
+      },
       "FundingEvent": {
         "properties": {
           "eventId": {
@@ -19181,22 +19212,6 @@
           },
           "href": {
             "example": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc",
-            "type": "string"
-          }
-        }
-      },
-      "FundingDeltaResponse_links": {
-        "example": {
-          "rel": "first",
-          "href": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
-        },
-        "properties": {
-          "rel": {
-            "example": "first",
-            "type": "string"
-          },
-          "href": {
-            "example": "http://api.sandbox.velopayments.com/v1/deltas/fundings?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000",
             "type": "string"
           }
         }
