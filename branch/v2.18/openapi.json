@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.18.26",
+    "version": "2.18.28",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -4476,6 +4476,93 @@
         ]
       }
     },
+    "/v1/payees/{payeeId}/remoteIdUpdate": {
+      "post": {
+        "description": "Update the remote Id for the given Payee Id.",
+        "parameters": [
+          {
+            "description": "The UUID of the payee.",
+            "in": "path",
+            "name": "payeeId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRemoteIdRequest"
+              }
+            }
+          },
+          "description": "Request to update payee remote id",
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted, No Content"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The request contained data that would reult in a duplicate value\n"
+          }
+        },
+        "summary": "Update Payee Remote Id",
+        "tags": [
+          "Payees"
+        ]
+      }
+    },
     "/v1/deltas/payees": {
       "get": {
         "description": "Get a paginated response listing payee changes.",
@@ -4598,6 +4685,7 @@
     },
     "/v2/payees": {
       "post": {
+        "deprecated": true,
         "description": "Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query\nfor status (201 - Created, 400 - invalid request body, 409 - if there is a duplicate remote id within the\nbatch / if there is a duplicate email within the batch).\n",
         "operationId": "v2CreatePayee",
         "requestBody": {
@@ -5480,6 +5568,7 @@
     },
     "/v1/payees/payors/{payorId}/invitationStatus": {
       "get": {
+        "deprecated": true,
         "description": "Returns a list of payees associated with a payor, along with invitation status and grace period end date.\n",
         "operationId": "getPayeesInvitationStatus",
         "parameters": [
@@ -10546,6 +10635,30 @@
             "$ref": "#/components/schemas/OnboardedStatus"
           }
         },
+        "type": "object"
+      },
+      "UpdateRemoteIdRequest": {
+        "example": {
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "remoteId": "remoteId"
+        },
+        "properties": {
+          "payorId": {
+            "format": "uuid",
+            "nullable": false,
+            "type": "string"
+          },
+          "remoteId": {
+            "maxLength": 100,
+            "minLength": 1,
+            "nullable": false,
+            "type": "string"
+          }
+        },
+        "required": [
+          "payorId",
+          "remoteId"
+        ],
         "type": "object"
       },
       "PayeeDeltaResponse": {
