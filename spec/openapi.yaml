@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.17.106
+  version: 2.17.107
   x-logo:
     url: https://velopayments.com/images/velo-logo.svg
 servers:
@@ -3673,6 +3673,7 @@ paths:
       description: Withdraw Payout will delete payout details from payout service
         and rails services but will just move the status of the payout to WITHDRAWN
         in payment audit.
+      operationId: withdrawPayoutV3
       parameters:
       - description: Id of the payout
         in: path
@@ -3697,6 +3698,7 @@ paths:
               -H 'Content-Type: application/json'
     get:
       description: Get payout summary - returns the current state of the payout.
+      operationId: getPayoutSummaryV3
       parameters:
       - description: Id of the payout
         in: path
@@ -3725,6 +3727,7 @@ paths:
               -H 'Content-Type: application/json'
     post:
       description: Instruct a payout to be made for the specified payoutId.
+      operationId: instructPayoutV3
       parameters:
       - description: Id of the payout
         in: path
