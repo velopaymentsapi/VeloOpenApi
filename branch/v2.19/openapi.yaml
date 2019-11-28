@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.19.3
+  version: 2.19.4
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -3280,6 +3280,7 @@ paths:
                 -H 'Content-Type: application/json'
   /v2/payees:
     post:
+      deprecated: true
       description: |
         Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query
         for status (201 - Created, 400 - invalid request body, 409 - if there is a duplicate remote id within the
@@ -3892,6 +3893,7 @@ paths:
                 -d '{"payorId":"545e29bd-75a8-4354-8192-ae68bab59d7b"}'
   '/v1/payees/payors/{payorId}/invitationStatus':
     get:
+      deprecated: true
       description: |
         Returns a list of payees associated with a payor, along with invitation status and grace period end date.
       operationId: getPayeesInvitationStatus
