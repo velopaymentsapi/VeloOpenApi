@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.19.7
+  version: 2.19.8
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -1734,60 +1734,6 @@ paths:
             $ curl 'https://api.sandbox.velopayments.com/v2/users/self' -i -X GET \
                 -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \
                 -H 'Content-Type: application/json'
-  /v2/users/self/emailUpdate:
-    post:
-      description: |
-        <p>Update email address for self </p>
-        <p>If the email address is already in use a 409 will be returned</p>
-      operationId: emailUpdateForSelf
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SelfEmailUpdateRequest'
-        description: a new email address
-        required: true
-      responses:
-        '204':
-          description: request completed okay
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Invalid request. See Error message payload for details of failure
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Invalid access token. May be expired or invalid
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: |
-            The authentication does not have permissions to access the resource
-            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: |
-            The request contained data that would reult in a duplicate value
-      summary: Update Email Address for self
-      tags:
-        - Users
-      x-code-samples:
-        - lang: shell
-          source: |
-            $ curl 'https://api.sandbox.velopayments.com/v2/users/self/emailUpdate' -i -X POST \
-                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
-                  -H 'Content-Type: application/json' \
-                  -d '{"email":"foo@example.com", \
-                      }'
   /v2/users/self/mfa/unregister:
     post:
       description: |
@@ -1973,51 +1919,6 @@ paths:
                       "secondaryContactNumber":null, \
                       "firstName":"Bob", \
                       "lastName":"Smith"}'
-  /v2/users/self/smsUpdate:
-    post:
-      description: update SMS Number for self
-      operationId: smsNumberUpdateForSelf
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SelfSmsNumberUpdateRequest'
-        description: a new SMS Number
-        required: true
-      responses:
-        '204':
-          description: request completed okay
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Invalid request. See Error message payload for details of failure
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Invalid access token. May be expired or invalid
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: |
-            The authentication does not have permissions to access the resource
-            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-      summary: Update SMS Number for self
-      tags:
-        - Users
-      x-code-samples:
-        - lang: shell
-          source: |
-            $ curl 'https://api.sandbox.velopayments.com/v2/users/self/smsNumberUpdate' -i -X POST \
-                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
-                  -H 'Content-Type: application/json' \
-                  -d '{"smsNumber":"+441235550000", \
-                      }'
   '/v1/payors/{payorId}':
     get:
       deprecated: true
@@ -3201,6 +3102,63 @@ paths:
           name: Get Payee sensitve true
           serviceName: payee-service
           contractPath: /v1/payees/026cc3c8-3a0c-4083-a05b-e908048c1b08
+  '/v1/payees/{payeeId}/remoteIdUpdate':
+    post:
+      description: Update the remote Id for the given Payee Id.
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRemoteIdRequest'
+        description: Request to update payee remote id
+        required: true
+      responses:
+        '202':
+          description: 'Accepted, No Content'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request contained data that would reult in a duplicate value
+      summary: Update Payee Remote Id
+      tags:
+        - Payees
   /v1/deltas/payees:
     get:
       description: Get a paginated response listing payee changes.
@@ -7051,18 +7009,6 @@ components:
           nullable: true
           type: string
       type: object
-    SelfEmailUpdateRequest:
-      example:
-        email: foo@example.com
-      properties:
-        email:
-          description: the email address of the invited user
-          example: foo@example.com
-          format: email
-          type: string
-      required:
-        - email
-      type: object
     SelfMFATypeUnregisterRequest:
       example:
         mfaType: TOTP
@@ -7098,19 +7044,6 @@ components:
       required:
         - newPassword
         - oldPassword
-      type: object
-    SelfSmsNumberUpdateRequest:
-      example:
-        smsNumber: '11235555555'
-      properties:
-        smsNumber:
-          description: |
-            The phone number of a device that the user can receive sms messages on
-          example: '11235555555'
-          pattern: '^\+?[1-9]\d{1,14}$'
-          type: string
-      required:
-        - smsNumber
       type: object
     PayorV1:
       example:
@@ -7776,6 +7709,24 @@ components:
           $ref: '#/components/schemas/OfacStatus'
         onboardedStatus:
           $ref: '#/components/schemas/OnboardedStatus'
+      type: object
+    UpdateRemoteIdRequest:
+      example:
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        remoteId: remoteId
+      properties:
+        payorId:
+          format: uuid
+          nullable: false
+          type: string
+        remoteId:
+          maxLength: 100
+          minLength: 1
+          nullable: false
+          type: string
+      required:
+        - payorId
+        - remoteId
       type: object
     PayeeDeltaResponse:
       description: List Payee Changes Response Object
