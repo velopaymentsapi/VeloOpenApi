@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.19.13
+  version: 2.19.14
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -175,6 +175,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Logout
       tags:
         - Login
@@ -252,6 +264,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: validate
       tags:
         - Login
@@ -863,6 +887,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: List Users
       tags:
         - Users
@@ -902,6 +938,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -969,6 +1017,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -1023,6 +1083,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -1082,6 +1154,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -1147,6 +1231,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -1197,6 +1293,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '409':
           content:
             application/json:
@@ -1275,6 +1383,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -1337,6 +1457,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -1397,6 +1529,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -1460,6 +1604,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -1519,6 +1675,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -1589,6 +1757,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Resend a token
       tags:
         - Tokens
@@ -1636,6 +1816,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -1689,6 +1881,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Register SMS Number
       tags:
         - Users
@@ -1725,6 +1929,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Get Self
       tags:
         - Users
@@ -1770,6 +1986,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Unregister MFA for Self
       tags:
         - Users
@@ -1814,6 +2042,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Update Password for self
       tags:
         - Users
@@ -1863,6 +2103,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Validate the proposed password
       tags:
         - Users
@@ -1906,6 +2158,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Update User Details for self
       tags:
         - Users
@@ -1974,6 +2238,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -2060,6 +2336,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -2151,6 +2439,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -2267,6 +2567,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -2340,6 +2652,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -2403,6 +2727,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -2479,6 +2815,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -2618,6 +2966,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -2685,6 +3045,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -3143,6 +3515,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -4029,11 +4413,16 @@ paths:
             default: 25
             format: int32
             type: integer
-        - description: Sort String
+        - description: |
+            List of sort fields e.g. ?sort=name:asc
+            Default is name:asc
+            The supported sort fields are - fundingRef
           in: query
           name: sort
           required: false
           schema:
+            default: 'fundingRef:asc'
+            pattern: '[fundingRef]+[:desc|:asc]'
             type: string
       responses:
         '200':
@@ -4198,6 +4587,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -4256,6 +4657,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -4284,9 +4697,23 @@ paths:
           required: false
           schema:
             type: string
+        - description: The physical account ID
+          in: query
+          name: physicalAccountId
+          required: false
+          schema:
+            format: uuid
+            type: string
         - description: The account owner Payor ID
           in: query
           name: payorId
+          required: false
+          schema:
+            format: uuid
+            type: string
+        - description: The funding account ID
+          in: query
+          name: fundingAccountId
           required: false
           schema:
             format: uuid
@@ -4307,11 +4734,16 @@ paths:
             default: 25
             format: int32
             type: integer
-        - description: Sort String
+        - description: |
+            List of sort fields e.g. ?sort=name:asc
+            Default is name:asc
+            The supported sort fields are - fundingRef, name, balance
           in: query
           name: sort
           required: false
           schema:
+            default: 'fundingRef:asc'
+            pattern: '[fundingRef|name|balance]+[:desc|:asc]'
             type: string
       responses:
         '200':
@@ -4340,6 +4772,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -4395,6 +4839,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -4452,6 +4908,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -4534,6 +5002,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Get Funding Accounts
       tags:
         - Funding Manager
@@ -4574,6 +5054,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Create Funding Account
   '/v1/fundingAccounts/{fundingAccountId}':
     get:
@@ -4615,6 +5107,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
           content:
             application/json:
@@ -4684,6 +5188,18 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Get Funding Audit Delta
       tags:
         - Funding Manager
@@ -11365,6 +11881,7 @@ components:
           enum:
             - requestBody
             - queryParam
+            - requestParam
             - header
             - pathParam
           example: requestBody

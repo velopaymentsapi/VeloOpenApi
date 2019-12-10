@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.19.13",
+    "version": "2.19.14",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -144,7 +144,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Logout",
@@ -246,7 +247,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "validate",
@@ -1104,7 +1106,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "List Users",
@@ -1157,7 +1160,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -1250,7 +1254,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -1323,7 +1328,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -1407,7 +1413,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -1490,7 +1497,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -1562,7 +1570,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "409": {
             "content": {
@@ -1656,7 +1665,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -1740,7 +1750,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -1824,7 +1835,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -1908,7 +1920,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -1992,7 +2005,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -2086,7 +2100,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Resend a token",
@@ -2150,7 +2165,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -2222,7 +2238,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Register SMS Number",
@@ -2270,7 +2287,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Get Self",
@@ -2332,7 +2350,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Unregister MFA for Self",
@@ -2394,7 +2413,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Update Password for self",
@@ -2463,7 +2483,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Validate the proposed password",
@@ -2525,7 +2546,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Update User Details for self",
@@ -2608,7 +2630,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -2729,7 +2752,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -2875,7 +2899,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -3056,7 +3081,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -3163,7 +3189,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -3256,7 +3283,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -3373,7 +3401,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -3584,7 +3613,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -3687,7 +3717,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -4400,7 +4431,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -5701,11 +5733,13 @@
             }
           },
           {
-            "description": "Sort String",
+            "description": "List of sort fields e.g. ?sort=name:asc\nDefault is name:asc\nThe supported sort fields are - fundingRef\n",
             "in": "query",
             "name": "sort",
             "required": false,
             "schema": {
+              "default": "fundingRef:asc",
+              "pattern": "[fundingRef]+[:desc|:asc]",
               "type": "string"
             }
           }
@@ -5951,7 +5985,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -6035,7 +6070,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -6076,9 +6112,29 @@
             }
           },
           {
+            "description": "The physical account ID",
+            "in": "query",
+            "name": "physicalAccountId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
             "description": "The account owner Payor ID",
             "in": "query",
             "name": "payorId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The funding account ID",
+            "in": "query",
+            "name": "fundingAccountId",
             "required": false,
             "schema": {
               "format": "uuid",
@@ -6108,11 +6164,13 @@
             }
           },
           {
-            "description": "Sort String",
+            "description": "List of sort fields e.g. ?sort=name:asc\nDefault is name:asc\nThe supported sort fields are - fundingRef, name, balance\n",
             "in": "query",
             "name": "sort",
             "required": false,
             "schema": {
+              "default": "fundingRef:asc",
+              "pattern": "[fundingRef|name|balance]+[:desc|:asc]",
               "type": "string"
             }
           }
@@ -6156,7 +6214,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -6238,7 +6297,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -6323,7 +6383,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -6441,7 +6502,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Get Funding Accounts",
@@ -6502,7 +6564,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Create Funding Account"
@@ -6564,7 +6627,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           },
           "404": {
             "content": {
@@ -6668,7 +6732,8 @@
                 }
               }
             },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Get Funding Audit Delta",
@@ -15062,6 +15127,7 @@
             "enum": [
               "requestBody",
               "queryParam",
+              "requestParam",
               "header",
               "pathParam"
             ],
