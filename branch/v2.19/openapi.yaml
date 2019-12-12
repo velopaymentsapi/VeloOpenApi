@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.19.18
+  version: 2.19.19
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -6288,10 +6288,10 @@ paths:
   /v3/payouts:
     post:
       description: |
-        Create a new payout and return a location header with a link to get the payout. Basic validation of the payout
-        is performed before returning but more comprehensive validation is done asynchronously, the results of which
-        can be obtained by issuing a HTTP GET to the URL returned in the location header.
-        **NOTE:** amount values in payments must be in 'minor units' format. E.g. cents for USD, pence for GBP etc.
+        <p>Create a new payout and return a location header with a link to get the payout.</p>
+        <p>Basic validation of the payout is performed before returning but more comprehensive validation is done asynchronously.</p>
+        <p>The results can be obtained by issuing a HTTP GET to the URL returned in the location header.</p>
+        <p>**NOTE:** amount values in payments must be in 'minor units' format. E.g. cents for USD, pence for GBP etc.</p>
          with no decimal places.
       operationId: submitPayout
       requestBody:
@@ -6337,11 +6337,37 @@ paths:
                 format: uri
                 type: string
         '400':
-          description: Bad Request
-        '404':
-          description: Not Found
-        '503':
-          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
       summary: Submit Payout
       tags:
         - Submit Payout
@@ -6366,8 +6392,44 @@ paths:
       responses:
         '202':
           description: HTTP 202 Accepted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
-          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
       summary: Withdraw Payout
       tags:
         - Withdraw Payout
@@ -6394,8 +6456,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/PayoutSummaryResponse'
           description: Details of Payout
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
-          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
       summary: Get Payout Summary
       tags:
         - Get Payout
@@ -6418,10 +6510,51 @@ paths:
       responses:
         '202':
           description: HTTP 202 Accepted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+          x-code-samples: |
+            {"errors":
+              [
+                {
+                "errorMessage":"Invalid Access Token",
+                "location":"bearer",
+                "locationType":"header",
+                "reasonCode":"invalidAccessToken"
+                }
+              ],
+            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
+            }
         '404':
-          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
         '409':
-          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request contained data that would reult in a duplicate value
       summary: Instruct Payout
       tags:
         - Instruct Payout
@@ -6450,9 +6583,18 @@ paths:
                 $ref: '#/components/schemas/QuoteResponse'
           description: Quote for payout
         '404':
-          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
         '409':
-          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: |
+            The request contained data that would reult in a duplicate value
       summary: Create a quote for the payout
       tags:
         - Quote Payout
@@ -6469,7 +6611,7 @@ paths:
         '200':
           content:
             application/json:
-              example: |-
+              example: |
                 HTTP/1.1 200 OK
                 Content-Length: 2158
                 Content-Type: application/json;charset=UTF-8
@@ -6562,6 +6704,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaymentChannelRulesResponse'
           description: List Payment Channel Country Rules
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid access token. May be expired or invalid
       summary: List Payment Channel Country Rules
       tags:
         - Countries
@@ -6573,7 +6721,9 @@ paths:
   /v1/supportedCountries:
     get:
       deprecated: true
-      description: List the supported countries.
+      description: |
+        <p>List the supported countries.</p>
+        <p>This version will be retired in March 2020. Use /v2/supportedCountries</p>
       operationId: listSupportedCountriesV1
       responses:
         '200':
@@ -6582,6 +6732,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/SupportedCountriesResponse'
           description: List of Supported Countries
+      security: []
       summary: List Supported Countries
       tags:
         - Countries
@@ -6601,14 +6752,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/SupportedCountriesResponse_2'
           description: List of Supported Countries
+      security: []
       summary: List Supported Countries
       tags:
         - Countries
       x-code-samples:
         - lang: shell
           source: |
-            $ curl 'https://api.sandbox.velopayments.com/v1/supportedCountries' -i -X GET \
-                -H 'Authorization: Bearer 9a7c9010-547f-410e-ac3c-fd6f6701c745'
+            $ curl 'https://api.sandbox.velopayments.com/v1/supportedCountries' -i -X GET
   /v2/currencies:
     get:
       description: List the supported currencies.
@@ -6617,70 +6768,17 @@ paths:
         '200':
           content:
             application/json:
-              example: |-
-                HTTP/1.1 200 OK
-                Content-Length: 938
-                Content-Type: application/json;charset=UTF-8
-
-                {
-                  "currencies" : [ {
-                    "currency" : "AUD",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "CAD",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "CHF",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "CNY",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "EUR",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "GBP",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "ILS",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "JPY",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "MXN",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "NOK",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "PHP",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "SGD",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "THB",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "USD",
-                    "maxPaymentAmount" : 1000
-                  }, {
-                    "currency" : "ZAR",
-                    "maxPaymentAmount" : 1000
-                  } ]
-                }
               schema:
                 $ref: '#/components/schemas/SupportedCurrencyResponse'
           description: List Supported Currencies
+      security: []
       summary: List Supported Currencies
       tags:
         - Currencies
       x-code-samples:
         - lang: shell
           source: |
-            $ curl 'https://api.sandbox.velopayments.com/v2/currencies' -i -X GET \
-                -H 'Authorization: Bearer 2f661796-3b13-467b-82c0-faf0f0721294'
+            $ curl 'https://api.sandbox.velopayments.com/v2/currencies' -i -X GET
 components:
   schemas:
     AuthResponse:
@@ -11520,8 +11618,8 @@ components:
       type: object
     CreatePayoutRequest:
       example:
-        payoutFromPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        payoutToPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payoutFromPayorId: c4261044-13df-4a6c-b1d4-fa8be2b46f5a
+        payoutToPayorId: 9afc6b39-de12-466a-a9ca-07c7a23b312d
         payments:
           - amount: 1299
             currency: USD
@@ -11554,7 +11652,7 @@ components:
             remoteId: remoteId1234
             sourceAccountName: MyAccountName
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        payoutMemo: A memo
+        payoutMemo: Monthly Payment
       properties:
         payorId:
           deprecated: true
@@ -11563,15 +11661,18 @@ components:
           type: string
         payoutFromPayorId:
           description: The id of the payor whose source account(s) will be debited. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.
+          example: c4261044-13df-4a6c-b1d4-fa8be2b46f5a
           format: uuid
           type: string
         payoutToPayorId:
           description: The id of the payor whose payees will be paid. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.
+          example: 9afc6b39-de12-466a-a9ca-07c7a23b312d
           format: uuid
           type: string
         payoutMemo:
           description: Text applied to all payment memos unless specified explicitly on a payment. This should be the reference field on the statement seen by the payee (but not via ACH)
-          example: A memo
+          example: Monthly Payment
+          maxLength: 40
           type: string
         payments:
           items:
@@ -11599,17 +11700,14 @@ components:
           type: string
         currency:
           description: Payee's currency
-          enum:
-            - USD
-            - GBP
-            - EUR
           example: USD
           type: string
         amount:
-          description: Amount to send to Payee
+          description: |
+            <p>Amount to send to Payee</p>
+            <p>The maximum payment amount is dependent on the currency</p>
           example: 1299
           format: int64
-          maximum: 9223372036854776000
           minimum: 1
           type: integer
         paymentMemo:
@@ -11776,38 +11874,38 @@ components:
     PaymentChannelRulesResponse:
       example:
         bank:
-          - isoCountryCode: isoCountryCode
+          - isoCountryCode: US
             rules:
-              - displayName: displayName
-                minLength: 0
-                displayOrder: 1
+              - displayName: Account Name
+                minLength: 5
+                displayOrder: 0
                 required: true
-                maxLength: 6
-                validation: validation
-                element: element
-              - displayName: displayName
-                minLength: 0
-                displayOrder: 1
+                maxLength: 50
+                validation: '^[0-9]{6,11}$'
+                element: accountName
+              - displayName: Account Name
+                minLength: 5
+                displayOrder: 0
                 required: true
-                maxLength: 6
-                validation: validation
-                element: element
-          - isoCountryCode: isoCountryCode
+                maxLength: 50
+                validation: '^[0-9]{6,11}$'
+                element: accountName
+          - isoCountryCode: US
             rules:
-              - displayName: displayName
-                minLength: 0
-                displayOrder: 1
+              - displayName: Account Name
+                minLength: 5
+                displayOrder: 0
                 required: true
-                maxLength: 6
-                validation: validation
-                element: element
-              - displayName: displayName
-                minLength: 0
-                displayOrder: 1
+                maxLength: 50
+                validation: '^[0-9]{6,11}$'
+                element: accountName
+              - displayName: Account Name
+                minLength: 5
+                displayOrder: 0
                 required: true
-                maxLength: 6
-                validation: validation
-                element: element
+                maxLength: 50
+                validation: '^[0-9]{6,11}$'
+                element: accountName
       properties:
         bank:
           items:
@@ -11833,14 +11931,18 @@ components:
       example:
         countries:
           - regions:
-              - regions
-              - regions
+              - name: California
+                abbreviation: CA
+              - name: California
+                abbreviation: CA
             isoCountryCode: US
             currencies:
               - USD
           - regions:
-              - regions
-              - regions
+              - name: California
+                abbreviation: CA
+              - name: California
+                abbreviation: CA
             isoCountryCode: US
             currencies:
               - USD
@@ -11853,10 +11955,10 @@ components:
     SupportedCurrencyResponse:
       example:
         currencies:
-          - currency: currency
-            maxPaymentAmount: 0
-          - currency: currency
-            maxPaymentAmount: 0
+          - currency: GBP
+            maxPaymentAmount: 100000
+          - currency: GBP
+            maxPaymentAmount: 100000
       properties:
         currencies:
           items:
@@ -13557,29 +13659,35 @@ components:
       type: object
     PaymentChannelCountry:
       example:
-        isoCountryCode: isoCountryCode
+        isoCountryCode: US
         rules:
-          - displayName: displayName
-            minLength: 0
-            displayOrder: 1
+          - displayName: Account Name
+            minLength: 5
+            displayOrder: 0
             required: true
-            maxLength: 6
-            validation: validation
-            element: element
-          - displayName: displayName
-            minLength: 0
-            displayOrder: 1
+            maxLength: 50
+            validation: '^[0-9]{6,11}$'
+            element: accountName
+          - displayName: Account Name
+            minLength: 5
+            displayOrder: 0
             required: true
-            maxLength: 6
-            validation: validation
-            element: element
+            maxLength: 50
+            validation: '^[0-9]{6,11}$'
+            element: accountName
       properties:
         isoCountryCode:
+          description: The ISO code for the country
+          example: US
           type: string
         rules:
+          description: The rules for the given country
           items:
             $ref: '#/components/schemas/PaymentChannelRule'
           type: array
+      required:
+        - isoCountryCode
+        - rules
       type: object
     SupportedCountry:
       example:
@@ -13612,8 +13720,10 @@ components:
     SupportedCountry_2:
       example:
         regions:
-          - regions
-          - regions
+          - name: California
+            abbreviation: CA
+          - name: California
+            abbreviation: CA
         isoCountryCode: US
         currencies:
           - USD
@@ -13640,17 +13750,22 @@ components:
             type: string
           type: array
         regions:
-          $ref: '#/components/schemas/Region'
+          items:
+            $ref: '#/components/schemas/Region'
+          type: array
       type: object
     SupportedCurrency:
       example:
-        currency: currency
-        maxPaymentAmount: 0
+        currency: GBP
+        maxPaymentAmount: 100000
       properties:
         currency:
           description: ISO Currency Code
+          example: GBP
           type: string
         maxPaymentAmount:
+          description: The max amount allowed in this currency
+          example: 100000
           type: integer
       type: object
     UserType_2:
@@ -14920,31 +15035,53 @@ components:
       nullable: true
       type: string
     PaymentChannelRule:
+      description: Rules that will get applied when creating or updating a payment channel for the given country
       example:
-        displayName: displayName
-        minLength: 0
-        displayOrder: 1
+        displayName: Account Name
+        minLength: 5
+        displayOrder: 0
         required: true
-        maxLength: 6
-        validation: validation
-        element: element
+        maxLength: 50
+        validation: '^[0-9]{6,11}$'
+        element: accountName
       properties:
         element:
+          description: |
+            <p>the rule element</p>
+            <p>will match a given element name for a payment channel configuration
+          example: accountName
           type: string
         required:
+          description: is this element required
           type: boolean
         displayName:
+          description: User friendly name
+          example: Account Name
           type: string
         minLength:
+          description: mininum length of the element data
+          example: 5
           type: integer
         maxLength:
+          description: maximum length of the element data
+          example: 50
           type: integer
         validation:
+          description: a regex to validate the element data
+          example: '^[0-9]{6,11}$'
           type: string
         displayOrder:
           type: integer
+      required:
+        - displayName
+        - element
+        - required
+        - validation
       type: object
     Region:
+      example:
+        name: California
+        abbreviation: CA
       properties:
         name:
           example: California

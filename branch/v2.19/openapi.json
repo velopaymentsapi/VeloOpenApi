@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.19.18",
+    "version": "2.19.19",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -8237,7 +8237,7 @@
     },
     "/v3/payouts": {
       "post": {
-        "description": "Create a new payout and return a location header with a link to get the payout. Basic validation of the payout\nis performed before returning but more comprehensive validation is done asynchronously, the results of which\ncan be obtained by issuing a HTTP GET to the URL returned in the location header.\n**NOTE:** amount values in payments must be in 'minor units' format. E.g. cents for USD, pence for GBP etc.\n with no decimal places.\n",
+        "description": "<p>Create a new payout and return a location header with a link to get the payout.</p>\n<p>Basic validation of the payout is performed before returning but more comprehensive validation is done asynchronously.</p>\n<p>The results can be obtained by issuing a HTTP GET to the URL returned in the location header.</p>\n<p>**NOTE:** amount values in payments must be in 'minor units' format. E.g. cents for USD, pence for GBP etc.</p>\n with no decimal places.\n",
         "operationId": "submitPayout",
         "requestBody": {
           "content": {
@@ -8295,13 +8295,35 @@
             }
           },
           "400": {
-            "description": "Bad Request"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
-          "404": {
-            "description": "Not Found"
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
-          "503": {
-            "description": "Service Unavailable"
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
           }
         },
         "summary": "Submit Payout",
@@ -8335,8 +8357,46 @@
           "202": {
             "description": "HTTP 202 Accepted"
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
+          },
           "404": {
-            "description": "Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
           }
         },
         "summary": "Withdraw Payout",
@@ -8375,8 +8435,36 @@
             },
             "description": "Details of Payout"
           },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
+          },
           "404": {
-            "description": "Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
           }
         },
         "summary": "Get Payout Summary",
@@ -8408,11 +8496,56 @@
           "202": {
             "description": "HTTP 202 Accepted"
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n",
+            "x-code-samples": "{\"errors\":\n  [\n    {\n    \"errorMessage\":\"Invalid Access Token\",\n    \"location\":\"bearer\",\n    \"locationType\":\"header\",\n    \"reasonCode\":\"invalidAccessToken\"\n    }\n  ],\n\"correlationId\":\"a23c03ce-ca24-4eb6-94bc-1f152512a72b\"\n}\n"
+          },
           "404": {
-            "description": "Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
           },
           "409": {
-            "description": "Conflict"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The request contained data that would reult in a duplicate value\n"
           }
         },
         "summary": "Instruct Payout",
@@ -8454,10 +8587,24 @@
             "description": "Quote for payout"
           },
           "404": {
-            "description": "Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
           },
           "409": {
-            "description": "Conflict"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The request contained data that would reult in a duplicate value\n"
           }
         },
         "summary": "Create a quote for the payout",
@@ -8479,13 +8626,23 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "HTTP/1.1 200 OK\nContent-Length: 2158\nContent-Type: application/json;charset=UTF-8\n\n{\n  \"bank\" : [ {\n    \"isoCountryCode\" : \"US\",\n    \"rules\" : [ {\n      \"element\" : \"accountName\",\n      \"required\" : true,\n      \"displayName\" : \"Account Holder Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 100,\n      \"validation\" : \"^.*$\",\n      \"displayOrder\" : 1\n    }, {\n      \"element\" : \"accountNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Account Number\",\n      \"minLength\" : 6,\n      \"maxLength\" : 11,\n      \"validation\" : \"^[0-9]{6,11}$\",\n      \"displayOrder\" : 3\n    }, {\n      \"element\" : \"routingNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Routing Number\",\n      \"minLength\" : 9,\n      \"maxLength\" : 9,\n      \"validation\" : \"^[0-9]{9}$\",\n      \"displayOrder\" : 2\n    }, {\n      \"element\" : \"paymentChannelName\",\n      \"required\" : false,\n      \"displayName\" : \"Payment Channel Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 20,\n      \"validation\" : \"^.*$\"\n    }, {\n      \"element\" : \"currency\",\n      \"required\" : true,\n      \"displayName\" : \"Currency\",\n      \"minLength\" : 3,\n      \"maxLength\" : 3,\n      \"validation\" : \"^[A-Z]{3}$\"\n    } ]\n  }, {\n    \"isoCountryCode\" : \"GB\",\n    \"rules\" : [ {\n      \"element\" : \"accountName\",\n      \"required\" : true,\n      \"displayName\" : \"Account Holder Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 100,\n      \"validation\" : \"^.*$\",\n      \"displayOrder\" : 1\n    }, {\n      \"element\" : \"accountNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Account Number\",\n      \"minLength\" : 8,\n      \"maxLength\" : 8,\n      \"validation\" : \"^[0-9]{8}$\",\n      \"displayOrder\" : 3\n    }, {\n      \"element\" : \"routingNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Sort Code\",\n      \"minLength\" : 6,\n      \"maxLength\" : 6,\n      \"validation\" : \"^[0-9]{6}$\",\n      \"displayOrder\" : 2\n    }, {\n      \"element\" : \"paymentChannelName\",\n      \"required\" : false,\n      \"displayName\" : \"Payment Channel Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 20,\n      \"validation\" : \"^.*$\"\n    }, {\n      \"element\" : \"currency\",\n      \"required\" : true,\n      \"displayName\" : \"Currency\",\n      \"minLength\" : 3,\n      \"maxLength\" : 3,\n      \"validation\" : \"^[A-Z]{3}$\"\n    } ]\n  } ]\n}",
+                "example": "HTTP/1.1 200 OK\nContent-Length: 2158\nContent-Type: application/json;charset=UTF-8\n\n{\n  \"bank\" : [ {\n    \"isoCountryCode\" : \"US\",\n    \"rules\" : [ {\n      \"element\" : \"accountName\",\n      \"required\" : true,\n      \"displayName\" : \"Account Holder Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 100,\n      \"validation\" : \"^.*$\",\n      \"displayOrder\" : 1\n    }, {\n      \"element\" : \"accountNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Account Number\",\n      \"minLength\" : 6,\n      \"maxLength\" : 11,\n      \"validation\" : \"^[0-9]{6,11}$\",\n      \"displayOrder\" : 3\n    }, {\n      \"element\" : \"routingNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Routing Number\",\n      \"minLength\" : 9,\n      \"maxLength\" : 9,\n      \"validation\" : \"^[0-9]{9}$\",\n      \"displayOrder\" : 2\n    }, {\n      \"element\" : \"paymentChannelName\",\n      \"required\" : false,\n      \"displayName\" : \"Payment Channel Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 20,\n      \"validation\" : \"^.*$\"\n    }, {\n      \"element\" : \"currency\",\n      \"required\" : true,\n      \"displayName\" : \"Currency\",\n      \"minLength\" : 3,\n      \"maxLength\" : 3,\n      \"validation\" : \"^[A-Z]{3}$\"\n    } ]\n  }, {\n    \"isoCountryCode\" : \"GB\",\n    \"rules\" : [ {\n      \"element\" : \"accountName\",\n      \"required\" : true,\n      \"displayName\" : \"Account Holder Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 100,\n      \"validation\" : \"^.*$\",\n      \"displayOrder\" : 1\n    }, {\n      \"element\" : \"accountNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Account Number\",\n      \"minLength\" : 8,\n      \"maxLength\" : 8,\n      \"validation\" : \"^[0-9]{8}$\",\n      \"displayOrder\" : 3\n    }, {\n      \"element\" : \"routingNumber\",\n      \"required\" : true,\n      \"displayName\" : \"Sort Code\",\n      \"minLength\" : 6,\n      \"maxLength\" : 6,\n      \"validation\" : \"^[0-9]{6}$\",\n      \"displayOrder\" : 2\n    }, {\n      \"element\" : \"paymentChannelName\",\n      \"required\" : false,\n      \"displayName\" : \"Payment Channel Name\",\n      \"minLength\" : 1,\n      \"maxLength\" : 20,\n      \"validation\" : \"^.*$\"\n    }, {\n      \"element\" : \"currency\",\n      \"required\" : true,\n      \"displayName\" : \"Currency\",\n      \"minLength\" : 3,\n      \"maxLength\" : 3,\n      \"validation\" : \"^[A-Z]{3}$\"\n    } ]\n  } ]\n}\n",
                 "schema": {
                   "$ref": "#/components/schemas/PaymentChannelRulesResponse"
                 }
               }
             },
             "description": "List Payment Channel Country Rules"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           }
         },
         "summary": "List Payment Channel Country Rules",
@@ -8503,7 +8660,7 @@
     "/v1/supportedCountries": {
       "get": {
         "deprecated": true,
-        "description": "List the supported countries.",
+        "description": "<p>List the supported countries.</p>\n<p>This version will be retired in March 2020. Use /v2/supportedCountries</p>\n",
         "operationId": "listSupportedCountriesV1",
         "responses": {
           "200": {
@@ -8517,6 +8674,7 @@
             "description": "List of Supported Countries"
           }
         },
+        "security": [],
         "summary": "List Supported Countries",
         "tags": [
           "Countries"
@@ -8545,6 +8703,7 @@
             "description": "List of Supported Countries"
           }
         },
+        "security": [],
         "summary": "List Supported Countries",
         "tags": [
           "Countries"
@@ -8552,7 +8711,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/supportedCountries' -i -X GET \\\n    -H 'Authorization: Bearer 9a7c9010-547f-410e-ac3c-fd6f6701c745'\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/supportedCountries' -i -X GET\n"
           }
         ]
       }
@@ -8565,7 +8724,6 @@
           "200": {
             "content": {
               "application/json": {
-                "example": "HTTP/1.1 200 OK\nContent-Length: 938\nContent-Type: application/json;charset=UTF-8\n\n{\n  \"currencies\" : [ {\n    \"currency\" : \"AUD\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"CAD\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"CHF\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"CNY\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"EUR\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"GBP\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"ILS\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"JPY\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"MXN\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"NOK\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"PHP\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"SGD\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"THB\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"USD\",\n    \"maxPaymentAmount\" : 1000\n  }, {\n    \"currency\" : \"ZAR\",\n    \"maxPaymentAmount\" : 1000\n  } ]\n}",
                 "schema": {
                   "$ref": "#/components/schemas/SupportedCurrencyResponse"
                 }
@@ -8574,6 +8732,7 @@
             "description": "List Supported Currencies"
           }
         },
+        "security": [],
         "summary": "List Supported Currencies",
         "tags": [
           "Currencies"
@@ -8581,7 +8740,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/currencies' -i -X GET \\\n    -H 'Authorization: Bearer 2f661796-3b13-467b-82c0-faf0f0721294'\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/currencies' -i -X GET\n"
           }
         ]
       }
@@ -14632,8 +14791,8 @@
       },
       "CreatePayoutRequest": {
         "example": {
-          "payoutFromPayorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "payoutToPayorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payoutFromPayorId": "c4261044-13df-4a6c-b1d4-fa8be2b46f5a",
+          "payoutToPayorId": "9afc6b39-de12-466a-a9ca-07c7a23b312d",
           "payments": [
             {
               "amount": 1299,
@@ -14677,7 +14836,7 @@
             }
           ],
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "payoutMemo": "A memo"
+          "payoutMemo": "Monthly Payment"
         },
         "properties": {
           "payorId": {
@@ -14688,17 +14847,20 @@
           },
           "payoutFromPayorId": {
             "description": "The id of the payor whose source account(s) will be debited. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.",
+            "example": "c4261044-13df-4a6c-b1d4-fa8be2b46f5a",
             "format": "uuid",
             "type": "string"
           },
           "payoutToPayorId": {
             "description": "The id of the payor whose payees will be paid. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.",
+            "example": "9afc6b39-de12-466a-a9ca-07c7a23b312d",
             "format": "uuid",
             "type": "string"
           },
           "payoutMemo": {
             "description": "Text applied to all payment memos unless specified explicitly on a payment. This should be the reference field on the statement seen by the payee (but not via ACH)",
-            "example": "A memo",
+            "example": "Monthly Payment",
+            "maxLength": 40,
             "type": "string"
           },
           "payments": {
@@ -14734,19 +14896,13 @@
           },
           "currency": {
             "description": "Payee's currency",
-            "enum": [
-              "USD",
-              "GBP",
-              "EUR"
-            ],
             "example": "USD",
             "type": "string"
           },
           "amount": {
-            "description": "Amount to send to Payee",
+            "description": "<p>Amount to send to Payee</p>\n<p>The maximum payment amount is dependent on the currency</p>\n",
             "example": 1299,
             "format": "int64",
-            "maximum": 9223372036854776000,
             "minimum": 1,
             "type": "integer"
           },
@@ -14968,48 +15124,48 @@
         "example": {
           "bank": [
             {
-              "isoCountryCode": "isoCountryCode",
+              "isoCountryCode": "US",
               "rules": [
                 {
-                  "displayName": "displayName",
-                  "minLength": 0,
-                  "displayOrder": 1,
+                  "displayName": "Account Name",
+                  "minLength": 5,
+                  "displayOrder": 0,
                   "required": true,
-                  "maxLength": 6,
-                  "validation": "validation",
-                  "element": "element"
+                  "maxLength": 50,
+                  "validation": "^[0-9]{6,11}$",
+                  "element": "accountName"
                 },
                 {
-                  "displayName": "displayName",
-                  "minLength": 0,
-                  "displayOrder": 1,
+                  "displayName": "Account Name",
+                  "minLength": 5,
+                  "displayOrder": 0,
                   "required": true,
-                  "maxLength": 6,
-                  "validation": "validation",
-                  "element": "element"
+                  "maxLength": 50,
+                  "validation": "^[0-9]{6,11}$",
+                  "element": "accountName"
                 }
               ]
             },
             {
-              "isoCountryCode": "isoCountryCode",
+              "isoCountryCode": "US",
               "rules": [
                 {
-                  "displayName": "displayName",
-                  "minLength": 0,
-                  "displayOrder": 1,
+                  "displayName": "Account Name",
+                  "minLength": 5,
+                  "displayOrder": 0,
                   "required": true,
-                  "maxLength": 6,
-                  "validation": "validation",
-                  "element": "element"
+                  "maxLength": 50,
+                  "validation": "^[0-9]{6,11}$",
+                  "element": "accountName"
                 },
                 {
-                  "displayName": "displayName",
-                  "minLength": 0,
-                  "displayOrder": 1,
+                  "displayName": "Account Name",
+                  "minLength": 5,
+                  "displayOrder": 0,
                   "required": true,
-                  "maxLength": 6,
-                  "validation": "validation",
-                  "element": "element"
+                  "maxLength": 50,
+                  "validation": "^[0-9]{6,11}$",
+                  "element": "accountName"
                 }
               ]
             }
@@ -15057,8 +15213,14 @@
           "countries": [
             {
               "regions": [
-                "regions",
-                "regions"
+                {
+                  "name": "California",
+                  "abbreviation": "CA"
+                },
+                {
+                  "name": "California",
+                  "abbreviation": "CA"
+                }
               ],
               "isoCountryCode": "US",
               "currencies": [
@@ -15067,8 +15229,14 @@
             },
             {
               "regions": [
-                "regions",
-                "regions"
+                {
+                  "name": "California",
+                  "abbreviation": "CA"
+                },
+                {
+                  "name": "California",
+                  "abbreviation": "CA"
+                }
               ],
               "isoCountryCode": "US",
               "currencies": [
@@ -15091,12 +15259,12 @@
         "example": {
           "currencies": [
             {
-              "currency": "currency",
-              "maxPaymentAmount": 0
+              "currency": "GBP",
+              "maxPaymentAmount": 100000
             },
             {
-              "currency": "currency",
-              "maxPaymentAmount": 0
+              "currency": "GBP",
+              "maxPaymentAmount": 100000
             }
           ]
         },
@@ -17311,39 +17479,46 @@
       },
       "PaymentChannelCountry": {
         "example": {
-          "isoCountryCode": "isoCountryCode",
+          "isoCountryCode": "US",
           "rules": [
             {
-              "displayName": "displayName",
-              "minLength": 0,
-              "displayOrder": 1,
+              "displayName": "Account Name",
+              "minLength": 5,
+              "displayOrder": 0,
               "required": true,
-              "maxLength": 6,
-              "validation": "validation",
-              "element": "element"
+              "maxLength": 50,
+              "validation": "^[0-9]{6,11}$",
+              "element": "accountName"
             },
             {
-              "displayName": "displayName",
-              "minLength": 0,
-              "displayOrder": 1,
+              "displayName": "Account Name",
+              "minLength": 5,
+              "displayOrder": 0,
               "required": true,
-              "maxLength": 6,
-              "validation": "validation",
-              "element": "element"
+              "maxLength": 50,
+              "validation": "^[0-9]{6,11}$",
+              "element": "accountName"
             }
           ]
         },
         "properties": {
           "isoCountryCode": {
+            "description": "The ISO code for the country",
+            "example": "US",
             "type": "string"
           },
           "rules": {
+            "description": "The rules for the given country",
             "items": {
               "$ref": "#/components/schemas/PaymentChannelRule"
             },
             "type": "array"
           }
         },
+        "required": [
+          "isoCountryCode",
+          "rules"
+        ],
         "type": "object"
       },
       "SupportedCountry": {
@@ -17387,8 +17562,14 @@
       "SupportedCountry_2": {
         "example": {
           "regions": [
-            "regions",
-            "regions"
+            {
+              "name": "California",
+              "abbreviation": "CA"
+            },
+            {
+              "name": "California",
+              "abbreviation": "CA"
+            }
           ],
           "isoCountryCode": "US",
           "currencies": [
@@ -17424,22 +17605,28 @@
             "type": "array"
           },
           "regions": {
-            "$ref": "#/components/schemas/Region"
+            "items": {
+              "$ref": "#/components/schemas/Region"
+            },
+            "type": "array"
           }
         },
         "type": "object"
       },
       "SupportedCurrency": {
         "example": {
-          "currency": "currency",
-          "maxPaymentAmount": 0
+          "currency": "GBP",
+          "maxPaymentAmount": 100000
         },
         "properties": {
           "currency": {
             "description": "ISO Currency Code",
+            "example": "GBP",
             "type": "string"
           },
           "maxPaymentAmount": {
+            "description": "The max amount allowed in this currency",
+            "example": 100000,
             "type": "integer"
           }
         },
@@ -18863,41 +19050,63 @@
         "type": "string"
       },
       "PaymentChannelRule": {
+        "description": "Rules that will get applied when creating or updating a payment channel for the given country",
         "example": {
-          "displayName": "displayName",
-          "minLength": 0,
-          "displayOrder": 1,
+          "displayName": "Account Name",
+          "minLength": 5,
+          "displayOrder": 0,
           "required": true,
-          "maxLength": 6,
-          "validation": "validation",
-          "element": "element"
+          "maxLength": 50,
+          "validation": "^[0-9]{6,11}$",
+          "element": "accountName"
         },
         "properties": {
           "element": {
+            "description": "<p>the rule element</p>\n<p>will match a given element name for a payment channel configuration\n",
+            "example": "accountName",
             "type": "string"
           },
           "required": {
+            "description": "is this element required",
             "type": "boolean"
           },
           "displayName": {
+            "description": "User friendly name",
+            "example": "Account Name",
             "type": "string"
           },
           "minLength": {
+            "description": "mininum length of the element data",
+            "example": 5,
             "type": "integer"
           },
           "maxLength": {
+            "description": "maximum length of the element data",
+            "example": 50,
             "type": "integer"
           },
           "validation": {
+            "description": "a regex to validate the element data",
+            "example": "^[0-9]{6,11}$",
             "type": "string"
           },
           "displayOrder": {
             "type": "integer"
           }
         },
+        "required": [
+          "displayName",
+          "element",
+          "required",
+          "validation"
+        ],
         "type": "object"
       },
       "Region": {
+        "example": {
+          "name": "California",
+          "abbreviation": "CA"
+        },
         "properties": {
           "name": {
             "example": "California",
