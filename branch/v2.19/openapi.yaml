@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.19.21
+  version: 2.19.23
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -165,28 +165,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Logout
       tags:
         - Login
@@ -217,7 +205,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
       security: []
       summary: Reset password
@@ -254,28 +242,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: validate
       tags:
         - Login
@@ -355,7 +331,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '404':
           content:
@@ -443,7 +419,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '404':
           content:
@@ -514,7 +490,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '404':
           content:
@@ -569,7 +545,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '404':
           content:
@@ -630,7 +606,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '404':
           content:
@@ -695,7 +671,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '404':
           content:
@@ -784,7 +760,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '404':
           content:
@@ -871,34 +847,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: List Users
       tags:
         - Users
@@ -928,28 +892,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -1007,28 +959,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -1067,34 +1007,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -1138,34 +1066,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -1215,34 +1131,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -1277,34 +1181,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '409':
           content:
             application/json:
@@ -1367,34 +1259,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -1441,34 +1321,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -1513,34 +1381,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -1588,34 +1444,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -1659,34 +1503,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -1741,34 +1573,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Resend a token
       tags:
         - Tokens
@@ -1800,34 +1620,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -1865,34 +1673,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Register SMS Number
       tags:
         - Users
@@ -1919,28 +1715,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Get Self
       tags:
         - Users
@@ -1970,34 +1754,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Unregister MFA for Self
       tags:
         - Users
@@ -2026,34 +1798,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Update Password for self
       tags:
         - Users
@@ -2087,34 +1847,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Validate the proposed password
       tags:
         - Users
@@ -2142,34 +1890,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Update User Details for self
       tags:
         - Users
@@ -2234,22 +1970,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -2326,28 +2050,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -2429,28 +2141,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -2557,28 +2257,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -2642,28 +2330,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -2717,28 +2393,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -2805,28 +2469,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -2956,28 +2608,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -3035,28 +2675,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -3499,34 +3127,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -4437,7 +4053,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '404':
           description: Not Found
@@ -4477,7 +4093,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '404':
           content:
@@ -4521,13 +4137,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '404':
           content:
@@ -4571,34 +4187,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -4641,34 +4245,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -4756,34 +4348,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -4823,34 +4403,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -4892,34 +4460,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -4992,28 +4548,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Get Funding Accounts
       tags:
         - Funding Manager
@@ -5038,34 +4582,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Create Funding Account
   '/v1/fundingAccounts/{fundingAccountId}':
     get:
@@ -5097,28 +4629,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -5172,34 +4692,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Get Funding Audit Delta
       tags:
         - Funding Manager
@@ -6340,34 +5848,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
       summary: Submit Payout
       tags:
         - Submit Payout
@@ -6396,34 +5892,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -6460,28 +5944,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -6514,34 +5986,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_400'
           description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '403':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_403'
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-          x-code-samples: |
-            {"errors":
-              [
-                {
-                "errorMessage":"Invalid Access Token",
-                "location":"bearer",
-                "locationType":"header",
-                "reasonCode":"invalidAccessToken"
-                }
-              ],
-            "correlationId":"a23c03ce-ca24-4eb6-94bc-1f152512a72b"
-            }
         '404':
           content:
             application/json:
@@ -6708,7 +6168,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
       summary: List Payment Channel Country Rules
       tags:
@@ -6815,23 +6275,17 @@ components:
         - access_token
         - token_type
       type: object
-    ErrorResponse:
-      description: Error response returned by all error conditions in Velo Services
-      properties:
-        errors:
-          description: one or more errors
-          items:
-            $ref: '#/components/schemas/Error'
-          minItems: 1
-          nullable: true
-          type: array
-        correlationId:
-          description: a unique identifier to track a request or related sequence of requests
-          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
-          format: uuid
-          nullable: true
-          type: string
-      type: object
+    LocationType:
+      description: |
+        the location type in the request that was the cause of the error
+      enum:
+        - requestBody
+        - queryParam
+        - requestParam
+        - header
+        - pathParam
+      example: requestBody
+      type: string
     ResetPasswordRequest:
       example:
         email: foo@example.com
@@ -6929,6 +6383,23 @@ components:
           type: boolean
         mfaStatus:
           $ref: '#/components/schemas/MFAStatus'
+      type: object
+    ErrorResponse:
+      description: Error response returned by all error conditions in Velo Services
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/Error'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
       type: object
     GenerateOTPRequest:
       example:
@@ -11965,34 +11436,6 @@ components:
             $ref: '#/components/schemas/SupportedCurrency'
           type: array
       type: object
-    Error:
-      properties:
-        errorMessage:
-          description: |
-            verbose message indicating the nature of the error
-            Will be localised
-          example: smsNumber must be in the E.164 format e.g. +15551231234
-          type: string
-        location:
-          description: the property or object that caused the error
-          example: smsNumber
-          type: string
-        locationType:
-          description: |
-            the location type in the request that was the cause of the error
-          enum:
-            - requestBody
-            - queryParam
-            - requestParam
-            - header
-            - pathParam
-          example: requestBody
-          type: string
-        reasonCode:
-          description: a camel-cased string that can be used by clients to localise client error messages
-          example: validationError
-          type: string
-      type: object
     UserInfo:
       example:
         mfa_details:
@@ -12035,6 +11478,34 @@ components:
         - UNREGISTERED
       example: REGISTERED
       type: string
+    Error:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: smsNumber must be in the E.164 format e.g. +15551231234
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: smsNumber
+          type: string
+        locationType:
+          description: |
+            the location type in the request that was the cause of the error
+          enum:
+            - requestBody
+            - queryParam
+            - requestParam
+            - header
+            - pathParam
+          example: requestBody
+          type: string
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise client error messages
+          example: validationError
+          type: string
+      type: object
     OTPType:
       description: The MFA type to send an OTP to
       enum:
@@ -15100,6 +14571,105 @@ components:
         - PAYOR_FUNDING_ENTRY_DETAIL_RECEIVED
         - FUNDING_DEALLOCATED
       type: string
+    inline_response_401_errors:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: Authentication is required and has not been provided or access has expired
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: accessToken
+          type: string
+        locationType:
+          $ref: '#/components/schemas/LocationType'
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise client error messages
+          example: tokenExpired
+          type: string
+    inline_response_401:
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/inline_response_401_errors'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
+    inline_response_403_errors:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: The invoker does not have the required permissions to access the resource
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: accessToken
+          type: string
+        locationType:
+          $ref: '#/components/schemas/LocationType'
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise client error messages
+          example: permissions
+          type: string
+    inline_response_403:
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/inline_response_403_errors'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
+    inline_response_400_errors:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: smsNumber must be in the E.164 format e.g. +15551231234
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: smsNumber
+          type: string
+        locationType:
+          $ref: '#/components/schemas/LocationType'
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise client error messages
+          example: validationError
+          type: string
+    inline_response_400:
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/inline_response_400_errors'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
     PagedUserResponse_page:
       example:
         numberOfElements: 12
