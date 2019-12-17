@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.19.23",
+    "version": "2.19.24",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -1348,100 +1348,6 @@
         ]
       }
     },
-    "/v2/users/{userId}/emailUpdate": {
-      "post": {
-        "description": "<p>Update the user's email address </p>\n<p>If the email address is already in use a 409 will be returned</p>\n",
-        "operationId": "emailUpdate",
-        "parameters": [
-          {
-            "description": "The UUID of the User.",
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmailUpdateRequest"
-              }
-            }
-          },
-          "description": "a new email address",
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "request completed okay"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "The request contained data that would reult in a duplicate value\n"
-          }
-        },
-        "summary": "Update Email Address",
-        "tags": [
-          "Users"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/emailUpdate' -i -X POST \\\n      -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"email\":\"foo@example.com\", \\\n          \"verificationCode\":\"123456\", \\\n          }'\n"
-          }
-        ]
-      }
-    },
     "/v2/users/{userId}/enable": {
       "post": {
         "description": "<p>If a user has been disabled this endpoints will enable them </p>\n<p>The invoker must have the appropriate permission </p>\n<p>A user cannot enable themself </p>\n<p>If the user is a payor user and the payor is disabled this operation is not allowed</p>\n<p>If enabling a payor user would breach the limit for master admin payor users the request will be rejected </p>\n",
@@ -1597,90 +1503,6 @@
         ]
       }
     },
-    "/v2/users/{userId}/mfaUpdate": {
-      "post": {
-        "description": "<p>Update the user's MFA Device type  </p>\n<p>This will unregister their current device and generate a token for registering a new device</p>\n",
-        "operationId": "mfaUpdate",
-        "parameters": [
-          {
-            "description": "The UUID of the User.",
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MFATypeUpdateRequest"
-              }
-            }
-          },
-          "description": "The MFA Type to change to",
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "request completed okay"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          }
-        },
-        "summary": "Update MFA Type",
-        "tags": [
-          "Users"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/mfaUpdate' -i -X POST \\\n      -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"mfaType\":\"TOTP\", \\\n          \"verificationCode\":\"123456\", \\\n          }'\n"
-          }
-        ]
-      }
-    },
     "/v2/users/{userId}/mfa/unregister": {
       "post": {
         "description": "<p>Unregister the MFA device for the user </p>\n<p>If the user does not require further verification then a register new MFA device token will be sent to them via their email address</p>\n",
@@ -1761,268 +1583,6 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/mfa/unregister' -i -X POST \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"mfaType\":\"TOTP\", \\\n        \"verificationCode\":\"123456\", \\\n        }'\n"
-          }
-        ]
-      }
-    },
-    "/v2/users/{userId}/profileUpdate": {
-      "post": {
-        "description": "Update the profile details for the given user\n",
-        "operationId": "userProfileUpdate",
-        "parameters": [
-          {
-            "description": "The UUID of the User.",
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProfileUpdateRequest"
-              }
-            }
-          },
-          "description": "The details of the user to update",
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "request completed okay"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          }
-        },
-        "summary": "Update User Details",
-        "tags": [
-          "Users"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/profileUpdate' -i -X POST \\\n      -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"primaryContactNumber\":\"+4411223233445\", \\\n          \"secondaryContactNumber\":null, \\\n          \"firstName\":\"Bob\", \\\n          \"lastName\":\"Smith\"}'\n"
-          }
-        ]
-      }
-    },
-    "/v2/users/{userId}/roleUpdate": {
-      "post": {
-        "description": "<p>Update the user's Role</p>\n<p>optionally change the MFA type if the role requires it</p>\n",
-        "operationId": "roleUpdate",
-        "parameters": [
-          {
-            "description": "The UUID of the User.",
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RoleUpdateRequest"
-              }
-            }
-          },
-          "description": "The Role to change to",
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "request completed okay"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          }
-        },
-        "summary": "Update User Role",
-        "tags": [
-          "Users"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/roleUpdate' -i -X POST \\\n      -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"role\":\"payor.admin\", \\\n          }'\n"
-          }
-        ]
-      }
-    },
-    "/v2/users/{userId}/smsUpdate": {
-      "post": {
-        "description": "Update the user's SMS number",
-        "operationId": "smsNumberUpdate",
-        "parameters": [
-          {
-            "description": "The UUID of the User.",
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SmsNumberUpdateRequest"
-              }
-            }
-          },
-          "description": "a new SMS Number",
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "request completed okay"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "The request contained data that would reult in a duplicate value\n"
-          }
-        },
-        "summary": "Update SMS Number",
-        "tags": [
-          "Users"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/smsNumberUpdate' -i -X POST \\\n      -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"smsNumber\":\"+4411223344556\", \\\n          \"verificationCode\":\"123456\", \\\n          }'\n"
           }
         ]
       }
@@ -2171,6 +1731,100 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/unlock' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8'\n"
+          }
+        ]
+      }
+    },
+    "/v2/users/{userId}/userDetailsUpdate": {
+      "post": {
+        "description": "<p>Update the profile details for the given user</p>\n<p>When updating Payor users with the role of payor.master_admin a verificationCode is required</p>\n",
+        "operationId": "userDetailsUpdate",
+        "parameters": [
+          {
+            "description": "The UUID of the User.",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDetailsUpdateRequest"
+              }
+            }
+          },
+          "description": "The details of the user to update",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "request completed okay"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "The request contained data that would reult in a duplicate value\n"
+          }
+        },
+        "summary": "Update User Details",
+        "tags": [
+          "Users"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/userDetailsUpdate' -i -X POST \\\n      -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"firstName: \"Foo\", \\\n           \"lastName\": \"Bar\", \\\n           \"primaryContactNumber\": \"+1234567890\", \\\n           \"secondaryContactNumber\": \"+!234567890\", \\\n           \"email\": \"foo@example.com\", \\\n           \"smsNumber\": \"+1234567890\", \\\n           \"mfaType\": \"TOTP\", \\\n           \"verificationCode\": \"123456\" \\\n           }'\n"
           }
         ]
       }
@@ -2474,68 +2128,6 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/self/password/validate' -i -X POST \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"password\":\"abcd_12345\"}'\n"
-          }
-        ]
-      }
-    },
-    "/v2/users/self/profileUpdate": {
-      "post": {
-        "description": "upate the profile details for self",
-        "operationId": "selfDetailsUpdate",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ProfileUpdateRequest"
-              }
-            }
-          },
-          "description": "The details to update",
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "request completed okay"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          }
-        },
-        "summary": "Update User Details for self",
-        "tags": [
-          "Users"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/self/profileUpdate' -i -X POST \\\n      -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"primaryContactNumber\":\"+4411223233445\", \\\n          \"secondaryContactNumber\":null, \\\n          \"firstName\":\"Bob\", \\\n          \"lastName\":\"Smith\"}'\n"
           }
         ]
       }
@@ -9270,31 +8862,6 @@
         },
         "type": "object"
       },
-      "EmailUpdateRequest": {
-        "example": {
-          "email": "foo@example.com",
-          "verificationCode": "123456"
-        },
-        "properties": {
-          "email": {
-            "description": "the email address of the invited user",
-            "example": "foo@example.com",
-            "format": "email",
-            "type": "string"
-          },
-          "verificationCode": {
-            "description": "Optional property that MUST be suppied when manually verifying a user\nThe user's smsNumber is registered via a separate endpoint and an OTP sent to them\n",
-            "example": "123456",
-            "maxLength": 6,
-            "minLength": 6,
-            "type": "string"
-          }
-        },
-        "required": [
-          "email"
-        ],
-        "type": "object"
-      },
       "InviteUserRequest": {
         "example": {
           "firstName": "John",
@@ -9318,7 +8885,7 @@
             "type": "string"
           },
           "mfaType": {
-            "description": "The MFA type that the user will use\nThe type may be conditional on the role(s) the user has\n",
+            "description": "<p>The MFA type that the user will use</p>\n<p>The type may be conditional on the role(s) the user has</p>\n",
             "enum": [
               "SMS",
               "YUBIKEY",
@@ -9393,35 +8960,6 @@
         ],
         "type": "object"
       },
-      "MFATypeUpdateRequest": {
-        "example": {
-          "mfaType": "TOTP",
-          "verificationCode": "123456"
-        },
-        "properties": {
-          "mfaType": {
-            "description": "The type of the MFA device",
-            "enum": [
-              "SMS",
-              "YUBIKEY",
-              "TOTP"
-            ],
-            "example": "TOTP",
-            "type": "string"
-          },
-          "verificationCode": {
-            "description": "Optional property that MUST be suppied when manually verifying a user\nThe user's smsNumber is registered via a separate endpoint and an OTP sent to them\n",
-            "example": "123456",
-            "maxLength": 6,
-            "minLength": 6,
-            "type": "string"
-          }
-        },
-        "required": [
-          "mfaType"
-        ],
-        "type": "object"
-      },
       "UnregisterMFARequest": {
         "example": {
           "mfaType": "TOTP",
@@ -9439,122 +8977,16 @@
             "type": "string"
           },
           "verificationCode": {
-            "description": "Optional property that MUST be suppied when manually verifying a user\nThe user's smsNumber is registered via a separate endpoint and an OTP sent to them\n",
+            "description": "<p>Optional property that MUST be suppied when manually verifying a user</p>\n<p>The user's smsNumber is registered via a separate endpoint and an OTP sent to them</p>\n",
             "example": "123456",
             "maxLength": 6,
             "minLength": 6,
+            "nullable": true,
             "type": "string"
           }
         },
         "required": [
           "mfaType"
-        ],
-        "type": "object"
-      },
-      "ProfileUpdateRequest": {
-        "description": "All properties are optional\nOnly provided properties will be updated\nUse null to null out a property that is allowed to be nullable\n",
-        "example": {
-          "firstName": "John",
-          "lastName": "Doe",
-          "primaryContactNumber": "11235555555",
-          "secondaryContactNumber": "11235555550"
-        },
-        "properties": {
-          "primaryContactNumber": {
-            "description": "The main contact number for the user\n",
-            "example": "11235555555",
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
-            "type": "string"
-          },
-          "secondaryContactNumber": {
-            "description": "The secondary contact number for the user\n",
-            "example": "11235555550",
-            "nullable": true,
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
-            "type": "string"
-          },
-          "firstName": {
-            "example": "John",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          },
-          "lastName": {
-            "example": "Doe",
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "RoleUpdateRequest": {
-        "example": {
-          "mfaType": "TOTP",
-          "roles": [
-            "payor.admin"
-          ],
-          "verificationCode": "123456"
-        },
-        "properties": {
-          "roles": {
-            "description": "The role(s) for the user\nThe role must exist\nThe role can be a custom role or a system role but the invoker must have the permissions to assign the role\nSystem roles are: backoffice.admin, payor.master_admin, payor.admin, payor.support\n",
-            "example": [
-              "payor.admin"
-            ],
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "mfaType": {
-            "description": "The type of the MFA device",
-            "enum": [
-              "SMS",
-              "YUBIKEY",
-              "TOTP"
-            ],
-            "example": "TOTP",
-            "nullable": true,
-            "type": "string"
-          },
-          "verificationCode": {
-            "description": "Optional property that MUST be suppied when manually verifying a user\nThe user's smsNumber is registered via a separate endpoint and an OTP sent to them\n",
-            "example": "123456",
-            "maxLength": 6,
-            "minLength": 6,
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "roles"
-        ],
-        "type": "object"
-      },
-      "SmsNumberUpdateRequest": {
-        "example": {
-          "smsNumber": "11235555555",
-          "verificationCode": "123456"
-        },
-        "properties": {
-          "smsNumber": {
-            "description": "The phone number of a device that the user can receive sms messages on\n",
-            "example": "11235555555",
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
-            "type": "string"
-          },
-          "verificationCode": {
-            "description": "Optional property that MUST be suppied when manually verifying a user\nThe user's smsNumber is registered via a separate endpoint and an OTP sent to them\n",
-            "example": "123456",
-            "maxLength": 6,
-            "minLength": 6,
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "required": [
-          "smsNumber"
         ],
         "type": "object"
       },
@@ -9574,16 +9006,86 @@
             "type": "string"
           },
           "verificationCode": {
-            "description": "Optional property that MUST be suppied when manually verifying a user <P>\nThe user's smsNumber is registered via a separate endpoint and an OTP sent to them\n",
+            "description": "<p>Optional property that MUST be suppied when manually verifying a user</p>\n<p>The user's smsNumber is registered via a separate endpoint and an OTP sent to them</p>\n",
             "example": "123456",
             "maxLength": 6,
             "minLength": 6,
+            "nullable": true,
             "type": "string"
           }
         },
         "required": [
           "tokenType"
         ],
+        "type": "object"
+      },
+      "UserDetailsUpdateRequest": {
+        "description": "<p>All properties are optional</p>\n<p>Only provided properties will be updated</p>\n<p>Use null to null out a property that is allowed to be nullable</p>\n",
+        "example": {
+          "firstName": "John",
+          "lastName": "Doe",
+          "primaryContactNumber": "11235555555",
+          "mfaType": "TOTP",
+          "smsNumber": "11235555555",
+          "secondaryContactNumber": "11235555550",
+          "email": "foo@example.com",
+          "verificationCode": "123456"
+        },
+        "properties": {
+          "primaryContactNumber": {
+            "description": "The main contact number for the user\n",
+            "example": "11235555555",
+            "nullable": true,
+            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "type": "string"
+          },
+          "secondaryContactNumber": {
+            "description": "The secondary contact number for the user\n",
+            "example": "11235555550",
+            "nullable": true,
+            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "type": "string"
+          },
+          "firstName": {
+            "example": "John",
+            "maxLength": 128,
+            "minLength": 1,
+            "nullable": true,
+            "type": "string"
+          },
+          "lastName": {
+            "example": "Doe",
+            "maxLength": 128,
+            "minLength": 1,
+            "nullable": true,
+            "type": "string"
+          },
+          "email": {
+            "description": "the email address of the user",
+            "example": "foo@example.com",
+            "format": "email",
+            "nullable": true,
+            "type": "string"
+          },
+          "smsNumber": {
+            "description": "The phone number of a device that the user can receive sms messages on\n",
+            "example": "11235555555",
+            "nullable": true,
+            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "type": "string"
+          },
+          "mfaType": {
+            "$ref": "#/components/schemas/MFAType"
+          },
+          "verificationCode": {
+            "description": "<p>Optional property that MUST be suppied when manually verifying a user</p>\n<p>The user's smsNumber is registered via a separate endpoint and an OTP sent to them</p>\n",
+            "example": "123456",
+            "maxLength": 6,
+            "minLength": 6,
+            "nullable": true,
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "RegisterSmsRequest": {
@@ -15278,6 +14780,7 @@
           "TOTP"
         ],
         "example": "TOTP",
+        "nullable": true,
         "type": "string"
       },
       "TokenType": {
@@ -15352,6 +14855,14 @@
           "name"
         ],
         "type": "object"
+      },
+      "VerificationCode": {
+        "description": "<p>Optional property that MUST be suppied when manually verifying a user</p>\n<p>The user's smsNumber is registered via a separate endpoint and an OTP sent to them</p>\n",
+        "example": "123456",
+        "maxLength": 6,
+        "minLength": 6,
+        "nullable": true,
+        "type": "string"
       },
       "PayorAddress": {
         "example": {
