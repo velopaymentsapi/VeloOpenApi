@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.19.27",
+    "version": "2.19.28",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -7258,7 +7258,7 @@
             }
           },
           {
-            "description": "List of sort fields (e.g. ?sort=submittedDateTime:asc,instructedDateTime:asc,status:asc)\nDefault is submittedDateTime:asc\nThe supported sort fields are: submittedDateTime, instructedDateTime, status.\n",
+            "description": "List of sort fields (e.g. ?sort=submittedDateTime:asc,instructedDateTime:asc,status:asc)\nDefault is submittedDateTime:asc\nThe supported sort fields are: submittedDateTime, instructedDateTime, status, totalPayments, payoutId\n",
             "in": "query",
             "name": "sort",
             "required": false,
@@ -7426,7 +7426,7 @@
             }
           },
           {
-            "description": "List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId\nThe supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,\nroutingNumber, accountNumber, remoteId, submittedDateTime and status\n",
+            "description": "List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId:asc,paymentId:asc\nThe supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,\nroutingNumber, accountNumber, remoteId, submittedDateTime, status and paymentId\n",
             "in": "query",
             "name": "sort",
             "required": false,
@@ -7659,7 +7659,7 @@
             }
           },
           {
-            "description": "List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId\nThe supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,\nroutingNumber, accountNumber, remoteId, submittedDateTime and status\n",
+            "description": "List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by submittedDateTime:desc,paymentId:asc\nThe supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,\nroutingNumber, accountNumber, remoteId, submittedDateTime, status and paymentId\n",
             "in": "query",
             "name": "sort",
             "required": false,

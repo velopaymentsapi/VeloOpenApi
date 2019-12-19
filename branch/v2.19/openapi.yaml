@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.19.27
+  version: 2.19.28
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -5129,7 +5129,7 @@ paths:
         - description: |
             List of sort fields (e.g. ?sort=submittedDateTime:asc,instructedDateTime:asc,status:asc)
             Default is submittedDateTime:asc
-            The supported sort fields are: submittedDateTime, instructedDateTime, status.
+            The supported sort fields are: submittedDateTime, instructedDateTime, status, totalPayments, payoutId
           in: query
           name: sort
           required: false
@@ -5250,9 +5250,9 @@ paths:
             format: int32
             type: integer
         - description: |
-            List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId
+            List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId:asc,paymentId:asc
             The supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,
-            routingNumber, accountNumber, remoteId, submittedDateTime and status
+            routingNumber, accountNumber, remoteId, submittedDateTime, status and paymentId
           in: query
           name: sort
           required: false
@@ -5418,9 +5418,9 @@ paths:
             format: int32
             type: integer
         - description: |
-            List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId
+            List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by submittedDateTime:desc,paymentId:asc
             The supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,
-            routingNumber, accountNumber, remoteId, submittedDateTime and status
+            routingNumber, accountNumber, remoteId, submittedDateTime, status and paymentId
           in: query
           name: sort
           required: false
