@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.19.26",
+    "version": "2.19.27",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -1499,6 +1499,90 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/invite' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8' \\\n    -d '{\"email\":\"foo@example.com\", \\\n        \"mfaType\":\"YUBIKEY\", \\\n        \"smsNumber\":\"+4411223344556\", \\\n        \"primaryContactNumber\":\"+4411223344556\", \\\n        \"secondaryContactNumber\":null, \\\n        \"roles\":[\"payor.admin\"], \\\n        \"firstName\":\"Foo\", \\\n        \"lastName\":\"Bar\", \\\n        \"entityId\":\"f84e437a-50a4-4e45-9223-e0601e370a79\", \\\n        \"verificationCode\":null \\\n        }'\n"
+          }
+        ]
+      }
+    },
+    "/v2/users/{userId}/roleUpdate": {
+      "post": {
+        "description": "<p>Update the user's Role</p>\n",
+        "operationId": "roleUpdate",
+        "parameters": [
+          {
+            "description": "The UUID of the User.",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleUpdateRequest"
+              }
+            }
+          },
+          "description": "The Role to change to",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "request completed okay"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "summary": "Update User Role",
+        "tags": [
+          "Users"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/ad19fc24-0cf6-4c15-a571-754b015b18e0/roleUpdate' -i -X POST \\\n      -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"role\":\"payor.admin\", \\\n          \"verificationCode\": \"123456\" \\\n          }'\n"
           }
         ]
       }
@@ -8957,6 +9041,38 @@
           "primaryContactNumber",
           "roles",
           "smsNumber"
+        ],
+        "type": "object"
+      },
+      "RoleUpdateRequest": {
+        "example": {
+          "roles": [
+            "payor.admin"
+          ],
+          "verificationCode": "123456"
+        },
+        "properties": {
+          "roles": {
+            "description": "<p>The role(s) for the user</p>\n<p>The role must exist</p>\n<p>The role can be a custom role or a system role but the invoker must have the permissions to assign the role</p>\n<p>System roles are: backoffice.admin, payor.master_admin, payor.admin, payor.support</p>\n",
+            "example": [
+              "payor.admin"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "verificationCode": {
+            "description": "<p>Optional property that MUST be suppied when manually verifying a user</p>\n<p>The user's smsNumber is registered via a separate endpoint and an OTP sent to them</p>\n",
+            "example": "123456",
+            "maxLength": 6,
+            "minLength": 6,
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "required": [
+          "roles"
         ],
         "type": "object"
       },
