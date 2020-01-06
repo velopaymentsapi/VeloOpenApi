@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.20.3
+  version: 2.20.4
   x-logo:
     url: 'https://velopayments.com/images/velo-logo.svg'
 servers:
@@ -2464,6 +2464,511 @@ paths:
       summary: Create a Payor Link
       tags:
         - Payors Private
+  '/v2/invites/{inviteId}':
+    get:
+      description: |
+        <p>Get an invite</p>
+      operationId: getInviteTokenById
+      parameters:
+        - description: Id of the invite
+          in: path
+          name: inviteId
+          required: true
+          schema:
+            example: 2ba4973a-41e6-4f4d-97fe-a04fe99e6da1
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteResponse'
+          description: Invite response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      security: []
+      summary: Get an invite
+      tags:
+        - Invites
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/invites/2ba4973a-41e6-4f4d-97fe-a04fe99e6da1' -i -X POST \
+                -H 'Content-Type: application/json'
+  '/v2/invites/{inviteId}/challenges':
+    get:
+      description: |
+        <p>Get challenge indices</p>
+        <p>Each indice marks a position of a character in a challenge value for the payee </p>
+      operationId: getChallengeIndices
+      parameters:
+        - description: Id of the invite
+          in: path
+          name: inviteId
+          required: true
+          schema:
+            example: 2ba4973a-41e6-4f4d-97fe-a04fe99e6da1
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateChallengeIndicesResponse'
+          description: The challenge indices response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Get Challenge indices
+      tags:
+        - Invites
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/invites/ad19fc24-0cf6-4c15-a571-754b015b18e0/challenges' -i -X GET \
+                  -H 'Content-Type: application/json'
+    post:
+      description: |
+        <p>provide the answer to the challenge request</p>
+        <p>The values must match the character position of the indice in the challenge request</p>
+        <p>e.g. given a challenge value of my_challenge_value</p>
+        <p>And a map of indices from the get challenge request of {0: 1, 1: 4, 2: 6}</p>
+        <p>A successful request would be ["y", "h", "l"]</p>
+      operationId: postChallengeResponse
+      parameters:
+        - description: Id of the invite
+          in: path
+          name: inviteId
+          required: true
+          schema:
+            example: 2ba4973a-41e6-4f4d-97fe-a04fe99e6da1
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChallengeIndicesRequest'
+        description: The challenge indices request
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeIndicesResponse'
+          description: The challenge response
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Post challenge response
+      tags:
+        - Invites
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/invites/ad19fc24-0cf6-4c15-a571-754b015b18e0/challenges' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"challengeValues":["a","h","5"]}'
+  '/v2/invites/{inviteId}/mfa':
+    post:
+      description: |
+        <p>Update the MFA details for an invited Payee</p>
+      operationId: updateInvitedPayeeMFA
+      parameters:
+        - description: Id of the invite
+          in: path
+          name: inviteId
+          required: true
+          schema:
+            example: 2ba4973a-41e6-4f4d-97fe-a04fe99e6da1
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMFARequest'
+        description: The MFA Details
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Update Invited Payee MFA details
+      tags:
+        - Invites
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/invites/ad19fc24-0cf6-4c15-a571-754b015b18e0/mfa' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"mfaType":"SMS","smsNumber":"+12345550123"}'
+  '/v2/invites/{inviteId}/mfa/validate':
+    post:
+      description: |
+        <p>Validate the MFA device for an invited Payee</p>
+      operationId: validateInvitedPayeeMFA
+      parameters:
+        - description: Id of the invite
+          in: path
+          name: inviteId
+          required: true
+          schema:
+            example: 2ba4973a-41e6-4f4d-97fe-a04fe99e6da1
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidateMFARequest_2'
+        description: The One Time Password that will be vaklidated against the registered MFA device
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenResponse_2'
+          description: The MFA device is validated and an access token returned
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Validate the MFA device
+      tags:
+        - Invites
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/invites/ad19fc24-0cf6-4c15-a571-754b015b18e0/mfa/validate' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"otp":"123456"}'
+  '/v2/invites/{inviteId}/passwords':
+    post:
+      description: |
+        update the payee password
+      operationId: updateInvitedPayeePassword
+      parameters:
+        - description: Id of the invite
+          in: path
+          name: inviteId
+          required: true
+          schema:
+            example: 2ba4973a-41e6-4f4d-97fe-a04fe99e6da1
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordRequest_2'
+        description: The password
+        required: true
+      responses:
+        '204':
+          description: the password was valid
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      security: []
+      summary: Update the payee password
+      tags:
+        - Invites
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/invites/ad19fc24-0cf6-4c15-a571-754b015b18e0/passwords' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"password":"abcd_12345"}'
+  '/v2/invites/{inviteId}/profile':
+    get:
+      description: |
+        <p>Get invited payee profile</p>
+      operationId: getInvitedPayeeProfile
+      parameters:
+        - description: Id of the invite
+          in: path
+          name: inviteId
+          required: true
+          schema:
+            example: 2ba4973a-41e6-4f4d-97fe-a04fe99e6da1
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+          description: Invite payee profile response
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      security: []
+      summary: Get the payee profile data
+      tags:
+        - Invites
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/invites/2ba4973a-41e6-4f4d-97fe-a04fe99e6da1/profile' -i -X GET \
+                -H 'Content-Type: application/json'
+  '/v2/invites/{inviteId}/profileUpdate':
+    post:
+      description: |
+        <p>Update the invited payee profile</p>
+      operationId: updatePayeeProfileForInvite
+      parameters:
+        - description: Id of the invite
+          in: path
+          name: inviteId
+          required: true
+          schema:
+            example: 2ba4973a-41e6-4f4d-97fe-a04fe99e6da1
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Profile'
+        description: The conditions to accept in the request
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Update invited payee profile
+      tags:
+        - Invites
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/invites/ad19fc24-0cf6-4c15-a571-754b015b18e0/termsUpdate' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"address": \
+                      {"line1":"100 Brook Lane","city":"Swindon","countyOrProvince":"Wiltshire","zipOrPostcode":"SN15 2SD","country":"GB" \
+                      }, \
+                      "type":"Individual", \
+                      "individual":{ \
+                      "name":{ \
+                      "title":"Mr","firstName":"Bob","otherNames":"Charles","lastName":"Builder" \
+                      }, \
+                      "nationalIdentification":"987654321", \
+                      "dateOfBirth":"1970-10-20" \
+                      }, \
+                      "language":"EN" \
+                      }'
+  '/v2/invites/{inviteId}/passwords/validate':
+    post:
+      description: |
+        validate the password and return a score
+      operationId: validateInvitedPayeePassword
+      parameters:
+        - description: Id of the invite
+          in: path
+          name: inviteId
+          required: true
+          schema:
+            example: 2ba4973a-41e6-4f4d-97fe-a04fe99e6da1
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordRequest_2'
+        description: The password
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidatePasswordResponse_2'
+          description: the password was checked and a score returned
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      security: []
+      summary: Validate the proposed password
+      tags:
+        - Invites
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/invites/ad19fc24-0cf6-4c15-a571-754b015b18e0/passwords/validate' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"password":"abcd_12345"}'
+  '/v2/invites/{inviteId}/termsUpdate':
+    post:
+      description: |
+        <p>Update the terms and coditions</p>
+        <p>If the payee does not accept the terms then the invite cannot be completed</p>
+      operationId: termsUpdateForInvite
+      parameters:
+        - description: Id of the invite
+          in: path
+          name: inviteId
+          required: true
+          schema:
+            example: 2ba4973a-41e6-4f4d-97fe-a04fe99e6da1
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TermsUpdateRequest'
+        description: The conditions to accept in the request
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Update Terms and Conditions
+      tags:
+        - Invites
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/invites/ad19fc24-0cf6-4c15-a571-754b015b18e0/termssUpdate' -i -X POST \
+                  -H 'Content-Type: application/json' \
+                  -d '{"marketingOptIn: true, \
+                       "acceptTermsAndConditions": true \
+                       }'
   '/v1/payees/{payeeId}':
     delete:
       deprecated: true
@@ -8244,6 +8749,288 @@ components:
         - linkType
         - toPayorId
       type: object
+    InviteResponse:
+      example:
+        country: United Kingdom
+        tasks:
+          - name: TERMS
+            complete: true
+          - name: TERMS
+            complete: true
+          - name: TERMS
+            complete: true
+          - name: TERMS
+            complete: true
+          - name: TERMS
+            complete: true
+        payorName: 'Foo Widgets, Inc'
+      properties:
+        tasks:
+          description: |
+            The tasks that have to be completed for the invite
+          items:
+            $ref: '#/components/schemas/Task'
+          maxItems: 5
+          minItems: 5
+          type: array
+        country:
+          description: The country that the payee resides in
+          example: United Kingdom
+          type: string
+        language:
+          $ref: '#/components/schemas/Language'
+        payorName:
+          description: The name of the payor that invited the payee
+          example: 'Foo Widgets, Inc'
+          type: string
+      type: object
+    GenerateChallengeIndicesResponse:
+      example:
+        indices:
+          key: 0
+        challengeDescription: Your social security number
+        challengeValueLength: 10
+      properties:
+        indices:
+          additionalProperties:
+            type: integer
+          description: |
+            <p>A map of indices representing the position of a character from a known value</p>
+            <p>The indices are zero-based</p>
+            <p>i.e. {0: 1, 1: 4, 2: 6} represents 'b, e, g' in the String 'abcdefghi'.</p>
+          properties:
+            '0':
+              type: integer
+            '1':
+              type: integer
+            '2':
+              type: integer
+          required:
+            - '0'
+            - '1'
+            - '2'
+          type: object
+        challengeDescription:
+          description: A useful hint to the payee on how the challenge value is derived
+          example: Your social security number
+          type: string
+        challengeValueLength:
+          description: the character length of the challenge value
+          example: 10
+          type: integer
+      type: object
+    ChallengeIndicesRequest:
+      example:
+        challengeValues:
+          - challengeValues
+          - challengeValues
+          - challengeValues
+      properties:
+        challengeValues:
+          description: |
+            The values that match the character position from the challenge request
+          items:
+            maxLength: 1
+            minLength: 1
+            type: string
+          maxItems: 3
+          minItems: 3
+          type: array
+      type: object
+    ChallengeIndicesResponse:
+      example:
+        challengeResult: success
+      properties:
+        challengeResult:
+          description: success if the challenge resposne matches the indices
+          enum:
+            - success
+            - failure
+          example: success
+          type: string
+      type: object
+    UpdateMFARequest:
+      example:
+        mfaType: SMS
+        smsNumber: '11235555555'
+      properties:
+        mfaType:
+          description: The Multi Factor Authentication type
+          enum:
+            - SMS
+          type: string
+        smsNumber:
+          description: |
+            The phone number of a device that the user can receive sms messages on
+          example: '11235555555'
+          pattern: '^\+?[1-9]\d{1,14}$'
+          type: string
+      required:
+        - mfaType
+        - smsNumber
+      type: object
+    ValidateMFARequest_2:
+      properties:
+        otp:
+          description: an OTP either sent via sms or generated by a registered MFA device
+          example: '123456'
+          maxLength: 64
+          minLength: 6
+          type: string
+      required:
+        - otp
+      type: object
+    AccessTokenResponse_2:
+      example:
+        access_token: 9b58410b-e1b7-4f90-bebb-7e09c5427020
+        refresh_token: c3d0f771-0997-4814-84e3-09690208545a
+        user_info:
+          mfa_details:
+            mfa_type: SMS
+            verified: true
+          user_id: 39976ee5-dc4c-4b21-a966-a04fa71ef9e1
+          userType: PAYOR
+        scope: 'https://api.velopayments.com/scopes/auth/users'
+        token_type: bearer
+        expires_in: 1800
+        entityIds:
+          - ed89eaa0-4450-4916-a4ff-62a328d60bd6
+      properties:
+        access_token:
+          description: |
+            Bearer token used in headers to access secure endpoints
+          example: 9b58410b-e1b7-4f90-bebb-7e09c5427020
+          type: string
+        token_type:
+          default: bearer
+          description: the type of the token
+          example: bearer
+          type: string
+        refresh_token:
+          description: can be used to obtain a new access token
+          example: c3d0f771-0997-4814-84e3-09690208545a
+          type: string
+        expires_in:
+          description: The lifetime in seconds of the access token
+          example: 1800
+          type: integer
+        scope:
+          description: the scope of the access token
+          example: 'https://api.velopayments.com/scopes/auth/users'
+          type: string
+        user_info:
+          $ref: '#/components/schemas/UserInfo_2'
+        entityIds:
+          description: |
+            the payeeId
+          example:
+            - ed89eaa0-4450-4916-a4ff-62a328d60bd6
+          items:
+            type: string
+          type: array
+      type: object
+    PasswordRequest_2:
+      properties:
+        password:
+          description: a password that passes validation
+          example: My_strong_password
+          maxLength: 128
+          minLength: 10
+          type: string
+      required:
+        - password
+      type: object
+    Profile:
+      example:
+        address:
+          country: US
+          countyOrProvince: FL
+          line4: line4
+          city: Key West
+          line3: line3
+          line2: line2
+          line1: 500 Duval St
+          zipOrPostcode: '33945'
+        individual:
+          name:
+            firstName: firstName
+            lastName: lastName
+            otherNames: otherNames
+            title: title
+          nationalIdentification: nationalIdentification
+          dateOfBirth: 2000-01-23T00:00:00.000Z
+        company:
+          taxId: AB123456789
+          name: ABC Group Plc
+          operatingName: ABC Co
+        type: Individual
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+        type:
+          enum:
+            - Individual
+            - Company
+          type: string
+        individual:
+          $ref: '#/components/schemas/Individual'
+        company:
+          $ref: '#/components/schemas/Company'
+        language:
+          $ref: '#/components/schemas/Language'
+      required:
+        - address
+        - language
+        - type
+      type: object
+    ValidatePasswordResponse_2:
+      example:
+        valid: true
+        score: 2
+        warning: Historic Password
+        suggestions:
+          - '[password can be easily guessed]'
+          - '[password can be easily guessed]'
+      properties:
+        score:
+          description: |
+            More secure passwords are given a higher score. <P>
+            For a password to be acceptable for use in Velo, it must score at least 3
+          example: 2
+          format: int32
+          maximum: 4
+          minimum: 0
+          type: integer
+        valid:
+          description: if true then the password can be accepted
+          type: boolean
+        warning:
+          description: Any warning message as a reason for the given score.
+          example: Historic Password
+          type: string
+        suggestions:
+          items:
+            description: |
+              Any suggested changes to password text which would make the password more secure
+            example: '[password can be easily guessed]'
+            type: string
+          type: array
+      type: object
+    TermsUpdateRequest:
+      example:
+        acceptTermsAndConditions: true
+        marketingOptIn: true
+      properties:
+        marketingOptIn:
+          description: Does the payee agree to recevice marketing updates
+          type: boolean
+        acceptTermsAndConditions:
+          description: Does the payee accept the terms and conditions of the platform
+          type: boolean
+      required:
+        - acceptTermsAndConditions
+        - marketingOptIn
+      type: object
     Payee:
       example:
         payorRefs:
@@ -8329,7 +9116,7 @@ components:
         challenge:
           $ref: '#/components/schemas/Challenge'
         language:
-          $ref: '#/components/schemas/Language'
+          $ref: '#/components/schemas/Language_2'
         acceptTermsAndConditionsTimestamp:
           description: The timestamp when the payee last accepted T&Cs
           example: 2019-01-20T09:00:00.000Z
@@ -8713,9 +9500,9 @@ components:
         address:
           $ref: '#/components/schemas/PayeeAddress_2'
         individual:
-          $ref: '#/components/schemas/Individual'
+          $ref: '#/components/schemas/Individual_2'
         company:
-          $ref: '#/components/schemas/Company'
+          $ref: '#/components/schemas/Company_2'
         cellphoneNumber:
           example: '1234567890'
           type: string
@@ -13030,6 +13817,164 @@ components:
         - WU
         - BOFA
       type: string
+    Task:
+      example:
+        name: TERMS
+        complete: true
+      properties:
+        name:
+          $ref: '#/components/schemas/TaskType'
+        complete:
+          description: True if the user has completed the task
+          type: boolean
+      type: object
+    Language:
+      description: The language preference for the invited payee
+      enum:
+        - AR
+        - EN
+        - ES
+        - FR
+        - HE
+        - HI
+        - JA
+        - PT
+        - RU
+        - UR
+        - ZH
+      type: string
+    UserInfo_2:
+      example:
+        mfa_details:
+          mfa_type: SMS
+          verified: true
+        user_id: 39976ee5-dc4c-4b21-a966-a04fa71ef9e1
+        userType: PAYOR
+      properties:
+        user_id:
+          description: the id of the user
+          example: 39976ee5-dc4c-4b21-a966-a04fa71ef9e1
+          format: uuid
+          type: string
+        userType:
+          $ref: '#/components/schemas/UserType_2'
+        mfa_details:
+          $ref: '#/components/schemas/MFADetails_2'
+      type: object
+    Address:
+      example:
+        country: US
+        countyOrProvince: FL
+        line4: line4
+        city: Key West
+        line3: line3
+        line2: line2
+        line1: 500 Duval St
+        zipOrPostcode: '33945'
+      properties:
+        line1:
+          example: 500 Duval St
+          maxLength: 255
+          minLength: 2
+          nullable: false
+          type: string
+        line2:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        line3:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        line4:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        city:
+          example: Key West
+          maxLength: 100
+          minLength: 2
+          nullable: false
+          type: string
+        countyOrProvince:
+          example: FL
+          maxLength: 100
+          minLength: 2
+          nullable: true
+          type: string
+        zipOrPostcode:
+          example: '33945'
+          maxLength: 30
+          minLength: 2
+          nullable: true
+          type: string
+        country:
+          example: US
+          maxLength: 50
+          minLength: 2
+          nullable: false
+          type: string
+      required:
+        - city
+        - country
+        - line1
+      type: object
+    Individual:
+      example:
+        name:
+          firstName: firstName
+          lastName: lastName
+          otherNames: otherNames
+          title: title
+        nationalIdentification: nationalIdentification
+        dateOfBirth: 2000-01-23T00:00:00.000Z
+      properties:
+        name:
+          $ref: '#/components/schemas/Individual_name'
+        nationalIdentification:
+          description: The identification particular to the payees country
+          maxLength: 30
+          minLength: 6
+          type: string
+        dateOfBirth:
+          description: The date of birth of the payee
+          format: date
+          type: string
+      required:
+        - dateOfBirth
+        - name
+      type: object
+    Company:
+      example:
+        taxId: AB123456789
+        name: ABC Group Plc
+        operatingName: ABC Co
+      nullable: true
+      properties:
+        name:
+          example: ABC Group Plc
+          maxLength: 40
+          minLength: 1
+          type: string
+        taxId:
+          description: The tax id of the company
+          example: AB123456789
+          maxLength: 30
+          minLength: 6
+          nullable: true
+          type: string
+        operatingName:
+          example: ABC Co
+          maxLength: 100
+          minLength: 1
+          nullable: true
+          type: string
+      required:
+        - name
+      type: object
     PayeePayorRef:
       example:
         payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
@@ -13181,7 +14126,7 @@ components:
         - description
         - value
       type: object
-    Language:
+    Language_2:
       description: Available Payee Language codes
       enum:
         - AR
@@ -13345,7 +14290,7 @@ components:
         challenge:
           $ref: '#/components/schemas/Challenge'
         language:
-          $ref: '#/components/schemas/Language'
+          $ref: '#/components/schemas/Language_2'
         acceptTermsAndConditionsTimestamp:
           description: The timestamp when the payee last accepted T&Cs
           example: 2019-01-20T09:00:00.000Z
@@ -13497,21 +14442,6 @@ components:
         - PASSED
         - FAILED
       type: string
-    Language_2:
-      description: Available Payee Language codes
-      enum:
-        - AR
-        - EN
-        - ES
-        - FR
-        - HE
-        - HI
-        - JA
-        - PT
-        - RU
-        - UR
-        - ZH
-      type: string
     PayeeAddress_2:
       example:
         country: US
@@ -13573,7 +14503,7 @@ components:
         - country
         - line1
       type: object
-    Individual:
+    Individual_2:
       example:
         name:
           firstName: Bob
@@ -13601,7 +14531,7 @@ components:
         - dateOfBirth
         - name
       type: object
-    Company:
+    Company_2:
       example:
         taxId: '123123123'
         name: ABC Group Plc
@@ -13709,7 +14639,7 @@ components:
         challenge:
           $ref: '#/components/schemas/Challenge'
         language:
-          $ref: '#/components/schemas/Language'
+          $ref: '#/components/schemas/Language_2'
         company:
           $ref: '#/components/schemas/CompanyV1'
         individual:
@@ -13847,62 +14777,6 @@ components:
           format: uuid
           type: string
       type: object
-    Individual_2:
-      example:
-        name:
-          firstName: Bob
-          lastName: Smith
-          otherNames: A
-          title: Mr
-        nationalIdentification: AB123456C
-        dateOfBirth: 1985-01-01T00:00:00.000Z
-      properties:
-        name:
-          $ref: '#/components/schemas/IndividualV1_name'
-        nationalIdentification:
-          description: 'If not authorized to view, value will be masked. Example: XXXXX1234'
-          example: AB123456C
-          maxLength: 30
-          minLength: 6
-          readOnly: true
-          type: string
-        dateOfBirth:
-          description: 'If not authorized to view, value will be masked. Example: - XXXX-XX-XX'
-          example: 1985-01-01T00:00:00.000Z
-          readOnly: true
-          type: string
-      required:
-        - dateOfBirth
-        - name
-      type: object
-    Company_2:
-      example:
-        taxId: '123123123'
-        name: ABC Group Plc
-        operatingName: ABC Co
-      nullable: true
-      properties:
-        name:
-          example: ABC Group Plc
-          maxLength: 40
-          minLength: 1
-          type: string
-        taxId:
-          description: Company Tax Id must be between 6 and 30 characters long
-          example: '123123123'
-          maxLength: 30
-          minLength: 6
-          nullable: true
-          type: string
-        operatingName:
-          example: ABC Co
-          maxLength: 100
-          minLength: 1
-          nullable: true
-          type: string
-      required:
-        - name
-      type: object
     PayeeResponse_2:
       example:
         payorRefs:
@@ -13989,7 +14863,7 @@ components:
         challenge:
           $ref: '#/components/schemas/Challenge'
         language:
-          $ref: '#/components/schemas/Language'
+          $ref: '#/components/schemas/Language_2'
         acceptTermsAndConditionsTimestamp:
           description: The timestamp when the payee last accepted T&Cs
           example: 2019-01-20T09:00:00.000Z
@@ -14064,7 +14938,7 @@ components:
         challenge:
           $ref: '#/components/schemas/Challenge'
         language:
-          $ref: '#/components/schemas/Language'
+          $ref: '#/components/schemas/Language_2'
         company:
           $ref: '#/components/schemas/CompanyV1'
         individual:
@@ -15093,6 +15967,31 @@ components:
       properties:
         mfa_type:
           $ref: '#/components/schemas/MFAType'
+        verified:
+          description: true if the user has used the MFA device for login
+          example: true
+          type: boolean
+      type: object
+    TaskType:
+      description: The type of the task
+      enum:
+        - CHALLENGE
+        - TERMS
+        - PROFILE
+        - PASSWORD
+        - MFA
+      example: TERMS
+      type: string
+    MFADetails_2:
+      example:
+        mfa_type: SMS
+        verified: true
+      properties:
+        mfa_type:
+          description: The Multi Factor Authentication type
+          enum:
+            - SMS
+          type: string
         verified:
           description: true if the user has used the MFA device for login
           example: true
@@ -17297,6 +18196,32 @@ components:
           $ref: '#/components/schemas/PayoutPayorV4'
         payoutTo:
           $ref: '#/components/schemas/PayoutPayorV4'
+    Individual_name:
+      example:
+        firstName: firstName
+        lastName: lastName
+        otherNames: otherNames
+        title: title
+      properties:
+        title:
+          maxLength: 10
+          minLength: 1
+          type: string
+        firstName:
+          maxLength: 40
+          minLength: 1
+          type: string
+        otherNames:
+          maxLength: 40
+          minLength: 1
+          type: string
+        lastName:
+          maxLength: 40
+          minLength: 1
+          type: string
+      required:
+        - firstName
+        - lastName
     IndividualV1_name:
       example:
         firstName: Bob
@@ -17396,6 +18321,7 @@ x-tagGroups:
       - Funding Manager
   - name: Payee Operations
     tags:
+      - Invites
       - Payees
       - Payee Service
       - Payee Batch Creation
