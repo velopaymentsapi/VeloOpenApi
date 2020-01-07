@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.20.4",
+    "version": "2.20.5",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -49,11 +49,11 @@
       "name": "Payments"
     },
     {
-      "description": "APIs which allows you to work with payees invited to the Velo Platform.",
+      "description": "<p>When a payor creates a payee then an invite token is emailed to the invited payee</p>\n<p>Payees use this token to onboard to the platform</p>\n<p>There are several required tasks that the payee must perform before they are accepted onto the platform</p>\n",
       "name": "Invites"
     },
     {
-      "description": "<p>Verification tokens allow users to complete authenitcation flows such as user invite, MFA registration ad password reset</p>\n<p>Tokens have an expiry and are one-time use only</p>\n",
+      "description": "<p>Verification tokens allow users to complete authenitcation flows such as user invite, MFA registration and password reset</p>\n<p>Tokens have an expiry and are one-time use only</p>\n",
       "name": "Tokens"
     },
     {
@@ -24033,11 +24033,9 @@
     {
       "name": "Payee Operations",
       "tags": [
-        "Invites",
         "Payees",
-        "Payee Service",
-        "Payee Batch Creation",
-        "Payee Invitation"
+        "Payee Invitation",
+        "Invites"
       ]
     },
     {
