@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.20.5",
+    "version": "2.20.6",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -3783,6 +3783,89 @@
         ]
       }
     },
+    "/v2/invites/{inviteId}/passwords/validate": {
+      "post": {
+        "description": "validate the password and return a score\n",
+        "operationId": "validateInvitedPayeePassword",
+        "parameters": [
+          {
+            "description": "Id of the invite",
+            "in": "path",
+            "name": "inviteId",
+            "required": true,
+            "schema": {
+              "example": "2ba4973a-41e6-4f4d-97fe-a04fe99e6da1",
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordRequest_2"
+              }
+            }
+          },
+          "description": "The password",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidatePasswordResponse_2"
+                }
+              }
+            },
+            "description": "the password was checked and a score returned"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "security": [],
+        "summary": "Validate the proposed password",
+        "tags": [
+          "Invites"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/invites/ad19fc24-0cf6-4c15-a571-754b015b18e0/passwords/validate' -i -X POST \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"password\":\"abcd_12345\"}'\n"
+          }
+        ]
+      }
+    },
     "/v2/invites/{inviteId}/profile": {
       "get": {
         "description": "<p>Get invited payee profile</p>\n",
@@ -3916,89 +3999,6 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v2/invites/ad19fc24-0cf6-4c15-a571-754b015b18e0/termsUpdate' -i -X POST \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"address\": \\\n          {\"line1\":\"100 Brook Lane\",\"city\":\"Swindon\",\"countyOrProvince\":\"Wiltshire\",\"zipOrPostcode\":\"SN15 2SD\",\"country\":\"GB\" \\\n          }, \\\n          \"type\":\"Individual\", \\\n          \"individual\":{ \\\n          \"name\":{ \\\n          \"title\":\"Mr\",\"firstName\":\"Bob\",\"otherNames\":\"Charles\",\"lastName\":\"Builder\" \\\n          }, \\\n          \"nationalIdentification\":\"987654321\", \\\n          \"dateOfBirth\":\"1970-10-20\" \\\n          }, \\\n          \"language\":\"EN\" \\\n          }'\n"
-          }
-        ]
-      }
-    },
-    "/v2/invites/{inviteId}/passwords/validate": {
-      "post": {
-        "description": "validate the password and return a score\n",
-        "operationId": "validateInvitedPayeePassword",
-        "parameters": [
-          {
-            "description": "Id of the invite",
-            "in": "path",
-            "name": "inviteId",
-            "required": true,
-            "schema": {
-              "example": "2ba4973a-41e6-4f4d-97fe-a04fe99e6da1",
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PasswordRequest_2"
-              }
-            }
-          },
-          "description": "The password",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidatePasswordResponse_2"
-                }
-              }
-            },
-            "description": "the password was checked and a score returned"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          }
-        },
-        "security": [],
-        "summary": "Validate the proposed password",
-        "tags": [
-          "Invites"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/invites/ad19fc24-0cf6-4c15-a571-754b015b18e0/passwords/validate' -i -X POST \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"password\":\"abcd_12345\"}'\n"
           }
         ]
       }
@@ -12211,6 +12211,45 @@
         ],
         "type": "object"
       },
+      "ValidatePasswordResponse_2": {
+        "example": {
+          "valid": true,
+          "score": 2,
+          "warning": "Historic Password",
+          "suggestions": [
+            "[password can be easily guessed]",
+            "[password can be easily guessed]"
+          ]
+        },
+        "properties": {
+          "score": {
+            "description": "More secure passwords are given a higher score. <P>\nFor a password to be acceptable for use in Velo, it must score at least 3\n",
+            "example": 2,
+            "format": "int32",
+            "maximum": 4,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "valid": {
+            "description": "if true then the password can be accepted",
+            "type": "boolean"
+          },
+          "warning": {
+            "description": "Any warning message as a reason for the given score.",
+            "example": "Historic Password",
+            "type": "string"
+          },
+          "suggestions": {
+            "items": {
+              "description": "Any suggested changes to password text which would make the password more secure\n",
+              "example": "[password can be easily guessed]",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "Profile": {
         "example": {
           "address": {
@@ -12266,45 +12305,6 @@
           "language",
           "type"
         ],
-        "type": "object"
-      },
-      "ValidatePasswordResponse_2": {
-        "example": {
-          "valid": true,
-          "score": 2,
-          "warning": "Historic Password",
-          "suggestions": [
-            "[password can be easily guessed]",
-            "[password can be easily guessed]"
-          ]
-        },
-        "properties": {
-          "score": {
-            "description": "More secure passwords are given a higher score. <P>\nFor a password to be acceptable for use in Velo, it must score at least 3\n",
-            "example": 2,
-            "format": "int32",
-            "maximum": 4,
-            "minimum": 0,
-            "type": "integer"
-          },
-          "valid": {
-            "description": "if true then the password can be accepted",
-            "type": "boolean"
-          },
-          "warning": {
-            "description": "Any warning message as a reason for the given score.",
-            "example": "Historic Password",
-            "type": "string"
-          },
-          "suggestions": {
-            "items": {
-              "description": "Any suggested changes to password text which would make the password more secure\n",
-              "example": "[password can be easily guessed]",
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
         "type": "object"
       },
       "TermsUpdateRequest": {
