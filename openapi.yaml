@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.18.111
+  version: 2.18.113
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -5713,6 +5713,7 @@ paths:
   '/v3/payouts/{payoutId}/quote':
     post:
       description: Create quote for a payout
+      operationId: v3PayoutsPayoutIdQuotePost
       parameters:
         - description: Id of the payout
           in: path
@@ -5744,6 +5745,7 @@ paths:
   /v1/paymentChannelRules:
     get:
       description: List the country specific payment channel rules.
+      operationId: v1PaymentChannelRulesGet
       responses:
         '200':
           content:
@@ -11218,7 +11220,7 @@ components:
       properties:
         countries:
           items:
-            $ref: '#/components/schemas/SupportedCountry_2'
+            $ref: '#/components/schemas/SupportedCountryV2'
           type: array
       type: object
     SupportedCurrencyResponse:
@@ -12979,7 +12981,7 @@ components:
             type: string
           type: array
       type: object
-    SupportedCountry_2:
+    SupportedCountryV2:
       example:
         regions:
           - regions
