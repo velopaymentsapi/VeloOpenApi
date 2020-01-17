@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.19.37
+  version: 2.19.38
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -5360,7 +5360,7 @@ paths:
           description: Funding Account Created
           headers:
             Location:
-              description: Reference to created accout
+              description: Reference to created account
               schema:
                 format: uri
                 type: string
@@ -5385,6 +5385,8 @@ paths:
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
       summary: Create Funding Account
+      tags:
+        - Funding Manager Private
   '/v1/fundingAccounts/{fundingAccountId}':
     get:
       description: Get Funding Account by ID
@@ -7668,7 +7670,6 @@ components:
         mfaType:
           description: The type of the MFA device
           enum:
-            - SMS
             - YUBIKEY
             - TOTP
           example: TOTP
