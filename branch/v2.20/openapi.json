@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.20.12",
+    "version": "2.20.13",
     "x-logo": {
       "url": "https://velopayments.com/images/velo-logo.svg"
     }
@@ -8256,7 +8256,7 @@
             "description": "Funding Account Created",
             "headers": {
               "Location": {
-                "description": "Reference to created accout",
+                "description": "Reference to created account",
                 "schema": {
                   "format": "uri",
                   "type": "string"
@@ -8295,7 +8295,10 @@
             "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           }
         },
-        "summary": "Create Funding Account"
+        "summary": "Create Funding Account",
+        "tags": [
+          "Funding Manager Private"
+        ]
       }
     },
     "/v1/fundingAccounts/{fundingAccountId}": {
@@ -11132,7 +11135,6 @@
           "mfaType": {
             "description": "The type of the MFA device",
             "enum": [
-              "SMS",
               "YUBIKEY",
               "TOTP"
             ],
