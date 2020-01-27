@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.19.39",
+    "version": "2.19.40",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -257,743 +257,6 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v1/validate' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8' \\\n    -d '{\"otp\":\"123456\"}'\n"
-          }
-        ]
-      }
-    },
-    "/v1/tokens/{tokenId}": {
-      "get": {
-        "description": "Get a Single Verification Token by Id.\n",
-        "operationId": "getVerificationTokenById",
-        "parameters": [
-          {
-            "description": "The UUID of the Token",
-            "in": "path",
-            "name": "tokenId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CheckTokenResponse"
-                }
-              }
-            },
-            "description": "Get Verification Token"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          },
-          "412": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "The request could not be completed as a precondition was not met\n"
-          }
-        },
-        "security": [],
-        "summary": "Get Token",
-        "tags": [
-          "Tokens"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/b898887c-6565-4b67-a1fd-31e3d87cb9ca' -i -X GET \\\n    -H 'Content-Type: application/json'\n"
-          }
-        ]
-      }
-    },
-    "/v1/tokens/{tokenId}/otp": {
-      "post": {
-        "description": "Generate an OTP and send to the MFA type specified in the request body\n",
-        "operationId": "generateOTP",
-        "parameters": [
-          {
-            "description": "The UUID of the Token",
-            "in": "path",
-            "name": "tokenId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GenerateOTPRequest"
-              }
-            }
-          },
-          "description": "The MFA type to send the generated OTP to",
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "the request was handled"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          },
-          "412": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "The request could not be completed as a precondition was not met\n"
-          }
-        },
-        "security": [],
-        "summary": "Generate an OTP",
-        "tags": [
-          "Tokens"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/3637fbb0-1fdb-4d2d-a635-e4001ba94212/otp' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"type\":\"SMS\"}'\n"
-          }
-        ]
-      }
-    },
-    "/v1/tokens/{tokenId}/otp/generate": {
-      "post": {
-        "description": "<p>Generate an OTP and send to the SMS device if the user</p>\n<p>Only users who have SMS as their registered MFA device will receive an OTP</p>\n<p>Used in conjuction with endpoints that require the Velo-OTP header</p>\n",
-        "operationId": "generateOTPForSMS",
-        "parameters": [
-          {
-            "description": "The UUID of the Token",
-            "in": "path",
-            "name": "tokenId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "the request was handled"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          }
-        },
-        "security": [],
-        "summary": "Send an OTP to SMS Users",
-        "tags": [
-          "Tokens"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/3637fbb0-1fdb-4d2d-a635-e4001ba94212/otp/generate' -i -X POST \\\n    -H 'Content-Type: application/json'\n"
-          }
-        ]
-      }
-    },
-    "/v1/tokens/{tokenId}/otp/validate": {
-      "post": {
-        "description": "<p>Validate the OTP </p>\n<p>The token that was used in the request will be revoked and a new token issued </p>\n<p>The new token link will be returned in a location header</p>\n<p>If there are too many invalid OTP requests the token may be disabled</p>\n",
-        "operationId": "validateOTP",
-        "parameters": [
-          {
-            "description": "The UUID of the Token",
-            "in": "path",
-            "name": "tokenId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ValidateOTPRequest"
-              }
-            }
-          },
-          "description": "The OTP generated and sent to the device",
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "the OTP was valid and a new token has been issued"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          },
-          "412": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "The request could not be completed as a precondition was not met\n"
-          }
-        },
-        "security": [],
-        "summary": "Validate an OTP",
-        "tags": [
-          "Tokens"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/3fe871d6-5a15-49c2-9797-f484c87f7950/otp/validate' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"otp\":\"123456\"}'\n"
-          }
-        ]
-      }
-    },
-    "/v1/tokens/{tokenId}/mfa/qrcode": {
-      "get": {
-        "description": "<p>Get a QR Code for an MFA device that supports it </p>\n<p>The device must have first been registered</p>\n",
-        "operationId": "getQRCodeForMFA",
-        "parameters": [
-          {
-            "description": "The UUID of the Token",
-            "in": "path",
-            "name": "tokenId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "description": "The width of the image\n",
-            "in": "query",
-            "name": "width",
-            "schema": {
-              "description": "The width of the image to be returned",
-              "format": "int32",
-              "maximum": 1024,
-              "minimum": 1,
-              "type": "integer"
-            }
-          },
-          {
-            "description": "The height of the image\n",
-            "in": "query",
-            "name": "height",
-            "schema": {
-              "description": "The height of the image to be returned",
-              "format": "int32",
-              "maximum": 1024,
-              "minimum": 1,
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "image/png": {
-                "schema": {
-                  "format": "binary",
-                  "type": "string"
-                }
-              }
-            },
-            "description": "success"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          },
-          "412": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "The request could not be completed as a precondition was not met\n"
-          }
-        },
-        "security": [],
-        "summary": "Get a QR Code image",
-        "tags": [
-          "Tokens"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/abbf55b4-5fc0-4b84-9ac0-3060250e6d9c/mfa/qrcode?width=300&height=400' -i -X GET\n"
-          }
-        ]
-      }
-    },
-    "/v1/tokens/{tokenId}/mfa/register": {
-      "post": {
-        "description": "<p>Some MFA Devices based on TOTP require a registration step (Authy, Authenticator) </p>\n<p>Registering the device will create a shared secret that the MFA device uses to generate OTPs</p>\n",
-        "operationId": "registerMFA",
-        "parameters": [
-          {
-            "description": "The UUID of the Token",
-            "in": "path",
-            "name": "tokenId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegisterMFARequest"
-              }
-            }
-          },
-          "description": "The MFA Type to register",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegisterMFAResponse"
-                }
-              }
-            },
-            "description": "the device was registered"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          },
-          "412": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "The request could not be completed as a precondition was not met\n"
-          }
-        },
-        "security": [],
-        "summary": "Register an MFA Device",
-        "tags": [
-          "Tokens"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/0b58f127-957b-4b49-bf23-95f83ecd0b98/mfa/register' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"mfaType\":\"TOTP\"}'\n"
-          }
-        ]
-      }
-    },
-    "/v1/tokens/{tokenId}/mfa/validate": {
-      "post": {
-        "description": "<p>Validate the user's registered MFA device with an OTP </p>\n<p>The response will be different based on the token type against which the MFA is validated </p>\n<p>For INVITE_MFA_USER tokens the response will be 200 and an access token will be returned i the response </p>\n<p>For MFA_REGISTRATION tokens the response will be 204</p>\n",
-        "operationId": "validateMFA",
-        "parameters": [
-          {
-            "description": "The UUID of the Token",
-            "in": "path",
-            "name": "tokenId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ValidateMFARequest"
-              }
-            }
-          },
-          "description": "The OTP generated or received by the device",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccessTokenResponse"
-                }
-              }
-            },
-            "description": "the OTP was valid"
-          },
-          "204": {
-            "description": "the MFA device was validated"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          },
-          "412": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "The request could not be completed as a precondition was not met\n"
-          }
-        },
-        "security": [],
-        "summary": "Validate an MFA Device",
-        "tags": [
-          "Tokens"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/0b58f127-957b-4b49-bf23-95f83ecd0b98/mfa/validate' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"otp\":\"123456\"}'\n"
-          }
-        ]
-      }
-    },
-    "/v1/tokens/{tokenId}/password": {
-      "post": {
-        "description": "Submit a password\n",
-        "operationId": "submitPassword",
-        "parameters": [
-          {
-            "description": "The UUID of the Token",
-            "in": "path",
-            "name": "tokenId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "description": "required when updating password using reset password <P>\nThe OTP is supplied by the users MFA device\n",
-            "in": "header",
-            "name": "Velo-OTP",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PasswordRequest"
-              }
-            }
-          },
-          "description": "The password",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccessTokenResponse"
-                }
-              }
-            },
-            "description": "response when the token is for invite and thers MFA tyope is SMS"
-          },
-          "204": {
-            "description": "the password was submitted and accepted"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          },
-          "412": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "The request could not be completed as a precondition was not met\n"
-          }
-        },
-        "security": [],
-        "summary": "Submit a password",
-        "tags": [
-          "Tokens"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/d6208463-d1df-4446-bcbf-638d7f876bb0/password' -i -X POST \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"password\":\"abcd_12345\"}'\n"
-          }
-        ]
-      }
-    },
-    "/v1/tokens/{tokenId}/password/lockout": {
-      "post": {
-        "description": "<p>When a user is locked out of their account due to execeding the limit of login attempts</p>\n<p>They can use a token to unlock their account </p>\n<p>Submitting the token will unlock the account associated with the token</p>\n",
-        "operationId": "unlockAccountWithToken",
-        "parameters": [
-          {
-            "description": "The UUID of the Token",
-            "in": "path",
-            "name": "tokenId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "the token was accepted and the user is unlocked"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          }
-        },
-        "security": [],
-        "summary": "Unlock the user",
-        "tags": [
-          "Tokens"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/d6208463-d1df-4446-bcbf-638d7f876bb0/password/lockout' -i -X POST \\\n      -H 'Content-Type: application/json'\n"
-          }
-        ]
-      }
-    },
-    "/v1/tokens/{tokenId}/password/validate": {
-      "post": {
-        "description": "validate the password and return a score\n",
-        "operationId": "validatePassword",
-        "parameters": [
-          {
-            "description": "The UUID of the Token",
-            "in": "path",
-            "name": "tokenId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PasswordRequest"
-              }
-            }
-          },
-          "description": "The password",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ValidatePasswordResponse"
-                }
-              }
-            },
-            "description": "the password was checked and a score returned"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Resource not found"
-          },
-          "412": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "The request could not be completed as a precondition was not met\n"
-          }
-        },
-        "security": [],
-        "summary": "Validate the proposed password",
-        "tags": [
-          "Tokens"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/tokens/d6208463-d1df-4446-bcbf-638d7f876bb0/password/validate' -i -X POST \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"password\":\"abcd_12345\"}'\n"
           }
         ]
       }
@@ -10020,199 +9283,6 @@
         },
         "type": "object"
       },
-      "CheckTokenResponse": {
-        "example": {
-          "expiryDate": "2019-10-25T14:08:25.701Z",
-          "mfaStatus": "REGISTERED",
-          "mfaType": "TOTP",
-          "mfaVerified": true,
-          "tokenType": "INVITE_MFA_USER"
-        },
-        "properties": {
-          "expiryDate": {
-            "description": "the timestamp when the token will expire",
-            "example": "2019-10-25T14:08:25.701Z",
-            "format": "date-time",
-            "type": "string"
-          },
-          "mfaType": {
-            "$ref": "#/components/schemas/MFAType"
-          },
-          "tokenType": {
-            "$ref": "#/components/schemas/TokenType"
-          },
-          "mfaVerified": {
-            "description": "has the user verified their MFA device by logging in",
-            "type": "boolean"
-          },
-          "mfaStatus": {
-            "$ref": "#/components/schemas/MFAStatus"
-          }
-        },
-        "type": "object"
-      },
-      "ErrorResponse": {
-        "description": "Error response returned by all error conditions in Velo Services",
-        "properties": {
-          "errors": {
-            "description": "one or more errors",
-            "items": {
-              "$ref": "#/components/schemas/Error"
-            },
-            "minItems": 1,
-            "nullable": true,
-            "type": "array"
-          },
-          "correlationId": {
-            "description": "a unique identifier to track a request or related sequence of requests",
-            "example": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
-            "format": "uuid",
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "GenerateOTPRequest": {
-        "example": {
-          "type": "SMS"
-        },
-        "properties": {
-          "type": {
-            "$ref": "#/components/schemas/OTPType"
-          }
-        },
-        "required": [
-          "type"
-        ],
-        "type": "object"
-      },
-      "ValidateOTPRequest": {
-        "example": {
-          "otp": "123456"
-        },
-        "properties": {
-          "otp": {
-            "description": "An OTP value that has been received by the user on their registered device",
-            "example": "123456",
-            "maxLength": 6,
-            "minLength": 6,
-            "type": "string"
-          }
-        },
-        "required": [
-          "otp"
-        ],
-        "type": "object"
-      },
-      "RegisterMFARequest": {
-        "example": {
-          "mfaType": "TOTP"
-        },
-        "properties": {
-          "mfaType": {
-            "$ref": "#/components/schemas/MFAType"
-          }
-        },
-        "required": [
-          "mfaType"
-        ],
-        "type": "object"
-      },
-      "RegisterMFAResponse": {
-        "example": {
-          "totpUrl": "otpauth://totp/Velo%20Payments:stephen.smith@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Velo%20Payments",
-          "totpSharedSecret": "JBSWY3DPEHPK3PXP"
-        },
-        "properties": {
-          "totpUrl": {
-            "description": "A TOTP Url thaty can be parsed by the TOTP device",
-            "example": "otpauth://totp/Velo%20Payments:stephen.smith@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Velo%20Payments",
-            "type": "string"
-          },
-          "totpSharedSecret": {
-            "description": "The shared secret between the TOTP app and the server",
-            "example": "JBSWY3DPEHPK3PXP",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "ValidateMFARequest": {
-        "example": {
-          "otp": "123456"
-        },
-        "properties": {
-          "otp": {
-            "description": "An OTP value that can be verified by the MFA type registered with the user",
-            "example": "123456",
-            "maxLength": 64,
-            "minLength": 6,
-            "type": "string"
-          }
-        },
-        "required": [
-          "otp"
-        ],
-        "type": "object"
-      },
-      "PasswordRequest": {
-        "example": {
-          "password": "My_strong_password"
-        },
-        "properties": {
-          "password": {
-            "description": "a password that passes validation",
-            "example": "My_strong_password",
-            "maxLength": 128,
-            "minLength": 8,
-            "type": "string"
-          }
-        },
-        "required": [
-          "password"
-        ],
-        "type": "object"
-      },
-      "ValidatePasswordResponse": {
-        "example": {
-          "valid": true,
-          "score": 2,
-          "warning": "Historic Password",
-          "suggestions": [
-            "[password has been used before]",
-            "[password has been used before]"
-          ]
-        },
-        "properties": {
-          "score": {
-            "description": "More secure passwords are given a higher score. <P>\nFor a password to be acceptable for use in Velo, it must score at least 3\n",
-            "example": 2,
-            "format": "int32",
-            "maximum": 4,
-            "minimum": 0,
-            "type": "integer"
-          },
-          "valid": {
-            "description": "if true then the password can be accepted",
-            "type": "boolean"
-          },
-          "warning": {
-            "description": "Any warning message as a reason for the given score.",
-            "example": "Historic Password",
-            "type": "string"
-          },
-          "suggestions": {
-            "items": {
-              "description": "Any suggested changes to password text which would make the password more secure\n",
-              "example": "[password has been used before]",
-              "type": "string"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
       "UserType": {
         "enum": [
           "BACKOFFICE",
@@ -10426,6 +9496,28 @@
           "lockedOutTimestamp": {
             "description": "A timestamp showing when the user was locked out\nIf null then the user is not currently locked out\n",
             "format": "date-time",
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "description": "Error response returned by all error conditions in Velo Services",
+        "properties": {
+          "errors": {
+            "description": "one or more errors",
+            "items": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "minItems": 1,
+            "nullable": true,
+            "type": "array"
+          },
+          "correlationId": {
+            "description": "a unique identifier to track a request or related sequence of requests",
+            "example": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
+            "format": "uuid",
             "nullable": true,
             "type": "string"
           }
@@ -10880,6 +9972,63 @@
           "newPassword",
           "oldPassword"
         ],
+        "type": "object"
+      },
+      "PasswordRequest": {
+        "example": {
+          "password": "My_strong_password"
+        },
+        "properties": {
+          "password": {
+            "description": "a password that passes validation",
+            "example": "My_strong_password",
+            "maxLength": 128,
+            "minLength": 8,
+            "type": "string"
+          }
+        },
+        "required": [
+          "password"
+        ],
+        "type": "object"
+      },
+      "ValidatePasswordResponse": {
+        "example": {
+          "valid": true,
+          "score": 2,
+          "warning": "Historic Password",
+          "suggestions": [
+            "[password has been used before]",
+            "[password has been used before]"
+          ]
+        },
+        "properties": {
+          "score": {
+            "description": "More secure passwords are given a higher score. <P>\nFor a password to be acceptable for use in Velo, it must score at least 3\n",
+            "example": 2,
+            "format": "int32",
+            "maximum": 4,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "valid": {
+            "description": "if true then the password can be accepted",
+            "type": "boolean"
+          },
+          "warning": {
+            "description": "Any warning message as a reason for the given score.",
+            "example": "Historic Password",
+            "type": "string"
+          },
+          "suggestions": {
+            "items": {
+              "description": "Any suggested changes to password text which would make the password more secure\n",
+              "example": "[password has been used before]",
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "PayorV1": {
@@ -17470,36 +16619,18 @@
         },
         "type": "object"
       },
-      "MFAType": {
-        "description": "The type of the MFA device",
-        "enum": [
-          "SMS",
-          "YUBIKEY",
-          "TOTP"
+      "Role": {
+        "properties": {
+          "name": {
+            "description": "the name of the role",
+            "example": "payor.admin",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
         ],
-        "example": "TOTP",
-        "nullable": true,
-        "type": "string"
-      },
-      "TokenType": {
-        "description": "The type of the token",
-        "enum": [
-          "INVITE_MFA_USER",
-          "MFA_REGISTRATION",
-          "RESET_PASSWORD",
-          "ACCOUNT_LOCKED"
-        ],
-        "example": "INVITE_MFA_USER",
-        "type": "string"
-      },
-      "MFAStatus": {
-        "description": "The status of the MFA device",
-        "enum": [
-          "REGISTERED",
-          "UNREGISTERED"
-        ],
-        "example": "REGISTERED",
-        "type": "string"
+        "type": "object"
       },
       "Error": {
         "properties": {
@@ -17533,32 +16664,22 @@
         },
         "type": "object"
       },
-      "OTPType": {
-        "description": "The MFA type to send an OTP to",
-        "enum": [
-          "SMS"
-        ],
-        "example": "SMS",
-        "type": "string"
-      },
-      "Role": {
-        "properties": {
-          "name": {
-            "description": "the name of the role",
-            "example": "payor.admin",
-            "type": "string"
-          }
-        },
-        "required": [
-          "name"
-        ],
-        "type": "object"
-      },
       "VerificationCode": {
         "description": "<p>Optional property that MUST be suppied when manually verifying a user</p>\n<p>The user's smsNumber is registered via a separate endpoint and an OTP sent to them</p>\n",
         "example": "123456",
         "maxLength": 6,
         "minLength": 6,
+        "nullable": true,
+        "type": "string"
+      },
+      "MFAType": {
+        "description": "The type of the MFA device",
+        "enum": [
+          "SMS",
+          "YUBIKEY",
+          "TOTP"
+        ],
+        "example": "TOTP",
         "nullable": true,
         "type": "string"
       },
