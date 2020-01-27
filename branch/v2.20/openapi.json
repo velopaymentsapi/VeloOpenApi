@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.20.18",
+    "version": "2.20.19",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -737,11 +737,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_409"
                 }
               }
             },
-            "description": "The request contained data that would reult in a duplicate value\n"
+            "description": "The request contained data that would result in a duplicate value\n"
           },
           "412": {
             "content": {
@@ -1157,11 +1157,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_409"
                 }
               }
             },
-            "description": "The request contained data that would reult in a duplicate value\n"
+            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Update User Details",
@@ -1830,11 +1830,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_409"
                 }
               }
             },
-            "description": "The request contained data that would reult in a duplicate value\n"
+            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Create Application",
@@ -3356,11 +3356,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_409"
                 }
               }
             },
-            "description": "The request contained data that would reult in a duplicate value\n"
+            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Resend Payee Invite",
@@ -3533,11 +3533,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_409"
                 }
               }
             },
-            "description": "The request contained data that would reult in a duplicate value\n"
+            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Update Payee Remote Id",
@@ -4169,11 +4169,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_409"
                 }
               }
             },
-            "description": "The request contained data that would reult in a duplicate value\n"
+            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Initiate Payee Creation",
@@ -5360,11 +5360,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_409"
                 }
               }
             },
-            "description": "The request contained data that would reult in a duplicate value\n"
+            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Initiate Payee Creation",
@@ -5547,11 +5547,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_409"
                 }
               }
             },
-            "description": "The request contained data that would reult in a duplicate value\n"
+            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Resend Payee Invite",
@@ -5977,11 +5977,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_409"
                 }
               }
             },
-            "description": "The request contained data that would reult in a duplicate value\n"
+            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Update Payee Remote Id",
@@ -8921,11 +8921,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_409"
                 }
               }
             },
-            "description": "The request contained data that would reult in a duplicate value\n"
+            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Instruct Payout",
@@ -8980,11 +8980,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_409"
                 }
               }
             },
-            "description": "The request contained data that would reult in a duplicate value\n"
+            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Create a quote for the payout",
@@ -21346,6 +21346,48 @@
             "description": "one or more errors",
             "items": {
               "$ref": "#/components/schemas/inline_response_400_errors"
+            },
+            "minItems": 1,
+            "nullable": true,
+            "type": "array"
+          },
+          "correlationId": {
+            "description": "a unique identifier to track a request or related sequence of requests",
+            "example": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
+            "format": "uuid",
+            "nullable": true,
+            "type": "string"
+          }
+        }
+      },
+      "inline_response_409_errors": {
+        "properties": {
+          "errorMessage": {
+            "description": "verbose message indicating the nature of the error\nWill be localised\n",
+            "example": "The resource already exists",
+            "type": "string"
+          },
+          "location": {
+            "description": "the property or object that caused the error",
+            "example": "email",
+            "type": "string"
+          },
+          "locationType": {
+            "$ref": "#/components/schemas/LocationType"
+          },
+          "reasonCode": {
+            "description": "a camel-cased string that can be used by clients to localise client error messages",
+            "example": "duplicateEmail",
+            "type": "string"
+          }
+        }
+      },
+      "inline_response_409": {
+        "properties": {
+          "errors": {
+            "description": "one or more errors",
+            "items": {
+              "$ref": "#/components/schemas/inline_response_409_errors"
             },
             "minItems": 1,
             "nullable": true,
