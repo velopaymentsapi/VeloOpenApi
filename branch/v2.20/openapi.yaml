@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.20.24
+  version: 2.20.25
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -12235,8 +12235,12 @@ components:
           minLength: 1
           type: string
         currency:
-          description: Payee's currency
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         amount:
           description: |
@@ -12454,8 +12458,10 @@ components:
           - isoCountryCode: US
             currencies:
               - USD
+              - USD
           - isoCountryCode: US
             currencies:
+              - USD
               - USD
       properties:
         countries:
@@ -12474,6 +12480,7 @@ components:
             isoCountryCode: US
             currencies:
               - USD
+              - USD
           - regions:
               - name: California
                 abbreviation: CA
@@ -12481,6 +12488,7 @@ components:
                 abbreviation: CA
             isoCountryCode: US
             currencies:
+              - USD
               - USD
       properties:
         countries:
@@ -12491,9 +12499,9 @@ components:
     SupportedCurrencyResponse:
       example:
         currencies:
-          - currency: GBP
+          - currency: USD
             maxPaymentAmount: 100000
-          - currency: GBP
+          - currency: USD
             maxPaymentAmount: 100000
       properties:
         currencies:
@@ -14464,6 +14472,14 @@ components:
         - eventId
         - eventType
       type: object
+    IsoCurrency:
+      description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+      example: USD
+      maxLength: 3
+      minLength: 3
+      pattern: '^[A-Z]{3}$'
+      title: ISO Currency Code
+      type: string
     QuoteFxSummary:
       example:
         invertedRate: 1.12
@@ -14502,14 +14518,20 @@ components:
           example: 1234
           type: integer
         sourceCurrency:
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: USD
           maxLength: 3
           minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         paymentCurrency:
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: USD
           maxLength: 3
           minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         fundingStatus:
           enum:
@@ -14552,7 +14574,12 @@ components:
           format: uuid
           type: string
         currency:
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         totalPayoutCost:
           example: 1231200
@@ -14576,9 +14603,12 @@ components:
           example: remoteIdVal123
           type: string
         currencyType:
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: USD
           maxLength: 3
           minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         amount:
           example: 1234
@@ -14615,9 +14645,12 @@ components:
           example: remoteIdVal123
           type: string
         currencyType:
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: USD
           maxLength: 3
           minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         amount:
           example: 1234
@@ -14685,27 +14718,19 @@ components:
         isoCountryCode: US
         currencies:
           - USD
+          - USD
       properties:
         isoCountryCode:
-          enum:
-            - US
-            - GB
-            - FR
-            - CA
-            - JP
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         currencies:
-          example:
-            - USD
           items:
-            enum:
-              - USD
-              - GBP
-              - EUR
-              - CAD
-              - JPY
-            type: string
+            $ref: '#/components/schemas/IsoCurrency'
           type: array
       type: object
     SupportedCountry_2:
@@ -14718,27 +14743,19 @@ components:
         isoCountryCode: US
         currencies:
           - USD
+          - USD
       properties:
         isoCountryCode:
-          enum:
-            - US
-            - GB
-            - FR
-            - CA
-            - JP
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         currencies:
-          example:
-            - USD
           items:
-            enum:
-              - USD
-              - GBP
-              - EUR
-              - CAD
-              - JPY
-            type: string
+            $ref: '#/components/schemas/IsoCurrency'
           type: array
         regions:
           items:
@@ -14747,12 +14764,16 @@ components:
       type: object
     SupportedCurrency:
       example:
-        currency: GBP
+        currency: USD
         maxPaymentAmount: 100000
       properties:
         currency:
-          description: ISO Currency Code
-          example: GBP
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         maxPaymentAmount:
           description: The max amount allowed in this currency
@@ -16201,6 +16222,14 @@ components:
         - required
         - validation
       type: object
+    IsoCountryCode:
+      description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
+      example: US
+      maxLength: 2
+      minLength: 2
+      pattern: '^[A-Z]{2}$'
+      title: ISO 3166 2 Character Country Code
+      type: string
     Region:
       example:
         name: California
