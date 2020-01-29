@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.19.115",
+    "version": "2.19.116",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -19437,14 +19437,12 @@
         },
         "properties": {
           "isoCountryCode": {
-            "enum": [
-              "US",
-              "GB",
-              "FR",
-              "CA",
-              "JP"
-            ],
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
+            "maxLength": 2,
+            "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "currencies": {
@@ -19480,6 +19478,8 @@
             "example": "US",
             "maxLength": 2,
             "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "currencies": {
@@ -21156,6 +21156,15 @@
           "validation"
         ],
         "type": "object"
+      },
+      "IsoCountryCode": {
+        "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
+        "example": "US",
+        "maxLength": 2,
+        "minLength": 2,
+        "pattern": "^[A-Z]{2}$",
+        "title": "ISO 3166 2 Character Country Code",
+        "type": "string"
       },
       "Region": {
         "example": {
