@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.19.116
+  version: 2.19.117
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -1967,7 +1967,11 @@ paths:
           x-contracts:
             - contractId: 1
         '400':
-          description: Bad Request. Payee Id failed validation for deletion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         '404':
           description: Payee Id not found
           x-contracts:
@@ -2317,7 +2321,11 @@ paths:
                     type: by_regex
                     predefined: uuid
         '400':
-          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         '404':
           description: Not Found
       summary: List Payees V1
@@ -2488,6 +2496,7 @@ paths:
       description: |
         <p>Update the remote Id for the given Payee Id.</p>
         <p>Please use V3 instead</p>
+      operationId: updatePayeeRemoteIdV1
       parameters:
         - description: The UUID of the payee.
           in: path
@@ -2604,7 +2613,11 @@ paths:
           description: Details of Payee Changes
           x-contracts: null
         '400':
-          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
       summary: List Payee Changes
       tags:
         - Payees
@@ -2842,7 +2855,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreatePayeesRequest'
+              $ref: '#/components/schemas/CreatePayeesRequestV2'
           multipart/form-data:
             schema:
               properties:
@@ -2852,7 +2865,7 @@ paths:
                 file:
                   description: CSV File of payee data
                   items:
-                    $ref: '#/components/schemas/CreatePayeesCSVRequest'
+                    $ref: '#/components/schemas/CreatePayeesCSVRequestV2'
                   type: array
               type: object
         description: Post payees to create.
@@ -2941,7 +2954,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreatePayeesCSVResponse'
+                $ref: '#/components/schemas/CreatePayeesCSVResponseV2'
           description: HTTP Created. Body created only on CSV requests
           x-contracts:
             - contractId: 1
@@ -3044,7 +3057,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QueryBatchResponse'
+                $ref: '#/components/schemas/QueryBatchResponseV2'
           description: Get Batch Status
         '400':
           content:
@@ -3134,7 +3147,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse'
+                $ref: '#/components/schemas/PagedPayeeInvitationStatusResponseV2'
           description: Get Payees with Invitaion status - filters of payeeId and invitationStatus
           x-contracts:
             - contractId: 1
@@ -3468,7 +3481,7 @@ paths:
           name: ofacStatus
           required: false
           schema:
-            $ref: '#/components/schemas/WatchlistStatus'
+            $ref: '#/components/schemas/WatchlistStatusV3'
         - description: The onboarded status of the payees.
           in: query
           name: onboardedStatus
@@ -3543,7 +3556,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PagedPayeeResponse_2'
+                $ref: '#/components/schemas/PagedPayeeResponseV3'
           description: Details of Payee
           x-contracts:
             - contractId: 1
@@ -3674,7 +3687,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreatePayeesRequest_2'
+              $ref: '#/components/schemas/CreatePayeesRequestV3'
           multipart/form-data:
             schema:
               properties:
@@ -3684,7 +3697,7 @@ paths:
                 file:
                   description: CSV File of payee data
                   items:
-                    $ref: '#/components/schemas/CreatePayeesCSVRequest_2'
+                    $ref: '#/components/schemas/CreatePayeesCSVRequestV3'
                   type: array
               type: object
         description: Post payees to create.
@@ -3773,7 +3786,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreatePayeesCSVResponse_2'
+                $ref: '#/components/schemas/CreatePayeesCSVResponseV3'
           description: HTTP Created. Body created only on CSV requests
           x-contracts:
             - contractId: 1
@@ -3874,7 +3887,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QueryBatchResponse_2'
+                $ref: '#/components/schemas/QueryBatchResponseV3'
           description: Get Batch Status
         '400':
           content:
@@ -3930,7 +3943,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InvitePayeeRequest_2'
+              $ref: '#/components/schemas/InvitePayeeRequestV3'
         description: Provide Payor Id in body of request
         required: true
       responses:
@@ -4030,7 +4043,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_2'
+                $ref: '#/components/schemas/PagedPayeeInvitationStatusResponseV3'
           description: Get Payees with Invitaion status - filters of payeeId and invitationStatus
           x-contracts:
             - contractId: 1
@@ -4172,11 +4185,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PayeeDeltaResponse_2'
+                $ref: '#/components/schemas/PayeeDeltaResponseV3'
           description: Details of Payee Changes
           x-contracts: null
         '400':
-          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
       summary: List Payee Changes
       tags:
         - Payees
@@ -4201,6 +4218,7 @@ paths:
     post:
       description: |
         <p>Update the remote Id for the given Payee Id.</p>
+      operationId: updatePayeeRemoteIdV3
       parameters:
         - description: The UUID of the payee.
           in: path
@@ -4214,7 +4232,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateRemoteIdRequest'
+              $ref: '#/components/schemas/UpdateRemoteIdRequestV3'
         description: Request to update payee remote id v3
         required: true
       responses:
@@ -7765,7 +7783,7 @@ components:
           paymentChannelName: My payment channel
           routingNumber: XXXXX6789
           accountName: My account
-          countryCode: UK
+          countryCode: US
           iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
           currency: USD
           accountNumber: XXXXXX5678
@@ -7804,7 +7822,12 @@ components:
         address:
           $ref: '#/components/schemas/PayeeAddress'
         country:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         displayName:
           example: Bob
@@ -7884,10 +7907,10 @@ components:
           totalInvitedCount: 10
           totalOfacFailedCount: 0
         links:
-          - rel: rel
-            href: href
-          - rel: rel
-            href: href
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
         page:
           numberOfElements: 10
           totalPages: 10
@@ -7927,7 +7950,7 @@ components:
               paymentChannelName: My payment channel
               routingNumber: XXXXX6789
               accountName: My account
-              countryCode: UK
+              countryCode: US
               iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
               currency: USD
               accountNumber: XXXXXX5678
@@ -7977,7 +8000,7 @@ components:
               paymentChannelName: My payment channel
               routingNumber: XXXXX6789
               accountName: My account
-              countryCode: UK
+              countryCode: US
               iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
               currency: USD
               accountNumber: XXXXXX5678
@@ -7999,10 +8022,10 @@ components:
         summary:
           $ref: '#/components/schemas/PagedPayeeResponse_summary'
         page:
-          $ref: '#/components/schemas/PagedPayeeResponse_page'
+          $ref: '#/components/schemas/CommonPageObject'
         links:
           items:
-            $ref: '#/components/schemas/PagedPayeeResponse_links'
+            $ref: '#/components/schemas/CommonLinkObject'
           type: array
         content:
           items:
@@ -8062,15 +8085,15 @@ components:
       example:
         links:
           - rel: first
-            href: 'http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
           - rel: first
-            href: 'http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
         page:
-          numberOfElements: 2
-          totalPages: 1
-          pageSize: 25
-          page: 1
-          totalElements: 2
+          numberOfElements: 10
+          totalPages: 10
+          pageSize: 10
+          page: 10
+          totalElements: 10
         content:
           - payeeCountry: US
             displayName: Payee1
@@ -8086,10 +8109,10 @@ components:
             remoteId: payee_1
       properties:
         page:
-          $ref: '#/components/schemas/PayeeDeltaResponse_page'
+          $ref: '#/components/schemas/CommonPageObject'
         links:
           items:
-            $ref: '#/components/schemas/PayeeDeltaResponse_links'
+            $ref: '#/components/schemas/CommonLinkObject'
           type: array
         content:
           items:
@@ -8169,23 +8192,28 @@ components:
           nullable: true
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus_2'
+          $ref: '#/components/schemas/OnboardedStatusV2'
         ofacStatus:
-          $ref: '#/components/schemas/OfacStatus_2'
+          $ref: '#/components/schemas/OfacStatusV2'
         language:
-          $ref: '#/components/schemas/Language_2'
+          $ref: '#/components/schemas/LanguageV2'
         created:
           example: 2019-01-20T09:00:00.000Z
           format: date-time
           type: string
         country:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         displayName:
           example: Bob
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeTypeV2'
         disabled:
           type: boolean
         disabledComment:
@@ -8196,11 +8224,11 @@ components:
           format: date-time
           type: string
         address:
-          $ref: '#/components/schemas/PayeeAddress_2'
+          $ref: '#/components/schemas/PayeeAddressV2'
         individual:
-          $ref: '#/components/schemas/Individual'
+          $ref: '#/components/schemas/IndividualV2'
         company:
-          $ref: '#/components/schemas/Company'
+          $ref: '#/components/schemas/CompanyV2'
         cellphoneNumber:
           example: '1234567890'
           type: string
@@ -8255,7 +8283,7 @@ components:
           readOnly: true
           type: string
       type: object
-    CreatePayeesRequest:
+    CreatePayeesRequestV2:
       example:
         payees:
           - payorRefs:
@@ -8290,9 +8318,9 @@ components:
               description: challenge description
               value: challenge test
             company:
-              taxId: '123'
-              name: ABC Ltd
-              operatingName: ABC
+              taxId: '123123123'
+              name: ABC Group Plc
+              operatingName: ABC Co
             payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             email: bob@example.com
             remoteId: remoteId123
@@ -8336,9 +8364,9 @@ components:
               description: challenge description
               value: challenge test
             company:
-              taxId: '123'
-              name: ABC Ltd
-              operatingName: ABC
+              taxId: '123123123'
+              name: ABC Group Plc
+              operatingName: ABC Co
             payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             email: bob@example.com
             remoteId: remoteId123
@@ -8357,16 +8385,16 @@ components:
           type: string
         payees:
           items:
-            $ref: '#/components/schemas/CreatePayee'
+            $ref: '#/components/schemas/CreatePayeeV2'
           type: array
       required:
         - payees
         - payorId
       type: object
-    CreatePayeesCSVRequest:
+    CreatePayeesCSVRequestV2:
       properties:
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeTypeV2'
         remoteId:
           example: remoteId123
           maxLength: 100
@@ -8411,10 +8439,12 @@ components:
           minLength: 1
           type: string
         addressCountry:
-          description: Ideally a 2 letter ISO 3166-1 country code.  But a limited set of additional values will be corrected.  See Java Locale.getISOCountries() and Locale.getDisplayCountry()
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
-          maxLength: 50
+          maxLength: 2
           minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         individualNationalIdentification:
           example: AB123456C
@@ -8481,268 +8511,23 @@ components:
           maxLength: 34
           minLength: 15
           pattern: '^[A-Za-z0-9]+$'
+          title: IBAN - International Bank Account Number
           type: string
         paymentChannelCountryCode:
-          description: Must be a 2 character country code - per ISO 3166-1
-          enum:
-            - AF
-            - AX
-            - AL
-            - DZ
-            - AS
-            - AD
-            - AO
-            - AI
-            - AQ
-            - AG
-            - AR
-            - AM
-            - AW
-            - AU
-            - AT
-            - AZ
-            - BS
-            - BH
-            - BD
-            - BB
-            - BY
-            - BE
-            - BZ
-            - BJ
-            - BM
-            - BT
-            - BO
-            - BQ
-            - BA
-            - BW
-            - BV
-            - BR
-            - IO
-            - BN
-            - BG
-            - BF
-            - BI
-            - KH
-            - CM
-            - CA
-            - CV
-            - KY
-            - CF
-            - TD
-            - CL
-            - CN
-            - CX
-            - CC
-            - CO
-            - KM
-            - CG
-            - CD
-            - CK
-            - CR
-            - CI
-            - HR
-            - CU
-            - CW
-            - CY
-            - CZ
-            - DK
-            - DJ
-            - DM
-            - DO
-            - EC
-            - EG
-            - SV
-            - GQ
-            - ER
-            - EE
-            - ET
-            - FK
-            - FO
-            - FJ
-            - FI
-            - FR
-            - GF
-            - PF
-            - TF
-            - GA
-            - GM
-            - GE
-            - DE
-            - GH
-            - GI
-            - GR
-            - GL
-            - GD
-            - GP
-            - GU
-            - GT
-            - GG
-            - GN
-            - GW
-            - GY
-            - HT
-            - HM
-            - VA
-            - HN
-            - HK
-            - HU
-            - IS
-            - IN
-            - ID
-            - IR
-            - IQ
-            - IE
-            - IM
-            - IL
-            - IT
-            - JM
-            - JP
-            - JE
-            - JO
-            - KZ
-            - KE
-            - KI
-            - KP
-            - KR
-            - KW
-            - KG
-            - LA
-            - LV
-            - LB
-            - LS
-            - LR
-            - LY
-            - LI
-            - LT
-            - LU
-            - MO
-            - MK
-            - MG
-            - MW
-            - MY
-            - MV
-            - ML
-            - MT
-            - MH
-            - MQ
-            - MR
-            - MU
-            - YT
-            - MX
-            - FM
-            - MD
-            - MC
-            - MN
-            - ME
-            - MS
-            - MA
-            - MZ
-            - MM
-            - NA
-            - NR
-            - NP
-            - NL
-            - NC
-            - NZ
-            - NI
-            - NE
-            - NG
-            - NU
-            - NF
-            - MP
-            - 'NO'
-            - OM
-            - PK
-            - PW
-            - PS
-            - PA
-            - PG
-            - PY
-            - PE
-            - PH
-            - PN
-            - PL
-            - PT
-            - PR
-            - QA
-            - RE
-            - RO
-            - RU
-            - RW
-            - BL
-            - SH
-            - KN
-            - LC
-            - MF
-            - PM
-            - VC
-            - WS
-            - SM
-            - ST
-            - SA
-            - SN
-            - RS
-            - SC
-            - SL
-            - SG
-            - SX
-            - SK
-            - SI
-            - SB
-            - SO
-            - ZA
-            - GS
-            - SS
-            - ES
-            - LK
-            - SD
-            - SR
-            - SJ
-            - SZ
-            - SE
-            - CH
-            - SY
-            - TW
-            - TJ
-            - TZ
-            - TH
-            - TL
-            - TG
-            - TK
-            - TO
-            - TT
-            - TN
-            - TR
-            - TM
-            - TC
-            - TV
-            - UG
-            - UA
-            - AE
-            - GB
-            - US
-            - UM
-            - UY
-            - UZ
-            - VU
-            - VE
-            - VN
-            - VG
-            - VI
-            - WF
-            - EH
-            - YE
-            - ZM
-            - ZW
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
           maxLength: 2
           minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         paymentChannelCurrency:
-          enum:
-            - USD
-            - GBP
-            - EUR
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         challengeDescription:
           example: challenge description
@@ -8777,7 +8562,7 @@ components:
         - remoteId
         - type
       type: object
-    CreatePayeesCSVResponse:
+    CreatePayeesCSVResponseV2:
       example:
         batchId: cb6ff8c6-85e9-45a6-b7d9-d05305db67f3
         rejectedCsvRows:
@@ -8794,10 +8579,10 @@ components:
           type: string
         rejectedCsvRows:
           items:
-            $ref: '#/components/schemas/CreatePayeesCSVResponse_rejectedCsvRows'
+            $ref: '#/components/schemas/CreatePayeesCSVResponseV2_rejectedCsvRows'
           type: array
       type: object
-    QueryBatchResponse:
+    QueryBatchResponseV2:
       example:
         failures:
           - failedSubmission:
@@ -8854,9 +8639,9 @@ components:
                 description: challenge description
                 value: challenge test
               company:
-                taxId: '123'
-                name: ABC Ltd
-                operatingName: ABC
+                taxId: '123123123'
+                name: ABC Group Plc
+                operatingName: ABC Co
               payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
               email: bob@example.com
               acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
@@ -8915,9 +8700,9 @@ components:
                 description: challenge description
                 value: challenge test
               company:
-                taxId: '123'
-                name: ABC Ltd
-                operatingName: ABC
+                taxId: '123123123'
+                name: ABC Group Plc
+                operatingName: ABC Co
               payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
               email: bob@example.com
               acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
@@ -8940,7 +8725,7 @@ components:
           type: integer
         failures:
           items:
-            $ref: '#/components/schemas/FailedSubmission'
+            $ref: '#/components/schemas/FailedSubmissionV2'
           type: array
       type: object
     InvitationStatus:
@@ -8949,20 +8734,20 @@ components:
         - PENDING
         - DECLINED
       type: string
-    PagedPayeeInvitationStatusResponse:
+    PagedPayeeInvitationStatusResponseV2:
       description: List Payees Invitation Status Object
       example:
         links:
-          - rel: rel
-            href: href
-          - rel: rel
-            href: href
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
         page:
-          numberOfElements: 0
-          totalPages: 1
-          pageSize: 5
-          page: 5
-          totalElements: 6
+          numberOfElements: 10
+          totalPages: 10
+          pageSize: 10
+          page: 10
+          totalElements: 10
         content:
           - payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
@@ -8972,14 +8757,14 @@ components:
             invitationStatus: ACCEPTED
       properties:
         page:
-          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
+          $ref: '#/components/schemas/CommonPageObject'
         links:
           items:
-            $ref: '#/components/schemas/PagedPayeeResponse_links'
+            $ref: '#/components/schemas/CommonLinkObject'
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PayeeInvitationStatusResponse'
+            $ref: '#/components/schemas/PayeeInvitationStatusResponseV2'
           type: array
       type: object
     PayeeResponseV3:
@@ -9025,7 +8810,7 @@ components:
           name:
             firstName: Bob
             lastName: Smith
-            otherNames: A
+            otherNames: H
             title: Mr
           nationalIdentification: AB123456C
           dateOfBirth: 1985-01-01T00:00:00.000Z
@@ -9054,9 +8839,9 @@ components:
           nullable: true
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus_2'
+          $ref: '#/components/schemas/OnboardedStatusV3'
         watchlistStatus:
-          $ref: '#/components/schemas/WatchlistStatus'
+          $ref: '#/components/schemas/WatchlistStatusV3'
         watchlistOverrideExpiresAtTimestamp:
           example: 2019-01-20T09:00:00.000Z
           format: date-time
@@ -9066,19 +8851,24 @@ components:
           example: watchlist override comment
           type: string
         language:
-          $ref: '#/components/schemas/Language_2'
+          $ref: '#/components/schemas/LanguageV3'
         created:
           example: 2019-01-20T09:00:00.000Z
           format: date-time
           type: string
         country:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         displayName:
           example: Bob
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeTypeV3'
         disabled:
           type: boolean
         disabledComment:
@@ -9089,11 +8879,11 @@ components:
           format: date-time
           type: string
         address:
-          $ref: '#/components/schemas/PayeeAddress_2'
+          $ref: '#/components/schemas/PayeeAddressV3'
         individual:
-          $ref: '#/components/schemas/Individual_2'
+          $ref: '#/components/schemas/IndividualV3'
         company:
-          $ref: '#/components/schemas/Company_2'
+          $ref: '#/components/schemas/CompanyV3'
         cellphoneNumber:
           example: '1234567890'
           type: string
@@ -9138,7 +8928,7 @@ components:
           readOnly: true
           type: string
       type: object
-    WatchlistStatus:
+    WatchlistStatusV3:
       enum:
         - NONE
         - PENDING
@@ -9146,7 +8936,7 @@ components:
         - PASSED
         - FAILED
       type: string
-    PagedPayeeResponse_2:
+    PagedPayeeResponseV3:
       description: List Payees Response Object
       example:
         summary:
@@ -9156,10 +8946,10 @@ components:
           totalInvitedCount: 10
           totalWatchlistFailedCount: 0
         links:
-          - rel: rel
-            href: href
-          - rel: rel
-            href: href
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
         page:
           numberOfElements: 10
           totalPages: 10
@@ -9178,8 +8968,23 @@ components:
                 invitationStatus: ACCEPTED
                 remoteId: uniqueIdForRemoteEntity
                 paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            watchlistOverrideComment: watchlist override comment
             country: US
             cellphoneNumber: '1234567890'
+            displayName: Bob
+            kycCompletedTimestamp: 2019-01-20T09:00:00.000Z
+            marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
+            watchlistOverrideExpiresAtTimestamp: 2019-01-20T09:00:00.000Z
+            disabled: true
+            company:
+              taxId: '123123123'
+              name: ABC Group Plc
+              operatingName: ABC Co
+            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            pausePaymentTimestamp: 2019-01-20T09:00:00.000Z
+            email: bob@example.com
+            acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+            disabledUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             address:
               country: US
               countyOrProvince: FL
@@ -9193,34 +8998,17 @@ components:
               name:
                 firstName: Bob
                 lastName: Smith
-                otherNames: A
+                otherNames: H
                 title: Mr
-            displayName: ABC
+              nationalIdentification: AB123456C
+              dateOfBirth: 1985-01-01T00:00:00.000Z
             created: 2019-01-20T09:00:00.000Z
+            enhancedKycCompleted: true
+            pausePayment: true
             gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-            paymentChannel:
-              paymentChannelName: My payment channel
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: UK
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            marketingOptIns:
-              - optedIn: true
-                timestamp: 2019-01-20T09:00:00.000Z
-              - optedIn: true
-                timestamp: 2019-01-20T09:00:00.000Z
+            marketingOptInDecision: true
             watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
-            challenge:
-              description: challenge description
-              value: challenge test
-            company:
-              name: ABC Ltd.
-              operatingName: ABC
-            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-            email: bob@example.com
-            acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+            disabledComment: reason for disabled
           - payorRefs:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
@@ -9232,8 +9020,23 @@ components:
                 invitationStatus: ACCEPTED
                 remoteId: uniqueIdForRemoteEntity
                 paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            watchlistOverrideComment: watchlist override comment
             country: US
             cellphoneNumber: '1234567890'
+            displayName: Bob
+            kycCompletedTimestamp: 2019-01-20T09:00:00.000Z
+            marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
+            watchlistOverrideExpiresAtTimestamp: 2019-01-20T09:00:00.000Z
+            disabled: true
+            company:
+              taxId: '123123123'
+              name: ABC Group Plc
+              operatingName: ABC Co
+            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            pausePaymentTimestamp: 2019-01-20T09:00:00.000Z
+            email: bob@example.com
+            acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+            disabledUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             address:
               country: US
               countyOrProvince: FL
@@ -9247,65 +9050,143 @@ components:
               name:
                 firstName: Bob
                 lastName: Smith
-                otherNames: A
+                otherNames: H
                 title: Mr
-            displayName: ABC
+              nationalIdentification: AB123456C
+              dateOfBirth: 1985-01-01T00:00:00.000Z
             created: 2019-01-20T09:00:00.000Z
+            enhancedKycCompleted: true
+            pausePayment: true
             gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-            paymentChannel:
-              paymentChannelName: My payment channel
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: UK
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            marketingOptIns:
-              - optedIn: true
-                timestamp: 2019-01-20T09:00:00.000Z
-              - optedIn: true
-                timestamp: 2019-01-20T09:00:00.000Z
+            marketingOptInDecision: true
             watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
+            disabledComment: reason for disabled
+      properties:
+        summary:
+          $ref: '#/components/schemas/PagedPayeeResponseV3_summary'
+        page:
+          $ref: '#/components/schemas/CommonPageObject'
+        links:
+          items:
+            $ref: '#/components/schemas/CommonLinkObject'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/PayeeResponseV3'
+          type: array
+      type: object
+    CreatePayeesRequestV3:
+      example:
+        payees:
+          - payorRefs:
+              - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+                invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                invitationStatus: ACCEPTED
+                remoteId: uniqueIdForRemoteEntity
+                paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+              - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+                invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                invitationStatus: ACCEPTED
+                remoteId: uniqueIdForRemoteEntity
+                paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            address:
+              country: US
+              countyOrProvince: FL
+              line4: line4
+              city: Key West
+              line3: line3
+              line2: line2
+              line1: 500 Duval St
+              zipOrPostcode: '33945'
+            individual:
+              name:
+                firstName: Bob
+                lastName: Smith
+                otherNames: H
+                title: Mr
+              nationalIdentification: SA211123K
+              dateOfBirth: '1970-05-20T00:00:00.000+0000'
             challenge:
               description: challenge description
               value: challenge test
             company:
-              name: ABC Ltd.
-              operatingName: ABC
+              taxId: '123123123'
+              name: ABC Group Plc
+              operatingName: ABC Co
             payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             email: bob@example.com
-            acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
-      properties:
-        summary:
-          $ref: '#/components/schemas/PagedPayeeResponse_2_summary'
-        page:
-          $ref: '#/components/schemas/PagedPayeeResponse_page'
-        links:
-          items:
-            $ref: '#/components/schemas/PagedPayeeResponse_links'
-          type: array
-        content:
-          items:
-            $ref: '#/components/schemas/PayeeResponse_2'
-          type: array
-      type: object
-    CreatePayeesRequest_2:
+            remoteId: Remote ID
+            paymentChannel:
+              paymentChannelName: My Payment Channel
+              routingNumber: XXXXX6789
+              accountName: My account
+              countryCode: US
+              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+              currency: USD
+              accountNumber: XXXXXX5678
+          - payorRefs:
+              - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+                invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                invitationStatus: ACCEPTED
+                remoteId: uniqueIdForRemoteEntity
+                paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+              - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+                invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                invitationStatus: ACCEPTED
+                remoteId: uniqueIdForRemoteEntity
+                paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            address:
+              country: US
+              countyOrProvince: FL
+              line4: line4
+              city: Key West
+              line3: line3
+              line2: line2
+              line1: 500 Duval St
+              zipOrPostcode: '33945'
+            individual:
+              name:
+                firstName: Bob
+                lastName: Smith
+                otherNames: H
+                title: Mr
+              nationalIdentification: SA211123K
+              dateOfBirth: '1970-05-20T00:00:00.000+0000'
+            challenge:
+              description: challenge description
+              value: challenge test
+            company:
+              taxId: '123123123'
+              name: ABC Group Plc
+              operatingName: ABC Co
+            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            email: bob@example.com
+            remoteId: Remote ID
+            paymentChannel:
+              paymentChannelName: My Payment Channel
+              routingNumber: XXXXX6789
+              accountName: My account
+              countryCode: US
+              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+              currency: USD
+              accountNumber: XXXXXX5678
+        payorId: 9ac75325-5dcd-42d5-b992-175d7e0a035e
       properties:
         payorId:
           example: 9ac75325-5dcd-42d5-b992-175d7e0a035e
           type: string
         payees:
           items:
-            $ref: '#/components/schemas/CreatePayee_2'
+            $ref: '#/components/schemas/CreatePayeeV3'
           type: array
       required:
         - payees
         - payorId
       type: object
-    CreatePayeesCSVRequest_2:
+    CreatePayeesCSVRequestV3:
       properties:
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeTypeV3'
         remoteId:
           example: remoteId123
           maxLength: 100
@@ -9350,260 +9231,12 @@ components:
           minLength: 1
           type: string
         addressCountry:
-          description: Must be a 2 character country code - per ISO 3166-1
-          enum:
-            - AF
-            - AX
-            - AL
-            - DZ
-            - AS
-            - AD
-            - AO
-            - AI
-            - AQ
-            - AG
-            - AR
-            - AM
-            - AW
-            - AU
-            - AT
-            - AZ
-            - BS
-            - BH
-            - BD
-            - BB
-            - BY
-            - BE
-            - BZ
-            - BJ
-            - BM
-            - BT
-            - BO
-            - BQ
-            - BA
-            - BW
-            - BV
-            - BR
-            - IO
-            - BN
-            - BG
-            - BF
-            - BI
-            - KH
-            - CM
-            - CA
-            - CV
-            - KY
-            - CF
-            - TD
-            - CL
-            - CN
-            - CX
-            - CC
-            - CO
-            - KM
-            - CG
-            - CD
-            - CK
-            - CR
-            - CI
-            - HR
-            - CU
-            - CW
-            - CY
-            - CZ
-            - DK
-            - DJ
-            - DM
-            - DO
-            - EC
-            - EG
-            - SV
-            - GQ
-            - ER
-            - EE
-            - ET
-            - FK
-            - FO
-            - FJ
-            - FI
-            - FR
-            - GF
-            - PF
-            - TF
-            - GA
-            - GM
-            - GE
-            - DE
-            - GH
-            - GI
-            - GR
-            - GL
-            - GD
-            - GP
-            - GU
-            - GT
-            - GG
-            - GN
-            - GW
-            - GY
-            - HT
-            - HM
-            - VA
-            - HN
-            - HK
-            - HU
-            - IS
-            - IN
-            - ID
-            - IR
-            - IQ
-            - IE
-            - IM
-            - IL
-            - IT
-            - JM
-            - JP
-            - JE
-            - JO
-            - KZ
-            - KE
-            - KI
-            - KP
-            - KR
-            - KW
-            - KG
-            - LA
-            - LV
-            - LB
-            - LS
-            - LR
-            - LY
-            - LI
-            - LT
-            - LU
-            - MO
-            - MK
-            - MG
-            - MW
-            - MY
-            - MV
-            - ML
-            - MT
-            - MH
-            - MQ
-            - MR
-            - MU
-            - YT
-            - MX
-            - FM
-            - MD
-            - MC
-            - MN
-            - ME
-            - MS
-            - MA
-            - MZ
-            - MM
-            - NA
-            - NR
-            - NP
-            - NL
-            - NC
-            - NZ
-            - NI
-            - NE
-            - NG
-            - NU
-            - NF
-            - MP
-            - 'NO'
-            - OM
-            - PK
-            - PW
-            - PS
-            - PA
-            - PG
-            - PY
-            - PE
-            - PH
-            - PN
-            - PL
-            - PT
-            - PR
-            - QA
-            - RE
-            - RO
-            - RU
-            - RW
-            - BL
-            - SH
-            - KN
-            - LC
-            - MF
-            - PM
-            - VC
-            - WS
-            - SM
-            - ST
-            - SA
-            - SN
-            - RS
-            - SC
-            - SL
-            - SG
-            - SX
-            - SK
-            - SI
-            - SB
-            - SO
-            - ZA
-            - GS
-            - SS
-            - ES
-            - LK
-            - SD
-            - SR
-            - SJ
-            - SZ
-            - SE
-            - CH
-            - SY
-            - TW
-            - TJ
-            - TZ
-            - TH
-            - TL
-            - TG
-            - TK
-            - TO
-            - TT
-            - TN
-            - TR
-            - TM
-            - TC
-            - TV
-            - UG
-            - UA
-            - AE
-            - GB
-            - US
-            - UM
-            - UY
-            - UZ
-            - VU
-            - VE
-            - VN
-            - VG
-            - VI
-            - WF
-            - EH
-            - YE
-            - ZM
-            - ZW
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
           maxLength: 2
           minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         individualNationalIdentification:
           example: AB123456C
@@ -9670,268 +9303,23 @@ components:
           maxLength: 34
           minLength: 15
           pattern: '^[A-Za-z0-9]+$'
+          title: IBAN - International Bank Account Number
           type: string
         paymentChannelCountryCode:
-          description: Must be a 2 character country code - per ISO 3166-1
-          enum:
-            - AF
-            - AX
-            - AL
-            - DZ
-            - AS
-            - AD
-            - AO
-            - AI
-            - AQ
-            - AG
-            - AR
-            - AM
-            - AW
-            - AU
-            - AT
-            - AZ
-            - BS
-            - BH
-            - BD
-            - BB
-            - BY
-            - BE
-            - BZ
-            - BJ
-            - BM
-            - BT
-            - BO
-            - BQ
-            - BA
-            - BW
-            - BV
-            - BR
-            - IO
-            - BN
-            - BG
-            - BF
-            - BI
-            - KH
-            - CM
-            - CA
-            - CV
-            - KY
-            - CF
-            - TD
-            - CL
-            - CN
-            - CX
-            - CC
-            - CO
-            - KM
-            - CG
-            - CD
-            - CK
-            - CR
-            - CI
-            - HR
-            - CU
-            - CW
-            - CY
-            - CZ
-            - DK
-            - DJ
-            - DM
-            - DO
-            - EC
-            - EG
-            - SV
-            - GQ
-            - ER
-            - EE
-            - ET
-            - FK
-            - FO
-            - FJ
-            - FI
-            - FR
-            - GF
-            - PF
-            - TF
-            - GA
-            - GM
-            - GE
-            - DE
-            - GH
-            - GI
-            - GR
-            - GL
-            - GD
-            - GP
-            - GU
-            - GT
-            - GG
-            - GN
-            - GW
-            - GY
-            - HT
-            - HM
-            - VA
-            - HN
-            - HK
-            - HU
-            - IS
-            - IN
-            - ID
-            - IR
-            - IQ
-            - IE
-            - IM
-            - IL
-            - IT
-            - JM
-            - JP
-            - JE
-            - JO
-            - KZ
-            - KE
-            - KI
-            - KP
-            - KR
-            - KW
-            - KG
-            - LA
-            - LV
-            - LB
-            - LS
-            - LR
-            - LY
-            - LI
-            - LT
-            - LU
-            - MO
-            - MK
-            - MG
-            - MW
-            - MY
-            - MV
-            - ML
-            - MT
-            - MH
-            - MQ
-            - MR
-            - MU
-            - YT
-            - MX
-            - FM
-            - MD
-            - MC
-            - MN
-            - ME
-            - MS
-            - MA
-            - MZ
-            - MM
-            - NA
-            - NR
-            - NP
-            - NL
-            - NC
-            - NZ
-            - NI
-            - NE
-            - NG
-            - NU
-            - NF
-            - MP
-            - 'NO'
-            - OM
-            - PK
-            - PW
-            - PS
-            - PA
-            - PG
-            - PY
-            - PE
-            - PH
-            - PN
-            - PL
-            - PT
-            - PR
-            - QA
-            - RE
-            - RO
-            - RU
-            - RW
-            - BL
-            - SH
-            - KN
-            - LC
-            - MF
-            - PM
-            - VC
-            - WS
-            - SM
-            - ST
-            - SA
-            - SN
-            - RS
-            - SC
-            - SL
-            - SG
-            - SX
-            - SK
-            - SI
-            - SB
-            - SO
-            - ZA
-            - GS
-            - SS
-            - ES
-            - LK
-            - SD
-            - SR
-            - SJ
-            - SZ
-            - SE
-            - CH
-            - SY
-            - TW
-            - TJ
-            - TZ
-            - TH
-            - TL
-            - TG
-            - TK
-            - TO
-            - TT
-            - TN
-            - TR
-            - TM
-            - TC
-            - TV
-            - UG
-            - UA
-            - AE
-            - GB
-            - US
-            - UM
-            - UY
-            - UZ
-            - VU
-            - VE
-            - VN
-            - VG
-            - VI
-            - WF
-            - EH
-            - YE
-            - ZM
-            - ZW
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
           maxLength: 2
           minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         paymentChannelCurrency:
-          enum:
-            - USD
-            - GBP
-            - EUR
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         challengeDescription:
           example: challenge description
@@ -9966,7 +9354,7 @@ components:
         - remoteId
         - type
       type: object
-    CreatePayeesCSVResponse_2:
+    CreatePayeesCSVResponseV3:
       example:
         batchId: cb6ff8c6-85e9-45a6-b7d9-d05305db67f3
         rejectedCsvRows:
@@ -9983,10 +9371,10 @@ components:
           type: string
         rejectedCsvRows:
           items:
-            $ref: '#/components/schemas/CreatePayeesCSVResponse_rejectedCsvRows'
+            $ref: '#/components/schemas/CreatePayeesCSVResponseV2_rejectedCsvRows'
           type: array
       type: object
-    QueryBatchResponse_2:
+    QueryBatchResponseV3:
       example:
         failures:
           - failedSubmission:
@@ -10001,29 +9389,37 @@ components:
                   invitationStatus: ACCEPTED
                   remoteId: uniqueIdForRemoteEntity
                   paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-              country: US
               cellphoneNumber: '1234567890'
+              marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
+              termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00.000Z
+              queryByExampleObject: true
+              disabled: true
+              company:
+                taxId: '123123123'
+                name: ABC Group Plc
+                operatingName: ABC Co
+              id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+              email: bob@example.com
               address:
-                country: US
-                countyOrProvince: FL
-                line4: line4
-                city: Key West
-                line3: line3
-                line2: line2
-                line1: 500 Duval St
-                zipOrPostcode: '33945'
+                addressCountry: US
+                addressZipOrPostcode: '33945'
+                addressLine1: 500 Duval St
+                addressLine2: addressLine2
+                addressLine3: addressLine3
+                addressLine4: addressLine4
+                addressCountyOrProvince: FL
+                addressCity: Key West
               individual:
-                name:
-                  firstName: Bob
-                  lastName: Smith
-                  otherNames: A
-                  title: Mr
+                unprotectedDateOfBirth: '1985-01-01T00:00:00.000+0000'
                 nationalIdentification: AB123456C
-                dateOfBirth: 1985-01-01T00:00:00.000Z
-              displayName: Bob
+                dateOfBirth: '1985-01-01T00:00:00.000+0000'
               created: 2019-01-20T09:00:00.000Z
-              type: Individual
+              enhancedKycCompleted: true
+              pausePayment: true
               gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
+              version: 0
+              marketingOptInDecision: true
+              remoteId: remoteId
               paymentChannel:
                 paymentChannelName: paymentChannelName
                 routingNumber: XXXXX6789
@@ -10032,23 +9428,17 @@ components:
                 iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
                 currency: USD
                 accountNumber: XXXXXX5678
-              remoteId: remoteId123
-              marketingOptIns:
+              hiddenMarketingOptIns:
                 - optedIn: true
                   timestamp: 2019-01-20T09:00:00.000Z
                 - optedIn: true
                   timestamp: 2019-01-20T09:00:00.000Z
-              watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
-              challenge:
-                description: challenge description
-                value: challenge test
-              company:
-                taxId: '123'
-                name: ABC Ltd
-                operatingName: ABC
-              payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-              email: bob@example.com
-              acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+              computedName: 'Cuthbert, Barney'
+              name:
+                firstName: Bob
+                lastName: Smith
+                otherNames: H
+                title: Mr
             failureMessage: failure reason
           - failedSubmission:
               payorRefs:
@@ -10062,29 +9452,37 @@ components:
                   invitationStatus: ACCEPTED
                   remoteId: uniqueIdForRemoteEntity
                   paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-              country: US
               cellphoneNumber: '1234567890'
+              marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
+              termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00.000Z
+              queryByExampleObject: true
+              disabled: true
+              company:
+                taxId: '123123123'
+                name: ABC Group Plc
+                operatingName: ABC Co
+              id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+              email: bob@example.com
               address:
-                country: US
-                countyOrProvince: FL
-                line4: line4
-                city: Key West
-                line3: line3
-                line2: line2
-                line1: 500 Duval St
-                zipOrPostcode: '33945'
+                addressCountry: US
+                addressZipOrPostcode: '33945'
+                addressLine1: 500 Duval St
+                addressLine2: addressLine2
+                addressLine3: addressLine3
+                addressLine4: addressLine4
+                addressCountyOrProvince: FL
+                addressCity: Key West
               individual:
-                name:
-                  firstName: Bob
-                  lastName: Smith
-                  otherNames: A
-                  title: Mr
+                unprotectedDateOfBirth: '1985-01-01T00:00:00.000+0000'
                 nationalIdentification: AB123456C
-                dateOfBirth: 1985-01-01T00:00:00.000Z
-              displayName: Bob
+                dateOfBirth: '1985-01-01T00:00:00.000+0000'
               created: 2019-01-20T09:00:00.000Z
-              type: Individual
+              enhancedKycCompleted: true
+              pausePayment: true
               gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
+              version: 0
+              marketingOptInDecision: true
+              remoteId: remoteId
               paymentChannel:
                 paymentChannelName: paymentChannelName
                 routingNumber: XXXXX6789
@@ -10093,23 +9491,17 @@ components:
                 iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
                 currency: USD
                 accountNumber: XXXXXX5678
-              remoteId: remoteId123
-              marketingOptIns:
+              hiddenMarketingOptIns:
                 - optedIn: true
                   timestamp: 2019-01-20T09:00:00.000Z
                 - optedIn: true
                   timestamp: 2019-01-20T09:00:00.000Z
-              watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
-              challenge:
-                description: challenge description
-                value: challenge test
-              company:
-                taxId: '123'
-                name: ABC Ltd
-                operatingName: ABC
-              payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-              email: bob@example.com
-              acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+              computedName: 'Cuthbert, Barney'
+              name:
+                firstName: Bob
+                lastName: Smith
+                otherNames: H
+                title: Mr
             failureMessage: failure reason
         pendingCount: 2
         failureCount: 2
@@ -10131,10 +9523,12 @@ components:
           type: integer
         failures:
           items:
-            $ref: '#/components/schemas/FailedSubmission_2'
+            $ref: '#/components/schemas/FailedSubmissionV3'
           type: array
       type: object
-    InvitePayeeRequest_2:
+    InvitePayeeRequestV3:
+      example:
+        payorId: 9ac75325-5dcd-42d5-b992-175d7e0a035e
       properties:
         payorId:
           example: 9ac75325-5dcd-42d5-b992-175d7e0a035e
@@ -10143,20 +9537,20 @@ components:
       required:
         - payorId
       type: object
-    PagedPayeeInvitationStatusResponse_2:
+    PagedPayeeInvitationStatusResponseV3:
       description: List Payees Invitation Status Object
       example:
         links:
-          - rel: rel
-            href: href
-          - rel: rel
-            href: href
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
         page:
-          numberOfElements: 0
-          totalPages: 1
-          pageSize: 5
-          page: 5
-          totalElements: 6
+          numberOfElements: 10
+          totalPages: 10
+          pageSize: 10
+          page: 10
+          totalElements: 10
         content:
           - payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
@@ -10166,30 +9560,30 @@ components:
             invitationStatus: ACCEPTED
       properties:
         page:
-          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
+          $ref: '#/components/schemas/CommonPageObject'
         links:
           items:
-            $ref: '#/components/schemas/PagedPayeeResponse_links'
+            $ref: '#/components/schemas/CommonLinkObject'
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PayeeInvitationStatusResponse_2'
+            $ref: '#/components/schemas/PayeeInvitationStatusResponseV3'
           type: array
       type: object
-    PayeeDeltaResponse_2:
+    PayeeDeltaResponseV3:
       description: List Payee Changes Response Object
       example:
         links:
           - rel: first
-            href: 'http://api.sandbox.velopayments.com/v3/payees/deltas?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
           - rel: first
-            href: 'http://api.sandbox.velopayments.com/v3/payees/deltas?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
         page:
-          numberOfElements: 2
-          totalPages: 1
-          pageSize: 25
-          page: 1
-          totalElements: 2
+          numberOfElements: 10
+          totalPages: 10
+          pageSize: 10
+          page: 10
+          totalElements: 10
         content:
           - payeeCountry: US
             displayName: Payee1
@@ -10205,15 +9599,35 @@ components:
             remoteId: payee_1
       properties:
         page:
-          $ref: '#/components/schemas/PayeeDeltaResponse_page'
+          $ref: '#/components/schemas/CommonPageObject'
         links:
           items:
-            $ref: '#/components/schemas/PayeeDeltaResponse_2_links'
+            $ref: '#/components/schemas/CommonLinkObject'
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PayeeDelta_2'
+            $ref: '#/components/schemas/PayeeDeltaV3'
           type: array
+      type: object
+    UpdateRemoteIdRequestV3:
+      example:
+        payorId: 9ac75325-5dcd-42d5-b992-175d7e0a035e
+        remoteId: remoteId123
+      properties:
+        payorId:
+          example: 9ac75325-5dcd-42d5-b992-175d7e0a035e
+          format: uuid
+          nullable: false
+          type: string
+        remoteId:
+          example: remoteId123
+          maxLength: 100
+          minLength: 1
+          nullable: false
+          type: string
+      required:
+        - payorId
+        - remoteId
       type: object
     ListSourceAccountResponse:
       description: List Source Accounts Response Object
@@ -10718,25 +10132,25 @@ components:
           - paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorPaymentId: payorPaymentId
             sourceCurrency: sourceCurrency
-            sourceAmount: 6
+            sourceAmount: 7
             payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             paymentCurrency: paymentCurrency
-            paymentAmount: 0
+            paymentAmount: 2
             status: status
           - paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorPaymentId: payorPaymentId
             sourceCurrency: sourceCurrency
-            sourceAmount: 6
+            sourceAmount: 7
             payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             paymentCurrency: paymentCurrency
-            paymentAmount: 0
+            paymentAmount: 2
             status: status
       properties:
         page:
-          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
+          $ref: '#/components/schemas/PaymentDeltaResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/PagedPayeeResponse_links'
+            $ref: '#/components/schemas/PaymentDeltaResponse_links'
           type: array
         content:
           items:
@@ -11407,10 +10821,10 @@ components:
             payorName: payorName
       properties:
         page:
-          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
+          $ref: '#/components/schemas/PaymentDeltaResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/PagedPayeeResponse_links'
+            $ref: '#/components/schemas/PaymentDeltaResponse_links'
           type: array
         content:
           items:
@@ -11611,10 +11025,10 @@ components:
         summary:
           $ref: '#/components/schemas/GetPaymentsForPayoutResponseV4_summary'
         page:
-          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
+          $ref: '#/components/schemas/PaymentDeltaResponse_page'
         links:
           items:
-            $ref: '#/components/schemas/PagedPayeeResponse_links'
+            $ref: '#/components/schemas/PaymentDeltaResponse_links'
           type: array
         content:
           items:
@@ -12783,22 +12197,32 @@ components:
           nullable: true
           type: string
         country:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
-          maxLength: 50
+          maxLength: 2
           minLength: 2
-          nullable: false
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
       required:
         - city
         - country
         - line1
       type: object
+    IsoCountryCode:
+      description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
+      example: US
+      maxLength: 2
+      minLength: 2
+      pattern: '^[A-Z]{2}$'
+      title: ISO 3166 2 Character Country Code
+      type: string
     PayeePaymentChannel:
       example:
         paymentChannelName: My payment channel
         routingNumber: XXXXX6789
         accountName: My account
-        countryCode: UK
+        countryCode: US
         iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
         currency: USD
         accountNumber: XXXXXX5678
@@ -12812,6 +12236,7 @@ components:
           maxLength: 34
           minLength: 15
           pattern: '^[A-Za-z0-9]+$'
+          title: IBAN - International Bank Account Number
           type: string
         accountNumber:
           example: XXXXXX5678
@@ -12824,17 +12249,20 @@ components:
           minLength: 9
           type: string
         countryCode:
-          description: Country Code must be a valid 2 letter ISO 3166-1 country code.
-          example: UK
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: US
           maxLength: 2
           minLength: 2
           pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         currency:
-          enum:
-            - USD
-            - GBP
-            - EUR
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         accountName:
           example: My account
@@ -12948,6 +12376,49 @@ components:
           format: date-time
           type: string
       type: object
+    CommonPageObject:
+      example:
+        numberOfElements: 10
+        totalPages: 10
+        pageSize: 10
+        page: 10
+        totalElements: 10
+      properties:
+        numberOfElements:
+          example: 10
+          format: int64
+          type: integer
+        totalElements:
+          example: 10
+          format: int64
+          type: integer
+        totalPages:
+          example: 10
+          format: int64
+          type: integer
+        page:
+          example: 10
+          format: int64
+          type: integer
+        pageSize:
+          example: 10
+          format: int64
+          type: integer
+      type: object
+    CommonLinkObject:
+      example:
+        rel: first
+        href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
+      properties:
+        rel:
+          description: 'One of: first, last, or self'
+          example: first
+          type: string
+        href:
+          description: the resource URI
+          example: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
+          type: string
+      type: object
     PayeeResponse:
       example:
         payorRefs:
@@ -12982,7 +12453,7 @@ components:
           paymentChannelName: My payment channel
           routingNumber: XXXXX6789
           accountName: My account
-          countryCode: UK
+          countryCode: US
           iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
           currency: USD
           accountNumber: XXXXXX5678
@@ -13020,7 +12491,12 @@ components:
         address:
           $ref: '#/components/schemas/PayeeAddress'
         country:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         displayName:
           example: ABC
@@ -13169,20 +12645,20 @@ components:
           format: uuid
           type: string
       type: object
-    OnboardedStatus_2:
+    OnboardedStatusV2:
       enum:
         - CREATED
         - INVITED
         - REGISTERED
         - ONBOARDED
       type: string
-    OfacStatus_2:
+    OfacStatusV2:
       enum:
         - PENDING
         - PASSED
         - FAILED
       type: string
-    Language_2:
+    LanguageV2:
       description: Available Payee Language codes
       enum:
         - AR
@@ -13197,7 +12673,12 @@ components:
         - UR
         - ZH
       type: string
-    PayeeAddress_2:
+    PayeeTypeV2:
+      enum:
+        - Individual
+        - Company
+      type: string
+    PayeeAddressV2:
       example:
         country: US
         countyOrProvince: FL
@@ -13248,17 +12729,19 @@ components:
           nullable: true
           type: string
         country:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
-          maxLength: 50
+          maxLength: 2
           minLength: 2
-          nullable: false
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
       required:
         - city
         - country
         - line1
       type: object
-    Individual:
+    IndividualV2:
       example:
         name:
           firstName: Bob
@@ -13269,7 +12752,7 @@ components:
         dateOfBirth: 1985-01-01T00:00:00.000Z
       properties:
         name:
-          $ref: '#/components/schemas/IndividualV1_name'
+          $ref: '#/components/schemas/NameV2'
         nationalIdentification:
           description: 'If not authorized to view, value will be masked. Example: XXXXX1234'
           example: AB123456C
@@ -13286,7 +12769,7 @@ components:
         - dateOfBirth
         - name
       type: object
-    Company:
+    CompanyV2:
       example:
         taxId: '123123123'
         name: ABC Group Plc
@@ -13314,7 +12797,7 @@ components:
       required:
         - name
       type: object
-    CreatePayee:
+    CreatePayeeV2:
       example:
         payorRefs:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
@@ -13348,9 +12831,9 @@ components:
           description: challenge description
           value: challenge test
         company:
-          taxId: '123'
-          name: ABC Ltd
-          operatingName: ABC
+          taxId: '123123123'
+          name: ABC Group Plc
+          operatingName: ABC Co
         payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
         email: bob@example.com
         remoteId: remoteId123
@@ -13386,26 +12869,42 @@ components:
           minLength: 1
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeTypeV2'
         address:
-          $ref: '#/components/schemas/CreatePayeeAddress'
+          $ref: '#/components/schemas/CreatePayeeAddressV2'
         paymentChannel:
-          $ref: '#/components/schemas/CreatePaymentChannel'
+          $ref: '#/components/schemas/CreatePaymentChannelV2'
         challenge:
-          $ref: '#/components/schemas/Challenge'
+          $ref: '#/components/schemas/ChallengeV2'
         language:
-          $ref: '#/components/schemas/Language'
+          $ref: '#/components/schemas/LanguageV2'
         company:
-          $ref: '#/components/schemas/CompanyV1'
+          $ref: '#/components/schemas/CompanyV2'
         individual:
-          $ref: '#/components/schemas/CreateIndividual'
+          $ref: '#/components/schemas/CreateIndividualV2'
       required:
         - address
         - email
         - remoteId
         - type
       type: object
-    FailedSubmission:
+    Iban:
+      description: 'Must match the regular expression ```^[A-Za-z0-9]+$```.'
+      example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+      maxLength: 34
+      minLength: 15
+      pattern: '^[A-Za-z0-9]+$'
+      title: IBAN - International Bank Account Number
+      type: string
+    IsoCurrency:
+      description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+      example: USD
+      maxLength: 3
+      minLength: 3
+      pattern: '^[A-Z]{3}$'
+      title: ISO Currency Code
+      type: string
+    FailedSubmissionV2:
       example:
         failedSubmission:
           payorRefs:
@@ -13461,21 +12960,21 @@ components:
             description: challenge description
             value: challenge test
           company:
-            taxId: '123'
-            name: ABC Ltd
-            operatingName: ABC
+            taxId: '123123123'
+            name: ABC Group Plc
+            operatingName: ABC Co
           payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
           email: bob@example.com
           acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
         failureMessage: failure reason
       properties:
         failedSubmission:
-          $ref: '#/components/schemas/Payee_2'
+          $ref: '#/components/schemas/PayeeV2'
         failureMessage:
           example: failure reason
           type: string
       type: object
-    PayeeInvitationStatusResponse:
+    PayeeInvitationStatusResponseV2:
       example:
         payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
         gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
@@ -13532,18 +13031,108 @@ components:
           format: uuid
           type: string
       type: object
-    Individual_2:
+    OnboardedStatusV3:
+      enum:
+        - CREATED
+        - INVITED
+        - REGISTERED
+        - ONBOARDED
+      type: string
+    LanguageV3:
+      description: Available Payee Language codes
+      enum:
+        - AR
+        - EN
+        - ES
+        - FR
+        - HE
+        - HI
+        - JA
+        - PT
+        - RU
+        - UR
+        - ZH
+      type: string
+    PayeeTypeV3:
+      enum:
+        - Individual
+        - Company
+      type: string
+    PayeeAddressV3:
+      example:
+        country: US
+        countyOrProvince: FL
+        line4: line4
+        city: Key West
+        line3: line3
+        line2: line2
+        line1: 500 Duval St
+        zipOrPostcode: '33945'
+      properties:
+        line1:
+          example: 500 Duval St
+          maxLength: 255
+          minLength: 2
+          nullable: false
+          type: string
+        line2:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        line3:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        line4:
+          maxLength: 255
+          minLength: 0
+          nullable: true
+          type: string
+        city:
+          example: Key West
+          maxLength: 100
+          minLength: 2
+          nullable: false
+          type: string
+        countyOrProvince:
+          example: FL
+          maxLength: 100
+          minLength: 2
+          nullable: true
+          type: string
+        zipOrPostcode:
+          example: '33945'
+          maxLength: 30
+          minLength: 2
+          nullable: true
+          type: string
+        country:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
+          type: string
+      required:
+        - city
+        - country
+        - line1
+      type: object
+    IndividualV3:
       example:
         name:
           firstName: Bob
           lastName: Smith
-          otherNames: A
+          otherNames: H
           title: Mr
         nationalIdentification: AB123456C
         dateOfBirth: 1985-01-01T00:00:00.000Z
       properties:
         name:
-          $ref: '#/components/schemas/IndividualV1_name'
+          $ref: '#/components/schemas/NameV3'
         nationalIdentification:
           description: 'If not authorized to view, value will be masked. Example: XXXXX1234'
           example: AB123456C
@@ -13557,10 +13146,9 @@ components:
           readOnly: true
           type: string
       required:
-        - dateOfBirth
         - name
       type: object
-    Company_2:
+    CompanyV3:
       example:
         taxId: '123123123'
         name: ABC Group Plc
@@ -13588,7 +13176,7 @@ components:
       required:
         - name
       type: object
-    PayeeResponse_2:
+    CreatePayeeV3:
       example:
         payorRefs:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
@@ -13601,8 +13189,6 @@ components:
             invitationStatus: ACCEPTED
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-        country: US
-        cellphoneNumber: '1234567890'
         address:
           country: US
           countyOrProvince: FL
@@ -13616,107 +13202,28 @@ components:
           name:
             firstName: Bob
             lastName: Smith
-            otherNames: A
+            otherNames: H
             title: Mr
-        displayName: ABC
-        created: 2019-01-20T09:00:00.000Z
-        gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-        paymentChannel:
-          paymentChannelName: My payment channel
-          routingNumber: XXXXX6789
-          accountName: My account
-          countryCode: UK
-          iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-          currency: USD
-          accountNumber: XXXXXX5678
-        marketingOptIns:
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00.000Z
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00.000Z
-        watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
+          nationalIdentification: SA211123K
+          dateOfBirth: '1970-05-20T00:00:00.000+0000'
         challenge:
           description: challenge description
           value: challenge test
         company:
-          name: ABC Ltd.
-          operatingName: ABC
+          taxId: '123123123'
+          name: ABC Group Plc
+          operatingName: ABC Co
         payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
         email: bob@example.com
-        acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
-      properties:
-        payeeId:
-          example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-          format: uuid
-          readOnly: true
-          type: string
-        payorRefs:
-          items:
-            $ref: '#/components/schemas/PayeePayorRefV3'
-          nullable: true
-          readOnly: true
-          type: array
-        email:
-          example: bob@example.com
-          format: email
-          nullable: true
-          type: string
-        address:
-          $ref: '#/components/schemas/PayeeAddress'
-        country:
-          example: US
-          type: string
-        displayName:
-          example: ABC
-          type: string
+        remoteId: Remote ID
         paymentChannel:
-          $ref: '#/components/schemas/PayeePaymentChannel'
-        challenge:
-          $ref: '#/components/schemas/Challenge'
-        language:
-          $ref: '#/components/schemas/Language'
-        acceptTermsAndConditionsTimestamp:
-          description: The timestamp when the payee last accepted T&Cs
-          example: 2019-01-20T09:00:00.000Z
-          format: date-time
-          nullable: true
-          readOnly: true
-          type: string
-        cellphoneNumber:
-          example: '1234567890'
-          type: string
-        payeeType:
-          $ref: '#/components/schemas/PayeeType'
-        company:
-          $ref: '#/components/schemas/CompanyResponse'
-        individual:
-          $ref: '#/components/schemas/IndividualResponse'
-        created:
-          example: 2019-01-20T09:00:00.000Z
-          format: date-time
-          type: string
-        gracePeriodEndDate:
-          example: 2019-01-20T00:00:00.000Z
-          format: date
-          nullable: true
-          readOnly: true
-          type: string
-        watchlistStatusUpdatedTimestamp:
-          example: 2019-01-20T09:00:00.000Z
-          format: date_time
-          nullable: true
-          readOnly: true
-          type: string
-        marketingOptIns:
-          items:
-            $ref: '#/components/schemas/MarketingOptIn'
-          type: array
-        watchlistStatus:
-          $ref: '#/components/schemas/WatchlistStatus'
-        onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus'
-      type: object
-    CreatePayee_2:
+          paymentChannelName: My Payment Channel
+          routingNumber: XXXXX6789
+          accountName: My account
+          countryCode: US
+          iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+          currency: USD
+          accountNumber: XXXXXX5678
       properties:
         payeeId:
           example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
@@ -13741,26 +13248,26 @@ components:
           minLength: 1
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeTypeV3'
         address:
-          $ref: '#/components/schemas/CreatePayeeAddress_2'
+          $ref: '#/components/schemas/CreatePayeeAddressV3'
         paymentChannel:
-          $ref: '#/components/schemas/CreatePaymentChannel_2'
+          $ref: '#/components/schemas/CreatePaymentChannelV3'
         challenge:
-          $ref: '#/components/schemas/Challenge'
+          $ref: '#/components/schemas/ChallengeV3'
         language:
-          $ref: '#/components/schemas/Language'
+          $ref: '#/components/schemas/LanguageV3'
         company:
-          $ref: '#/components/schemas/CompanyV1'
+          $ref: '#/components/schemas/CompanyV3'
         individual:
-          $ref: '#/components/schemas/CreateIndividual_2'
+          $ref: '#/components/schemas/CreateIndividualV3'
       required:
         - address
         - email
         - remoteId
         - type
       type: object
-    FailedSubmission_2:
+    FailedSubmissionV3:
       example:
         failedSubmission:
           payorRefs:
@@ -13774,29 +13281,37 @@ components:
               invitationStatus: ACCEPTED
               remoteId: uniqueIdForRemoteEntity
               paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-          country: US
           cellphoneNumber: '1234567890'
+          marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
+          termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00.000Z
+          queryByExampleObject: true
+          disabled: true
+          company:
+            taxId: '123123123'
+            name: ABC Group Plc
+            operatingName: ABC Co
+          id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+          email: bob@example.com
           address:
-            country: US
-            countyOrProvince: FL
-            line4: line4
-            city: Key West
-            line3: line3
-            line2: line2
-            line1: 500 Duval St
-            zipOrPostcode: '33945'
+            addressCountry: US
+            addressZipOrPostcode: '33945'
+            addressLine1: 500 Duval St
+            addressLine2: addressLine2
+            addressLine3: addressLine3
+            addressLine4: addressLine4
+            addressCountyOrProvince: FL
+            addressCity: Key West
           individual:
-            name:
-              firstName: Bob
-              lastName: Smith
-              otherNames: A
-              title: Mr
+            unprotectedDateOfBirth: '1985-01-01T00:00:00.000+0000'
             nationalIdentification: AB123456C
-            dateOfBirth: 1985-01-01T00:00:00.000Z
-          displayName: Bob
+            dateOfBirth: '1985-01-01T00:00:00.000+0000'
           created: 2019-01-20T09:00:00.000Z
-          type: Individual
+          enhancedKycCompleted: true
+          pausePayment: true
           gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
+          version: 0
+          marketingOptInDecision: true
+          remoteId: remoteId
           paymentChannel:
             paymentChannelName: paymentChannelName
             routingNumber: XXXXX6789
@@ -13805,32 +13320,26 @@ components:
             iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
             currency: USD
             accountNumber: XXXXXX5678
-          remoteId: remoteId123
-          marketingOptIns:
+          hiddenMarketingOptIns:
             - optedIn: true
               timestamp: 2019-01-20T09:00:00.000Z
             - optedIn: true
               timestamp: 2019-01-20T09:00:00.000Z
-          watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
-          challenge:
-            description: challenge description
-            value: challenge test
-          company:
-            taxId: '123'
-            name: ABC Ltd
-            operatingName: ABC
-          payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-          email: bob@example.com
-          acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+          computedName: 'Cuthbert, Barney'
+          name:
+            firstName: Bob
+            lastName: Smith
+            otherNames: H
+            title: Mr
         failureMessage: failure reason
       properties:
         failedSubmission:
-          $ref: '#/components/schemas/Payee_2'
+          $ref: '#/components/schemas/PayeeV3'
         failureMessage:
           example: failure reason
           type: string
       type: object
-    PayeeInvitationStatusResponse_2:
+    PayeeInvitationStatusResponseV3:
       example:
         payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
         gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
@@ -13854,7 +13363,7 @@ components:
         - invitationStatus
         - payeeId
       type: object
-    PayeeDelta_2:
+    PayeeDeltaV3:
       example:
         payeeCountry: US
         displayName: Payee1
@@ -13884,10 +13393,15 @@ components:
           nullable: true
           type: string
         payeeCountry:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus_2'
+          $ref: '#/components/schemas/OnboardedStatusV3'
       required:
         - payeeId
         - remoteId
@@ -14029,10 +13543,10 @@ components:
         paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorPaymentId: payorPaymentId
         sourceCurrency: sourceCurrency
-        sourceAmount: 6
+        sourceAmount: 7
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         paymentCurrency: paymentCurrency
-        paymentAmount: 0
+        paymentAmount: 2
         status: status
       properties:
         paymentId:
@@ -14469,14 +13983,6 @@ components:
         - eventId
         - eventType
       type: object
-    IsoCurrency:
-      description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
-      example: USD
-      maxLength: 3
-      minLength: 3
-      pattern: '^[A-Z]{3}$'
-      title: ISO Currency Code
-      type: string
     QuoteFxSummary:
       example:
         invertedRate: 1.12
@@ -14829,7 +14335,38 @@ components:
       required:
         - name
       type: object
-    CreatePayeeAddress:
+    NameV2:
+      example:
+        firstName: Bob
+        lastName: Smith
+        otherNames: A
+        title: Mr
+      properties:
+        title:
+          example: Mr
+          maxLength: 10
+          minLength: 1
+          type: string
+        firstName:
+          example: Bob
+          maxLength: 40
+          minLength: 1
+          type: string
+        otherNames:
+          example: A
+          maxLength: 40
+          minLength: 1
+          type: string
+        lastName:
+          example: Smith
+          maxLength: 40
+          minLength: 1
+          type: string
+      required:
+        - firstName
+        - lastName
+      type: object
+    CreatePayeeAddressV2:
       example:
         country: US
         countyOrProvince: FL
@@ -14880,18 +14417,19 @@ components:
           nullable: true
           type: string
         country:
-          description: Ideally a 2 letter ISO 3166-1 country code.  But a limited set of additional values will be corrected.  See Java Locale.getISOCountries() and Locale.getDisplayCountry()
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
-          maxLength: 50
+          maxLength: 2
           minLength: 2
-          nullable: false
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
       required:
         - city
         - country
         - line1
       type: object
-    CreatePaymentChannel:
+    CreatePaymentChannelV2:
       example:
         paymentChannelName: My Payment Channel
         routingNumber: XXXXX6789
@@ -14905,11 +14443,12 @@ components:
           example: My Payment Channel
           type: string
         iban:
-          description: 'Must match the regular expression ```^[A-Za-z0-9]+$```. Either routing number and account number or only iban must be set'
+          description: 'Must match the regular expression ```^[A-Za-z0-9]+$```.'
           example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
           maxLength: 34
           minLength: 15
           pattern: '^[A-Za-z0-9]+$'
+          title: IBAN - International Bank Account Number
           type: string
         accountNumber:
           description: Either routing number and account number or only iban must be set
@@ -14924,266 +14463,20 @@ components:
           minLength: 9
           type: string
         countryCode:
-          description: Two character country code
-          enum:
-            - AF
-            - AX
-            - AL
-            - DZ
-            - AS
-            - AD
-            - AO
-            - AI
-            - AQ
-            - AG
-            - AR
-            - AM
-            - AW
-            - AU
-            - AT
-            - AZ
-            - BS
-            - BH
-            - BD
-            - BB
-            - BY
-            - BE
-            - BZ
-            - BJ
-            - BM
-            - BT
-            - BO
-            - BQ
-            - BA
-            - BW
-            - BV
-            - BR
-            - IO
-            - BN
-            - BG
-            - BF
-            - BI
-            - KH
-            - CM
-            - CA
-            - CV
-            - KY
-            - CF
-            - TD
-            - CL
-            - CN
-            - CX
-            - CC
-            - CO
-            - KM
-            - CG
-            - CD
-            - CK
-            - CR
-            - CI
-            - HR
-            - CU
-            - CW
-            - CY
-            - CZ
-            - DK
-            - DJ
-            - DM
-            - DO
-            - EC
-            - EG
-            - SV
-            - GQ
-            - ER
-            - EE
-            - ET
-            - FK
-            - FO
-            - FJ
-            - FI
-            - FR
-            - GF
-            - PF
-            - TF
-            - GA
-            - GM
-            - GE
-            - DE
-            - GH
-            - GI
-            - GR
-            - GL
-            - GD
-            - GP
-            - GU
-            - GT
-            - GG
-            - GN
-            - GW
-            - GY
-            - HT
-            - HM
-            - VA
-            - HN
-            - HK
-            - HU
-            - IS
-            - IN
-            - ID
-            - IR
-            - IQ
-            - IE
-            - IM
-            - IL
-            - IT
-            - JM
-            - JP
-            - JE
-            - JO
-            - KZ
-            - KE
-            - KI
-            - KP
-            - KR
-            - KW
-            - KG
-            - LA
-            - LV
-            - LB
-            - LS
-            - LR
-            - LY
-            - LI
-            - LT
-            - LU
-            - MO
-            - MK
-            - MG
-            - MW
-            - MY
-            - MV
-            - ML
-            - MT
-            - MH
-            - MQ
-            - MR
-            - MU
-            - YT
-            - MX
-            - FM
-            - MD
-            - MC
-            - MN
-            - ME
-            - MS
-            - MA
-            - MZ
-            - MM
-            - NA
-            - NR
-            - NP
-            - NL
-            - NC
-            - NZ
-            - NI
-            - NE
-            - NG
-            - NU
-            - NF
-            - MP
-            - 'NO'
-            - OM
-            - PK
-            - PW
-            - PS
-            - PA
-            - PG
-            - PY
-            - PE
-            - PH
-            - PN
-            - PL
-            - PT
-            - PR
-            - QA
-            - RE
-            - RO
-            - RU
-            - RW
-            - BL
-            - SH
-            - KN
-            - LC
-            - MF
-            - PM
-            - VC
-            - WS
-            - SM
-            - ST
-            - SA
-            - SN
-            - RS
-            - SC
-            - SL
-            - SG
-            - SX
-            - SK
-            - SI
-            - SB
-            - SO
-            - ZA
-            - GS
-            - SS
-            - ES
-            - LK
-            - SD
-            - SR
-            - SJ
-            - SZ
-            - SE
-            - CH
-            - SY
-            - TW
-            - TJ
-            - TZ
-            - TH
-            - TL
-            - TG
-            - TK
-            - TO
-            - TT
-            - TN
-            - TR
-            - TM
-            - TC
-            - TV
-            - UG
-            - UA
-            - AE
-            - GB
-            - US
-            - UM
-            - UY
-            - UZ
-            - VU
-            - VE
-            - VN
-            - VG
-            - VI
-            - WF
-            - EH
-            - YE
-            - ZM
-            - ZW
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
           maxLength: 2
           minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         currency:
-          enum:
-            - USD
-            - GBP
-            - EUR
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         accountName:
           example: My account
@@ -15193,7 +14486,26 @@ components:
         - countryCode
         - currency
       type: object
-    CreateIndividual:
+    ChallengeV2:
+      example:
+        description: challenge description
+        value: challenge test
+      properties:
+        value:
+          example: challenge test
+          maxLength: 20
+          minLength: 3
+          type: string
+        description:
+          example: challenge description
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+        - description
+        - value
+      type: object
+    CreateIndividualV2:
       example:
         name:
           firstName: Bob
@@ -15204,7 +14516,7 @@ components:
         dateOfBirth: '1985-01-01T00:00:00.000+0000'
       properties:
         name:
-          $ref: '#/components/schemas/IndividualV1_name'
+          $ref: '#/components/schemas/CreateIndividualNameV2'
         nationalIdentification:
           example: AB123456C
           maxLength: 30
@@ -15219,7 +14531,7 @@ components:
         - dateOfBirth
         - name
       type: object
-    Payee_2:
+    PayeeV2:
       example:
         payorRefs:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
@@ -15274,9 +14586,9 @@ components:
           description: challenge description
           value: challenge test
         company:
-          taxId: '123'
-          name: ABC Ltd
-          operatingName: ABC
+          taxId: '123123123'
+          name: ABC Group Plc
+          operatingName: ABC Co
         payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
         email: bob@example.com
         acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
@@ -15303,19 +14615,24 @@ components:
           nullable: true
           type: string
         address:
-          $ref: '#/components/schemas/PayeeAddress'
+          $ref: '#/components/schemas/PayeeAddressV2'
         country:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         displayName:
           example: Bob
           type: string
         paymentChannel:
-          $ref: '#/components/schemas/PayeePaymentChannel_2'
+          $ref: '#/components/schemas/PayeePaymentChannelV2'
         challenge:
-          $ref: '#/components/schemas/Challenge'
+          $ref: '#/components/schemas/ChallengeV2'
         language:
-          $ref: '#/components/schemas/Language_2'
+          $ref: '#/components/schemas/LanguageV2'
         acceptTermsAndConditionsTimestamp:
           description: The timestamp when the payee last accepted T&Cs
           example: 2019-01-20T09:00:00.000Z
@@ -15327,11 +14644,11 @@ components:
           example: '1234567890'
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeTypeV2'
         company:
-          $ref: '#/components/schemas/CompanyV1'
+          $ref: '#/components/schemas/CompanyV2'
         individual:
-          $ref: '#/components/schemas/IndividualV1'
+          $ref: '#/components/schemas/IndividualV2'
         created:
           example: 2019-01-20T09:00:00.000Z
           format: date-time
@@ -15350,10 +14667,10 @@ components:
           type: string
         marketingOptIns:
           items:
-            $ref: '#/components/schemas/MarketingOptIn'
+            $ref: '#/components/schemas/MarketingOptInV2'
           type: array
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus'
+          $ref: '#/components/schemas/OnboardedStatusV2'
         remoteId:
           description: Remote Id must be between 1 and 100 characters long
           example: remoteId123
@@ -15361,7 +14678,44 @@ components:
           minLength: 1
           type: string
       type: object
-    CreatePayeeAddress_2:
+    NameV3:
+      example:
+        firstName: Bob
+        lastName: Smith
+        otherNames: H
+        title: Mr
+      properties:
+        title:
+          example: Mr
+          maxLength: 10
+          minLength: 1
+          type: string
+        firstName:
+          example: Bob
+          maxLength: 40
+          minLength: 1
+          type: string
+        otherNames:
+          example: H
+          maxLength: 40
+          minLength: 1
+          type: string
+        lastName:
+          example: Smith
+          maxLength: 40
+          minLength: 1
+          type: string
+      type: object
+    CreatePayeeAddressV3:
+      example:
+        country: US
+        countyOrProvince: FL
+        line4: line4
+        city: Key West
+        line3: line3
+        line2: line2
+        line1: 500 Duval St
+        zipOrPostcode: '33945'
       properties:
         line1:
           example: 500 Duval St
@@ -15403,278 +14757,38 @@ components:
           nullable: true
           type: string
         country:
-          description: 2 letter ISO 3166-1 country code
-          enum:
-            - AF
-            - AX
-            - AL
-            - DZ
-            - AS
-            - AD
-            - AO
-            - AI
-            - AQ
-            - AG
-            - AR
-            - AM
-            - AW
-            - AU
-            - AT
-            - AZ
-            - BS
-            - BH
-            - BD
-            - BB
-            - BY
-            - BE
-            - BZ
-            - BJ
-            - BM
-            - BT
-            - BO
-            - BQ
-            - BA
-            - BW
-            - BV
-            - BR
-            - IO
-            - BN
-            - BG
-            - BF
-            - BI
-            - KH
-            - CM
-            - CA
-            - CV
-            - KY
-            - CF
-            - TD
-            - CL
-            - CN
-            - CX
-            - CC
-            - CO
-            - KM
-            - CG
-            - CD
-            - CK
-            - CR
-            - CI
-            - HR
-            - CU
-            - CW
-            - CY
-            - CZ
-            - DK
-            - DJ
-            - DM
-            - DO
-            - EC
-            - EG
-            - SV
-            - GQ
-            - ER
-            - EE
-            - ET
-            - FK
-            - FO
-            - FJ
-            - FI
-            - FR
-            - GF
-            - PF
-            - TF
-            - GA
-            - GM
-            - GE
-            - DE
-            - GH
-            - GI
-            - GR
-            - GL
-            - GD
-            - GP
-            - GU
-            - GT
-            - GG
-            - GN
-            - GW
-            - GY
-            - HT
-            - HM
-            - VA
-            - HN
-            - HK
-            - HU
-            - IS
-            - IN
-            - ID
-            - IR
-            - IQ
-            - IE
-            - IM
-            - IL
-            - IT
-            - JM
-            - JP
-            - JE
-            - JO
-            - KZ
-            - KE
-            - KI
-            - KP
-            - KR
-            - KW
-            - KG
-            - LA
-            - LV
-            - LB
-            - LS
-            - LR
-            - LY
-            - LI
-            - LT
-            - LU
-            - MO
-            - MK
-            - MG
-            - MW
-            - MY
-            - MV
-            - ML
-            - MT
-            - MH
-            - MQ
-            - MR
-            - MU
-            - YT
-            - MX
-            - FM
-            - MD
-            - MC
-            - MN
-            - ME
-            - MS
-            - MA
-            - MZ
-            - MM
-            - NA
-            - NR
-            - NP
-            - NL
-            - NC
-            - NZ
-            - NI
-            - NE
-            - NG
-            - NU
-            - NF
-            - MP
-            - 'NO'
-            - OM
-            - PK
-            - PW
-            - PS
-            - PA
-            - PG
-            - PY
-            - PE
-            - PH
-            - PN
-            - PL
-            - PT
-            - PR
-            - QA
-            - RE
-            - RO
-            - RU
-            - RW
-            - BL
-            - SH
-            - KN
-            - LC
-            - MF
-            - PM
-            - VC
-            - WS
-            - SM
-            - ST
-            - SA
-            - SN
-            - RS
-            - SC
-            - SL
-            - SG
-            - SX
-            - SK
-            - SI
-            - SB
-            - SO
-            - ZA
-            - GS
-            - SS
-            - ES
-            - LK
-            - SD
-            - SR
-            - SJ
-            - SZ
-            - SE
-            - CH
-            - SY
-            - TW
-            - TJ
-            - TZ
-            - TH
-            - TL
-            - TG
-            - TK
-            - TO
-            - TT
-            - TN
-            - TR
-            - TM
-            - TC
-            - TV
-            - UG
-            - UA
-            - AE
-            - GB
-            - US
-            - UM
-            - UY
-            - UZ
-            - VU
-            - VE
-            - VN
-            - VG
-            - VI
-            - WF
-            - EH
-            - YE
-            - ZM
-            - ZW
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
           maxLength: 2
           minLength: 2
-          nullable: false
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
       required:
         - city
         - country
         - line1
       type: object
-    CreatePaymentChannel_2:
+    CreatePaymentChannelV3:
+      example:
+        paymentChannelName: My Payment Channel
+        routingNumber: XXXXX6789
+        accountName: My account
+        countryCode: US
+        iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+        currency: USD
+        accountNumber: XXXXXX5678
       properties:
         paymentChannelName:
           example: My Payment Channel
           type: string
         iban:
-          description: 'Must match the regular expression ```^[A-Za-z0-9]+$```. Either routing number and account number or only iban must be set'
+          description: 'Must match the regular expression ```^[A-Za-z0-9]+$```.'
           example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
           maxLength: 34
           minLength: 15
           pattern: '^[A-Za-z0-9]+$'
+          title: IBAN - International Bank Account Number
           type: string
         accountNumber:
           description: Either routing number and account number or only iban must be set
@@ -15689,266 +14803,20 @@ components:
           minLength: 9
           type: string
         countryCode:
-          description: Two character country code
-          enum:
-            - AF
-            - AX
-            - AL
-            - DZ
-            - AS
-            - AD
-            - AO
-            - AI
-            - AQ
-            - AG
-            - AR
-            - AM
-            - AW
-            - AU
-            - AT
-            - AZ
-            - BS
-            - BH
-            - BD
-            - BB
-            - BY
-            - BE
-            - BZ
-            - BJ
-            - BM
-            - BT
-            - BO
-            - BQ
-            - BA
-            - BW
-            - BV
-            - BR
-            - IO
-            - BN
-            - BG
-            - BF
-            - BI
-            - KH
-            - CM
-            - CA
-            - CV
-            - KY
-            - CF
-            - TD
-            - CL
-            - CN
-            - CX
-            - CC
-            - CO
-            - KM
-            - CG
-            - CD
-            - CK
-            - CR
-            - CI
-            - HR
-            - CU
-            - CW
-            - CY
-            - CZ
-            - DK
-            - DJ
-            - DM
-            - DO
-            - EC
-            - EG
-            - SV
-            - GQ
-            - ER
-            - EE
-            - ET
-            - FK
-            - FO
-            - FJ
-            - FI
-            - FR
-            - GF
-            - PF
-            - TF
-            - GA
-            - GM
-            - GE
-            - DE
-            - GH
-            - GI
-            - GR
-            - GL
-            - GD
-            - GP
-            - GU
-            - GT
-            - GG
-            - GN
-            - GW
-            - GY
-            - HT
-            - HM
-            - VA
-            - HN
-            - HK
-            - HU
-            - IS
-            - IN
-            - ID
-            - IR
-            - IQ
-            - IE
-            - IM
-            - IL
-            - IT
-            - JM
-            - JP
-            - JE
-            - JO
-            - KZ
-            - KE
-            - KI
-            - KP
-            - KR
-            - KW
-            - KG
-            - LA
-            - LV
-            - LB
-            - LS
-            - LR
-            - LY
-            - LI
-            - LT
-            - LU
-            - MO
-            - MK
-            - MG
-            - MW
-            - MY
-            - MV
-            - ML
-            - MT
-            - MH
-            - MQ
-            - MR
-            - MU
-            - YT
-            - MX
-            - FM
-            - MD
-            - MC
-            - MN
-            - ME
-            - MS
-            - MA
-            - MZ
-            - MM
-            - NA
-            - NR
-            - NP
-            - NL
-            - NC
-            - NZ
-            - NI
-            - NE
-            - NG
-            - NU
-            - NF
-            - MP
-            - 'NO'
-            - OM
-            - PK
-            - PW
-            - PS
-            - PA
-            - PG
-            - PY
-            - PE
-            - PH
-            - PN
-            - PL
-            - PT
-            - PR
-            - QA
-            - RE
-            - RO
-            - RU
-            - RW
-            - BL
-            - SH
-            - KN
-            - LC
-            - MF
-            - PM
-            - VC
-            - WS
-            - SM
-            - ST
-            - SA
-            - SN
-            - RS
-            - SC
-            - SL
-            - SG
-            - SX
-            - SK
-            - SI
-            - SB
-            - SO
-            - ZA
-            - GS
-            - SS
-            - ES
-            - LK
-            - SD
-            - SR
-            - SJ
-            - SZ
-            - SE
-            - CH
-            - SY
-            - TW
-            - TJ
-            - TZ
-            - TH
-            - TL
-            - TG
-            - TK
-            - TO
-            - TT
-            - TN
-            - TR
-            - TM
-            - TC
-            - TV
-            - UG
-            - UA
-            - AE
-            - GB
-            - US
-            - UM
-            - UY
-            - UZ
-            - VU
-            - VE
-            - VN
-            - VG
-            - VI
-            - WF
-            - EH
-            - YE
-            - ZM
-            - ZW
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
           maxLength: 2
           minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         currency:
-          enum:
-            - USD
-            - GBP
-            - EUR
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         accountName:
           example: My account
@@ -15958,10 +14826,37 @@ components:
         - countryCode
         - currency
       type: object
-    CreateIndividual_2:
+    ChallengeV3:
+      example:
+        description: challenge description
+        value: challenge test
+      properties:
+        value:
+          example: challenge test
+          maxLength: 20
+          minLength: 3
+          type: string
+        description:
+          example: challenge description
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+        - description
+        - value
+      type: object
+    CreateIndividualV3:
+      example:
+        name:
+          firstName: Bob
+          lastName: Smith
+          otherNames: H
+          title: Mr
+        nationalIdentification: SA211123K
+        dateOfBirth: '1970-05-20T00:00:00.000+0000'
       properties:
         name:
-          $ref: '#/components/schemas/CreateIndividual_2_name'
+          $ref: '#/components/schemas/CreateIndividualNameV3'
         nationalIdentification:
           example: SA211123K
           maxLength: 30
@@ -15975,6 +14870,147 @@ components:
       required:
         - dateOfBirth
         - name
+      type: object
+    PayeeV3:
+      example:
+        payorRefs:
+          - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+            invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+            invitationStatus: ACCEPTED
+            remoteId: uniqueIdForRemoteEntity
+            paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+            invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+            invitationStatus: ACCEPTED
+            remoteId: uniqueIdForRemoteEntity
+            paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+        cellphoneNumber: '1234567890'
+        marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
+        termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00.000Z
+        queryByExampleObject: true
+        disabled: true
+        company:
+          taxId: '123123123'
+          name: ABC Group Plc
+          operatingName: ABC Co
+        id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+        email: bob@example.com
+        address:
+          addressCountry: US
+          addressZipOrPostcode: '33945'
+          addressLine1: 500 Duval St
+          addressLine2: addressLine2
+          addressLine3: addressLine3
+          addressLine4: addressLine4
+          addressCountyOrProvince: FL
+          addressCity: Key West
+        individual:
+          unprotectedDateOfBirth: '1985-01-01T00:00:00.000+0000'
+          nationalIdentification: AB123456C
+          dateOfBirth: '1985-01-01T00:00:00.000+0000'
+        created: 2019-01-20T09:00:00.000Z
+        enhancedKycCompleted: true
+        pausePayment: true
+        gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
+        version: 0
+        marketingOptInDecision: true
+        remoteId: remoteId
+        paymentChannel:
+          paymentChannelName: paymentChannelName
+          routingNumber: XXXXX6789
+          accountName: My account
+          countryCode: US
+          iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+          currency: USD
+          accountNumber: XXXXXX5678
+        hiddenMarketingOptIns:
+          - optedIn: true
+            timestamp: 2019-01-20T09:00:00.000Z
+          - optedIn: true
+            timestamp: 2019-01-20T09:00:00.000Z
+        computedName: 'Cuthbert, Barney'
+        name:
+          firstName: Bob
+          lastName: Smith
+          otherNames: H
+          title: Mr
+      properties:
+        id:
+          example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+          format: uuid
+          readOnly: true
+          type: string
+        remoteId:
+          maxLength: 100
+          minLength: 1
+          type: string
+        email:
+          example: bob@example.com
+          format: email
+          nullable: true
+          type: string
+        onboardedStatus:
+          $ref: '#/components/schemas/OnboardedStatusV3'
+        address:
+          $ref: '#/components/schemas/PayeeResponseAddressV3'
+        paymentChannel:
+          $ref: '#/components/schemas/PayeePaymentChannelV3'
+        enhancedKycCompleted:
+          type: boolean
+        pausePayment:
+          type: boolean
+        disabled:
+          type: boolean
+        gracePeriodEndDate:
+          example: 2019-01-20T00:00:00.000Z
+          format: date
+          nullable: true
+          readOnly: true
+          type: string
+        queryByExampleObject:
+          type: boolean
+        type:
+          $ref: '#/components/schemas/PayeeTypeV3'
+        computedName:
+          example: 'Cuthbert, Barney'
+          type: string
+        language:
+          $ref: '#/components/schemas/LanguageV3'
+        payorRefs:
+          items:
+            $ref: '#/components/schemas/PayeePayorRefV3'
+          type: array
+        created:
+          example: 2019-01-20T09:00:00.000Z
+          format: date-time
+          type: string
+        termsAndConditionsAcceptanceTimestamp:
+          example: 2019-01-20T09:00:00.000Z
+          format: date-time
+          type: string
+        hiddenMarketingOptIns:
+          items:
+            $ref: '#/components/schemas/MarketingOptInV3'
+          type: array
+        marketingOptInDecision:
+          type: boolean
+        marketingOptInTimestamp:
+          example: 2019-01-20T09:00:00.000Z
+          format: date-time
+          type: string
+        watchlistStatus:
+          $ref: '#/components/schemas/WatchlistStatusV3'
+        version:
+          type: integer
+        name:
+          $ref: '#/components/schemas/NameV3'
+        individual:
+          $ref: '#/components/schemas/IndividualDetailV3'
+        company:
+          $ref: '#/components/schemas/CompanyV3'
+        cellphoneNumber:
+          example: '1234567890'
+          type: string
       type: object
     CurrencyType:
       example:
@@ -16219,14 +15255,6 @@ components:
         - required
         - validation
       type: object
-    IsoCountryCode:
-      description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
-      example: US
-      maxLength: 2
-      minLength: 2
-      pattern: '^[A-Z]{2}$'
-      title: ISO 3166 2 Character Country Code
-      type: string
     Region:
       example:
         name: California
@@ -16239,7 +15267,38 @@ components:
           example: CA
           type: string
       type: object
-    PayeePaymentChannel_2:
+    CreateIndividualNameV2:
+      example:
+        firstName: Bob
+        lastName: Smith
+        otherNames: A
+        title: Mr
+      properties:
+        title:
+          example: Mr
+          maxLength: 10
+          minLength: 1
+          type: string
+        firstName:
+          example: Bob
+          maxLength: 40
+          minLength: 1
+          type: string
+        otherNames:
+          example: A
+          maxLength: 40
+          minLength: 1
+          type: string
+        lastName:
+          example: Smith
+          maxLength: 40
+          minLength: 1
+          type: string
+      required:
+        - firstName
+        - lastName
+      type: object
+    PayeePaymentChannelV2:
       example:
         paymentChannelName: paymentChannelName
         routingNumber: XXXXX6789
@@ -16257,6 +15316,7 @@ components:
           maxLength: 34
           minLength: 15
           pattern: '^[A-Za-z0-9]+$'
+          title: IBAN - International Bank Account Number
           type: string
         accountNumber:
           example: XXXXXX5678
@@ -16269,17 +15329,20 @@ components:
           minLength: 9
           type: string
         countryCode:
-          description: Country Code must be a valid 2 letter ISO 3166-1 country code
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
           example: US
           maxLength: 2
           minLength: 2
           pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
           type: string
         currency:
-          enum:
-            - USD
-            - GBP
-            - EUR
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
           type: string
         accountName:
           example: My account
@@ -16290,6 +15353,194 @@ components:
         - countryCode
         - currency
         - routingNumber
+      type: object
+    MarketingOptInV2:
+      example:
+        optedIn: true
+        timestamp: 2019-01-20T09:00:00.000Z
+      properties:
+        optedIn:
+          type: boolean
+        timestamp:
+          example: 2019-01-20T09:00:00.000Z
+          format: date-time
+          type: string
+      type: object
+    CreateIndividualNameV3:
+      example:
+        firstName: Bob
+        lastName: Smith
+        otherNames: H
+        title: Mr
+      properties:
+        title:
+          example: Mr
+          maxLength: 10
+          minLength: 1
+          type: string
+        firstName:
+          example: Bob
+          maxLength: 40
+          minLength: 1
+          type: string
+        otherNames:
+          example: H
+          maxLength: 40
+          minLength: 1
+          type: string
+        lastName:
+          example: Smith
+          maxLength: 40
+          minLength: 1
+          type: string
+      required:
+        - firstName
+        - lastName
+      type: object
+    PayeeResponseAddressV3:
+      example:
+        addressCountry: US
+        addressZipOrPostcode: '33945'
+        addressLine1: 500 Duval St
+        addressLine2: addressLine2
+        addressLine3: addressLine3
+        addressLine4: addressLine4
+        addressCountyOrProvince: FL
+        addressCity: Key West
+      properties:
+        addressLine1:
+          example: 500 Duval St
+          maxLength: 100
+          minLength: 2
+          type: string
+        addressLine2:
+          maxLength: 100
+          minLength: 0
+          type: string
+        addressLine3:
+          maxLength: 100
+          minLength: 0
+          type: string
+        addressLine4:
+          maxLength: 100
+          minLength: 0
+          type: string
+        addressCity:
+          example: Key West
+          maxLength: 50
+          minLength: 2
+          type: string
+        addressCountyOrProvince:
+          example: FL
+          maxLength: 50
+          minLength: 1
+          type: string
+        addressZipOrPostcode:
+          example: '33945'
+          maxLength: 60
+          minLength: 1
+          type: string
+        addressCountry:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
+          type: string
+      type: object
+    PayeePaymentChannelV3:
+      example:
+        paymentChannelName: paymentChannelName
+        routingNumber: XXXXX6789
+        accountName: My account
+        countryCode: US
+        iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+        currency: USD
+        accountNumber: XXXXXX5678
+      properties:
+        paymentChannelName:
+          type: string
+        iban:
+          description: 'Must match the regular expression ```^[A-Za-z0-9]+$```.'
+          example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+          maxLength: 34
+          minLength: 15
+          pattern: '^[A-Za-z0-9]+$'
+          title: IBAN - International Bank Account Number
+          type: string
+        accountNumber:
+          example: XXXXXX5678
+          maxLength: 17
+          minLength: 6
+          type: string
+        routingNumber:
+          example: XXXXX6789
+          maxLength: 9
+          minLength: 9
+          type: string
+        countryCode:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
+          type: string
+        currency:
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
+          type: string
+        accountName:
+          example: My account
+          type: string
+      required:
+        - accountName
+        - accountNumber
+        - countryCode
+        - currency
+        - routingNumber
+      type: object
+    MarketingOptInV3:
+      example:
+        optedIn: true
+        timestamp: 2019-01-20T09:00:00.000Z
+      properties:
+        optedIn:
+          type: boolean
+        timestamp:
+          example: 2019-01-20T09:00:00.000Z
+          format: date-time
+          type: string
+      type: object
+    IndividualDetailV3:
+      example:
+        unprotectedDateOfBirth: '1985-01-01T00:00:00.000+0000'
+        nationalIdentification: AB123456C
+        dateOfBirth: '1985-01-01T00:00:00.000+0000'
+      properties:
+        nationalIdentification:
+          example: AB123456C
+          maxLength: 30
+          minLength: 6
+          nullable: true
+          type: string
+        unprotectedDateOfBirth:
+          description: Must not be date in future. Example - 1970-05-20
+          example: 1985-01-01T00:00:00.000Z
+          format: date
+          nullable: true
+          type: string
+        dateOfBirth:
+          description: Must not be date in future. Example - 1970-05-20
+          example: 1985-01-01T00:00:00.000Z
+          format: date
+          nullable: true
+          type: string
       type: object
     FundingEventType:
       enum:
@@ -16509,73 +15760,7 @@ components:
         totalOfacFailedCount:
           example: 0
           type: integer
-    PagedPayeeResponse_page:
-      example:
-        numberOfElements: 10
-        totalPages: 10
-        pageSize: 10
-        page: 10
-        totalElements: 10
-      properties:
-        numberOfElements:
-          example: 10
-          type: integer
-        totalElements:
-          example: 10
-          type: integer
-        totalPages:
-          example: 10
-          type: integer
-        page:
-          example: 10
-          type: integer
-        pageSize:
-          example: 10
-          type: integer
-    PagedPayeeResponse_links:
-      example:
-        rel: rel
-        href: href
-      properties:
-        rel:
-          type: string
-        href:
-          type: string
-    PayeeDeltaResponse_page:
-      example:
-        numberOfElements: 2
-        totalPages: 1
-        pageSize: 25
-        page: 1
-        totalElements: 2
-      properties:
-        numberOfElements:
-          example: 2
-          type: integer
-        totalElements:
-          example: 2
-          type: integer
-        totalPages:
-          example: 1
-          type: integer
-        page:
-          example: 1
-          type: integer
-        pageSize:
-          example: 25
-          type: integer
-    PayeeDeltaResponse_links:
-      example:
-        rel: first
-        href: 'http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
-      properties:
-        rel:
-          example: first
-          type: string
-        href:
-          example: 'http://api.sandbox.velopayments.com/v1/deltas/payees?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
-          type: string
-    CreatePayeesCSVResponse_rejectedCsvRows:
+    CreatePayeesCSVResponseV2_rejectedCsvRows:
       example:
         rejectedContent: 'remoteId1,USD,-123.45,ref1'
         lineNumber: 3
@@ -16590,25 +15775,7 @@ components:
         message:
           example: rejected message 1
           type: string
-    PagedPayeeInvitationStatusResponse_page:
-      example:
-        numberOfElements: 0
-        totalPages: 1
-        pageSize: 5
-        page: 5
-        totalElements: 6
-      properties:
-        numberOfElements:
-          type: integer
-        totalElements:
-          type: integer
-        totalPages:
-          type: integer
-        page:
-          type: integer
-        pageSize:
-          type: integer
-    PagedPayeeResponse_2_summary:
+    PagedPayeeResponseV3_summary:
       example:
         totalOnboardedCount: 10
         totalRegisteredCount: 10
@@ -16631,17 +15798,6 @@ components:
         totalWatchlistFailedCount:
           example: 0
           type: integer
-    PayeeDeltaResponse_2_links:
-      example:
-        rel: first
-        href: 'http://api.sandbox.velopayments.com/v3/payees/deltas?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
-      properties:
-        rel:
-          example: first
-          type: string
-        href:
-          example: 'http://api.sandbox.velopayments.com/v3/payees/deltas?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000'
-          type: string
     ListSourceAccountResponse_page:
       example:
         numberOfElements: 1
@@ -16682,6 +15838,33 @@ components:
           items:
             $ref: '#/components/schemas/FundingAudit'
           type: array
+    PaymentDeltaResponse_page:
+      example:
+        numberOfElements: 0
+        totalPages: 1
+        pageSize: 5
+        page: 5
+        totalElements: 6
+      properties:
+        numberOfElements:
+          type: integer
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+        page:
+          type: integer
+        pageSize:
+          type: integer
+    PaymentDeltaResponse_links:
+      example:
+        rel: rel
+        href: href
+      properties:
+        rel:
+          type: string
+        href:
+          type: string
     GetPayoutsResponseV3_page:
       example:
         numberOfElements: 12
@@ -16995,31 +16178,6 @@ components:
         pageSize:
           format: int64
           type: integer
-    CreateIndividual_2_name:
-      properties:
-        title:
-          example: Mr
-          maxLength: 10
-          minLength: 1
-          type: string
-        firstName:
-          example: Bob
-          maxLength: 40
-          minLength: 1
-          type: string
-        otherNames:
-          example: H
-          maxLength: 40
-          minLength: 1
-          type: string
-        lastName:
-          example: Smith
-          maxLength: 40
-          minLength: 1
-          type: string
-      required:
-        - firstName
-        - lastName
   securitySchemes:
     OAuth2:
       description: 'This API uses OAuth 2 with the Client Credentials grant flow. [More info](https://www.oauth.com/oauth2-servers/access-tokens/client-credentials)'
