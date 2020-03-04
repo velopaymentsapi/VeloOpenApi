@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.21.27
+  version: 2.21.28
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -6398,6 +6398,95 @@ paths:
             $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/quote' -i -X POST \
                 -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f' \
                 -H 'Content-Type: application/json'
+  '/v3/payouts/{payoutId}/payments':
+    get:
+      description: Retrieve payments for a payout
+      parameters:
+        - description: Id of the payout
+          in: path
+          name: payoutId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - description: |
+            Payment Status
+            * ACCEPTED: any payment which was accepted at submission time (status may have changed since)
+            * REJECTED: any payment rejected by initial submission processing
+            * WITHDRAWN: any payment which has been withdrawn
+            * WITHDRAWABLE: any payment eligible for withdrawal
+          in: query
+          name: status
+          required: false
+          schema:
+            enum:
+              - ACCEPTED
+              - REJECTED
+              - WITHDRAWN
+              - WITHDRAWABLE
+            type: string
+        - description: The remote id of the payees.
+          in: query
+          name: remoteId
+          required: false
+          schema:
+            type: string
+        - description: Payor's Id of the Payment
+          in: query
+          name: payorPaymentId
+          required: false
+          schema:
+            type: string
+        - description: Physical Account Name
+          in: query
+          name: sourceAccountName
+          required: false
+          schema:
+            type: string
+        - description: Payment Memo of the Payment
+          in: query
+          name: paymentMemo
+          required: false
+          schema:
+            type: string
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            type: integer
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedPaymentsResponse'
+          description: Payments for payout
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Retrieve payments for a payout
+      tags:
+        - Payments for Payout
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/quote' -i -X POST \
+                -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f' \
+                -H 'Content-Type: application/json'
   /v1/paymentChannelRules:
     get:
       description: List the country specific payment channel rules.
@@ -12311,6 +12400,7 @@ components:
             sourceAccountName: Chase
         paymentsRejected: 0
         paymentsSubmitted: 10
+        paymentsWithdrawn: 0
         fxSummaries:
           - invertedRate: 1.12
             creationTime: 2000-01-23T04:56:07.000Z
@@ -12375,6 +12465,9 @@ components:
         paymentsRejected:
           example: 0
           type: integer
+        paymentsWithdrawn:
+          example: 0
+          type: integer
         fxSummaries:
           items:
             $ref: '#/components/schemas/QuoteFxSummary'
@@ -12395,6 +12488,7 @@ components:
         - acceptedPayments
         - accounts
         - fxSummaries
+        - paymentsWithdrawn
         - rejectedPayments
       type: object
     QuoteResponse:
@@ -12426,6 +12520,171 @@ components:
         fxSummaries:
           items:
             $ref: '#/components/schemas/QuoteFxSummary'
+          type: array
+      type: object
+    PagedPaymentsResponse:
+      description: List Payees Response Object
+      example:
+        links:
+          - rel: rel
+            href: href
+          - rel: rel
+            href: href
+        page:
+          numberOfElements: 0
+          totalPages: 1
+          pageSize: 5
+          page: 5
+          totalElements: 6
+        content:
+          - payee:
+              payorRefs:
+                - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+                  invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                  invitationStatus: ACCEPTED
+                  remoteId: uniqueIdForRemoteEntity
+                  paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+                - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+                  invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                  invitationStatus: ACCEPTED
+                  remoteId: uniqueIdForRemoteEntity
+                  paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+              country: US
+              cellphoneNumber: '1234567890'
+              address:
+                country: US
+                countyOrProvince: FL
+                line4: line4
+                city: Key West
+                line3: line3
+                line2: line2
+                line1: 500 Duval St
+                zipOrPostcode: '33945'
+              individual:
+                name:
+                  firstName: Bob
+                  lastName: Smith
+                  otherNames: A
+                  title: Mr
+                nationalIdentification: AB123456C
+                dateOfBirth: 1985-01-01T00:00:00.000Z
+              displayName: Bob
+              created: 2019-01-20T09:00:00.000Z
+              type: Individual
+              gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
+              paymentChannel:
+                paymentChannelName: paymentChannelName
+                routingNumber: XXXXX6789
+                accountName: My account
+                countryCode: US
+                iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+                currency: USD
+                accountNumber: XXXXXX5678
+              remoteId: remoteId123
+              marketingOptIns:
+                - optedIn: true
+                  timestamp: 2019-01-20T09:00:00.000Z
+                - optedIn: true
+                  timestamp: 2019-01-20T09:00:00.000Z
+              watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
+              challenge:
+                description: challenge description
+                value: challenge test
+              company:
+                taxId: '123'
+                name: ABC Ltd
+                operatingName: ABC
+              payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+              email: bob@example.com
+              acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+            amount: 1234
+            paymentId: paymentId
+            withdrawable: false
+            currency: USD
+            payorPaymentId: paymenIdVal123123
+            paymentMemo: Payment memo
+            remoteId: remoteIdVal123
+            sourceAccountName: Chase
+            status: SUBMITTED
+          - payee:
+              payorRefs:
+                - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+                  invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                  invitationStatus: ACCEPTED
+                  remoteId: uniqueIdForRemoteEntity
+                  paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+                - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+                  invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                  invitationStatus: ACCEPTED
+                  remoteId: uniqueIdForRemoteEntity
+                  paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+              country: US
+              cellphoneNumber: '1234567890'
+              address:
+                country: US
+                countyOrProvince: FL
+                line4: line4
+                city: Key West
+                line3: line3
+                line2: line2
+                line1: 500 Duval St
+                zipOrPostcode: '33945'
+              individual:
+                name:
+                  firstName: Bob
+                  lastName: Smith
+                  otherNames: A
+                  title: Mr
+                nationalIdentification: AB123456C
+                dateOfBirth: 1985-01-01T00:00:00.000Z
+              displayName: Bob
+              created: 2019-01-20T09:00:00.000Z
+              type: Individual
+              gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
+              paymentChannel:
+                paymentChannelName: paymentChannelName
+                routingNumber: XXXXX6789
+                accountName: My account
+                countryCode: US
+                iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+                currency: USD
+                accountNumber: XXXXXX5678
+              remoteId: remoteId123
+              marketingOptIns:
+                - optedIn: true
+                  timestamp: 2019-01-20T09:00:00.000Z
+                - optedIn: true
+                  timestamp: 2019-01-20T09:00:00.000Z
+              watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
+              challenge:
+                description: challenge description
+                value: challenge test
+              company:
+                taxId: '123'
+                name: ABC Ltd
+                operatingName: ABC
+              payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+              email: bob@example.com
+              acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+            amount: 1234
+            paymentId: paymentId
+            withdrawable: false
+            currency: USD
+            payorPaymentId: paymenIdVal123123
+            paymentMemo: Payment memo
+            remoteId: remoteIdVal123
+            sourceAccountName: Chase
+            status: SUBMITTED
+      properties:
+        page:
+          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/PagedPayeeResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/Payment'
           type: array
       type: object
     PaymentChannelRulesResponse:
@@ -14700,6 +14959,121 @@ components:
         - reason
         - remoteId
         - sourceAccountName
+      type: object
+    Payment:
+      example:
+        payee:
+          payorRefs:
+            - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+              invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+              invitationStatus: ACCEPTED
+              remoteId: uniqueIdForRemoteEntity
+              paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+              invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+              invitationStatus: ACCEPTED
+              remoteId: uniqueIdForRemoteEntity
+              paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          country: US
+          cellphoneNumber: '1234567890'
+          address:
+            country: US
+            countyOrProvince: FL
+            line4: line4
+            city: Key West
+            line3: line3
+            line2: line2
+            line1: 500 Duval St
+            zipOrPostcode: '33945'
+          individual:
+            name:
+              firstName: Bob
+              lastName: Smith
+              otherNames: A
+              title: Mr
+            nationalIdentification: AB123456C
+            dateOfBirth: 1985-01-01T00:00:00.000Z
+          displayName: Bob
+          created: 2019-01-20T09:00:00.000Z
+          type: Individual
+          gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
+          paymentChannel:
+            paymentChannelName: paymentChannelName
+            routingNumber: XXXXX6789
+            accountName: My account
+            countryCode: US
+            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+            currency: USD
+            accountNumber: XXXXXX5678
+          remoteId: remoteId123
+          marketingOptIns:
+            - optedIn: true
+              timestamp: 2019-01-20T09:00:00.000Z
+            - optedIn: true
+              timestamp: 2019-01-20T09:00:00.000Z
+          watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
+          challenge:
+            description: challenge description
+            value: challenge test
+          company:
+            taxId: '123'
+            name: ABC Ltd
+            operatingName: ABC
+          payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+          email: bob@example.com
+          acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+        amount: 1234
+        paymentId: paymentId
+        withdrawable: false
+        currency: USD
+        payorPaymentId: paymenIdVal123123
+        paymentMemo: Payment memo
+        remoteId: remoteIdVal123
+        sourceAccountName: Chase
+        status: SUBMITTED
+      properties:
+        paymentId:
+          type: string
+        remoteId:
+          example: remoteIdVal123
+          type: string
+        currency:
+          example: USD
+          maxLength: 3
+          minLength: 3
+          type: string
+        amount:
+          example: 1234
+          type: integer
+        sourceAccountName:
+          example: Chase
+          type: string
+        payorPaymentId:
+          example: paymenIdVal123123
+          type: string
+        paymentMemo:
+          example: Payment memo
+          type: string
+        payee:
+          $ref: '#/components/schemas/Payee_2'
+        withdrawable:
+          example: false
+          type: boolean
+        status:
+          enum:
+            - SUBMITTED
+            - ACCEPTED
+            - REJECTED
+            - WITHDRAWN
+            - RETURNED
+            - AWAITING_FUNDS
+            - FUNDED
+            - UNFUNDED
+            - CANCELLED
+            - REQUESTED
+          type: string
+      required:
+        - paymentId
       type: object
     PaymentChannelCountry:
       example:
