@@ -15,8 +15,8 @@ You can view the current documentation here:
 Pre-production releases may be viewed at `/branch/{branch_name}/` and `/branch/{branch_name}/swagger-ui`
 
 Examples:
-* `https://velopaymentsapi.github.io/VeloOpenApi/branch/v2.11/`
-* `https://velopaymentsapi.github.io/VeloOpenApi/branch/v2.11/swagger-ui/`
+* [https://apidocs.velopayments.com/VeloOpenApi/branch/v2.21/](https://apidocs.velopayments.com/VeloOpenApi/branch/v2.21)
+* (https://apidocs.velopayments.com/VeloOpenApi/branch/v2.21/swagger-ui/)[https://apidocs.velopayments.com/VeloOpenApi/branch/v2.21/swagger-ui/]
 
 To request your API keys [contact](mailto:info@velopayments.com) us!
 
