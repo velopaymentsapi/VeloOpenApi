@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.21.25",
+    "version": "2.21.27",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -15113,6 +15113,7 @@
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalIncompletePayments": 6,
               "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
+              "totalWithdrawnPayments": 5,
               "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo",
               "payorName": "payorName"
@@ -15158,6 +15159,7 @@
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalIncompletePayments": 6,
               "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
+              "totalWithdrawnPayments": 5,
               "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo",
               "payorName": "payorName"
@@ -15187,6 +15189,7 @@
         "description": "List Payments for payout",
         "example": {
           "summary": {
+            "withdrawnPayments": 2,
             "submitting": {
               "principal": "principal",
               "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -15271,15 +15274,16 @@
                 }
               },
               "paymentMemo": "Payment memo",
-              "paymentAmount": 2,
+              "paymentAmount": 7,
               "fundingStatus": "FUNDED",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 7.061401241503109,
+              "rate": 9.301444243932576,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
+              "withdrawable": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15314,7 +15318,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 9.301444243932576,
+              "invertedRate": 3.616076749251911,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
@@ -15323,6 +15327,7 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "payorPaymentId": "123123asdf",
               "rejectionReason": "rejectionReason",
@@ -15349,15 +15354,16 @@
                 }
               },
               "paymentMemo": "Payment memo",
-              "paymentAmount": 2,
+              "paymentAmount": 7,
               "fundingStatus": "FUNDED",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 7.061401241503109,
+              "rate": 9.301444243932576,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
+              "withdrawable": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15392,7 +15398,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 9.301444243932576,
+              "invertedRate": 3.616076749251911,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
@@ -15401,6 +15407,7 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "payorPaymentId": "123123asdf",
               "rejectionReason": "rejectionReason",
@@ -15472,15 +15479,16 @@
                 }
               },
               "paymentMemo": "Payment memo",
-              "paymentAmount": 2,
+              "paymentAmount": 7,
               "fundingStatus": "FUNDED",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 7.061401241503109,
+              "rate": 9.301444243932576,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
+              "withdrawable": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15515,7 +15523,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 9.301444243932576,
+              "invertedRate": 3.616076749251911,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
@@ -15524,6 +15532,7 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "payorPaymentId": "123123asdf",
               "rejectionReason": "rejectionReason",
@@ -15550,15 +15559,16 @@
                 }
               },
               "paymentMemo": "Payment memo",
-              "paymentAmount": 2,
+              "paymentAmount": 7,
               "fundingStatus": "FUNDED",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 7.061401241503109,
+              "rate": 9.301444243932576,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
+              "withdrawable": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15593,7 +15603,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 9.301444243932576,
+              "invertedRate": 3.616076749251911,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
@@ -15602,6 +15612,7 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "payorPaymentId": "123123asdf",
               "rejectionReason": "rejectionReason",
@@ -15650,15 +15661,16 @@
             }
           },
           "paymentMemo": "Payment memo",
-          "paymentAmount": 2,
+          "paymentAmount": 7,
           "fundingStatus": "FUNDED",
           "railsBatchId": "railsBatchId",
           "paymentChannelName": "My Payment Channel",
           "filenameReference": "file ref",
-          "rate": 7.061401241503109,
+          "rate": 9.301444243932576,
           "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "countryCode": "US",
           "returnReason": "Some Reason Value",
+          "withdrawable": true,
           "submittedDateTime": "2000-01-23T04:56:07.000Z",
           "sourceAmount": 12345,
           "railsId": "asdf123",
@@ -15693,7 +15705,7 @@
           "payorName": "payorName",
           "sourceAccountName": "My Account",
           "paymentChannelId": "123asdf",
-          "invertedRate": 9.301444243932576,
+          "invertedRate": 3.616076749251911,
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "individualIdentificationNumber": "1231231adf",
           "railsPaymentId": "railsPaymentId",
@@ -15702,6 +15714,7 @@
           "remoteId": "aasdf123",
           "routingNumber": "123123123123",
           "returnCost": 1232,
+          "withdrawnReason": "withdrawnReason",
           "iban": "DE89 3704 0044 0532 0130 00",
           "payorPaymentId": "123123asdf",
           "rejectionReason": "rejectionReason",
@@ -15885,6 +15898,12 @@
           },
           "rejectionReason": {
             "type": "string"
+          },
+          "withdrawnReason": {
+            "type": "string"
+          },
+          "withdrawable": {
+            "type": "boolean"
           },
           "payout": {
             "$ref": "#/components/schemas/PaymentResponseV4_payout"
@@ -18868,6 +18887,7 @@
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalIncompletePayments": 6,
           "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
+          "totalWithdrawnPayments": 5,
           "instructedDateTime": "instructedDateTime",
           "payoutMemo": "payoutMemo",
           "payorName": "payorName"
@@ -18905,6 +18925,9 @@
             "type": "integer"
           },
           "totalReturnedPayments": {
+            "type": "integer"
+          },
+          "totalWithdrawnPayments": {
             "type": "integer"
           },
           "sourceAccountSummary": {
@@ -22008,6 +22031,7 @@
       },
       "GetPaymentsForPayoutResponseV4_summary": {
         "example": {
+          "withdrawnPayments": 2,
           "submitting": {
             "principal": "principal",
             "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -22110,6 +22134,10 @@
           },
           "returnedPayments": {
             "description": "The count of payments within the payout which have been returned.",
+            "type": "integer"
+          },
+          "withdrawnPayments": {
+            "description": "The count of payments within the payout which have been withdrawn.",
             "type": "integer"
           },
           "payoutType": {
@@ -22313,10 +22341,13 @@
       "tags": [
         "Submit Payout",
         "Get Payout",
+        "Get Payments for Payout",
         "Quote Payout",
         "Instruct Payout",
         "Withdraw Payout",
-        "Payout History"
+        "Payout History",
+        "Payout History",
+        "Withdraw Payment"
       ]
     },
     {
