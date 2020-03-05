@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.8
+  version: 2.22.9
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -1174,7 +1174,7 @@ paths:
         Get a Single Payor by Id.
       operationId: getPayorById
       parameters:
-        - description: The account owner Payor ID
+        - description: The Payor Id
           in: path
           name: payorId
           required: true
@@ -1254,7 +1254,7 @@ paths:
         Get a Single Payor by Id.
       operationId: getPayorByIdV2
       parameters:
-        - description: The account owner Payor ID
+        - description: The Payor Id
           in: path
           name: payorId
           required: true
@@ -1339,7 +1339,7 @@ paths:
       description: Create an application for the given Payor ID. Applications are programatic users which can be assigned unique keys.
       operationId: payorCreateApplicationRequest
       parameters:
-        - description: The account owner Payor ID
+        - description: The Payor Id
           in: path
           name: payorId
           required: true
@@ -1432,7 +1432,7 @@ paths:
       description: Create an an API key for the given payor Id and application Id
       operationId: payorCreateApiKeyRequest
       parameters:
-        - description: The account owner Payor ID
+        - description: The Payor Id
           in: path
           name: payorId
           required: true
@@ -1544,7 +1544,7 @@ paths:
         such as payees registering and onboarding.
       operationId: payorEmailOptOut
       parameters:
-        - description: The account owner Payor ID
+        - description: The Payor Id
           in: path
           name: payorId
           required: true
@@ -1620,7 +1620,7 @@ paths:
       description: 'Add Payor Logo. Logo file is used in your branding, and emails sent to payees.'
       operationId: payorAddPayorLogo
       parameters:
-        - description: The account owner Payor ID
+        - description: The Payor Id
           in: path
           name: payorId
           required: true
@@ -1671,7 +1671,7 @@ paths:
       description: Get the payor branding details.
       operationId: payorGetBranding
       parameters:
-        - description: The account owner Payor ID
+        - description: The Payor Id
           in: path
           name: payorId
           required: true

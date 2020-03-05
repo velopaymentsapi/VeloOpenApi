@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.8",
+    "version": "2.22.9",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -1486,7 +1486,7 @@
         "operationId": "getPayorById",
         "parameters": [
           {
-            "description": "The account owner Payor ID",
+            "description": "The Payor Id",
             "in": "path",
             "name": "payorId",
             "required": true,
@@ -1597,7 +1597,7 @@
         "operationId": "getPayorByIdV2",
         "parameters": [
           {
-            "description": "The account owner Payor ID",
+            "description": "The Payor Id",
             "in": "path",
             "name": "payorId",
             "required": true,
@@ -1718,7 +1718,7 @@
         "operationId": "payorCreateApplicationRequest",
         "parameters": [
           {
-            "description": "The account owner Payor ID",
+            "description": "The Payor Id",
             "in": "path",
             "name": "payorId",
             "required": true,
@@ -1863,7 +1863,7 @@
         "operationId": "payorCreateApiKeyRequest",
         "parameters": [
           {
-            "description": "The account owner Payor ID",
+            "description": "The Payor Id",
             "in": "path",
             "name": "payorId",
             "required": true,
@@ -2034,7 +2034,7 @@
         "operationId": "payorEmailOptOut",
         "parameters": [
           {
-            "description": "The account owner Payor ID",
+            "description": "The Payor Id",
             "in": "path",
             "name": "payorId",
             "required": true,
@@ -2152,7 +2152,7 @@
         "operationId": "payorAddPayorLogo",
         "parameters": [
           {
-            "description": "The account owner Payor ID",
+            "description": "The Payor Id",
             "in": "path",
             "name": "payorId",
             "required": true,
@@ -2226,7 +2226,7 @@
         "operationId": "payorGetBranding",
         "parameters": [
           {
-            "description": "The account owner Payor ID",
+            "description": "The Payor Id",
             "in": "path",
             "name": "payorId",
             "required": true,
