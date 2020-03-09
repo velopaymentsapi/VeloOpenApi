@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.13",
+    "version": "2.22.14",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -15406,6 +15406,7 @@
               "countryCode": "US",
               "returnReason": "Some Reason Value",
               "withdrawable": true,
+              "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15486,6 +15487,7 @@
               "countryCode": "US",
               "returnReason": "Some Reason Value",
               "withdrawable": true,
+              "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15611,6 +15613,7 @@
               "countryCode": "US",
               "returnReason": "Some Reason Value",
               "withdrawable": true,
+              "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15691,6 +15694,7 @@
               "countryCode": "US",
               "returnReason": "Some Reason Value",
               "withdrawable": true,
+              "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15793,6 +15797,7 @@
           "countryCode": "US",
           "returnReason": "Some Reason Value",
           "withdrawable": true,
+          "isPaymentCcyBaseCcy": true,
           "submittedDateTime": "2000-01-23T04:56:07.000Z",
           "sourceAmount": 12345,
           "railsId": "asdf123",
@@ -15906,6 +15911,9 @@
             "description": "The inverted FX rate for the payment, if FX was involved. **Note** that (depending on the role of the caller) this information may not be displayed",
             "format": "double",
             "type": "number"
+          },
+          "isPaymentCcyBaseCcy": {
+            "type": "boolean"
           },
           "submittedDateTime": {
             "format": "date-time",
