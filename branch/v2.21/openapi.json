@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.21.33",
+    "version": "2.21.34",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -9106,6 +9106,90 @@
         ]
       }
     },
+    "/v1/payments/{paymentId}/withdraw": {
+      "post": {
+        "description": "<p>withdraw a payment </p>\n<p>There are a variety of reasons why this can fail</p>\n<ul>\n    <li>the payment must be in a state of 'accepted' or 'unfunded'</li>\n    <li>the payout must not be in a state of 'instructed'</li>\n</ul>\n",
+        "operationId": "withdrawPayment",
+        "parameters": [
+          {
+            "description": "Id of the Payment",
+            "in": "path",
+            "name": "paymentId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawPaymentRequest"
+              }
+            }
+          },
+          "description": "details for withdrawal",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "The payment was withdrawn"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "summary": "Withdraw a Payment",
+        "tags": [
+          "Withdraw Payment"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payments/b39264fc-560e-4fa6-b6c3-b12d42e14596/withdraw' -i -X POST \\\n-H 'Authorization: Bearer 63e4d691-847b-46b5-893d-fd15c54dd4bf' \\\n-H 'Content-Type: application/json' \\\n-d '{\"reason\": \"payment submitted in error\"}'\n"
+          }
+        ]
+      }
+    },
     "/v1/supportedCountries": {
       "get": {
         "deprecated": true,
@@ -16817,6 +16901,24 @@
             "type": "array"
           }
         },
+        "type": "object"
+      },
+      "WithdrawPaymentRequest": {
+        "example": {
+          "reason": "Payment submitted in error"
+        },
+        "properties": {
+          "reason": {
+            "description": "Reason for withdrawal",
+            "example": "Payment submitted in error",
+            "maxLength": 256,
+            "minLength": 2,
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
         "type": "object"
       },
       "SupportedCountriesResponse": {
