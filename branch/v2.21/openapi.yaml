@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.21.34
+  version: 2.21.35
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -6369,6 +6369,7 @@ paths:
   '/v3/payouts/{payoutId}/payments':
     get:
       description: Retrieve payments for a payout
+      operationId: getPaymentsForPayoutV3
       parameters:
         - description: Id of the payout
           in: path
