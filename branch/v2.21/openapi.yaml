@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.21.35
+  version: 2.21.36
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -4884,6 +4884,459 @@ paths:
       summary: Get Funding Account
       tags:
         - Funding Manager
+  /v2/fundingAccounts:
+    get:
+      description: Get the funding accounts.
+      operationId: getFundingAccountsV2
+      parameters:
+        - in: query
+          name: payorId
+          required: false
+          schema:
+            format: uuid
+            type: string
+        - description: The descriptive funding account name
+          in: query
+          name: name
+          required: false
+          schema:
+            type: string
+        - description: The 2 letter ISO 3166-1 country code (upper case)
+          in: query
+          name: country
+          required: false
+          schema:
+            example: US
+            type: string
+        - description: The ISO 4217 currency code
+          in: query
+          name: currency
+          required: false
+          schema:
+            example: USD
+            type: string
+        - description: The type of funding account.
+          in: query
+          name: type
+          required: false
+          schema:
+            $ref: '#/components/schemas/FundingAccountType'
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            type: integer
+        - description: 'List of sort fields (e.g. ?sort=accountName:asc,name:asc) Default is accountName:asc The supported sort fields are - accountName, name.'
+          in: query
+          name: sort
+          required: false
+          schema:
+            default: 'accountName:asc'
+            pattern: '[a-zA-Z]+[:desc|:asc]'
+            type: string
+        - in: query
+          name: sensitive
+          required: false
+          schema:
+            default: false
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListFundingAccountsResponse_2'
+          description: Get Funding Accounts Response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Get Funding Accounts
+      tags:
+        - Funding Manager
+    post:
+      description: Create Funding Account
+      operationId: createFundingAccountV2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFundingAccountRequest'
+      responses:
+        '202':
+          description: Funding Account Created
+          headers:
+            Location:
+              description: Reference to created account
+              schema:
+                format: uri
+                type: string
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Create Funding Account
+      tags:
+        - Funding Manager Private
+  '/v2/fundingAccounts/{fundingAccountId}':
+    get:
+      description: Get Funding Account by ID
+      operationId: getFundingAccountV2
+      parameters:
+        - in: path
+          name: fundingAccountId
+          required: true
+          schema:
+            format: uuid
+            type: string
+        - in: query
+          name: sensitive
+          required: false
+          schema:
+            default: false
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FundingAccountResponse_2'
+          description: Funding Account Response
+        '400':
+          description: Bad Request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Get Funding Account
+      tags:
+        - Funding Manager
+  '/v3/sourceAccounts/{sourceAccountId}/fundingRequest':
+    post:
+      description: 'Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).'
+      operationId: createFundingRequestV3
+      parameters:
+        - description: Source account id
+          in: path
+          name: sourceAccountId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FundingRequestV3'
+        description: Body to included amount to be funded
+        required: true
+      responses:
+        '202':
+          description: Request Accepted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Create Funding Request
+      tags:
+        - Funding Manager
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/fundingRequest' -i -X POST \
+                -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \
+                -H 'Content-Type: application/json' \
+                -d '{"amount":999990}'
+  /v3/sourceAccounts:
+    description: List Source Accounts
+    get:
+      description: List source accounts.
+      operationId: getSourceAccountsV3
+      parameters:
+        - description: Physical Account Name
+          in: query
+          name: physicalAccountName
+          required: false
+          schema:
+            type: string
+        - description: The physical account ID
+          in: query
+          name: physicalAccountId
+          required: false
+          schema:
+            format: uuid
+            type: string
+        - description: The account owner Payor ID
+          in: query
+          name: payorId
+          required: false
+          schema:
+            format: uuid
+            type: string
+        - description: The funding account ID
+          in: query
+          name: fundingAccountId
+          required: false
+          schema:
+            format: uuid
+            type: string
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            type: integer
+        - description: |
+            List of sort fields e.g. ?sort=name:asc
+            Default is name:asc
+            The supported sort fields are - fundingRef, name, balance
+          in: query
+          name: sort
+          required: false
+          schema:
+            default: 'fundingRef:asc'
+            pattern: '[fundingRef|name|balance]+[:desc|:asc]'
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListSourceAccountResponseV3'
+          description: List Source Account response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Get list of source accounts
+      tags:
+        - Funding Manager
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \
+                -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'
+    summary: List Source Accounts
+  '/v3/sourceAccounts/{sourceAccountId}':
+    description: Get details about given source account.
+    get:
+      description: Get details about given source account.
+      operationId: getSourceAccountV3
+      parameters:
+        - description: Source account id
+          in: path
+          name: sourceAccountId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SourceAccountResponseV3'
+          description: Source account response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Get details about given source account.
+      tags:
+        - Funding Manager
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \
+                -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
+    summary: Get Source Account
+  '/v3/sourceAccounts/{sourceAccountId}/transfers':
+    post:
+      description: 'Transfer funds between source accounts for a Payor. The ''from'' source account is identified in the URL, and is the account which will be debited. The ''to'' (destination) source account is in the body, and is the account which will be credited. Both source accounts must belong to the same Payor. There must be sufficient balance in the ''from'' source account, otherwise the transfer attempt will fail.'
+      operationId: transferFundsV3
+      parameters:
+        - description: 'The ''from'' source account id, which will be debited'
+          in: path
+          name: sourceAccountId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRequest_2'
+        description: Body
+        required: true
+      responses:
+        '204':
+          description: Request Processed
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+          description: Resource not found
+      summary: Transfer Funds between source accounts
+      tags:
+        - Funding Manager
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/transfers' -i -X POST \
+                -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \
+                -H 'Content-Type: application/json' \
+                -d '{ "toSourceAccountId": "a99f93f9-6845-451d-a1f5-f3c841599dd7", "amount": 10000, "currency": "USD" }'
   /v1/deltas/fundings:
     get:
       description: Get funding audit deltas for a payor
@@ -10778,6 +11231,318 @@ components:
           example: FBO
           type: string
       type: object
+    FundingAccountType:
+      enum:
+        - FBO
+      type: string
+    ListFundingAccountsResponse_2:
+      description: List Funding Accounts Response Object
+      example:
+        links:
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+        page:
+          numberOfElements: 1
+          totalPages: 2
+          pageSize: 25
+          page: 1
+          totalElements: 1
+        content:
+          - routingNumber: 12345678
+            country: US
+            accountName: Payor Corp
+            name: My Funding Account
+            currency: USD
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            accountNumber: '7001001234'
+            type: FBO
+          - routingNumber: 12345678
+            country: US
+            accountName: Payor Corp
+            name: My Funding Account
+            currency: USD
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            accountNumber: '7001001234'
+            type: FBO
+      properties:
+        page:
+          $ref: '#/components/schemas/ListSourceAccountResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/ListSourceAccountResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/FundingAccountResponse_2'
+          type: array
+      type: object
+    CreateFundingAccountRequest:
+      example:
+        routingNumber: routingNumber
+        accountName: accountName
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        accountNumber: accountNumber
+      properties:
+        accountName:
+          maxLength: 22
+          minLength: 1
+          type: string
+        accountNumber:
+          maxLength: 17
+          minLength: 4
+          type: string
+        routingNumber:
+          maxLength: 9
+          minLength: 9
+          type: string
+        payorId:
+          format: uuid
+          type: string
+      required:
+        - accountName
+        - accountNumber
+        - payorId
+        - routingNumber
+      type: object
+    FundingAccountResponse_2:
+      example:
+        routingNumber: 12345678
+        country: US
+        accountName: Payor Corp
+        name: My Funding Account
+        currency: USD
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        accountNumber: '7001001234'
+        type: FBO
+      properties:
+        id:
+          description: Funding Account Id
+          format: uuid
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        accountName:
+          description: name on the bank account
+          example: Payor Corp
+          type: string
+        accountNumber:
+          description: bank account number
+          example: '7001001234'
+          type: string
+        routingNumber:
+          description: bank account routing number
+          example: 12345678
+          type: string
+        name:
+          description: name of funding account
+          example: My Funding Account
+          type: string
+        currency:
+          description: ISO 4217 currency code
+          example: USD
+          maxLength: 3
+          minLength: 3
+          type: string
+        country:
+          description: ISO 3166-1 2 letter country code (upper case)
+          example: US
+          maxLength: 2
+          minLength: 2
+          type: string
+        type:
+          description: Funding account type
+          example: FBO
+          type: string
+      type: object
+    FundingRequestV3:
+      example:
+        fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        amount: 800828191
+      properties:
+        fundingAccountId:
+          description: The funding account id
+          format: uuid
+          type: string
+        amount:
+          description: Amount to fund in minor units
+          format: int64
+          maximum: 9999999999
+          minimum: 1
+          type: integer
+      required:
+        - amount
+        - fundingAccountId
+      type: object
+    ListSourceAccountResponseV3:
+      description: List Source Accounts Response Object
+      example:
+        links:
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+        page:
+          numberOfElements: 12
+          totalPages: 2
+          pageSize: 25
+          page: 1
+          totalElements: 33
+        content:
+          - physicalAccountName: VELO_FBO_MYBANKA_USD
+            fundingRef: a1b2c3d4
+            balance: 1203489
+            pooled: true
+            name: MyAccountName
+            customerId: Joe Customer
+            physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            autoTopUpConfig:
+              targetBalance: 300000
+              fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+              minBalance: 10000
+              enabled: true
+            currency: USD
+            railsId: BOA_RAIL
+            balanceVisible: true
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            notifications:
+              minimumBalance: 120000
+          - physicalAccountName: VELO_FBO_MYBANKA_USD
+            fundingRef: a1b2c3d4
+            balance: 1203489
+            pooled: true
+            name: MyAccountName
+            customerId: Joe Customer
+            physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            autoTopUpConfig:
+              targetBalance: 300000
+              fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+              minBalance: 10000
+              enabled: true
+            currency: USD
+            railsId: BOA_RAIL
+            balanceVisible: true
+            id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            notifications:
+              minimumBalance: 120000
+      properties:
+        page:
+          $ref: '#/components/schemas/PagedUserResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/ListSourceAccountResponseV3_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/SourceAccountResponseV3'
+          type: array
+      type: object
+    SourceAccountResponseV3:
+      example:
+        physicalAccountName: VELO_FBO_MYBANKA_USD
+        fundingRef: a1b2c3d4
+        balance: 1203489
+        pooled: true
+        name: MyAccountName
+        customerId: Joe Customer
+        physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        autoTopUpConfig:
+          targetBalance: 300000
+          fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          minBalance: 10000
+          enabled: true
+        currency: USD
+        railsId: BOA_RAIL
+        balanceVisible: true
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        notifications:
+          minimumBalance: 120000
+      properties:
+        id:
+          description: Source Account Id
+          format: uuid
+          type: string
+        balance:
+          description: Decimal implied
+          example: 1203489
+          format: int64
+          type: integer
+        currency:
+          enum:
+            - USD
+          example: USD
+          maxLength: 3
+          minLength: 3
+          type: string
+        fundingRef:
+          example: a1b2c3d4
+          type: string
+        physicalAccountName:
+          example: VELO_FBO_MYBANKA_USD
+          type: string
+        railsId:
+          example: BOA_RAIL
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        name:
+          example: MyAccountName
+          type: string
+        pooled:
+          type: boolean
+        balanceVisible:
+          type: boolean
+        customerId:
+          example: Joe Customer
+          nullable: true
+          type: string
+        physicalAccountId:
+          format: uuid
+          type: string
+        notifications:
+          $ref: '#/components/schemas/Notifications_2'
+        autoTopUpConfig:
+          $ref: '#/components/schemas/AutoTopUpConfig_2'
+      required:
+        - autoTopUpConfig
+        - balanceVisible
+        - fundingRef
+        - id
+        - physicalAccountName
+        - pooled
+        - railsId
+      type: object
+    TransferRequest_2:
+      properties:
+        toSourceAccountId:
+          description: 'The ''to'' source account id, which will be credited'
+          format: uuid
+          type: string
+        amount:
+          description: 'Amount to transfer, in minor units'
+          format: int64
+          maximum: 9999999999
+          minimum: 1
+          type: integer
+        currency:
+          example: USD
+          maxLength: 3
+          minLength: 3
+          type: string
+      required:
+        - amount
+        - currency
+        - toSourceAccountId
+      type: object
     PageResourceFundingPayorStatusAuditResponseFundingPayorStatusAuditResponse:
       example:
         links:
@@ -14260,6 +15025,44 @@ components:
       required:
         - enabled
       type: object
+    Notifications_2:
+      example:
+        minimumBalance: 120000
+      properties:
+        minimumBalance:
+          example: 120000
+          type: integer
+      type: object
+    AutoTopUpConfig_2:
+      example:
+        targetBalance: 300000
+        fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        minBalance: 10000
+        enabled: true
+      properties:
+        enabled:
+          description: Is auto top-up enabled? automatically trigger funding to top-up the source account balance when the balance falls below the configured minimum level.
+          example: true
+          type: boolean
+        minBalance:
+          description: When the payor balance falls below this level then auto top-up will be triggered. Note - This is in minor units.
+          example: 10000
+          format: int64
+          nullable: true
+          type: integer
+        targetBalance:
+          description: When the payor balance falls below the min balance then auto top-up will request funds bring the balance to this level. Note - this is in minor units.
+          example: 300000
+          format: int64
+          nullable: true
+          type: integer
+        fundingAccountId:
+          description: Id of funding account from which to pull funds when auto top-up is triggered.  Note - if this is not set then auto top-up is effectively disabled.
+          format: uuid
+          type: string
+      required:
+        - enabled
+      type: object
     LinkForResponse:
       example:
         rel: rel
@@ -17173,6 +17976,17 @@ components:
           type: string
         href:
           example: 'https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+          type: string
+    ListSourceAccountResponseV3_links:
+      example:
+        rel: first
+        href: 'https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+      properties:
+        rel:
+          example: first
+          type: string
+        href:
+          example: 'https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
           type: string
     GetFundingsResponse_allOf:
       properties:
