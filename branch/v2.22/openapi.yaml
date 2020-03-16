@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.21
+  version: 2.22.22
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -297,13 +297,15 @@ paths:
             default: 1
             format: int32
             type: integer
-        - description: Page size. Default is 25. Max allowable is 100.
+        - description: The number of results to return in a page
           in: query
           name: pageSize
           required: false
           schema:
             default: 25
             format: int32
+            maximum: 100
+            minimum: 1
             type: integer
         - description: |
             List of sort fields (e.g. ?sort=email:asc,lastName:asc)
@@ -386,8 +388,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Delete a User
       tags:
         - Users
@@ -453,8 +456,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get User
       tags:
         - Users
@@ -507,8 +511,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Disable a User
       tags:
         - Users
@@ -562,8 +567,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Enable a User
       tags:
         - Users
@@ -619,7 +625,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_412'
           description: |
             The request could not be completed as a precondition was not met
       summary: Invite a User
@@ -689,8 +695,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Update User Role
       tags:
         - Users
@@ -751,8 +758,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Unregister MFA for the user
       tags:
         - Users
@@ -860,8 +868,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Unlock a User
       tags:
         - Users
@@ -919,8 +928,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         '409':
           content:
             application/json:
@@ -1403,8 +1413,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         '409':
           content:
             application/json:
@@ -1519,8 +1530,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Create API Key
       tags:
         - Payors
@@ -1655,8 +1667,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Add Logo
       tags:
         - Payors
@@ -1870,8 +1883,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: List Payor Links
       tags:
         - Payors
@@ -1937,8 +1951,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       security:
         - oAuthVeloBackOffice: []
       summary: Create a Payor Link
@@ -2409,8 +2424,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         '409':
           content:
             application/json:
@@ -2475,8 +2491,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payee Invitation Status
       tags:
         - Payee Invitation
@@ -2534,8 +2551,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         '409':
           content:
             application/json:
@@ -2990,8 +3008,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         '409':
           content:
             application/json:
@@ -3073,8 +3092,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Query Batch Status
       tags:
         - Payee Invitation
@@ -3215,8 +3235,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payee Invitation Status
       tags:
         - Payee Invitation
@@ -3630,8 +3651,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: List Payees
       tags:
         - Payees
@@ -3822,8 +3844,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         '409':
           content:
             application/json:
@@ -3903,8 +3926,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Query Batch Status
       tags:
         - Payee Invitation
@@ -3963,8 +3987,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         '409':
           content:
             application/json:
@@ -4111,8 +4136,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payee Invitation Status
       tags:
         - Payee Invitation
@@ -4247,8 +4273,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         '409':
           content:
             application/json:
@@ -4287,13 +4314,15 @@ paths:
             default: 1
             format: int32
             type: integer
-        - description: Page size. Default is 25. Max allowable is 100.
+        - description: The number of results to return in a page
           in: query
           name: pageSize
           required: false
           schema:
             default: 25
             format: int32
+            maximum: 100
+            minimum: 1
             type: integer
         - description: |
             List of sort fields e.g. ?sort=name:asc
@@ -4365,8 +4394,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get details about given source account.
       tags:
         - Funding Manager
@@ -4415,8 +4445,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Create Funding Request
       tags:
         - Funding Manager
@@ -4473,8 +4504,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Set notifications
       tags:
         - Funding Manager
@@ -4531,8 +4563,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Create Funding Request
       tags:
         - Funding Manager
@@ -4584,13 +4617,15 @@ paths:
             default: 1
             format: int32
             type: integer
-        - description: Page size. Default is 25. Max allowable is 100.
+        - description: The number of results to return in a page
           in: query
           name: pageSize
           required: false
           schema:
             default: 25
             format: int32
+            maximum: 100
+            minimum: 1
             type: integer
         - description: |
             List of sort fields e.g. ?sort=name:asc
@@ -4634,8 +4669,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get list of source accounts
       tags:
         - Funding Manager
@@ -4689,8 +4725,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get details about given source account.
       tags:
         - Funding Manager
@@ -4746,8 +4783,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Transfer Funds between source accounts
       tags:
         - Funding Manager
@@ -4783,13 +4821,15 @@ paths:
             default: 1
             format: int32
             type: integer
-        - description: Page size. Default is 25. Max allowable is 100.
+        - description: The number of results to return in a page
           in: query
           name: pageSize
           required: false
           schema:
             default: 25
             format: int32
+            maximum: 100
+            minimum: 1
             type: integer
         - in: query
           name: sort
@@ -4911,8 +4951,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Funding Account
       tags:
         - Funding Manager
@@ -4941,13 +4982,15 @@ paths:
             default: 1
             format: int32
             type: integer
-        - description: Page size. Default is 25. Max allowable is 100.
+        - description: The number of results to return in a page
           in: query
           name: pageSize
           required: false
           schema:
             default: 25
             format: int32
+            maximum: 100
+            minimum: 1
             type: integer
       responses:
         '200':
@@ -6246,8 +6289,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Withdraw Payout
       tags:
         - Withdraw Payout
@@ -6292,8 +6336,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payout Summary
       tags:
         - Get Payout
@@ -6340,8 +6385,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         '409':
           content:
             application/json:
@@ -6380,8 +6426,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         '409':
           content:
             application/json:
@@ -6449,13 +6496,15 @@ paths:
           required: false
           schema:
             type: string
-        - description: Page size. Default is 25. Max allowable is 100.
+        - description: The number of results to return in a page
           in: query
           name: pageSize
           required: false
           schema:
             default: 25
             format: int32
+            maximum: 100
+            minimum: 1
             type: integer
         - description: Page number. Default is 1.
           in: query
@@ -6476,8 +6525,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Retrieve payments for a payout
       tags:
         - Payments for Payout
@@ -6963,23 +7013,6 @@ components:
             A timestamp showing when the user was locked out
             If null then the user is not currently locked out
           format: date-time
-          nullable: true
-          type: string
-      type: object
-    ErrorResponse:
-      description: Error response returned by all error conditions in Velo Services
-      properties:
-        errors:
-          description: one or more errors
-          items:
-            $ref: '#/components/schemas/Error'
-          minItems: 1
-          nullable: true
-          type: array
-        correlationId:
-          description: a unique identifier to track a request or related sequence of requests
-          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
-          format: uuid
           nullable: true
           type: string
       type: object
@@ -7539,6 +7572,23 @@ components:
           type: integer
       required:
         - payorName
+      type: object
+    ErrorResponse:
+      description: Error response returned by all error conditions in Velo Services
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/Error'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
       type: object
     PayorV2:
       example:
@@ -12819,34 +12869,6 @@ components:
       required:
         - name
       type: object
-    Error:
-      properties:
-        errorMessage:
-          description: |
-            verbose message indicating the nature of the error
-            Will be localised
-          example: smsNumber must be in the E.164 format e.g. +15551231234
-          type: string
-        location:
-          description: the property or object that caused the error
-          example: smsNumber
-          type: string
-        locationType:
-          description: |
-            the location type in the request that was the cause of the error
-          enum:
-            - requestBody
-            - queryParam
-            - requestParam
-            - header
-            - pathParam
-          example: requestBody
-          type: string
-        reasonCode:
-          description: a camel-cased string that can be used by clients to localise client error messages
-          example: validationError
-          type: string
-      type: object
     VerificationCode:
       description: |
         <p>Optional property that MUST be suppied when manually verifying a user</p>
@@ -12935,6 +12957,34 @@ components:
       example: PASSED_KYC
       readOnly: true
       type: string
+    Error:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: smsNumber must be in the E.164 format e.g. +15551231234
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: smsNumber
+          type: string
+        locationType:
+          description: |
+            the location type in the request that was the cause of the error
+          enum:
+            - requestBody
+            - queryParam
+            - requestParam
+            - header
+            - pathParam
+          example: requestBody
+          type: string
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise client error messages
+          example: validationError
+          type: string
+      type: object
     PayorAddressV2:
       example:
         country: US
@@ -16804,6 +16854,39 @@ components:
           format: uuid
           nullable: true
           type: string
+    inline_response_404_errors:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: The resource was not found
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: paymentId
+          type: string
+        locationType:
+          $ref: '#/components/schemas/LocationType'
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise client error messages
+          example: permissions
+          type: string
+    inline_response_404:
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/inline_response_404_errors'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
     inline_response_409_errors:
       properties:
         errorMessage:
@@ -16828,6 +16911,39 @@ components:
           description: one or more errors
           items:
             $ref: '#/components/schemas/inline_response_409_errors'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
+    inline_response_412_errors:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: The request could not be completed as the pre conditions have not been met
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: accessToken
+          type: string
+        locationType:
+          $ref: '#/components/schemas/LocationType'
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise client error messages
+          example: permissions
+          type: string
+    inline_response_412:
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/inline_response_412_errors'
           minItems: 1
           nullable: true
           type: array

@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.21",
+    "version": "2.22.22",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -306,13 +306,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -426,11 +428,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Delete a User",
@@ -519,11 +521,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get User",
@@ -592,11 +594,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Disable a User",
@@ -665,11 +667,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Enable a User",
@@ -747,7 +749,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_412"
                 }
               }
             },
@@ -831,11 +833,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Update User Role",
@@ -915,11 +917,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Unregister MFA for the user",
@@ -1063,11 +1065,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Unlock a User",
@@ -1147,11 +1149,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           },
           "409": {
             "content": {
@@ -1820,11 +1822,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           },
           "409": {
             "content": {
@@ -2001,11 +2003,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Create API Key",
@@ -2201,11 +2203,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Add Logo",
@@ -2529,11 +2531,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "List Payor Links",
@@ -2632,11 +2634,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "security": [
@@ -3346,11 +3348,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           },
           "409": {
             "content": {
@@ -3438,11 +3440,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payee Invitation Status",
@@ -3523,11 +3525,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           },
           "409": {
             "content": {
@@ -4159,11 +4161,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           },
           "409": {
             "content": {
@@ -4262,11 +4264,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Query Batch Status",
@@ -4477,11 +4479,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payee Invitation Status",
@@ -5056,11 +5058,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "List Payees",
@@ -5350,11 +5352,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           },
           "409": {
             "content": {
@@ -5452,11 +5454,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Query Batch Status",
@@ -5537,11 +5539,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           },
           "409": {
             "content": {
@@ -5761,11 +5763,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payee Invitation Status",
@@ -5967,11 +5969,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           },
           "409": {
             "content": {
@@ -6028,13 +6030,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -6137,11 +6141,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get details about given source account.",
@@ -6213,11 +6217,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Create Funding Request",
@@ -6297,11 +6301,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Set notifications",
@@ -6381,11 +6385,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Create Funding Request",
@@ -6457,13 +6461,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -6524,11 +6530,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get list of source accounts",
@@ -6606,11 +6612,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get details about given source account.",
@@ -6691,11 +6697,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Transfer Funds between source accounts",
@@ -6745,13 +6751,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -6935,11 +6943,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Funding Account",
@@ -6983,13 +6991,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -8774,11 +8784,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Withdraw Payout",
@@ -8841,11 +8851,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payout Summary",
@@ -8911,11 +8921,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           },
           "409": {
             "content": {
@@ -8970,11 +8980,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           },
           "409": {
             "content": {
@@ -9065,13 +9075,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -9102,11 +9114,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Resource not found"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Retrieve payments for a payout",
@@ -9618,28 +9630,6 @@
           "lockedOutTimestamp": {
             "description": "A timestamp showing when the user was locked out\nIf null then the user is not currently locked out\n",
             "format": "date-time",
-            "nullable": true,
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "ErrorResponse": {
-        "description": "Error response returned by all error conditions in Velo Services",
-        "properties": {
-          "errors": {
-            "description": "one or more errors",
-            "items": {
-              "$ref": "#/components/schemas/Error"
-            },
-            "minItems": 1,
-            "nullable": true,
-            "type": "array"
-          },
-          "correlationId": {
-            "description": "a unique identifier to track a request or related sequence of requests",
-            "example": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
-            "format": "uuid",
             "nullable": true,
             "type": "string"
           }
@@ -10291,6 +10281,28 @@
         "required": [
           "payorName"
         ],
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "description": "Error response returned by all error conditions in Velo Services",
+        "properties": {
+          "errors": {
+            "description": "one or more errors",
+            "items": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "minItems": 1,
+            "nullable": true,
+            "type": "array"
+          },
+          "correlationId": {
+            "description": "a unique identifier to track a request or related sequence of requests",
+            "example": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
+            "format": "uuid",
+            "nullable": true,
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "PayorV2": {
@@ -17013,38 +17025,6 @@
         ],
         "type": "object"
       },
-      "Error": {
-        "properties": {
-          "errorMessage": {
-            "description": "verbose message indicating the nature of the error\nWill be localised\n",
-            "example": "smsNumber must be in the E.164 format e.g. +15551231234",
-            "type": "string"
-          },
-          "location": {
-            "description": "the property or object that caused the error",
-            "example": "smsNumber",
-            "type": "string"
-          },
-          "locationType": {
-            "description": "the location type in the request that was the cause of the error\n",
-            "enum": [
-              "requestBody",
-              "queryParam",
-              "requestParam",
-              "header",
-              "pathParam"
-            ],
-            "example": "requestBody",
-            "type": "string"
-          },
-          "reasonCode": {
-            "description": "a camel-cased string that can be used by clients to localise client error messages",
-            "example": "validationError",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "VerificationCode": {
         "description": "<p>Optional property that MUST be suppied when manually verifying a user</p>\n<p>The user's smsNumber is registered via a separate endpoint and an OTP sent to them</p>\n",
         "example": "123456",
@@ -17147,6 +17127,38 @@
         "example": "PASSED_KYC",
         "readOnly": true,
         "type": "string"
+      },
+      "Error": {
+        "properties": {
+          "errorMessage": {
+            "description": "verbose message indicating the nature of the error\nWill be localised\n",
+            "example": "smsNumber must be in the E.164 format e.g. +15551231234",
+            "type": "string"
+          },
+          "location": {
+            "description": "the property or object that caused the error",
+            "example": "smsNumber",
+            "type": "string"
+          },
+          "locationType": {
+            "description": "the location type in the request that was the cause of the error\n",
+            "enum": [
+              "requestBody",
+              "queryParam",
+              "requestParam",
+              "header",
+              "pathParam"
+            ],
+            "example": "requestBody",
+            "type": "string"
+          },
+          "reasonCode": {
+            "description": "a camel-cased string that can be used by clients to localise client error messages",
+            "example": "validationError",
+            "type": "string"
+          }
+        },
+        "type": "object"
       },
       "PayorAddressV2": {
         "example": {
@@ -21909,6 +21921,48 @@
           }
         }
       },
+      "inline_response_404_errors": {
+        "properties": {
+          "errorMessage": {
+            "description": "verbose message indicating the nature of the error\nWill be localised\n",
+            "example": "The resource was not found",
+            "type": "string"
+          },
+          "location": {
+            "description": "the property or object that caused the error",
+            "example": "paymentId",
+            "type": "string"
+          },
+          "locationType": {
+            "$ref": "#/components/schemas/LocationType"
+          },
+          "reasonCode": {
+            "description": "a camel-cased string that can be used by clients to localise client error messages",
+            "example": "permissions",
+            "type": "string"
+          }
+        }
+      },
+      "inline_response_404": {
+        "properties": {
+          "errors": {
+            "description": "one or more errors",
+            "items": {
+              "$ref": "#/components/schemas/inline_response_404_errors"
+            },
+            "minItems": 1,
+            "nullable": true,
+            "type": "array"
+          },
+          "correlationId": {
+            "description": "a unique identifier to track a request or related sequence of requests",
+            "example": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
+            "format": "uuid",
+            "nullable": true,
+            "type": "string"
+          }
+        }
+      },
       "inline_response_409_errors": {
         "properties": {
           "errorMessage": {
@@ -21937,6 +21991,48 @@
             "description": "one or more errors",
             "items": {
               "$ref": "#/components/schemas/inline_response_409_errors"
+            },
+            "minItems": 1,
+            "nullable": true,
+            "type": "array"
+          },
+          "correlationId": {
+            "description": "a unique identifier to track a request or related sequence of requests",
+            "example": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
+            "format": "uuid",
+            "nullable": true,
+            "type": "string"
+          }
+        }
+      },
+      "inline_response_412_errors": {
+        "properties": {
+          "errorMessage": {
+            "description": "verbose message indicating the nature of the error\nWill be localised\n",
+            "example": "The request could not be completed as the pre conditions have not been met",
+            "type": "string"
+          },
+          "location": {
+            "description": "the property or object that caused the error",
+            "example": "accessToken",
+            "type": "string"
+          },
+          "locationType": {
+            "$ref": "#/components/schemas/LocationType"
+          },
+          "reasonCode": {
+            "description": "a camel-cased string that can be used by clients to localise client error messages",
+            "example": "permissions",
+            "type": "string"
+          }
+        }
+      },
+      "inline_response_412": {
+        "properties": {
+          "errors": {
+            "description": "one or more errors",
+            "items": {
+              "$ref": "#/components/schemas/inline_response_412_errors"
             },
             "minItems": 1,
             "nullable": true,
