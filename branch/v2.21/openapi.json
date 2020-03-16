@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.21.36",
+    "version": "2.21.37",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -24045,7 +24045,7 @@
       "tags": [
         "Submit Payout",
         "Get Payout",
-        "Get Payments for Payout",
+        "Retrieve Payments for Payout",
         "Quote Payout",
         "Instruct Payout",
         "Withdraw Payout",
