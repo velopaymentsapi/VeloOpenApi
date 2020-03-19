@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.21.40",
+    "version": "2.21.41",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -15067,10 +15067,16 @@
         "example": {
           "routingNumber": "routingNumber",
           "accountName": "accountName",
+          "name": "name",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "accountNumber": "accountNumber"
         },
         "properties": {
+          "name": {
+            "maxLength": 30,
+            "minLength": 1,
+            "type": "string"
+          },
           "accountName": {
             "maxLength": 22,
             "minLength": 1,
@@ -15094,6 +15100,7 @@
         "required": [
           "accountName",
           "accountNumber",
+          "name",
           "payorId",
           "routingNumber"
         ],
