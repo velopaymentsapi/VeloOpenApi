@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.35",
+    "version": "2.22.36",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -7668,14 +7668,15 @@
     },
     "/v1/paymentaudit/fundings": {
       "get": {
-        "description": "Get a list of Fundings for a payor.\n",
+        "deprecated": true,
+        "description": "<p>Get a list of Fundings for a payor.</p>\n<p>Deprecated (use v4/paymentaudit/fundings)</p>\n",
         "operationId": "getFundingsV1",
         "parameters": [
           {
             "description": "The account owner Payor ID",
             "in": "query",
             "name": "payorId",
-            "required": false,
+            "required": true,
             "schema": {
               "format": "uuid",
               "type": "string"
@@ -7693,13 +7694,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -7724,16 +7727,49 @@
             "description": "Get Fundings normal response"
           },
           "400": {
-            "description": "Bad Request"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Payor Id Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Fundings for Payor",
         "tags": [
-          "Payment Audit Service",
-          "Funding Manager"
+          "Payment Audit"
         ],
         "x-code-samples": [
           {
@@ -7745,7 +7781,8 @@
     },
     "/v1/paymentaudit/payoutStatistics": {
       "get": {
-        "description": "Get payout statistics for a payor.",
+        "deprecated": true,
+        "description": "<p>Get payout statistics for a payor.</p>\n<p>Deprecated (Use /v4/paymentaudit/payoutStatistics)</p>\n",
         "operationId": "getPayoutStatsV1",
         "parameters": [
           {
@@ -7768,19 +7805,47 @@
                 }
               }
             },
-            "description": "List Source Account response"
+            "description": "Payout Statistics response"
           },
           "400": {
-            "description": "Bad Request"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "401": {
-            "description": "Not Authorized"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
           "403": {
-            "description": "Forbidden"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payout Statistics",
@@ -7827,20 +7892,20 @@
             "required": false,
             "schema": {
               "default": 1,
-              "example": 1,
               "format": "int32",
               "type": "integer"
             }
           },
           {
-            "description": "Page size. Default is 100. Max allowable is 1000.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 100,
-              "example": 100,
               "format": "int32",
+              "maximum": 1000,
+              "minimum": 1,
               "type": "integer"
             }
           }
@@ -7875,7 +7940,7 @@
     "/v3/paymentaudit/payouts": {
       "get": {
         "deprecated": true,
-        "description": "Get List of payouts for payor\n",
+        "description": "<p>Get List of payouts for payor</p>\n<p>Deprecated Use v4</p>\n",
         "operationId": "getPayoutsForPayorV3",
         "parameters": [
           {
@@ -7949,13 +8014,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -7974,23 +8041,51 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetPayoutsResponseV3"
+                  "$ref": "#/components/schemas/GetPayoutsResponse"
                 }
               }
             },
             "description": "Payor data found"
           },
           "400": {
-            "description": "Invalid Request Parameter"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "401": {
-            "description": "Not Authorized"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
           "403": {
-            "description": "Forbidden"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Payor Id Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payouts for Payor",
@@ -8124,18 +8219,20 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
           {
-            "description": "List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId\nThe supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,\nroutingNumber, accountNumber, remoteId, submittedDateTime and status\n",
+            "description": "<p>List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId</p>\n<p>The supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,\nroutingNumber, accountNumber, remoteId, submittedDateTime and status</p>\n",
             "in": "query",
             "name": "sort",
             "required": false,
@@ -8158,23 +8255,51 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV3"
+                  "$ref": "#/components/schemas/GetPaymentsForPayoutResponse"
                 }
               }
             },
             "description": "200 response, data found okay"
           },
           "400": {
-            "description": "Invalid Request Parameter"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "401": {
-            "description": "Not Authorized"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
           "403": {
-            "description": "Forbidden"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Payout Id Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payments for Payout",
@@ -8364,13 +8489,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -8405,13 +8532,34 @@
             "description": "Details of Payee"
           },
           "400": {
-            "description": "Bad Request Parameter"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "401": {
-            "description": "Not Authorized"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
           "403": {
-            "description": "Forbidden"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           }
         },
         "summary": "Get List of Payments",
@@ -8451,20 +8599,51 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaymentResponseV3"
+                  "$ref": "#/components/schemas/PaymentResponse"
                 }
               }
             },
             "description": "200 response, request completed okay"
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
           "401": {
-            "description": "Not Authorized"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
           "403": {
-            "description": "Forbidden"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Payment Id Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payment",
@@ -8475,6 +8654,97 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v3/paymentaudit/payments/c3a422c2-12ac-4416-84fe-964221bd9815' -i \\\n    -H 'Authorization: Bearer 67a1b299-69b1-4fdf-a576-96b81199a2b9'\n"
+          }
+        ]
+      }
+    },
+    "/v3/paymentaudit/transactions": {
+      "get": {
+        "deprecated": true,
+        "description": "Download a CSV file containing payments in a date range. Uses Transfer-Encoding - chunked to stream to the client. Date range is inclusive of both the start and end dates.",
+        "operationId": "exportTransactionsCSVV3",
+        "parameters": [
+          {
+            "description": "The Payor ID for whom you wish to run the report.\nFor a Payor requesting the report, this could be their exact Payor, or it could be a child/descendant Payor.\n",
+            "in": "query",
+            "name": "payorId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Start date, inclusive. Format is YYYY-MM-DD",
+            "in": "query",
+            "name": "startDate",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "End date, inclusive. Format is YYYY-MM-DD",
+            "in": "query",
+            "name": "endDate",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayorAmlTransaction"
+                }
+              }
+            },
+            "description": "Export Transactions response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "Export Transactions",
+        "tags": [
+          "Payment Audit Service"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/transactions?startDate=2018-05-01&endDate=2018-05-31' -i -X GET \\\n    -H 'Authorization: Bearer 76748e09-775d-4e2d-b889-f0555901d8eb'\n"
           }
         ]
       }
@@ -8564,13 +8834,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -8589,23 +8861,51 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetPayoutsResponseV4"
+                  "$ref": "#/components/schemas/GetPayoutsResponse_2"
                 }
               }
             },
             "description": "Payor data found"
           },
           "400": {
-            "description": "Invalid Request Parameter"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "401": {
-            "description": "Not Authorized"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
           "403": {
-            "description": "Forbidden"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Payor Id Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payouts for Payor",
@@ -8738,13 +9038,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -8772,23 +9074,51 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV4"
+                  "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_2"
                 }
               }
             },
             "description": "200 response, data found okay"
           },
           "400": {
-            "description": "Invalid Request Parameter"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "401": {
-            "description": "Not Authorized"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
           "403": {
-            "description": "Forbidden"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Payout Id Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payments for Payout",
@@ -8977,13 +9307,15 @@
             }
           },
           {
-            "description": "Page size. Default is 25. Max allowable is 100.",
+            "description": "The number of results to return in a page",
             "in": "query",
             "name": "pageSize",
             "required": false,
             "schema": {
               "default": 25,
               "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
               "type": "integer"
             }
           },
@@ -9011,20 +9343,41 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ListPaymentsResponseV4"
+                  "$ref": "#/components/schemas/ListPaymentsResponse_2"
                 }
               }
             },
             "description": "Details of Payee"
           },
           "400": {
-            "description": "Bad Request Parameter"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "401": {
-            "description": "Not Authorized"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
           "403": {
-            "description": "Forbidden"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           }
         },
         "summary": "Get List of Payments",
@@ -9063,20 +9416,51 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaymentResponseV4"
+                  "$ref": "#/components/schemas/PaymentResponse_2"
                 }
               }
             },
             "description": "200 response, request completed okay"
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
           "401": {
-            "description": "Not Authorized"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
           "403": {
-            "description": "Forbidden"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           },
           "404": {
-            "description": "Payment Id Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payment",
@@ -9091,39 +9475,51 @@
         ]
       }
     },
-    "/v3/paymentaudit/transactions": {
+    "/v4/paymentaudit/fundings": {
       "get": {
         "deprecated": true,
-        "description": "Download a CSV file containing payments in a date range. Uses Transfer-Encoding - chunked to stream to the client. Date range is inclusive of both the start and end dates.",
-        "operationId": "exportTransactionsCSVV3",
+        "description": "<p>Get a list of Fundings for a payor.</p>\n",
+        "operationId": "getFundingsV4",
         "parameters": [
           {
-            "description": "The Payor ID for whom you wish to run the report.\nFor a Payor requesting the report, this could be their exact Payor, or it could be a child/descendant Payor.\n",
+            "description": "The account owner Payor ID",
             "in": "query",
             "name": "payorId",
-            "required": false,
+            "required": true,
             "schema": {
               "format": "uuid",
               "type": "string"
             }
           },
           {
-            "description": "Start date, inclusive. Format is YYYY-MM-DD",
+            "description": "Page number. Default is 1.",
             "in": "query",
-            "name": "startDate",
+            "name": "page",
             "required": false,
             "schema": {
-              "format": "date",
-              "type": "string"
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
             }
           },
           {
-            "description": "End date, inclusive. Format is YYYY-MM-DD",
+            "description": "The number of results to return in a page",
             "in": "query",
-            "name": "endDate",
+            "name": "pageSize",
             "required": false,
             "schema": {
-              "format": "date",
+              "default": 25,
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "List of sort fields. Example: ```?sort=destinationCurrency:asc,destinationAmount:asc```\nDefault is no sort. The supported sort fields are: dateTime and amount.\n",
+            "in": "query",
+            "name": "sort",
+            "schema": {
               "type": "string"
             }
           }
@@ -9131,32 +9527,221 @@
         "responses": {
           "200": {
             "content": {
-              "application/csv": {
+              "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PayorAmlTransactionV3"
+                  "$ref": "#/components/schemas/GetFundingsResponse"
                 }
               }
             },
-            "description": "Export Transactions response"
+            "description": "Get Fundings normal response"
           },
           "400": {
-            "description": "invalid Request"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "401": {
-            "description": "Not Authorized"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
           },
           "403": {
-            "description": "Forbidden"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
-        "summary": "Export Transactions",
+        "summary": "Get Fundings for Payor",
+        "tags": [
+          "Payment Audit"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/fundings?payorId=2a5d8af2-a1ed-4d7f-b9a7-ebe4b333be5a' -i -X GET \\\n    -H 'Authorization: Bearer 3667f994-7d41-4d20-990d-b79fa720e56b'\n"
+          }
+        ]
+      }
+    },
+    "/v4/paymentaudit/payoutStatistics": {
+      "get": {
+        "deprecated": true,
+        "description": "<p>Get payout statistics for a payor.</p>\n",
+        "operationId": "getPayoutStatsV4",
+        "parameters": [
+          {
+            "description": "The account owner Payor ID. Required for external users.",
+            "in": "query",
+            "name": "payorId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetPayoutStatistics"
+                }
+              }
+            },
+            "description": "Payout Statistics response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Get Payout Statistics",
+        "tags": [
+          "Payout History"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/payoutStatistics?payorId=c61b32ac-8e50-433e-9372-b5b1c8180742' -i -X GET \\\n    -H 'Authorization: Bearer e71d3dfe-3587-4df6-9f8d-59d3135d7bf7'\n"
+          }
+        ]
+      }
+    },
+    "/v4/payments/deltas": {
+      "get": {
+        "description": "Get a paginated response listing payment changes.",
+        "operationId": "listPaymentChangesV4",
+        "parameters": [
+          {
+            "description": "The Payor ID to find associated Payments",
+            "in": "query",
+            "name": "payorId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The updatedSince filter in the format YYYY-MM-DDThh:mm:ss+hh:mm",
+            "in": "query",
+            "name": "updatedSince",
+            "required": true,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The number of results to return in a page",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 100,
+              "format": "int32",
+              "maximum": 1000,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentDeltaResponse_2"
+                }
+              }
+            },
+            "description": "Details of Payment Changes"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "summary": "List Payment Changes",
         "tags": [
           "Payment Audit Service"
         ],
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/transactions?startDate=2018-05-01&endDate=2018-05-31' -i -X GET \\\n    -H 'Authorization: Bearer 76748e09-775d-4e2d-b889-f0555901d8eb'\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v4/payments/deltas?pageSize=2&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \\\n    -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \\\n    -H 'Content-Type: application/json'\n"
           }
         ]
       }
@@ -9215,7 +9800,7 @@
             "content": {
               "application/csv": {
                 "schema": {
-                  "$ref": "#/components/schemas/PayorAmlTransactionV4"
+                  "$ref": "#/components/schemas/PayorAmlTransaction_2"
                 }
               }
             },
@@ -15481,14 +16066,89 @@
         "type": "object"
       },
       "GetFundingsResponse": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/PagedResponse"
+        "description": "List Users Response Object",
+        "example": {
+          "links": [
+            {
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v1/paymentaudit/fundings?payorId=2a5d8af2-a1ed-4d7f-b9a7-ebe4b333be5a&page=1&pageSize=10"
+            },
+            {
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v1/paymentaudit/fundings?payorId=2a5d8af2-a1ed-4d7f-b9a7-ebe4b333be5a&page=1&pageSize=10"
+            }
+          ],
+          "page": {
+            "numberOfElements": 12,
+            "totalPages": 2,
+            "pageSize": 25,
+            "page": 1,
+            "totalElements": 33
           },
-          {
-            "$ref": "#/components/schemas/GetFundingsResponse_allOf"
+          "content": [
+            {
+              "dateTime": "2000-01-23T04:56:07.000Z",
+              "fundingAccountName": "fundingAccountName",
+              "amount": 120000,
+              "fundingType": "ACH",
+              "currency": "USD",
+              "topupType": "AUTOMATIC",
+              "events": [
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z"
+                },
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z"
+                }
+              ],
+              "status": "PENDING",
+              "sourceAccountName": "sourceAccountName"
+            },
+            {
+              "dateTime": "2000-01-23T04:56:07.000Z",
+              "fundingAccountName": "fundingAccountName",
+              "amount": 120000,
+              "fundingType": "ACH",
+              "currency": "USD",
+              "topupType": "AUTOMATIC",
+              "events": [
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z"
+                },
+                {
+                  "principal": "principal",
+                  "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                  "eventDateTime": "2000-01-23T04:56:07.000Z"
+                }
+              ],
+              "status": "PENDING",
+              "sourceAccountName": "sourceAccountName"
+            }
+          ]
+        },
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PagedUserResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/GetFundingsResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/FundingAudit"
+            },
+            "type": "array"
           }
-        ],
+        },
         "type": "object"
       },
       "GetPayoutStatistics": {
@@ -15572,7 +16232,7 @@
         },
         "type": "object"
       },
-      "GetPayoutsResponseV3": {
+      "GetPayoutsResponse": {
         "description": "List Payouts Response",
         "example": {
           "links": [
@@ -15683,24 +16343,24 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/GetPayoutsResponseV3_page"
+            "$ref": "#/components/schemas/GetPayoutsResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/GetPayoutsResponseV3_links"
+              "$ref": "#/components/schemas/GetPayoutsResponse_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PayoutSummaryAuditV3"
+              "$ref": "#/components/schemas/PayoutSummaryAudit"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "GetPaymentsForPayoutResponseV3": {
+      "GetPaymentsForPayoutResponse": {
         "description": "List Payments for payout",
         "example": {
           "summary": {
@@ -15859,20 +16519,20 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV3_summary"
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV3_page"
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/GetPayoutsResponseV3_links"
+              "$ref": "#/components/schemas/GetPayoutsResponse_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PaymentResponseV3"
+              "$ref": "#/components/schemas/PaymentResponse"
             },
             "type": "array"
           }
@@ -16030,20 +16690,20 @@
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/GetPayoutsResponseV3_links"
+              "$ref": "#/components/schemas/GetPayoutsResponse_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PaymentResponseV3"
+              "$ref": "#/components/schemas/PaymentResponse"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "PaymentResponseV3": {
+      "PaymentResponse": {
         "example": {
           "traceNumber": "abodu123",
           "accountName": "My Account Name",
@@ -16151,14 +16811,14 @@
             "type": "integer"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
+            "$ref": "#/components/schemas/PaymentAuditCurrency"
           },
           "paymentAmount": {
             "description": "The amount which the payee will receive",
             "type": "integer"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
+            "$ref": "#/components/schemas/PaymentAuditCurrency"
           },
           "rate": {
             "description": "The FX rate for the payment, if FX was involved. **Note** that (depending on the role of the caller) this information may not be displayed",
@@ -16262,7 +16922,7 @@
           },
           "events": {
             "items": {
-              "$ref": "#/components/schemas/PaymentEventResponseV3"
+              "$ref": "#/components/schemas/PaymentEventResponse"
             },
             "type": "array"
           },
@@ -16300,7 +16960,137 @@
         ],
         "type": "object"
       },
-      "GetPayoutsResponseV4": {
+      "PayorAmlTransaction": {
+        "example": {
+          "debitCurrency": "debitCurrency",
+          "payeeType": "payeeType",
+          "fxApplied": 5.962133916683182,
+          "transactionTime": "transactionTime",
+          "paymentMemo": "paymentMemo",
+          "paymentAmount": 1,
+          "paymentType": "paymentType",
+          "returnCode": "returnCode",
+          "payeeName": "payeeName",
+          "rejectReason": "rejectReason",
+          "fundingType": "fundingType",
+          "paymentRails": "paymentRails",
+          "debit": 0,
+          "credit": 6,
+          "paymentStatus": "paymentStatus",
+          "payeeEmail": "payeeEmail",
+          "sourceAccount": "sourceAccount",
+          "returnFeeDescription": "returnFeeDescription",
+          "returnDescription": "returnDescription",
+          "transactionDate": "2000-01-23T00:00:00.000Z",
+          "remoteId": "remoteId",
+          "returnFee": "returnFee",
+          "returnFeeCurrency": "returnFeeCurrency",
+          "dateFundingRequested": "dateFundingRequested",
+          "payorPaymentId": "payorPaymentId",
+          "creditCurrency": "creditCurrency",
+          "paymentCurrency": "paymentCurrency",
+          "reportTransactionType": "reportTransactionType"
+        },
+        "properties": {
+          "transactionDate": {
+            "format": "date",
+            "type": "string"
+          },
+          "transactionTime": {
+            "type": "string"
+          },
+          "reportTransactionType": {
+            "type": "string"
+          },
+          "debit": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "debitCurrency": {
+            "description": "ISO 4217 3 character currency code",
+            "type": "string"
+          },
+          "credit": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "creditCurrency": {
+            "description": "ISO 4217 3 character currency code",
+            "type": "string"
+          },
+          "returnFee": {
+            "type": "string"
+          },
+          "returnFeeCurrency": {
+            "description": "ISO 4217 3 character currency code",
+            "type": "string"
+          },
+          "returnFeeDescription": {
+            "type": "string"
+          },
+          "returnCode": {
+            "type": "string"
+          },
+          "returnDescription": {
+            "type": "string"
+          },
+          "fundingType": {
+            "type": "string"
+          },
+          "dateFundingRequested": {
+            "type": "string"
+          },
+          "payeeName": {
+            "type": "string"
+          },
+          "remoteId": {
+            "description": "Remote ID of the Payee, set by Payor",
+            "type": "string"
+          },
+          "payeeType": {
+            "type": "string"
+          },
+          "payeeEmail": {
+            "format": "email",
+            "type": "string"
+          },
+          "sourceAccount": {
+            "type": "string"
+          },
+          "paymentAmount": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "paymentCurrency": {
+            "description": "ISO 4217 3 character currency code",
+            "type": "string"
+          },
+          "paymentMemo": {
+            "type": "string"
+          },
+          "paymentType": {
+            "type": "string"
+          },
+          "paymentRails": {
+            "type": "string"
+          },
+          "payorPaymentId": {
+            "type": "string"
+          },
+          "paymentStatus": {
+            "type": "string"
+          },
+          "rejectReason": {
+            "type": "string"
+          },
+          "fxApplied": {
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "GetPayoutsResponse_2": {
         "description": "List Payouts Response",
         "example": {
           "links": [
@@ -16427,14 +17217,14 @@
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PayoutSummaryAuditV4"
+              "$ref": "#/components/schemas/PayoutSummaryAudit_2"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "GetPaymentsForPayoutResponseV4": {
+      "GetPaymentsForPayoutResponse_2": {
         "description": "List Payments for payout",
         "example": {
           "summary": {
@@ -16668,7 +17458,7 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV4_summary"
+            "$ref": "#/components/schemas/GetPaymentsForPayoutResponse_2_summary"
           },
           "page": {
             "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
@@ -16681,14 +17471,14 @@
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PaymentResponseV4"
+              "$ref": "#/components/schemas/PaymentResponse_2"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "ListPaymentsResponseV4": {
+      "ListPaymentsResponse_2": {
         "description": "List Payments Response Object",
         "example": {
           "links": [
@@ -16879,20 +17669,20 @@
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/GetPayoutsResponseV3_links"
+              "$ref": "#/components/schemas/GetPayoutsResponse_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PaymentResponseV4"
+              "$ref": "#/components/schemas/PaymentResponse_2"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "PaymentResponseV4": {
+      "PaymentResponse_2": {
         "example": {
           "traceNumber": "abodu123",
           "accountName": "My Account Name",
@@ -17020,14 +17810,14 @@
             "type": "integer"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
+            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
           },
           "paymentAmount": {
             "description": "The amount which the payee will receive",
             "type": "integer"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
+            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
           },
           "rate": {
             "description": "The FX rate for the payment, if FX was involved. **Note** that (depending on the role of the caller) this information may not be displayed",
@@ -17134,7 +17924,7 @@
           },
           "events": {
             "items": {
-              "$ref": "#/components/schemas/PaymentEventResponseV4"
+              "$ref": "#/components/schemas/PaymentEventResponse_2"
             },
             "type": "array"
           },
@@ -17163,7 +17953,7 @@
             "type": "boolean"
           },
           "payout": {
-            "$ref": "#/components/schemas/PaymentResponseV4_payout"
+            "$ref": "#/components/schemas/PaymentResponse_2_payout"
           }
         },
         "required": [
@@ -17181,107 +17971,69 @@
         ],
         "type": "object"
       },
-      "PayorAmlTransactionV3": {
+      "PaymentDeltaResponse_2": {
+        "description": "List Payment Changes Response Object",
+        "example": {
+          "links": [
+            {
+              "rel": "rel",
+              "href": "href"
+            },
+            {
+              "rel": "rel",
+              "href": "href"
+            }
+          ],
+          "page": {
+            "numberOfElements": 0,
+            "totalPages": 1,
+            "pageSize": 5,
+            "page": 5,
+            "totalElements": 6
+          },
+          "content": [
+            {
+              "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorPaymentId": "payorPaymentId",
+              "sourceCurrency": "sourceCurrency",
+              "sourceAmount": 6,
+              "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "paymentCurrency": "paymentCurrency",
+              "paymentAmount": 0,
+              "status": "status"
+            },
+            {
+              "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorPaymentId": "payorPaymentId",
+              "sourceCurrency": "sourceCurrency",
+              "sourceAmount": 6,
+              "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "paymentCurrency": "paymentCurrency",
+              "paymentAmount": 0,
+              "status": "status"
+            }
+          ]
+        },
         "properties": {
-          "transactionDate": {
-            "format": "date",
-            "type": "string"
+          "page": {
+            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
           },
-          "transactionTime": {
-            "type": "string"
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+            },
+            "type": "array"
           },
-          "reportTransactionType": {
-            "type": "string"
-          },
-          "debit": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "debitCurrency": {
-            "description": "ISO 4217 3 character currency code",
-            "type": "string"
-          },
-          "credit": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "creditCurrency": {
-            "description": "ISO 4217 3 character currency code",
-            "type": "string"
-          },
-          "returnFee": {
-            "type": "string"
-          },
-          "returnFeeCurrency": {
-            "description": "ISO 4217 3 character currency code",
-            "type": "string"
-          },
-          "returnFeeDescription": {
-            "type": "string"
-          },
-          "returnCode": {
-            "type": "string"
-          },
-          "returnDescription": {
-            "type": "string"
-          },
-          "fundingType": {
-            "type": "string"
-          },
-          "dateFundingRequested": {
-            "type": "string"
-          },
-          "payeeName": {
-            "type": "string"
-          },
-          "remoteId": {
-            "description": "Remote ID of the Payee, set by Payor",
-            "type": "string"
-          },
-          "payeeType": {
-            "type": "string"
-          },
-          "payeeEmail": {
-            "format": "email",
-            "type": "string"
-          },
-          "sourceAccount": {
-            "type": "string"
-          },
-          "paymentAmount": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "paymentCurrency": {
-            "description": "ISO 4217 3 character currency code",
-            "type": "string"
-          },
-          "paymentMemo": {
-            "type": "string"
-          },
-          "paymentType": {
-            "type": "string"
-          },
-          "paymentRails": {
-            "type": "string"
-          },
-          "payorPaymentId": {
-            "type": "string"
-          },
-          "paymentStatus": {
-            "type": "string"
-          },
-          "rejectReason": {
-            "type": "string"
-          },
-          "fxApplied": {
-            "format": "double",
-            "type": "number"
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/PaymentDelta_2"
+            },
+            "type": "array"
           }
         },
         "type": "object"
       },
-      "PayorAmlTransactionV4": {
+      "PayorAmlTransaction_2": {
         "properties": {
           "transactionDate": {
             "format": "date",
@@ -20047,25 +20799,40 @@
         },
         "type": "object"
       },
-      "PagedResponse": {
-        "properties": {
-          "page": {
-            "$ref": "#/components/schemas/PagedResponse_page"
-          },
-          "links": {
-            "items": {
-              "type": "object"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
       "FundingAudit": {
+        "example": {
+          "dateTime": "2000-01-23T04:56:07.000Z",
+          "fundingAccountName": "fundingAccountName",
+          "amount": 120000,
+          "fundingType": "ACH",
+          "currency": "USD",
+          "topupType": "AUTOMATIC",
+          "events": [
+            {
+              "principal": "principal",
+              "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "eventDateTime": "2000-01-23T04:56:07.000Z"
+            },
+            {
+              "principal": "principal",
+              "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "eventDateTime": "2000-01-23T04:56:07.000Z"
+            }
+          ],
+          "status": "PENDING",
+          "sourceAccountName": "sourceAccountName"
+        },
         "properties": {
           "amount": {
+            "description": "The amount funded",
+            "example": 120000,
             "format": "double",
             "type": "number"
+          },
+          "currency": {
+            "description": "The currency of the funding",
+            "example": "USD",
+            "type": "string"
           },
           "dateTime": {
             "format": "date-time",
@@ -20078,9 +20845,6 @@
               "CREDIT",
               "DEBIT"
             ],
-            "type": "string"
-          },
-          "currency": {
             "type": "string"
           },
           "sourceAccountName": {
@@ -20166,7 +20930,7 @@
         ],
         "type": "object"
       },
-      "PayoutSummaryAuditV3": {
+      "PayoutSummaryAudit": {
         "example": {
           "sourceAccountSummary": [
             {
@@ -20220,7 +20984,7 @@
             "type": "string"
           },
           "status": {
-            "$ref": "#/components/schemas/PayoutStatusV3"
+            "$ref": "#/components/schemas/PayoutStatus"
           },
           "submittedDateTime": {
             "type": "string"
@@ -20245,13 +21009,13 @@
           },
           "sourceAccountSummary": {
             "items": {
-              "$ref": "#/components/schemas/SourceAccountSummaryV3"
+              "$ref": "#/components/schemas/SourceAccountSummary"
             },
             "type": "array"
           },
           "fxSummaries": {
             "items": {
-              "$ref": "#/components/schemas/FxSummaryV3"
+              "$ref": "#/components/schemas/FxSummary"
             },
             "type": "array"
           },
@@ -20266,7 +21030,7 @@
         ],
         "type": "object"
       },
-      "PaymentAuditCurrencyV3": {
+      "PaymentAuditCurrency": {
         "description": "ISO 3 character currency code",
         "enum": [
           "USD",
@@ -20277,7 +21041,7 @@
         "minLength": 3,
         "type": "string"
       },
-      "PaymentEventResponseV3": {
+      "PaymentEventResponse": {
         "example": {
           "principal": "Prinicple example",
           "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -20338,7 +21102,7 @@
             "type": "string"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
+            "$ref": "#/components/schemas/PaymentAuditCurrency"
           },
           "sourceAmount": {
             "description": "The source amount exposed by the event.",
@@ -20347,7 +21111,7 @@
             "type": "integer"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
+            "$ref": "#/components/schemas/PaymentAuditCurrency"
           },
           "paymentAmount": {
             "description": "The destination amount exposed by the event.",
@@ -20385,7 +21149,7 @@
         ],
         "type": "object"
       },
-      "PayoutSummaryAuditV4": {
+      "PayoutSummaryAudit_2": {
         "example": {
           "dateTime": "2000-01-23T04:56:07.000Z",
           "sourceAccountSummary": [
@@ -20442,7 +21206,7 @@
             "type": "string"
           },
           "status": {
-            "$ref": "#/components/schemas/PayoutStatusV4"
+            "$ref": "#/components/schemas/PayoutStatus_2"
           },
           "dateTime": {
             "format": "date-time",
@@ -20472,13 +21236,13 @@
           },
           "sourceAccountSummary": {
             "items": {
-              "$ref": "#/components/schemas/SourceAccountSummaryV4"
+              "$ref": "#/components/schemas/SourceAccountSummary_2"
             },
             "type": "array"
           },
           "fxSummaries": {
             "items": {
-              "$ref": "#/components/schemas/FxSummaryV4"
+              "$ref": "#/components/schemas/FxSummary_2"
             },
             "type": "array"
           },
@@ -20486,7 +21250,7 @@
             "type": "string"
           },
           "payoutType": {
-            "$ref": "#/components/schemas/PayoutTypeV4"
+            "$ref": "#/components/schemas/PayoutType"
           },
           "payorName": {
             "type": "string"
@@ -20500,7 +21264,7 @@
         ],
         "type": "object"
       },
-      "PayoutTypeV4": {
+      "PayoutType": {
         "description": "The type of payout.",
         "enum": [
           "STANDARD",
@@ -20509,7 +21273,7 @@
         ],
         "type": "string"
       },
-      "PayoutPayorV4": {
+      "PayoutPayor": {
         "description": "Details of payor and principal participating in a payout.",
         "example": {
           "principal": "principal",
@@ -20551,7 +21315,7 @@
         ],
         "type": "object"
       },
-      "PayoutPrincipalV4": {
+      "PayoutPrincipal": {
         "description": "Details of principal participating in a payout.",
         "example": {
           "principal": "principal",
@@ -20574,7 +21338,7 @@
         ],
         "type": "object"
       },
-      "PaymentAuditCurrencyV4": {
+      "PaymentAuditCurrency_2": {
         "description": "ISO 3 character currency code",
         "enum": [
           "USD",
@@ -20585,7 +21349,7 @@
         "minLength": 3,
         "type": "string"
       },
-      "PaymentEventResponseV4": {
+      "PaymentEventResponse_2": {
         "example": {
           "principal": "principal",
           "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -20646,7 +21410,7 @@
             "type": "string"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
+            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
           },
           "sourceAmount": {
             "description": "The source amount exposed by the event.",
@@ -20655,7 +21419,7 @@
             "type": "integer"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
+            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
           },
           "paymentAmount": {
             "description": "The destination amount exposed by the event.",
@@ -20685,6 +21449,59 @@
           "eventDateTime",
           "eventId",
           "eventType"
+        ],
+        "type": "object"
+      },
+      "PaymentDelta_2": {
+        "example": {
+          "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payorPaymentId": "payorPaymentId",
+          "sourceCurrency": "sourceCurrency",
+          "sourceAmount": 6,
+          "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "paymentCurrency": "paymentCurrency",
+          "paymentAmount": 0,
+          "status": "status"
+        },
+        "properties": {
+          "paymentId": {
+            "format": "uuid",
+            "readOnly": true,
+            "type": "string"
+          },
+          "payoutId": {
+            "format": "uuid",
+            "readOnly": true,
+            "type": "string"
+          },
+          "payorPaymentId": {
+            "nullable": true,
+            "type": "string"
+          },
+          "paymentCurrency": {
+            "nullable": true,
+            "type": "string"
+          },
+          "paymentAmount": {
+            "nullable": true,
+            "type": "integer"
+          },
+          "status": {
+            "nullable": true,
+            "type": "string"
+          },
+          "sourceCurrency": {
+            "nullable": true,
+            "type": "string"
+          },
+          "sourceAmount": {
+            "nullable": true,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "paymentId",
+          "payoutId"
         ],
         "type": "object"
       },
@@ -22580,6 +23397,11 @@
         "type": "object"
       },
       "FundingEvent": {
+        "example": {
+          "principal": "principal",
+          "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "eventDateTime": "2000-01-23T04:56:07.000Z"
+        },
         "properties": {
           "eventId": {
             "format": "uuid",
@@ -22598,7 +23420,7 @@
         },
         "type": "object"
       },
-      "PayoutStatusV3": {
+      "PayoutStatus": {
         "enum": [
           "ACCEPTED",
           "REJECTED",
@@ -22612,7 +23434,7 @@
         ],
         "type": "string"
       },
-      "SourceAccountSummaryV3": {
+      "SourceAccountSummary": {
         "example": {
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalCost": 3434
@@ -22628,7 +23450,7 @@
             "type": "integer"
           },
           "currency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
+            "$ref": "#/components/schemas/PaymentAuditCurrency"
           }
         },
         "required": [
@@ -22637,7 +23459,7 @@
         ],
         "type": "object"
       },
-      "FxSummaryV3": {
+      "FxSummary": {
         "example": {
           "invertedRate": 1.12,
           "rate": 1.12,
@@ -22676,10 +23498,10 @@
             "type": "integer"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
+            "$ref": "#/components/schemas/PaymentAuditCurrency"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV3"
+            "$ref": "#/components/schemas/PaymentAuditCurrency"
           },
           "status": {
             "enum": [
@@ -22711,7 +23533,7 @@
         ],
         "type": "object"
       },
-      "PayoutStatusV4": {
+      "PayoutStatus_2": {
         "enum": [
           "ACCEPTED",
           "REJECTED",
@@ -22725,7 +23547,7 @@
         ],
         "type": "string"
       },
-      "SourceAccountSummaryV4": {
+      "SourceAccountSummary_2": {
         "example": {
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalCost": 3344
@@ -22741,7 +23563,7 @@
             "type": "integer"
           },
           "currency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
+            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
           }
         },
         "required": [
@@ -22750,7 +23572,7 @@
         ],
         "type": "object"
       },
-      "FxSummaryV4": {
+      "FxSummary_2": {
         "example": {
           "invertedRate": 123.23,
           "rate": 123.23,
@@ -22788,10 +23610,10 @@
             "type": "integer"
           },
           "sourceCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
+            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
           },
           "paymentCurrency": {
-            "$ref": "#/components/schemas/PaymentAuditCurrencyV4"
+            "$ref": "#/components/schemas/PaymentAuditCurrency_2"
           },
           "status": {
             "enum": [
@@ -23646,17 +24468,23 @@
           }
         }
       },
-      "GetFundingsResponse_allOf": {
+      "GetFundingsResponse_links": {
+        "example": {
+          "rel": "first",
+          "href": "https://api.sandbox.velopayments.com/v1/paymentaudit/fundings?payorId=2a5d8af2-a1ed-4d7f-b9a7-ebe4b333be5a&page=1&pageSize=10"
+        },
         "properties": {
-          "content": {
-            "items": {
-              "$ref": "#/components/schemas/FundingAudit"
-            },
-            "type": "array"
+          "rel": {
+            "example": "first",
+            "type": "string"
+          },
+          "href": {
+            "example": "https://api.sandbox.velopayments.com/v1/paymentaudit/fundings?payorId=2a5d8af2-a1ed-4d7f-b9a7-ebe4b333be5a&page=1&pageSize=10",
+            "type": "string"
           }
         }
       },
-      "GetPayoutsResponseV3_page": {
+      "GetPayoutsResponse_page": {
         "example": {
           "numberOfElements": 12,
           "totalPages": 123,
@@ -23687,7 +24515,7 @@
           }
         }
       },
-      "GetPayoutsResponseV3_links": {
+      "GetPayoutsResponse_links": {
         "example": {
           "rel": "first",
           "href": "https://example.com"
@@ -23703,7 +24531,7 @@
           }
         }
       },
-      "GetPaymentsForPayoutResponseV3_summary": {
+      "GetPaymentsForPayoutResponse_summary": {
         "example": {
           "incompletePayments": 123,
           "confirmedPayments": 123,
@@ -23779,7 +24607,7 @@
           }
         }
       },
-      "GetPaymentsForPayoutResponseV3_page": {
+      "GetPaymentsForPayoutResponse_page": {
         "example": {
           "numberOfElements": 12,
           "totalPages": 10,
@@ -23841,7 +24669,7 @@
           }
         }
       },
-      "GetPaymentsForPayoutResponseV4_summary": {
+      "GetPaymentsForPayoutResponse_2_summary": {
         "example": {
           "withdrawnPayments": 2,
           "submitting": {
@@ -23953,29 +24781,29 @@
             "type": "integer"
           },
           "payoutType": {
-            "$ref": "#/components/schemas/PayoutTypeV4"
+            "$ref": "#/components/schemas/PayoutType"
           },
           "submitting": {
-            "$ref": "#/components/schemas/PayoutPayorV4"
+            "$ref": "#/components/schemas/PayoutPayor"
           },
           "payoutFrom": {
-            "$ref": "#/components/schemas/PayoutPayorV4"
+            "$ref": "#/components/schemas/PayoutPayor"
           },
           "payoutTo": {
-            "$ref": "#/components/schemas/PayoutPayorV4"
+            "$ref": "#/components/schemas/PayoutPayor"
           },
           "quoted": {
-            "$ref": "#/components/schemas/PayoutPrincipalV4"
+            "$ref": "#/components/schemas/PayoutPrincipal"
           },
           "instructed": {
-            "$ref": "#/components/schemas/PayoutPrincipalV4"
+            "$ref": "#/components/schemas/PayoutPrincipal"
           },
           "withdrawn": {
-            "$ref": "#/components/schemas/PayoutPrincipalV4"
+            "$ref": "#/components/schemas/PayoutPrincipal"
           }
         }
       },
-      "PaymentResponseV4_payout": {
+      "PaymentResponse_2_payout": {
         "example": {
           "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "payoutFrom": {
@@ -23999,10 +24827,10 @@
             "type": "string"
           },
           "payoutFrom": {
-            "$ref": "#/components/schemas/PayoutPayorV4"
+            "$ref": "#/components/schemas/PayoutPayor"
           },
           "payoutTo": {
-            "$ref": "#/components/schemas/PayoutPayorV4"
+            "$ref": "#/components/schemas/PayoutPayor"
           }
         }
       },
@@ -24043,30 +24871,6 @@
           "firstName",
           "lastName"
         ]
-      },
-      "PagedResponse_page": {
-        "properties": {
-          "numberOfElements": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "totalElements": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "totalPages": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "page": {
-            "format": "int64",
-            "type": "integer"
-          },
-          "pageSize": {
-            "format": "int64",
-            "type": "integer"
-          }
-        }
       },
       "CreateIndividual_2_name": {
         "properties": {
