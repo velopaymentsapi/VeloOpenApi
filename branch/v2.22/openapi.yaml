@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.37
+  version: 2.22.38
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -2208,7 +2208,7 @@ paths:
             $ref: '#/components/schemas/OnboardedStatus'
         - description: Email address
           in: query
-          name: Email
+          name: email
           required: false
           schema:
             example: bob@example.com
@@ -3489,10 +3489,16 @@ paths:
                   value: 0a818933-087d-47f2-ad83-2f986ed087eb
         - description: The watchlistStatus of the payees.
           in: query
-          name: ofacStatus
+          name: watchlistStatus
           required: false
           schema:
             $ref: '#/components/schemas/WatchlistStatus'
+        - description: Payee disabled
+          in: query
+          name: disabled
+          required: false
+          schema:
+            type: boolean
         - description: The onboarded status of the payees.
           in: query
           name: onboardedStatus
@@ -3501,7 +3507,7 @@ paths:
             $ref: '#/components/schemas/OnboardedStatus'
         - description: Email address
           in: query
-          name: Email
+          name: email
           required: false
           schema:
             example: bob@example.com

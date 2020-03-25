@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.37",
+    "version": "2.22.38",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -3018,7 +3018,7 @@
           {
             "description": "Email address",
             "in": "query",
-            "name": "Email",
+            "name": "email",
             "required": false,
             "schema": {
               "example": "bob@example.com",
@@ -4812,10 +4812,19 @@
           {
             "description": "The watchlistStatus of the payees.",
             "in": "query",
-            "name": "ofacStatus",
+            "name": "watchlistStatus",
             "required": false,
             "schema": {
               "$ref": "#/components/schemas/WatchlistStatus"
+            }
+          },
+          {
+            "description": "Payee disabled",
+            "in": "query",
+            "name": "disabled",
+            "required": false,
+            "schema": {
+              "type": "boolean"
             }
           },
           {
@@ -4830,7 +4839,7 @@
           {
             "description": "Email address",
             "in": "query",
-            "name": "Email",
+            "name": "email",
             "required": false,
             "schema": {
               "example": "bob@example.com",
