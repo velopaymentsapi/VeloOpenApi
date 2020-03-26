@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.39
+  version: 2.22.40
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -5735,7 +5735,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetPayoutsResponse'
+                $ref: '#/components/schemas/GetPayoutsResponseV3'
           description: Payor data found
         '400':
           content:
@@ -5892,7 +5892,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetPaymentsForPayoutResponse'
+                $ref: '#/components/schemas/GetPaymentsForPayoutResponseV3'
           description: '200 response, data found okay'
         '400':
           content:
@@ -6086,7 +6086,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListPaymentsResponse'
+                $ref: '#/components/schemas/ListPaymentsResponseV3'
           description: Details of Payee
         '400':
           content:
@@ -6138,7 +6138,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentResponse'
+                $ref: '#/components/schemas/PaymentResponseV3'
           description: '200 response, request completed okay'
         '400':
           content:
@@ -6209,7 +6209,7 @@ paths:
           content:
             application/csv:
               schema:
-                $ref: '#/components/schemas/PayorAmlTransaction'
+                $ref: '#/components/schemas/PayorAmlTransactionV3'
           description: Export Transactions response
         '400':
           content:
@@ -6326,7 +6326,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetPayoutsResponse_2'
+                $ref: '#/components/schemas/GetPayoutsResponseV4'
           description: Payor data found
         '400':
           content:
@@ -6482,7 +6482,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetPaymentsForPayoutResponse_2'
+                $ref: '#/components/schemas/GetPaymentsForPayoutResponseV4'
           description: '200 response, data found okay'
         '400':
           content:
@@ -6675,7 +6675,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListPaymentsResponse_2'
+                $ref: '#/components/schemas/ListPaymentsResponseV4'
           description: Details of Payee
         '400':
           content:
@@ -6726,7 +6726,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentResponse_2'
+                $ref: '#/components/schemas/PaymentResponseV4'
           description: '200 response, request completed okay'
         '400':
           content:
@@ -6765,7 +6765,6 @@ paths:
                 -H 'Authorization: Bearer 67a1b299-69b1-4fdf-a576-96b81199a2b9'
   /v4/paymentaudit/fundings:
     get:
-      deprecated: true
       description: |
         <p>Get a list of Fundings for a payor.</p>
       operationId: getFundingsV4
@@ -6942,7 +6941,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentDeltaResponse_2'
+                $ref: '#/components/schemas/PaymentDeltaResponseV4'
           description: Details of Payment Changes
         '400':
           description: Bad Request
@@ -7003,7 +7002,7 @@ paths:
           content:
             application/csv:
               schema:
-                $ref: '#/components/schemas/PayorAmlTransaction_2'
+                $ref: '#/components/schemas/PayorAmlTransactionV4'
           description: Export Transactions response
         '400':
           description: invalid Request
@@ -12174,7 +12173,7 @@ components:
             $ref: '#/components/schemas/PaymentDelta'
           type: array
       type: object
-    GetPayoutsResponse:
+    GetPayoutsResponseV3:
       description: List Payouts Response
       example:
         links:
@@ -12253,17 +12252,17 @@ components:
             payoutMemo: payoutMemo
       properties:
         page:
-          $ref: '#/components/schemas/GetPayoutsResponse_page'
+          $ref: '#/components/schemas/GetPayoutsResponseV3_page'
         links:
           items:
-            $ref: '#/components/schemas/GetPayoutsResponse_links'
+            $ref: '#/components/schemas/GetPayoutsResponseV3_links'
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PayoutSummaryAudit'
+            $ref: '#/components/schemas/PayoutSummaryAuditV3'
           type: array
       type: object
-    GetPaymentsForPayoutResponse:
+    GetPaymentsForPayoutResponseV3:
       description: List Payments for payout
       example:
         summary:
@@ -12399,19 +12398,19 @@ components:
             status: ACCEPTED
       properties:
         summary:
-          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_summary'
+          $ref: '#/components/schemas/GetPaymentsForPayoutResponseV3_summary'
         page:
-          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_page'
+          $ref: '#/components/schemas/GetPaymentsForPayoutResponseV3_page'
         links:
           items:
-            $ref: '#/components/schemas/GetPayoutsResponse_links'
+            $ref: '#/components/schemas/GetPayoutsResponseV3_links'
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PaymentResponse'
+            $ref: '#/components/schemas/PaymentResponseV3'
           type: array
       type: object
-    ListPaymentsResponse:
+    ListPaymentsResponseV3:
       description: List Payments Response Object
       example:
         links:
@@ -12536,17 +12535,17 @@ components:
             status: ACCEPTED
       properties:
         page:
-          $ref: '#/components/schemas/ListPaymentsResponse_page'
+          $ref: '#/components/schemas/ListPaymentsResponseV3_page'
         links:
           items:
-            $ref: '#/components/schemas/GetPayoutsResponse_links'
+            $ref: '#/components/schemas/GetPayoutsResponseV3_links'
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PaymentResponse'
+            $ref: '#/components/schemas/PaymentResponseV3'
           type: array
       type: object
-    PaymentResponse:
+    PaymentResponseV3:
       example:
         traceNumber: abodu123
         accountName: My Account Name
@@ -12639,12 +12638,12 @@ components:
           example: 12345
           type: integer
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
         paymentAmount:
           description: The amount which the payee will receive
           type: integer
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
         rate:
           description: 'The FX rate for the payment, if FX was involved. **Note** that (depending on the role of the caller) this information may not be displayed'
           format: float
@@ -12727,7 +12726,7 @@ components:
           type: string
         events:
           items:
-            $ref: '#/components/schemas/PaymentEventResponse'
+            $ref: '#/components/schemas/PaymentEventResponseV3'
           type: array
         returnCost:
           description: The return cost if a returned payment.
@@ -12755,7 +12754,7 @@ components:
         - status
         - submittedDateTime
       type: object
-    PayorAmlTransaction:
+    PayorAmlTransactionV3:
       example:
         debitCurrency: debitCurrency
         payeeType: payeeType
@@ -12854,7 +12853,7 @@ components:
           format: double
           type: number
       type: object
-    GetPayoutsResponse_2:
+    GetPayoutsResponseV4:
       description: List Payouts Response
       example:
         links:
@@ -12946,10 +12945,10 @@ components:
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PayoutSummaryAudit_2'
+            $ref: '#/components/schemas/PayoutSummaryAuditV4'
           type: array
       type: object
-    GetPaymentsForPayoutResponse_2:
+    GetPaymentsForPayoutResponseV4:
       description: List Payments for payout
       example:
         summary:
@@ -13148,7 +13147,7 @@ components:
             status: ACCEPTED
       properties:
         summary:
-          $ref: '#/components/schemas/GetPaymentsForPayoutResponse_2_summary'
+          $ref: '#/components/schemas/GetPaymentsForPayoutResponseV4_summary'
         page:
           $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
         links:
@@ -13157,10 +13156,10 @@ components:
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PaymentResponse_2'
+            $ref: '#/components/schemas/PaymentResponseV4'
           type: array
       type: object
-    ListPaymentsResponse_2:
+    ListPaymentsResponseV4:
       description: List Payments Response Object
       example:
         links:
@@ -13319,17 +13318,17 @@ components:
             status: ACCEPTED
       properties:
         page:
-          $ref: '#/components/schemas/ListPaymentsResponse_page'
+          $ref: '#/components/schemas/ListPaymentsResponseV3_page'
         links:
           items:
-            $ref: '#/components/schemas/GetPayoutsResponse_links'
+            $ref: '#/components/schemas/GetPayoutsResponseV3_links'
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PaymentResponse_2'
+            $ref: '#/components/schemas/PaymentResponseV4'
           type: array
       type: object
-    PaymentResponse_2:
+    PaymentResponseV4:
       example:
         traceNumber: abodu123
         accountName: My Account Name
@@ -13439,12 +13438,12 @@ components:
           example: 12345
           type: integer
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
         paymentAmount:
           description: The amount which the payee will receive
           type: integer
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
         rate:
           description: 'The FX rate for the payment, if FX was involved. **Note** that (depending on the role of the caller) this information may not be displayed'
           format: double
@@ -13529,7 +13528,7 @@ components:
           type: string
         events:
           items:
-            $ref: '#/components/schemas/PaymentEventResponse_2'
+            $ref: '#/components/schemas/PaymentEventResponseV4'
           type: array
         returnCost:
           description: The return cost if a returned payment.
@@ -13549,7 +13548,7 @@ components:
         withdrawable:
           type: boolean
         payout:
-          $ref: '#/components/schemas/PaymentResponse_2_payout'
+          $ref: '#/components/schemas/PaymentResponseV4_payout'
       required:
         - events
         - fundingStatus
@@ -13563,7 +13562,7 @@ components:
         - status
         - submittedDateTime
       type: object
-    PaymentDeltaResponse_2:
+    PaymentDeltaResponseV4:
       description: List Payment Changes Response Object
       example:
         links:
@@ -13603,10 +13602,10 @@ components:
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PaymentDelta_2'
+            $ref: '#/components/schemas/PaymentDeltaV4'
           type: array
       type: object
-    PayorAmlTransaction_2:
+    PayorAmlTransactionV4:
       properties:
         transactionDate:
           format: date
@@ -15816,7 +15815,7 @@ components:
         - paymentId
         - payoutId
       type: object
-    PayoutSummaryAudit:
+    PayoutSummaryAuditV3:
       example:
         sourceAccountSummary:
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -15857,7 +15856,7 @@ components:
           format: uuid
           type: string
         status:
-          $ref: '#/components/schemas/PayoutStatus'
+          $ref: '#/components/schemas/PayoutStatusV3'
         submittedDateTime:
           type: string
         instructedDateTime:
@@ -15875,11 +15874,11 @@ components:
           type: integer
         sourceAccountSummary:
           items:
-            $ref: '#/components/schemas/SourceAccountSummary'
+            $ref: '#/components/schemas/SourceAccountSummaryV3'
           type: array
         fxSummaries:
           items:
-            $ref: '#/components/schemas/FxSummary'
+            $ref: '#/components/schemas/FxSummaryV3'
           type: array
         payoutMemo:
           type: string
@@ -15888,7 +15887,7 @@ components:
         - status
         - submittedDateTime
       type: object
-    PaymentAuditCurrency:
+    PaymentAuditCurrencyV3:
       description: ISO 3 character currency code
       enum:
         - USD
@@ -15897,7 +15896,7 @@ components:
       maxLength: 3
       minLength: 3
       type: string
-    PaymentEventResponse:
+    PaymentEventResponseV3:
       example:
         principal: Prinicple example
         eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -15953,14 +15952,14 @@ components:
             - PAYOUT_WITHDRAWN
           type: string
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
         sourceAmount:
           description: The source amount exposed by the event.
           example: 1299
           format: int64
           type: integer
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
         paymentAmount:
           description: The destination amount exposed by the event.
           example: 1299
@@ -15988,7 +15987,7 @@ components:
         - eventId
         - eventType
       type: object
-    PayoutSummaryAudit_2:
+    PayoutSummaryAuditV4:
       example:
         dateTime: 2000-01-23T04:56:07.000Z
         sourceAccountSummary:
@@ -16032,7 +16031,7 @@ components:
           format: uuid
           type: string
         status:
-          $ref: '#/components/schemas/PayoutStatus_2'
+          $ref: '#/components/schemas/PayoutStatusV4'
         dateTime:
           format: date-time
           type: string
@@ -16053,16 +16052,16 @@ components:
           type: integer
         sourceAccountSummary:
           items:
-            $ref: '#/components/schemas/SourceAccountSummary_2'
+            $ref: '#/components/schemas/SourceAccountSummaryV4'
           type: array
         fxSummaries:
           items:
-            $ref: '#/components/schemas/FxSummary_2'
+            $ref: '#/components/schemas/FxSummaryV4'
           type: array
         payoutMemo:
           type: string
         payoutType:
-          $ref: '#/components/schemas/PayoutType'
+          $ref: '#/components/schemas/PayoutTypeV4'
         payorName:
           type: string
       required:
@@ -16071,14 +16070,14 @@ components:
         - status
         - submittedDateTime
       type: object
-    PayoutType:
+    PayoutTypeV4:
       description: The type of payout.
       enum:
         - STANDARD
         - AS
         - ON_BEHALF_OF
       type: string
-    PayoutPayor:
+    PayoutPayorV4:
       description: Details of payor and principal participating in a payout.
       example:
         principal: principal
@@ -16111,7 +16110,7 @@ components:
         - principal
         - principalId
       type: object
-    PayoutPrincipal:
+    PayoutPrincipalV4:
       description: Details of principal participating in a payout.
       example:
         principal: principal
@@ -16128,7 +16127,7 @@ components:
         - principal
         - principalId
       type: object
-    PaymentAuditCurrency_2:
+    PaymentAuditCurrencyV4:
       description: ISO 3 character currency code
       enum:
         - USD
@@ -16137,7 +16136,7 @@ components:
       maxLength: 3
       minLength: 3
       type: string
-    PaymentEventResponse_2:
+    PaymentEventResponseV4:
       example:
         principal: principal
         eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -16193,14 +16192,14 @@ components:
             - PAYOUT_WITHDRAWN
           type: string
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
         sourceAmount:
           description: The source amount exposed by the event.
           example: 1299
           format: int64
           type: integer
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
         paymentAmount:
           description: The destination amount exposed by the event.
           example: 1299
@@ -16223,7 +16222,7 @@ components:
         - eventId
         - eventType
       type: object
-    PaymentDelta_2:
+    PaymentDeltaV4:
       example:
         paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorPaymentId: payorPaymentId
@@ -17921,7 +17920,7 @@ components:
         principal:
           type: string
       type: object
-    PayoutStatus:
+    PayoutStatusV3:
       enum:
         - ACCEPTED
         - REJECTED
@@ -17933,7 +17932,7 @@ components:
         - CONFIRMED
         - WITHDRAWN
       type: string
-    SourceAccountSummary:
+    SourceAccountSummaryV3:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalCost: 3434
@@ -17946,12 +17945,12 @@ components:
           format: int64
           type: integer
         currency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
       required:
         - sourceAccountId
         - totalCost
       type: object
-    FxSummary:
+    FxSummaryV3:
       example:
         invertedRate: 1.12
         rate: 1.12
@@ -17983,9 +17982,9 @@ components:
           example: 1234
           type: integer
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
         status:
           enum:
             - UNQUOTED
@@ -18009,7 +18008,7 @@ components:
         - totalCost
         - totalPaymentAmount
       type: object
-    PayoutStatus_2:
+    PayoutStatusV4:
       enum:
         - ACCEPTED
         - REJECTED
@@ -18021,7 +18020,7 @@ components:
         - CONFIRMED
         - WITHDRAWN
       type: string
-    SourceAccountSummary_2:
+    SourceAccountSummaryV4:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalCost: 3344
@@ -18034,12 +18033,12 @@ components:
           format: int64
           type: integer
         currency:
-          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
       required:
         - sourceAccountId
         - totalCost
       type: object
-    FxSummary_2:
+    FxSummaryV4:
       example:
         invertedRate: 123.23
         rate: 123.23
@@ -18070,9 +18069,9 @@ components:
           example: 34235
           type: integer
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency_2'
+          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
         status:
           enum:
             - UNQUOTED
@@ -18729,7 +18728,7 @@ components:
         href:
           example: 'https://api.sandbox.velopayments.com/v1/paymentaudit/fundings?payorId=2a5d8af2-a1ed-4d7f-b9a7-ebe4b333be5a&page=1&pageSize=10'
           type: string
-    GetPayoutsResponse_page:
+    GetPayoutsResponseV3_page:
       example:
         numberOfElements: 12
         totalPages: 123
@@ -18752,7 +18751,7 @@ components:
         pageSize:
           example: 25
           type: integer
-    GetPayoutsResponse_links:
+    GetPayoutsResponseV3_links:
       example:
         rel: first
         href: 'https://example.com'
@@ -18763,7 +18762,7 @@ components:
         href:
           example: 'https://example.com'
           type: string
-    GetPaymentsForPayoutResponse_summary:
+    GetPaymentsForPayoutResponseV3_summary:
       example:
         incompletePayments: 123
         confirmedPayments: 123
@@ -18825,7 +18824,7 @@ components:
           description: The count of payments within the payout which have failed or been returned.
           example: 0
           type: integer
-    GetPaymentsForPayoutResponse_page:
+    GetPaymentsForPayoutResponseV3_page:
       example:
         numberOfElements: 12
         totalPages: 10
@@ -18848,7 +18847,7 @@ components:
         pageSize:
           example: 25
           type: integer
-    ListPaymentsResponse_page:
+    ListPaymentsResponseV3_page:
       example:
         numberOfElements: 12
         totalPages: 12
@@ -18871,7 +18870,7 @@ components:
         pageSize:
           example: 25
           type: integer
-    GetPaymentsForPayoutResponse_2_summary:
+    GetPaymentsForPayoutResponseV4_summary:
       example:
         withdrawnPayments: 2
         submitting:
@@ -18963,20 +18962,20 @@ components:
           description: The count of payments within the payout which have been withdrawn.
           type: integer
         payoutType:
-          $ref: '#/components/schemas/PayoutType'
+          $ref: '#/components/schemas/PayoutTypeV4'
         submitting:
-          $ref: '#/components/schemas/PayoutPayor'
+          $ref: '#/components/schemas/PayoutPayorV4'
         payoutFrom:
-          $ref: '#/components/schemas/PayoutPayor'
+          $ref: '#/components/schemas/PayoutPayorV4'
         payoutTo:
-          $ref: '#/components/schemas/PayoutPayor'
+          $ref: '#/components/schemas/PayoutPayorV4'
         quoted:
-          $ref: '#/components/schemas/PayoutPrincipal'
+          $ref: '#/components/schemas/PayoutPrincipalV4'
         instructed:
-          $ref: '#/components/schemas/PayoutPrincipal'
+          $ref: '#/components/schemas/PayoutPrincipalV4'
         withdrawn:
-          $ref: '#/components/schemas/PayoutPrincipal'
-    PaymentResponse_2_payout:
+          $ref: '#/components/schemas/PayoutPrincipalV4'
+    PaymentResponseV4_payout:
       example:
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payoutFrom:
@@ -18996,9 +18995,9 @@ components:
           format: uuid
           type: string
         payoutFrom:
-          $ref: '#/components/schemas/PayoutPayor'
+          $ref: '#/components/schemas/PayoutPayorV4'
         payoutTo:
-          $ref: '#/components/schemas/PayoutPayor'
+          $ref: '#/components/schemas/PayoutPayorV4'
     IndividualV1_name:
       example:
         firstName: Bob
