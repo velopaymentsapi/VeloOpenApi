@@ -2,7 +2,8 @@
   "name": "velo-payments-openapi",
   "version": "1.0.0",
   "dependencies": {
-    "swagger-repo": "^2.0.0-rc.15"
+    "swagger-repo": "^2.0.0-rc.15",
+    "minimist": ">=1.2.2"
   },
   "private": true,
   "scripts": {
