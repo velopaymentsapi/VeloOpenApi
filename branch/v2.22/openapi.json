@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.42",
+    "version": "2.22.43",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -45,8 +45,8 @@
       "name": "Payouts"
     },
     {
-      "description": "Payment Audit Service APIs allow you to see payment history to payees.",
-      "name": "Payments"
+      "description": "Payment Audit Service APIs allow you to see the history of fundings, payouts, and payments to payees.",
+      "name": "Payment Audit Service"
     },
     {
       "description": "<p>When a payor creates a payee then an invite token is emailed to the invited payee</p>\n<p>Payees use this token to onboard to the platform</p>\n<p>There are several required tasks that the payee must perform before they are accepted onto the platform</p>\n",
@@ -7778,7 +7778,7 @@
         },
         "summary": "Get Fundings for Payor",
         "tags": [
-          "Payment Audit"
+          "Payment Audit Service"
         ],
         "x-code-samples": [
           {
@@ -7859,7 +7859,7 @@
         },
         "summary": "Get Payout Statistics",
         "tags": [
-          "Payout History"
+          "Payment Audit Service"
         ],
         "x-code-samples": [
           {
@@ -8313,8 +8313,7 @@
         },
         "summary": "Get Payments for Payout",
         "tags": [
-          "Payment Audit Service",
-          "Payout History"
+          "Payment Audit Service"
         ],
         "x-code-samples": [
           {
@@ -9132,8 +9131,7 @@
         },
         "summary": "Get Payments for Payout",
         "tags": [
-          "Payment Audit Service",
-          "Payout History"
+          "Payment Audit Service"
         ],
         "x-code-samples": [
           {
@@ -9586,7 +9584,7 @@
         },
         "summary": "Get Fundings for Payor",
         "tags": [
-          "Payment Audit"
+          "Payment Audit Service"
         ],
         "x-code-samples": [
           {
@@ -9667,7 +9665,7 @@
         },
         "summary": "Get Payout Statistics",
         "tags": [
-          "Payout History"
+          "Payment Audit Service"
         ],
         "x-code-samples": [
           {
@@ -24977,7 +24975,6 @@
     {
       "name": "Reporting",
       "tags": [
-        "Payments",
         "Payment Audit Service"
       ]
     },

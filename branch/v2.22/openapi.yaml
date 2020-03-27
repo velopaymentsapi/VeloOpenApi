@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.42
+  version: 2.22.43
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -98,8 +98,8 @@ tags:
     name: Payors
   - description: Payout Service APIs allow you to create and instruct payouts to payees.
     name: Payouts
-  - description: Payment Audit Service APIs allow you to see payment history to payees.
-    name: Payments
+  - description: 'Payment Audit Service APIs allow you to see the history of fundings, payouts, and payments to payees.'
+    name: Payment Audit Service
   - description: |
       <p>When a payor creates a payee then an invite token is emailed to the invited payee</p>
       <p>Payees use this token to onboard to the platform</p>
@@ -5534,7 +5534,7 @@ paths:
             The resource was not found or is no longer available
       summary: Get Fundings for Payor
       tags:
-        - Payment Audit
+        - Payment Audit Service
       x-code-samples:
         - lang: shell
           source: |
@@ -5591,7 +5591,7 @@ paths:
             The resource was not found or is no longer available
       summary: Get Payout Statistics
       tags:
-        - Payout History
+        - Payment Audit Service
       x-code-samples:
         - lang: shell
           source: |
@@ -5924,7 +5924,6 @@ paths:
       summary: Get Payments for Payout
       tags:
         - Payment Audit Service
-        - Payout History
       x-code-samples:
         - lang: shell
           source: |
@@ -6514,7 +6513,6 @@ paths:
       summary: Get Payments for Payout
       tags:
         - Payment Audit Service
-        - Payout History
       x-code-samples:
         - lang: shell
           source: |
@@ -6837,7 +6835,7 @@ paths:
             The resource was not found or is no longer available
       summary: Get Fundings for Payor
       tags:
-        - Payment Audit
+        - Payment Audit Service
       x-code-samples:
         - lang: shell
           source: |
@@ -6893,7 +6891,7 @@ paths:
             The resource was not found or is no longer available
       summary: Get Payout Statistics
       tags:
-        - Payout History
+        - Payment Audit Service
       x-code-samples:
         - lang: shell
           source: |
@@ -19096,7 +19094,6 @@ x-tagGroups:
       - Withdraw Payment
   - name: Reporting
     tags:
-      - Payments
       - Payment Audit Service
   - name: Auth
     tags:
