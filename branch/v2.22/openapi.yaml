@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.46
+  version: 2.22.47
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -7029,7 +7029,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreatePayoutRequest'
+              $ref: '#/components/schemas/CreatePayoutRequestV3'
           multipart/form-data:
             example: |
               remoteId,currency,amount,paymentMemo,sourceAccountName,payorPaymentId
@@ -7053,7 +7053,7 @@ paths:
                 file:
                   description: Create a new payout from a CSV source file and return a location header with a link to get the payout
                   items:
-                    $ref: '#/components/schemas/PaymentInstruction'
+                    $ref: '#/components/schemas/PaymentInstructionV3'
                   type: array
               type: object
         description: Post amount to transfer using stored funding account details.
@@ -7089,7 +7089,7 @@ paths:
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
       summary: Submit Payout
       tags:
-        - Submit Payout
+        - Payout Service
       x-code-samples:
         - lang: shell
           source: |
@@ -7100,6 +7100,7 @@ paths:
   '/v3/payouts/{payoutId}':
     delete:
       description: Withdraw Payout will delete payout details from payout service and rails services but will just move the status of the payout to WITHDRAWN in payment audit.
+      operationId: withdrawPayoutV3
       parameters:
         - description: Id of the payout
           in: path
@@ -7140,7 +7141,7 @@ paths:
             The resource was not found or is no longer available
       summary: Withdraw Payout
       tags:
-        - Withdraw Payout
+        - Payout Service
       x-code-samples:
         - lang: shell
           source: |
@@ -7149,6 +7150,7 @@ paths:
                 -H 'Content-Type: application/json'
     get:
       description: Get payout summary - returns the current state of the payout.
+      operationId: getPayoutSummaryV3
       parameters:
         - description: Id of the payout
           in: path
@@ -7162,7 +7164,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PayoutSummaryResponse'
+                $ref: '#/components/schemas/PayoutSummaryResponseV3'
           description: Details of Payout
         '401':
           content:
@@ -7187,7 +7189,7 @@ paths:
             The resource was not found or is no longer available
       summary: Get Payout Summary
       tags:
-        - Get Payout
+        - Payout Service
       x-code-samples:
         - lang: shell
           source: |
@@ -7196,6 +7198,7 @@ paths:
                 -H 'Content-Type: application/json'
     post:
       description: Instruct a payout to be made for the specified payoutId.
+      operationId: instructPayoutV3
       parameters:
         - description: Id of the payout
           in: path
@@ -7243,7 +7246,7 @@ paths:
             The request contained data that would result in a duplicate value
       summary: Instruct Payout
       tags:
-        - Instruct Payout
+        - Payout Service
       x-code-samples:
         - lang: shell
           source: |
@@ -7266,7 +7269,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuoteResponse'
+                $ref: '#/components/schemas/QuoteResponseV3'
           description: Quote for payout
         '404':
           content:
@@ -7284,7 +7287,7 @@ paths:
             The request contained data that would result in a duplicate value
       summary: Create a quote for the payout
       tags:
-        - Quote Payout
+        - Payout Service
       x-code-samples:
         - lang: shell
           source: |
@@ -7366,7 +7369,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PagedPaymentsResponse'
+                $ref: '#/components/schemas/PagedPaymentsResponseV3'
           description: Payments for payout
         '404':
           content:
@@ -7377,7 +7380,7 @@ paths:
             The resource was not found or is no longer available
       summary: Retrieve payments for a payout
       tags:
-        - Payments for Payout
+        - Payout Service
       x-code-samples:
         - lang: shell
           source: |
@@ -7391,96 +7394,6 @@ paths:
         '200':
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Length: 2158
-                Content-Type: application/json;charset=UTF-8
-
-                {
-                  "bank" : [ {
-                    "isoCountryCode" : "US",
-                    "rules" : [ {
-                      "element" : "accountName",
-                      "required" : true,
-                      "displayName" : "Account Holder Name",
-                      "minLength" : 1,
-                      "maxLength" : 100,
-                      "validation" : "^.*$",
-                      "displayOrder" : 1
-                    }, {
-                      "element" : "accountNumber",
-                      "required" : true,
-                      "displayName" : "Account Number",
-                      "minLength" : 6,
-                      "maxLength" : 11,
-                      "validation" : "^[0-9]{6,11}$",
-                      "displayOrder" : 3
-                    }, {
-                      "element" : "routingNumber",
-                      "required" : true,
-                      "displayName" : "Routing Number",
-                      "minLength" : 9,
-                      "maxLength" : 9,
-                      "validation" : "^[0-9]{9}$",
-                      "displayOrder" : 2
-                    }, {
-                      "element" : "paymentChannelName",
-                      "required" : false,
-                      "displayName" : "Payment Channel Name",
-                      "minLength" : 1,
-                      "maxLength" : 20,
-                      "validation" : "^.*$"
-                    }, {
-                      "element" : "currency",
-                      "required" : true,
-                      "displayName" : "Currency",
-                      "minLength" : 3,
-                      "maxLength" : 3,
-                      "validation" : "^[A-Z]{3}$"
-                    } ]
-                  }, {
-                    "isoCountryCode" : "GB",
-                    "rules" : [ {
-                      "element" : "accountName",
-                      "required" : true,
-                      "displayName" : "Account Holder Name",
-                      "minLength" : 1,
-                      "maxLength" : 100,
-                      "validation" : "^.*$",
-                      "displayOrder" : 1
-                    }, {
-                      "element" : "accountNumber",
-                      "required" : true,
-                      "displayName" : "Account Number",
-                      "minLength" : 8,
-                      "maxLength" : 8,
-                      "validation" : "^[0-9]{8}$",
-                      "displayOrder" : 3
-                    }, {
-                      "element" : "routingNumber",
-                      "required" : true,
-                      "displayName" : "Sort Code",
-                      "minLength" : 6,
-                      "maxLength" : 6,
-                      "validation" : "^[0-9]{6}$",
-                      "displayOrder" : 2
-                    }, {
-                      "element" : "paymentChannelName",
-                      "required" : false,
-                      "displayName" : "Payment Channel Name",
-                      "minLength" : 1,
-                      "maxLength" : 20,
-                      "validation" : "^.*$"
-                    }, {
-                      "element" : "currency",
-                      "required" : true,
-                      "displayName" : "Currency",
-                      "minLength" : 3,
-                      "maxLength" : 3,
-                      "validation" : "^[A-Z]{3}$"
-                    } ]
-                  } ]
-                }
               schema:
                 $ref: '#/components/schemas/PaymentChannelRulesResponse'
           description: List Payment Channel Country Rules
@@ -7555,7 +7468,7 @@ paths:
             The resource was not found or is no longer available
       summary: Withdraw a Payment
       tags:
-        - Withdraw Payment
+        - Payout Service
       x-code-samples:
         - lang: shell
           source: |
@@ -7589,13 +7502,13 @@ paths:
   /v2/supportedCountries:
     get:
       description: List the supported countries.
-      operationId: listSupportedCountries
+      operationId: listSupportedCountriesV2
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SupportedCountriesResponse_2'
+                $ref: '#/components/schemas/SupportedCountriesResponseV2'
           description: List of Supported Countries
       security: []
       summary: List Supported Countries
@@ -7608,13 +7521,13 @@ paths:
   /v2/currencies:
     get:
       description: List the supported currencies.
-      operationId: listSupportedCurrencies
+      operationId: listSupportedCurrenciesV2
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SupportedCurrencyResponse'
+                $ref: '#/components/schemas/SupportedCurrencyResponseV2'
           description: List Supported Currencies
       security: []
       summary: List Supported Currencies
@@ -13673,7 +13586,7 @@ components:
           format: double
           type: number
       type: object
-    CreatePayoutRequest:
+    CreatePayoutRequestV3:
       example:
         payoutFromPayorId: c4261044-13df-4a6c-b1d4-fa8be2b46f5a
         payoutToPayorId: 9afc6b39-de12-466a-a9ca-07c7a23b312d
@@ -13733,14 +13646,14 @@ components:
           type: string
         payments:
           items:
-            $ref: '#/components/schemas/PaymentInstruction'
+            $ref: '#/components/schemas/PaymentInstructionV3'
           maxItems: 2000
           minItems: 1
           type: array
       required:
         - payments
       type: object
-    PaymentInstruction:
+    PaymentInstructionV3:
       example:
         amount: 1299
         currency: USD
@@ -13792,7 +13705,7 @@ components:
         - remoteId
         - sourceAccountName
       type: object
-    PayoutSummaryResponse:
+    PayoutSummaryResponseV3:
       example:
         rejectedPayments:
           - currencyType: USD
@@ -13885,19 +13798,19 @@ components:
           type: integer
         fxSummaries:
           items:
-            $ref: '#/components/schemas/QuoteFxSummary'
+            $ref: '#/components/schemas/QuoteFxSummaryV3'
           type: array
         accounts:
           items:
-            $ref: '#/components/schemas/SourceAccount'
+            $ref: '#/components/schemas/SourceAccountV3'
           type: array
         acceptedPayments:
           items:
-            $ref: '#/components/schemas/AcceptedPayment'
+            $ref: '#/components/schemas/AcceptedPaymentV3'
           type: array
         rejectedPayments:
           items:
-            $ref: '#/components/schemas/RejectedPayment'
+            $ref: '#/components/schemas/RejectedPaymentV3'
           type: array
       required:
         - acceptedPayments
@@ -13906,7 +13819,7 @@ components:
         - paymentsWithdrawn
         - rejectedPayments
       type: object
-    QuoteResponse:
+    QuoteResponseV3:
       example:
         fxSummaries:
           - invertedRate: 1.12
@@ -13934,10 +13847,10 @@ components:
       properties:
         fxSummaries:
           items:
-            $ref: '#/components/schemas/QuoteFxSummary'
+            $ref: '#/components/schemas/QuoteFxSummaryV3'
           type: array
       type: object
-    PagedPaymentsResponse:
+    PagedPaymentsResponseV3:
       description: List Payees Response Object
       example:
         links:
@@ -13953,65 +13866,13 @@ components:
           totalElements: 6
         content:
           - payee:
-              payorRefs:
-                - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-                  invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-                  invitationStatus: ACCEPTED
-                  remoteId: uniqueIdForRemoteEntity
-                  paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-                - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-                  invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-                  invitationStatus: ACCEPTED
-                  remoteId: uniqueIdForRemoteEntity
-                  paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-              country: US
-              cellphoneNumber: '1234567890'
-              address:
-                country: US
-                countyOrProvince: FL
-                line4: line4
-                city: Key West
-                line3: line3
-                line2: line2
-                line1: 500 Duval St
-                zipOrPostcode: '33945'
               individual:
                 name:
-                  firstName: Bob
-                  lastName: Smith
-                  otherNames: A
-                  title: Mr
-                nationalIdentification: AB123456C
-                dateOfBirth: 1985-01-01T00:00:00.000Z
-              displayName: Bob
-              created: 2019-01-20T09:00:00.000Z
-              type: Individual
-              gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-              paymentChannel:
-                paymentChannelName: paymentChannelName
-                routingNumber: XXXXX6789
-                accountName: My account
-                countryCode: US
-                iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-                currency: USD
-                accountNumber: XXXXXX5678
-              remoteId: remoteId123
-              marketingOptIns:
-                - optedIn: true
-                  timestamp: 2019-01-20T09:00:00.000Z
-                - optedIn: true
-                  timestamp: 2019-01-20T09:00:00.000Z
-              watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
-              challenge:
-                description: challenge description
-                value: challenge test
+                  firstName: Fred
+                  lastName: Flintstone
               company:
-                taxId: '123'
-                name: ABC Ltd
-                operatingName: ABC
-              payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-              email: bob@example.com
-              acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+                companyName: ACME Anvils PLC
+              payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             amount: 1234
             paymentId: paymentId
             withdrawable: false
@@ -14022,65 +13883,13 @@ components:
             sourceAccountName: Chase
             status: SUBMITTED
           - payee:
-              payorRefs:
-                - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-                  invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-                  invitationStatus: ACCEPTED
-                  remoteId: uniqueIdForRemoteEntity
-                  paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-                - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-                  invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-                  invitationStatus: ACCEPTED
-                  remoteId: uniqueIdForRemoteEntity
-                  paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-              country: US
-              cellphoneNumber: '1234567890'
-              address:
-                country: US
-                countyOrProvince: FL
-                line4: line4
-                city: Key West
-                line3: line3
-                line2: line2
-                line1: 500 Duval St
-                zipOrPostcode: '33945'
               individual:
                 name:
-                  firstName: Bob
-                  lastName: Smith
-                  otherNames: A
-                  title: Mr
-                nationalIdentification: AB123456C
-                dateOfBirth: 1985-01-01T00:00:00.000Z
-              displayName: Bob
-              created: 2019-01-20T09:00:00.000Z
-              type: Individual
-              gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-              paymentChannel:
-                paymentChannelName: paymentChannelName
-                routingNumber: XXXXX6789
-                accountName: My account
-                countryCode: US
-                iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-                currency: USD
-                accountNumber: XXXXXX5678
-              remoteId: remoteId123
-              marketingOptIns:
-                - optedIn: true
-                  timestamp: 2019-01-20T09:00:00.000Z
-                - optedIn: true
-                  timestamp: 2019-01-20T09:00:00.000Z
-              watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
-              challenge:
-                description: challenge description
-                value: challenge test
+                  firstName: Fred
+                  lastName: Flintstone
               company:
-                taxId: '123'
-                name: ABC Ltd
-                operatingName: ABC
-              payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-              email: bob@example.com
-              acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+                companyName: ACME Anvils PLC
+              payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             amount: 1234
             paymentId: paymentId
             withdrawable: false
@@ -14099,7 +13908,7 @@ components:
           type: array
         content:
           items:
-            $ref: '#/components/schemas/Payment'
+            $ref: '#/components/schemas/PaymentV3'
           type: array
       type: object
     PaymentChannelRulesResponse:
@@ -14173,7 +13982,7 @@ components:
             $ref: '#/components/schemas/SupportedCountry'
           type: array
       type: object
-    SupportedCountriesResponse_2:
+    SupportedCountriesResponseV2:
       example:
         countries:
           - regions:
@@ -14197,10 +14006,10 @@ components:
       properties:
         countries:
           items:
-            $ref: '#/components/schemas/SupportedCountry_2'
+            $ref: '#/components/schemas/SupportedCountryV2'
           type: array
       type: object
-    SupportedCurrencyResponse:
+    SupportedCurrencyResponseV2:
       example:
         currencies:
           - currency: USD
@@ -14210,7 +14019,7 @@ components:
       properties:
         currencies:
           items:
-            $ref: '#/components/schemas/SupportedCurrency'
+            $ref: '#/components/schemas/SupportedCurrencyV2'
           type: array
       type: object
     UserInfo:
@@ -16269,7 +16078,7 @@ components:
       pattern: '^[A-Z]{3}$'
       title: ISO Currency Code
       type: string
-    QuoteFxSummary:
+    QuoteFxSummaryV3:
       example:
         invertedRate: 1.12
         creationTime: 2000-01-23T04:56:07.000Z
@@ -16349,7 +16158,7 @@ components:
         - totalPaymentAmount
         - totalSourceAmount
       type: object
-    SourceAccount:
+    SourceAccountV3:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         currency: USD
@@ -16379,7 +16188,7 @@ components:
         - sourceAccountName
         - totalPayoutCost
       type: object
-    AcceptedPayment:
+    AcceptedPaymentV3:
       example:
         currencyType: USD
         amount: 1234
@@ -16418,7 +16227,7 @@ components:
         - remoteId
         - sourceAccountName
       type: object
-    RejectedPayment:
+    RejectedPaymentV3:
       example:
         currencyType: USD
         reason: The payee has not been onboarded
@@ -16470,68 +16279,16 @@ components:
         - remoteId
         - sourceAccountName
       type: object
-    Payment:
+    PaymentV3:
       example:
         payee:
-          payorRefs:
-            - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-              invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-              invitationStatus: ACCEPTED
-              remoteId: uniqueIdForRemoteEntity
-              paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-            - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-              invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-              invitationStatus: ACCEPTED
-              remoteId: uniqueIdForRemoteEntity
-              paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-          country: US
-          cellphoneNumber: '1234567890'
-          address:
-            country: US
-            countyOrProvince: FL
-            line4: line4
-            city: Key West
-            line3: line3
-            line2: line2
-            line1: 500 Duval St
-            zipOrPostcode: '33945'
           individual:
             name:
-              firstName: Bob
-              lastName: Smith
-              otherNames: A
-              title: Mr
-            nationalIdentification: AB123456C
-            dateOfBirth: 1985-01-01T00:00:00.000Z
-          displayName: Bob
-          created: 2019-01-20T09:00:00.000Z
-          type: Individual
-          gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-          paymentChannel:
-            paymentChannelName: paymentChannelName
-            routingNumber: XXXXX6789
-            accountName: My account
-            countryCode: US
-            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-            currency: USD
-            accountNumber: XXXXXX5678
-          remoteId: remoteId123
-          marketingOptIns:
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00.000Z
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00.000Z
-          watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
-          challenge:
-            description: challenge description
-            value: challenge test
+              firstName: Fred
+              lastName: Flintstone
           company:
-            taxId: '123'
-            name: ABC Ltd
-            operatingName: ABC
-          payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-          email: bob@example.com
-          acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+            companyName: ACME Anvils PLC
+          payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         amount: 1234
         paymentId: paymentId
         withdrawable: false
@@ -16565,7 +16322,7 @@ components:
           example: Payment memo
           type: string
         payee:
-          $ref: '#/components/schemas/Payee_2'
+          $ref: '#/components/schemas/PayoutPayeeV3'
         withdrawable:
           example: false
           type: boolean
@@ -16637,7 +16394,7 @@ components:
             $ref: '#/components/schemas/IsoCurrency'
           type: array
       type: object
-    SupportedCountry_2:
+    SupportedCountryV2:
       example:
         regions:
           - name: California
@@ -16663,10 +16420,10 @@ components:
           type: array
         regions:
           items:
-            $ref: '#/components/schemas/Region'
+            $ref: '#/components/schemas/RegionV2'
           type: array
       type: object
-    SupportedCurrency:
+    SupportedCurrencyV2:
       example:
         currency: USD
         maxPaymentAmount: 100000
@@ -18093,6 +17850,27 @@ components:
         - totalCost
         - totalPaymentAmount
       type: object
+    PayoutPayeeV3:
+      description: Payee data associated with a payment. Either individual or company must be populated
+      example:
+        individual:
+          name:
+            firstName: Fred
+            lastName: Flintstone
+        company:
+          companyName: ACME Anvils PLC
+        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        payeeId:
+          format: uuid
+          type: string
+        individual:
+          $ref: '#/components/schemas/PayoutIndividualV3'
+        company:
+          $ref: '#/components/schemas/PayoutCompanyV3'
+      required:
+        - payeeId
+      type: object
     PaymentChannelRule:
       description: Rules that will get applied when creating or updating a payment channel for the given country
       example:
@@ -18145,7 +17923,7 @@ components:
       pattern: '^[A-Z]{2}$'
       title: ISO 3166 2 Character Country Code
       type: string
-    Region:
+    RegionV2:
       example:
         name: California
         abbreviation: CA
@@ -18219,6 +17997,42 @@ components:
         - PAYOR_FUNDING_ENTRY_DETAIL_RECEIVED
         - FUNDING_DEALLOCATED
       type: string
+    PayoutIndividualV3:
+      example:
+        name:
+          firstName: Fred
+          lastName: Flintstone
+      properties:
+        name:
+          $ref: '#/components/schemas/PayoutNameV3'
+      required:
+        - name
+      type: object
+    PayoutCompanyV3:
+      example:
+        companyName: ACME Anvils PLC
+      properties:
+        companyName:
+          example: ACME Anvils PLC
+          type: string
+      required:
+        - companyName
+      type: object
+    PayoutNameV3:
+      example:
+        firstName: Fred
+        lastName: Flintstone
+      properties:
+        firstName:
+          example: Fred
+          type: string
+        lastName:
+          example: Flintstone
+          type: string
+      required:
+        - firstName
+        - lastName
+      type: object
     inline_response_401_errors:
       properties:
         errorMessage:
@@ -19083,15 +18897,7 @@ x-tagGroups:
       - Invites
   - name: Payouts
     tags:
-      - Submit Payout
-      - Get Payout
-      - Retrieve Payments for Payout
-      - Quote Payout
-      - Instruct Payout
-      - Withdraw Payout
-      - Payout History
-      - Payout History
-      - Withdraw Payment
+      - Payout Service
   - name: Reporting
     tags:
       - Payment Audit Service
