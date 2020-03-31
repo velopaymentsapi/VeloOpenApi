@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.48
+  version: 2.22.49
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -7024,7 +7024,7 @@ paths:
         <p>The results can be obtained by issuing a HTTP GET to the URL returned in the location header.</p>
         <p>**NOTE:** amount values in payments must be in 'minor units' format. E.g. cents for USD, pence for GBP etc.</p>
          with no decimal places.
-      operationId: submitPayout
+      operationId: submitPayoutV3
       requestBody:
         content:
           application/json:
@@ -7256,6 +7256,7 @@ paths:
   '/v3/payouts/{payoutId}/quote':
     post:
       description: Create quote for a payout
+      operationId: createQuoteForPayoutV3
       parameters:
         - description: Id of the payout
           in: path
@@ -7390,6 +7391,7 @@ paths:
   /v1/paymentChannelRules:
     get:
       description: List the country specific payment channel rules.
+      operationId: listPaymentChannelRulesV1
       responses:
         '200':
           content:
