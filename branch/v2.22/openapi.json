@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.50",
+    "version": "2.22.51",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -5998,6 +5998,91 @@
         "summary": "Update Payee Remote Id",
         "tags": [
           "Payees"
+        ]
+      }
+    },
+    "/v3/payees/{payeeId}/payeeDetailsUpdate": {
+      "post": {
+        "description": "<p>Update payee details for the given Payee Id.<p>\n",
+        "operationId": "payeeDetailsUpdateV3",
+        "parameters": [
+          {
+            "description": "The UUID of the payee.",
+            "in": "path",
+            "name": "payeeId",
+            "required": true,
+            "schema": {
+              "example": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePayeeDetailsRequest"
+              }
+            }
+          },
+          "description": "Request to update payee details",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Request accepted"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Update Payee Details",
+        "tags": [
+          "Payees"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/payees/77f84ae9-42df-49d7-941b-47360347f86f/payeeDetailsUpdate' -i -X POST \\\n    -H 'Authorization: Bearer ed73aa9a-b51b-44cb-a8e9-11e2fb85046b' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\n            \"address\": {\n                \"line1\": \"line1\",\n                \"line2\": \"line2\",\n                \"line3\": \"line3\",\n                \"line4\": \"line4\",\n                \"city\": \"City\",\n                \"countyOrProvince\": \"county\",\n                \"zipOrPostcode\": \"BS11AA\",\n                \"country\": \"US\"\n            },\n            \"individual\": {\n                \"name\": {\n                    \"title\": \"Mr\",\n                    \"firstName\": \"A\",\n                    \"otherNames\": \"P\",\n                    \"lastName\": \"Smith\"\n                },\n                \"nationalIdentification\": \"987654321\",\n                \"dateOfBirth\": \"1970-04-03\"\n            }\n        }'\n"
+          }
         ]
       }
     },
@@ -13615,7 +13700,11 @@
           "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
           "marketingOptInDecision": true,
           "watchlistStatusUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
-          "disabledComment": "reason for disabled"
+          "disabledComment": "reason for disabled",
+          "challenge": {
+            "description": "challenge description",
+            "value": "challenge test"
+          }
         },
         "properties": {
           "payeeId": {
@@ -13746,6 +13835,9 @@
             "nullable": true,
             "readOnly": true,
             "type": "string"
+          },
+          "challenge": {
+            "$ref": "#/components/schemas/Challenge_2"
           }
         },
         "type": "object"
@@ -15017,6 +15109,60 @@
               "$ref": "#/components/schemas/PayeeDelta_2"
             },
             "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "UpdatePayeeDetailsRequest": {
+        "example": {
+          "address": {
+            "country": "US",
+            "countyOrProvince": "FL",
+            "line4": "line4",
+            "city": "Key West",
+            "line3": "line3",
+            "line2": "line2",
+            "line1": "500 Duval St",
+            "zipOrPostcode": "33945"
+          },
+          "individual": {
+            "name": {
+              "firstName": "Bob",
+              "lastName": "Smith",
+              "otherNames": "A",
+              "title": "Mr"
+            },
+            "nationalIdentification": "AB123456C",
+            "dateOfBirth": "1985-01-01T00:00:00.000Z"
+          },
+          "challenge": {
+            "description": "challenge description",
+            "value": "challenge test"
+          },
+          "company": {
+            "taxId": "123123123",
+            "name": "ABC Group Plc",
+            "operatingName": "ABC Co"
+          }
+        },
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/PayeeAddress_2"
+          },
+          "individual": {
+            "$ref": "#/components/schemas/Individual_2"
+          },
+          "company": {
+            "$ref": "#/components/schemas/Company_2"
+          },
+          "language": {
+            "$ref": "#/components/schemas/Language_2"
+          },
+          "payeeType": {
+            "$ref": "#/components/schemas/PayeeType_2"
+          },
+          "challenge": {
+            "$ref": "#/components/schemas/Challenge_2"
           }
         },
         "type": "object"
@@ -20112,6 +20258,31 @@
         ],
         "type": "object"
       },
+      "Challenge_2": {
+        "example": {
+          "description": "challenge description",
+          "value": "challenge test"
+        },
+        "properties": {
+          "value": {
+            "example": "challenge test",
+            "maxLength": 20,
+            "minLength": 3,
+            "type": "string"
+          },
+          "description": {
+            "example": "challenge description",
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "value"
+        ],
+        "type": "object"
+      },
       "PayeeResponse_2": {
         "example": {
           "payorRefs": [
@@ -20219,7 +20390,7 @@
             "$ref": "#/components/schemas/PayeePaymentChannel"
           },
           "challenge": {
-            "$ref": "#/components/schemas/Challenge"
+            "$ref": "#/components/schemas/Challenge_2"
           },
           "language": {
             "$ref": "#/components/schemas/Language"
@@ -20318,13 +20489,13 @@
             "$ref": "#/components/schemas/CreatePaymentChannel_2"
           },
           "challenge": {
-            "$ref": "#/components/schemas/Challenge"
+            "$ref": "#/components/schemas/Challenge_2"
           },
           "language": {
-            "$ref": "#/components/schemas/Language"
+            "$ref": "#/components/schemas/Language_2"
           },
           "company": {
-            "$ref": "#/components/schemas/CompanyV1"
+            "$ref": "#/components/schemas/Company_2"
           },
           "individual": {
             "$ref": "#/components/schemas/CreateIndividual_2"
@@ -20510,6 +20681,13 @@
           "remoteId"
         ],
         "type": "object"
+      },
+      "PayeeType_2": {
+        "enum": [
+          "INDIVIDUAL",
+          "COMPANY"
+        ],
+        "type": "string"
       },
       "Notifications": {
         "example": {
