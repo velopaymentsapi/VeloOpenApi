@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.53
+  version: 2.22.54
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -11291,6 +11291,7 @@ components:
           taxId: '123123123'
           name: ABC Group Plc
           operatingName: ABC Co
+        email: bob@example.com
       properties:
         address:
           $ref: '#/components/schemas/PayeeAddress_2'
@@ -11304,6 +11305,11 @@ components:
           $ref: '#/components/schemas/PayeeType_2'
         challenge:
           $ref: '#/components/schemas/Challenge_2'
+        email:
+          example: bob@example.com
+          format: email
+          nullable: true
+          type: string
       type: object
     ListSourceAccountResponse:
       description: List Source Accounts Response Object
