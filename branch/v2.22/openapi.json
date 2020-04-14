@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.65",
+    "version": "2.22.66",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -4561,7 +4561,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PayeeResponseV3"
+                  "$ref": "#/components/schemas/PayeeDetailResponse"
                 }
               }
             },
@@ -13640,7 +13640,7 @@
         },
         "type": "object"
       },
-      "PayeeResponseV3": {
+      "PayeeDetailResponse": {
         "example": {
           "payorRefs": [
             {
@@ -13895,60 +13895,28 @@
                   "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
                 }
               ],
+              "watchlistOverrideComment": "Example reason for the watchlist status being overridden",
               "country": "US",
-              "cellphoneNumber": "1234567890",
-              "address": {
-                "country": "US",
-                "countyOrProvince": "FL",
-                "line4": "line4",
-                "city": "Key West",
-                "line3": "line3",
-                "line2": "line2",
-                "line1": "500 Duval St",
-                "zipOrPostcode": "33945"
-              },
+              "disabledUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
               "individual": {
                 "name": {
                   "firstName": "Bob",
                   "lastName": "Smith",
-                  "otherNames": "A",
+                  "otherNames": "H",
                   "title": "Mr"
                 }
               },
-              "displayName": "ABC",
               "created": "2019-01-20T09:00:00.000Z",
-              "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
-              "paymentChannel": {
-                "paymentChannelName": "My payment channel",
-                "routingNumber": "XXXXX6789",
-                "accountName": "My account",
-                "countryCode": "UK",
-                "iban": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
-                "currency": "USD",
-                "accountNumber": "XXXXXX5678"
-              },
-              "marketingOptIns": [
-                {
-                  "optedIn": true,
-                  "timestamp": "2019-01-20T09:00:00.000Z"
-                },
-                {
-                  "optedIn": true,
-                  "timestamp": "2019-01-20T09:00:00.000Z"
-                }
-              ],
+              "displayName": "ABC",
               "watchlistStatusUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
-              "challenge": {
-                "description": "challenge description",
-                "value": "challenge test"
-              },
+              "disabledComment": "reason for disabled",
+              "disabled": true,
               "company": {
-                "name": "ABC Ltd.",
-                "operatingName": "ABC"
+                "name": "ABC Group Plc",
+                "operatingName": "ABC Co"
               },
               "payeeId": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
-              "email": "bob@example.com",
-              "acceptTermsAndConditionsTimestamp": "2019-01-20T09:00:00.000Z"
+              "email": "bob@example.com"
             },
             {
               "payorRefs": [
@@ -13965,60 +13933,28 @@
                   "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
                 }
               ],
+              "watchlistOverrideComment": "Example reason for the watchlist status being overridden",
               "country": "US",
-              "cellphoneNumber": "1234567890",
-              "address": {
-                "country": "US",
-                "countyOrProvince": "FL",
-                "line4": "line4",
-                "city": "Key West",
-                "line3": "line3",
-                "line2": "line2",
-                "line1": "500 Duval St",
-                "zipOrPostcode": "33945"
-              },
+              "disabledUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
               "individual": {
                 "name": {
                   "firstName": "Bob",
                   "lastName": "Smith",
-                  "otherNames": "A",
+                  "otherNames": "H",
                   "title": "Mr"
                 }
               },
-              "displayName": "ABC",
               "created": "2019-01-20T09:00:00.000Z",
-              "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
-              "paymentChannel": {
-                "paymentChannelName": "My payment channel",
-                "routingNumber": "XXXXX6789",
-                "accountName": "My account",
-                "countryCode": "UK",
-                "iban": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
-                "currency": "USD",
-                "accountNumber": "XXXXXX5678"
-              },
-              "marketingOptIns": [
-                {
-                  "optedIn": true,
-                  "timestamp": "2019-01-20T09:00:00.000Z"
-                },
-                {
-                  "optedIn": true,
-                  "timestamp": "2019-01-20T09:00:00.000Z"
-                }
-              ],
+              "displayName": "ABC",
               "watchlistStatusUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
-              "challenge": {
-                "description": "challenge description",
-                "value": "challenge test"
-              },
+              "disabledComment": "reason for disabled",
+              "disabled": true,
               "company": {
-                "name": "ABC Ltd.",
-                "operatingName": "ABC"
+                "name": "ABC Group Plc",
+                "operatingName": "ABC Co"
               },
               "payeeId": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
-              "email": "bob@example.com",
-              "acceptTermsAndConditionsTimestamp": "2019-01-20T09:00:00.000Z"
+              "email": "bob@example.com"
             }
           ]
         },
@@ -14037,7 +13973,7 @@
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PayeeResponse_2"
+              "$ref": "#/components/schemas/GetPayeeListResponse"
             },
             "type": "array"
           }
@@ -20290,7 +20226,7 @@
         ],
         "type": "object"
       },
-      "PayeeResponse_2": {
+      "GetPayeeListResponse": {
         "example": {
           "payorRefs": [
             {
@@ -20306,60 +20242,28 @@
               "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
             }
           ],
+          "watchlistOverrideComment": "Example reason for the watchlist status being overridden",
           "country": "US",
-          "cellphoneNumber": "1234567890",
-          "address": {
-            "country": "US",
-            "countyOrProvince": "FL",
-            "line4": "line4",
-            "city": "Key West",
-            "line3": "line3",
-            "line2": "line2",
-            "line1": "500 Duval St",
-            "zipOrPostcode": "33945"
-          },
+          "disabledUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
           "individual": {
             "name": {
               "firstName": "Bob",
               "lastName": "Smith",
-              "otherNames": "A",
+              "otherNames": "H",
               "title": "Mr"
             }
           },
-          "displayName": "ABC",
           "created": "2019-01-20T09:00:00.000Z",
-          "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
-          "paymentChannel": {
-            "paymentChannelName": "My payment channel",
-            "routingNumber": "XXXXX6789",
-            "accountName": "My account",
-            "countryCode": "UK",
-            "iban": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
-            "currency": "USD",
-            "accountNumber": "XXXXXX5678"
-          },
-          "marketingOptIns": [
-            {
-              "optedIn": true,
-              "timestamp": "2019-01-20T09:00:00.000Z"
-            },
-            {
-              "optedIn": true,
-              "timestamp": "2019-01-20T09:00:00.000Z"
-            }
-          ],
+          "displayName": "ABC",
           "watchlistStatusUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
-          "challenge": {
-            "description": "challenge description",
-            "value": "challenge test"
-          },
+          "disabledComment": "reason for disabled",
+          "disabled": true,
           "company": {
-            "name": "ABC Ltd.",
-            "operatingName": "ABC"
+            "name": "ABC Group Plc",
+            "operatingName": "ABC Co"
           },
           "payeeId": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
-          "email": "bob@example.com",
-          "acceptTermsAndConditionsTimestamp": "2019-01-20T09:00:00.000Z"
+          "email": "bob@example.com"
         },
         "properties": {
           "payeeId": {
@@ -20382,8 +20286,31 @@
             "nullable": true,
             "type": "string"
           },
-          "address": {
-            "$ref": "#/components/schemas/PayeeAddress"
+          "onboardedStatus": {
+            "$ref": "#/components/schemas/OnboardedStatus_2"
+          },
+          "watchlistStatus": {
+            "$ref": "#/components/schemas/WatchlistStatus"
+          },
+          "watchlistStatusUpdatedTimestamp": {
+            "example": "2019-01-20T09:00:00.000Z",
+            "format": "date_time",
+            "nullable": true,
+            "readOnly": true,
+            "type": "string"
+          },
+          "watchlistOverrideComment": {
+            "example": "Example reason for the watchlist status being overridden",
+            "nullable": true,
+            "type": "string"
+          },
+          "language": {
+            "$ref": "#/components/schemas/Language_2"
+          },
+          "created": {
+            "example": "2019-01-20T09:00:00.000Z",
+            "format": "date-time",
+            "type": "string"
           },
           "country": {
             "example": "US",
@@ -20393,66 +20320,26 @@
             "example": "ABC",
             "type": "string"
           },
-          "paymentChannel": {
-            "$ref": "#/components/schemas/PayeePaymentChannel"
-          },
-          "challenge": {
-            "$ref": "#/components/schemas/Challenge_2"
-          },
-          "language": {
-            "$ref": "#/components/schemas/Language"
-          },
-          "acceptTermsAndConditionsTimestamp": {
-            "description": "The timestamp when the payee last accepted T&Cs",
-            "example": "2019-01-20T09:00:00.000Z",
-            "format": "date-time",
-            "nullable": true,
-            "readOnly": true,
-            "type": "string"
-          },
-          "cellphoneNumber": {
-            "example": "1234567890",
-            "type": "string"
-          },
           "payeeType": {
             "$ref": "#/components/schemas/PayeeType"
           },
-          "company": {
-            "$ref": "#/components/schemas/CompanyResponse"
+          "disabled": {
+            "type": "boolean"
           },
-          "individual": {
-            "$ref": "#/components/schemas/IndividualResponse"
+          "disabledComment": {
+            "example": "reason for disabled",
+            "type": "string"
           },
-          "created": {
+          "disabledUpdatedTimestamp": {
             "example": "2019-01-20T09:00:00.000Z",
             "format": "date-time",
             "type": "string"
           },
-          "gracePeriodEndDate": {
-            "example": "2019-01-20T00:00:00.000Z",
-            "format": "date",
-            "nullable": true,
-            "readOnly": true,
-            "type": "string"
+          "individual": {
+            "$ref": "#/components/schemas/GetPayeeListResponseIndividual"
           },
-          "watchlistStatusUpdatedTimestamp": {
-            "example": "2019-01-20T09:00:00.000Z",
-            "format": "date_time",
-            "nullable": true,
-            "readOnly": true,
-            "type": "string"
-          },
-          "marketingOptIns": {
-            "items": {
-              "$ref": "#/components/schemas/MarketingOptIn"
-            },
-            "type": "array"
-          },
-          "watchlistStatus": {
-            "$ref": "#/components/schemas/WatchlistStatus"
-          },
-          "onboardedStatus": {
-            "$ref": "#/components/schemas/OnboardedStatus"
+          "company": {
+            "$ref": "#/components/schemas/GetPayeeListResponseCompany"
           }
         },
         "type": "object"
@@ -22734,6 +22621,44 @@
         ],
         "type": "string"
       },
+      "GetPayeeListResponseIndividual": {
+        "example": {
+          "name": {
+            "firstName": "Bob",
+            "lastName": "Smith",
+            "otherNames": "H",
+            "title": "Mr"
+          }
+        },
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/Name"
+          }
+        },
+        "type": "object"
+      },
+      "GetPayeeListResponseCompany": {
+        "example": {
+          "name": "ABC Group Plc",
+          "operatingName": "ABC Co"
+        },
+        "properties": {
+          "name": {
+            "example": "ABC Group Plc",
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "operatingName": {
+            "example": "ABC Co",
+            "maxLength": 100,
+            "minLength": 1,
+            "nullable": true,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "CreatePayeeAddress_2": {
         "properties": {
           "line1": {
@@ -23817,6 +23742,41 @@
           "currency",
           "routingNumber"
         ],
+        "type": "object"
+      },
+      "Name": {
+        "example": {
+          "firstName": "Bob",
+          "lastName": "Smith",
+          "otherNames": "H",
+          "title": "Mr"
+        },
+        "properties": {
+          "title": {
+            "example": "Mr",
+            "maxLength": 10,
+            "minLength": 1,
+            "type": "string"
+          },
+          "firstName": {
+            "example": "Bob",
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "otherNames": {
+            "example": "H",
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "example": "Smith",
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "FundingEventType": {
