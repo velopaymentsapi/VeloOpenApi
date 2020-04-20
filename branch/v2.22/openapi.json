@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.72",
+    "version": "2.22.75",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -11701,6 +11701,10 @@
           },
           "includesReports": true,
           "allowsLanguageChoice": true,
+          "paymentPermissions": {
+            "wire": true,
+            "sameDayAch": true
+          },
           "language": "EN",
           "dbaName": "Some Biz",
           "primaryContactPhone": "123-123-1234",
@@ -11806,6 +11810,9 @@
           },
           "paymentRails": {
             "$ref": "#/components/schemas/PaymentRails"
+          },
+          "paymentPermissions": {
+            "$ref": "#/components/schemas/PaymentPermissions"
           }
         },
         "required": [
@@ -19093,6 +19100,29 @@
           "BOFA"
         ],
         "type": "string"
+      },
+      "PaymentPermissions": {
+        "example": {
+          "wire": true,
+          "sameDayAch": true
+        },
+        "properties": {
+          "sameDayAch": {
+            "description": "Whether the payor is permitted to pay via same day ACH payments",
+            "nullable": false,
+            "type": "boolean"
+          },
+          "wire": {
+            "description": "Whether the payor is permitted to pay via wire",
+            "nullable": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "sameDayAch",
+          "wire"
+        ],
+        "type": "object"
       },
       "PayeePayorRef": {
         "example": {
