@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.20.118",
+    "version": "2.21.41",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -6182,7 +6182,7 @@
               }
             }
           },
-          "description": "Body to included ammount to be funded",
+          "description": "Body to included amount to be funded",
           "required": true
         },
         "responses": {
@@ -6318,6 +6318,7 @@
     },
     "/v2/sourceAccounts/{sourceAccountId}/fundingRequest": {
       "post": {
+        "deprecated": true,
         "description": "Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).",
         "operationId": "createFundingRequest",
         "parameters": [
@@ -6340,7 +6341,7 @@
               }
             }
           },
-          "description": "Body to included ammount to be funded",
+          "description": "Body to included amount to be funded",
           "required": true
         },
         "responses": {
@@ -6403,6 +6404,7 @@
     "/v2/sourceAccounts": {
       "description": "List Source Accounts",
       "get": {
+        "deprecated": true,
         "description": "List source accounts.",
         "operationId": "getSourceAccountsV2",
         "parameters": [
@@ -6547,6 +6549,7 @@
     "/v2/sourceAccounts/{sourceAccountId}": {
       "description": "Get details about given source account.",
       "get": {
+        "deprecated": true,
         "description": "Get details about given source account.",
         "operationId": "getSourceAccountV2",
         "parameters": [
@@ -6628,6 +6631,7 @@
     },
     "/v2/sourceAccounts/{sourceAccountId}/transfers": {
       "post": {
+        "deprecated": true,
         "description": "Transfer funds between source accounts for a Payor. The 'from' source account is identified in the URL, and is the account which will be debited. The 'to' (destination) source account is in the body, and is the account which will be credited. Both source accounts must belong to the same Payor. There must be sufficient balance in the 'from' source account, otherwise the transfer attempt will fail.",
         "operationId": "transferFunds",
         "parameters": [
@@ -6712,7 +6716,8 @@
     },
     "/v1/fundingAccounts": {
       "get": {
-        "description": "Get the source accounts.",
+        "deprecated": true,
+        "description": "Get the funding accounts.",
         "operationId": "getFundingAccounts",
         "parameters": [
           {
@@ -6756,11 +6761,13 @@
             }
           },
           {
+            "description": "List of sort fields (e.g. ?sort=accountName:asc,name:asc) Default is accountName:asc The supported sort fields are - accountName, name.",
             "in": "query",
             "name": "sort",
             "required": false,
             "schema": {
               "default": "accountName:asc",
+              "pattern": "[a-zA-Z]+[:desc|:asc]",
               "type": "string"
             }
           },
@@ -6810,71 +6817,11 @@
         "tags": [
           "Funding Manager"
         ]
-      },
-      "post": {
-        "description": "Create Funding Account",
-        "operationId": "createFundingAccount",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateFundingAccountRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "202": {
-            "description": "Funding Account Created",
-            "headers": {
-              "Location": {
-                "description": "Reference to created account",
-                "schema": {
-                  "format": "uri",
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          }
-        },
-        "summary": "Create Funding Account",
-        "tags": [
-          "Funding Manager Private"
-        ]
       }
     },
     "/v1/fundingAccounts/{fundingAccountId}": {
       "get": {
+        "deprecated": true,
         "description": "Get Funding Account by ID",
         "operationId": "getFundingAccount",
         "parameters": [
@@ -6945,6 +6892,669 @@
         "summary": "Get Funding Account",
         "tags": [
           "Funding Manager"
+        ]
+      }
+    },
+    "/v2/fundingAccounts": {
+      "get": {
+        "description": "Get the funding accounts.",
+        "operationId": "getFundingAccountsV2",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "payorId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The descriptive funding account name",
+            "in": "query",
+            "name": "name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The 2 letter ISO 3166-1 country code (upper case)",
+            "in": "query",
+            "name": "country",
+            "required": false,
+            "schema": {
+              "example": "US",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The ISO 4217 currency code",
+            "in": "query",
+            "name": "currency",
+            "required": false,
+            "schema": {
+              "example": "USD",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The type of funding account.",
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/FundingAccountType"
+            }
+          },
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page size. Default is 25. Max allowable is 100.",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "List of sort fields (e.g. ?sort=accountName:asc,name:asc) Default is accountName:asc The supported sort fields are - accountName, name.",
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "accountName:asc",
+              "pattern": "[a-zA-Z]+[:desc|:asc]",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sensitive",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListFundingAccountsResponse_2"
+                }
+              }
+            },
+            "description": "Get Funding Accounts Response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "Get Funding Accounts",
+        "tags": [
+          "Funding Manager"
+        ]
+      },
+      "post": {
+        "description": "Create Funding Account",
+        "operationId": "createFundingAccountV2",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFundingAccountRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Funding Account Created",
+            "headers": {
+              "Location": {
+                "description": "Reference to created account",
+                "schema": {
+                  "format": "uri",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "Create Funding Account",
+        "tags": [
+          "Funding Manager Private"
+        ]
+      }
+    },
+    "/v2/fundingAccounts/{fundingAccountId}": {
+      "get": {
+        "description": "Get Funding Account by ID",
+        "operationId": "getFundingAccountV2",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fundingAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sensitive",
+            "required": false,
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FundingAccountResponse_2"
+                }
+              }
+            },
+            "description": "Funding Account Response"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "summary": "Get Funding Account",
+        "tags": [
+          "Funding Manager"
+        ]
+      }
+    },
+    "/v3/sourceAccounts/{sourceAccountId}/fundingRequest": {
+      "post": {
+        "description": "Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).",
+        "operationId": "createFundingRequestV3",
+        "parameters": [
+          {
+            "description": "Source account id",
+            "in": "path",
+            "name": "sourceAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FundingRequestV3"
+              }
+            }
+          },
+          "description": "Body to included amount to be funded",
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Request Accepted"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "summary": "Create Funding Request",
+        "tags": [
+          "Funding Manager"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/fundingRequest' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"amount\":999990}'\n"
+          }
+        ]
+      }
+    },
+    "/v3/sourceAccounts": {
+      "description": "List Source Accounts",
+      "get": {
+        "description": "List source accounts.",
+        "operationId": "getSourceAccountsV3",
+        "parameters": [
+          {
+            "description": "Physical Account Name",
+            "in": "query",
+            "name": "physicalAccountName",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The physical account ID",
+            "in": "query",
+            "name": "physicalAccountId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The account owner Payor ID",
+            "in": "query",
+            "name": "payorId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The funding account ID",
+            "in": "query",
+            "name": "fundingAccountId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page size. Default is 25. Max allowable is 100.",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "List of sort fields e.g. ?sort=name:asc\nDefault is name:asc\nThe supported sort fields are - fundingRef, name, balance\n",
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "fundingRef:asc",
+              "pattern": "[fundingRef|name|balance]+[:desc|:asc]",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListSourceAccountResponseV3"
+                }
+              }
+            },
+            "description": "List Source Account response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "summary": "Get list of source accounts",
+        "tags": [
+          "Funding Manager"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
+          }
+        ]
+      },
+      "summary": "List Source Accounts"
+    },
+    "/v3/sourceAccounts/{sourceAccountId}": {
+      "description": "Get details about given source account.",
+      "get": {
+        "description": "Get details about given source account.",
+        "operationId": "getSourceAccountV3",
+        "parameters": [
+          {
+            "description": "Source account id",
+            "in": "path",
+            "name": "sourceAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceAccountResponseV3"
+                }
+              }
+            },
+            "description": "Source account response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "summary": "Get details about given source account.",
+        "tags": [
+          "Funding Manager"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \\\n    -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'\n"
+          }
+        ]
+      },
+      "summary": "Get Source Account"
+    },
+    "/v3/sourceAccounts/{sourceAccountId}/transfers": {
+      "post": {
+        "description": "Transfer funds between source accounts for a Payor. The 'from' source account is identified in the URL, and is the account which will be debited. The 'to' (destination) source account is in the body, and is the account which will be credited. Both source accounts must belong to the same Payor. There must be sufficient balance in the 'from' source account, otherwise the transfer attempt will fail.",
+        "operationId": "transferFundsV3",
+        "parameters": [
+          {
+            "description": "The 'from' source account id, which will be debited",
+            "in": "path",
+            "name": "sourceAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferRequest_2"
+              }
+            }
+          },
+          "description": "Body",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Request Processed"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "summary": "Transfer Funds between source accounts",
+        "tags": [
+          "Funding Manager"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/transfers' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{ \"toSourceAccountId\": \"a99f93f9-6845-451d-a1f5-f3c841599dd7\", \"amount\": 10000, \"currency\": \"USD\" }'\n"
+          }
         ]
       }
     },
@@ -8999,6 +9609,129 @@
         ]
       }
     },
+    "/v3/payouts/{payoutId}/payments": {
+      "get": {
+        "description": "Retrieve payments for a payout",
+        "operationId": "getPaymentsForPayoutV3",
+        "parameters": [
+          {
+            "description": "Id of the payout",
+            "in": "path",
+            "name": "payoutId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Payment Status\n* ACCEPTED: any payment which was accepted at submission time (status may have changed since)\n* REJECTED: any payment rejected by initial submission processing\n* WITHDRAWN: any payment which has been withdrawn\n* WITHDRAWABLE: any payment eligible for withdrawal\n",
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ACCEPTED",
+                "REJECTED",
+                "WITHDRAWN",
+                "WITHDRAWABLE"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "The remote id of the payees.",
+            "in": "query",
+            "name": "remoteId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Payor's Id of the Payment",
+            "in": "query",
+            "name": "payorPaymentId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Physical Account Name",
+            "in": "query",
+            "name": "sourceAccountName",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Payment Memo of the Payment",
+            "in": "query",
+            "name": "paymentMemo",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size. Default is 25. Max allowable is 100.",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PagedPaymentsResponse"
+                }
+              }
+            },
+            "description": "Payments for payout"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "summary": "Retrieve payments for a payout",
+        "tags": [
+          "Payments for Payout"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/quote' -i -X POST \\\n    -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f' \\\n    -H 'Content-Type: application/json'\n"
+          }
+        ]
+      }
+    },
     "/v1/paymentChannelRules": {
       "get": {
         "description": "List the country specific payment channel rules.",
@@ -9033,6 +9766,90 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v1/paymentChannelRules' -i -X GET \\\n    -H 'Authorization: Bearer 63fa49a0-1eeb-4756-b4fb-7cdd94ae80c1'\n"
+          }
+        ]
+      }
+    },
+    "/v1/payments/{paymentId}/withdraw": {
+      "post": {
+        "description": "<p>withdraw a payment </p>\n<p>There are a variety of reasons why this can fail</p>\n<ul>\n    <li>the payment must be in a state of 'accepted' or 'unfunded'</li>\n    <li>the payout must not be in a state of 'instructed'</li>\n</ul>\n",
+        "operationId": "withdrawPayment",
+        "parameters": [
+          {
+            "description": "Id of the Payment",
+            "in": "path",
+            "name": "paymentId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawPaymentRequest"
+              }
+            }
+          },
+          "description": "details for withdrawal",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "The payment was withdrawn"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          }
+        },
+        "summary": "Withdraw a Payment",
+        "tags": [
+          "Withdraw Payment"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payments/b39264fc-560e-4fa6-b6c3-b12d42e14596/withdraw' -i -X POST \\\n-H 'Authorization: Bearer 63e4d691-847b-46b5-893d-fd15c54dd4bf' \\\n-H 'Content-Type: application/json' \\\n-d '{\"reason\": \"payment submitted in error\"}'\n"
           }
         ]
       }
@@ -13811,11 +14628,11 @@
           "links": [
             {
               "rel": "first",
-              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+              "href": "https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
             },
             {
               "rel": "first",
-              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+              "href": "https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
             }
           ],
           "page": {
@@ -13880,7 +14697,7 @@
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/ListSourceAccountResponse_links"
+              "$ref": "#/components/schemas/ListSourceAccountResponseV2_links"
             },
             "type": "array"
           },
@@ -14051,26 +14868,34 @@
           },
           "content": [
             {
-              "routingNumber": "routingNumber",
-              "accountName": "accountName",
+              "routingNumber": 12345678,
+              "country": "US",
+              "accountName": "Payor Corp",
+              "name": "My Funding Account",
               "sourceAccountIds": [
                 "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
               ],
+              "currency": "USD",
               "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "accountNumber": "accountNumber"
+              "accountNumber": "7001001234",
+              "type": "FBO"
             },
             {
-              "routingNumber": "routingNumber",
-              "accountName": "accountName",
+              "routingNumber": 12345678,
+              "country": "US",
+              "accountName": "Payor Corp",
+              "name": "My Funding Account",
               "sourceAccountIds": [
                 "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
               ],
+              "currency": "USD",
               "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "accountNumber": "accountNumber"
+              "accountNumber": "7001001234",
+              "type": "FBO"
             }
           ]
         },
@@ -14093,14 +14918,165 @@
         },
         "type": "object"
       },
+      "FundingAccountResponse": {
+        "example": {
+          "routingNumber": 12345678,
+          "country": "US",
+          "accountName": "Payor Corp",
+          "name": "My Funding Account",
+          "sourceAccountIds": [
+            "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          ],
+          "currency": "USD",
+          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "accountNumber": "7001001234",
+          "type": "FBO"
+        },
+        "properties": {
+          "id": {
+            "description": "Funding Account Id",
+            "format": "uuid",
+            "type": "string"
+          },
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "accountName": {
+            "description": "name on the bank account",
+            "example": "Payor Corp",
+            "type": "string"
+          },
+          "accountNumber": {
+            "description": "bank account number",
+            "example": "7001001234",
+            "type": "string"
+          },
+          "routingNumber": {
+            "description": "bank account routing number",
+            "example": 12345678,
+            "type": "string"
+          },
+          "sourceAccountIds": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "name": {
+            "description": "name of funding account",
+            "example": "My Funding Account",
+            "type": "string"
+          },
+          "currency": {
+            "description": "ISO 4217 currency code",
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "country": {
+            "description": "ISO 3166-1 2 letter country code (upper case)",
+            "example": "US",
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string"
+          },
+          "type": {
+            "description": "Funding account type",
+            "example": "FBO",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "FundingAccountType": {
+        "enum": [
+          "FBO"
+        ],
+        "type": "string"
+      },
+      "ListFundingAccountsResponse_2": {
+        "description": "List Funding Accounts Response Object",
+        "example": {
+          "links": [
+            {
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+            },
+            {
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+            }
+          ],
+          "page": {
+            "numberOfElements": 1,
+            "totalPages": 2,
+            "pageSize": 25,
+            "page": 1,
+            "totalElements": 1
+          },
+          "content": [
+            {
+              "routingNumber": 12345678,
+              "country": "US",
+              "accountName": "Payor Corp",
+              "name": "My Funding Account",
+              "currency": "USD",
+              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "accountNumber": "7001001234",
+              "type": "FBO"
+            },
+            {
+              "routingNumber": 12345678,
+              "country": "US",
+              "accountName": "Payor Corp",
+              "name": "My Funding Account",
+              "currency": "USD",
+              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "accountNumber": "7001001234",
+              "type": "FBO"
+            }
+          ]
+        },
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/ListSourceAccountResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/ListSourceAccountResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/FundingAccountResponse_2"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "CreateFundingAccountRequest": {
         "example": {
           "routingNumber": "routingNumber",
           "accountName": "accountName",
+          "name": "name",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "accountNumber": "accountNumber"
         },
         "properties": {
+          "name": {
+            "maxLength": 30,
+            "minLength": 1,
+            "type": "string"
+          },
           "accountName": {
             "maxLength": 22,
             "minLength": 1,
@@ -14124,22 +15100,23 @@
         "required": [
           "accountName",
           "accountNumber",
+          "name",
           "payorId",
           "routingNumber"
         ],
         "type": "object"
       },
-      "FundingAccountResponse": {
+      "FundingAccountResponse_2": {
         "example": {
-          "routingNumber": "routingNumber",
-          "accountName": "accountName",
-          "sourceAccountIds": [
-            "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-            "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-          ],
+          "routingNumber": 12345678,
+          "country": "US",
+          "accountName": "Payor Corp",
+          "name": "My Funding Account",
+          "currency": "USD",
           "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "accountNumber": "accountNumber"
+          "accountNumber": "7001001234",
+          "type": "FBO"
         },
         "properties": {
           "id": {
@@ -14152,22 +15129,284 @@
             "type": "string"
           },
           "accountName": {
+            "description": "name on the bank account",
+            "example": "Payor Corp",
             "type": "string"
           },
           "accountNumber": {
+            "description": "bank account number",
+            "example": "7001001234",
             "type": "string"
           },
           "routingNumber": {
+            "description": "bank account routing number",
+            "example": 12345678,
             "type": "string"
           },
-          "sourceAccountIds": {
+          "name": {
+            "description": "name of funding account",
+            "example": "My Funding Account",
+            "type": "string"
+          },
+          "currency": {
+            "description": "ISO 4217 currency code",
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "country": {
+            "description": "ISO 3166-1 2 letter country code (upper case)",
+            "example": "US",
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string"
+          },
+          "type": {
+            "description": "Funding account type",
+            "example": "FBO",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "FundingRequestV3": {
+        "example": {
+          "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "amount": 800828191
+        },
+        "properties": {
+          "fundingAccountId": {
+            "description": "The funding account id",
+            "format": "uuid",
+            "type": "string"
+          },
+          "amount": {
+            "description": "Amount to fund in minor units",
+            "format": "int64",
+            "maximum": 9999999999,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "amount",
+          "fundingAccountId"
+        ],
+        "type": "object"
+      },
+      "ListSourceAccountResponseV3": {
+        "description": "List Source Accounts Response Object",
+        "example": {
+          "links": [
+            {
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+            },
+            {
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+            }
+          ],
+          "page": {
+            "numberOfElements": 12,
+            "totalPages": 2,
+            "pageSize": 25,
+            "page": 1,
+            "totalElements": 33
+          },
+          "content": [
+            {
+              "physicalAccountName": "VELO_FBO_MYBANKA_USD",
+              "fundingRef": "a1b2c3d4",
+              "balance": 1203489,
+              "pooled": true,
+              "name": "MyAccountName",
+              "customerId": "Joe Customer",
+              "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "autoTopUpConfig": {
+                "targetBalance": 300000,
+                "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "minBalance": 10000,
+                "enabled": true
+              },
+              "currency": "USD",
+              "railsId": "BOA_RAIL",
+              "balanceVisible": true,
+              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "notifications": {
+                "minimumBalance": 120000
+              }
+            },
+            {
+              "physicalAccountName": "VELO_FBO_MYBANKA_USD",
+              "fundingRef": "a1b2c3d4",
+              "balance": 1203489,
+              "pooled": true,
+              "name": "MyAccountName",
+              "customerId": "Joe Customer",
+              "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "autoTopUpConfig": {
+                "targetBalance": 300000,
+                "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+                "minBalance": 10000,
+                "enabled": true
+              },
+              "currency": "USD",
+              "railsId": "BOA_RAIL",
+              "balanceVisible": true,
+              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "notifications": {
+                "minimumBalance": 120000
+              }
+            }
+          ]
+        },
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PagedUserResponse_page"
+          },
+          "links": {
             "items": {
-              "format": "uuid",
-              "type": "string"
+              "$ref": "#/components/schemas/ListSourceAccountResponseV3_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/SourceAccountResponseV3"
             },
             "type": "array"
           }
         },
+        "type": "object"
+      },
+      "SourceAccountResponseV3": {
+        "example": {
+          "physicalAccountName": "VELO_FBO_MYBANKA_USD",
+          "fundingRef": "a1b2c3d4",
+          "balance": 1203489,
+          "pooled": true,
+          "name": "MyAccountName",
+          "customerId": "Joe Customer",
+          "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "autoTopUpConfig": {
+            "targetBalance": 300000,
+            "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+            "minBalance": 10000,
+            "enabled": true
+          },
+          "currency": "USD",
+          "railsId": "BOA_RAIL",
+          "balanceVisible": true,
+          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "notifications": {
+            "minimumBalance": 120000
+          }
+        },
+        "properties": {
+          "id": {
+            "description": "Source Account Id",
+            "format": "uuid",
+            "type": "string"
+          },
+          "balance": {
+            "description": "Decimal implied",
+            "example": 1203489,
+            "format": "int64",
+            "type": "integer"
+          },
+          "currency": {
+            "enum": [
+              "USD"
+            ],
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "fundingRef": {
+            "example": "a1b2c3d4",
+            "type": "string"
+          },
+          "physicalAccountName": {
+            "example": "VELO_FBO_MYBANKA_USD",
+            "type": "string"
+          },
+          "railsId": {
+            "example": "BOA_RAIL",
+            "type": "string"
+          },
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "example": "MyAccountName",
+            "type": "string"
+          },
+          "pooled": {
+            "type": "boolean"
+          },
+          "balanceVisible": {
+            "type": "boolean"
+          },
+          "customerId": {
+            "example": "Joe Customer",
+            "nullable": true,
+            "type": "string"
+          },
+          "physicalAccountId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "notifications": {
+            "$ref": "#/components/schemas/Notifications_2"
+          },
+          "autoTopUpConfig": {
+            "$ref": "#/components/schemas/AutoTopUpConfig_2"
+          }
+        },
+        "required": [
+          "autoTopUpConfig",
+          "balanceVisible",
+          "fundingRef",
+          "id",
+          "physicalAccountName",
+          "pooled",
+          "railsId"
+        ],
+        "type": "object"
+      },
+      "TransferRequest_2": {
+        "properties": {
+          "toSourceAccountId": {
+            "description": "The 'to' source account id, which will be credited",
+            "format": "uuid",
+            "type": "string"
+          },
+          "amount": {
+            "description": "Amount to transfer, in minor units",
+            "format": "int64",
+            "maximum": 9999999999,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "currency": {
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          }
+        },
+        "required": [
+          "amount",
+          "currency",
+          "toSourceAccountId"
+        ],
         "type": "object"
       },
       "PageResourceFundingPayorStatusAuditResponseFundingPayorStatusAuditResponse": {
@@ -14194,7 +15433,7 @@
               "amount": 2,
               "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "currency": {
-                "currencyCode": "currencyCode"
+                "currencyCode": "USD"
               },
               "status": "status"
             },
@@ -14202,7 +15441,7 @@
               "amount": 2,
               "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "currency": {
-                "currencyCode": "currencyCode"
+                "currencyCode": "USD"
               },
               "status": "status"
             }
@@ -15113,6 +16352,7 @@
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalIncompletePayments": 6,
               "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
+              "totalWithdrawnPayments": 5,
               "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo",
               "payorName": "payorName"
@@ -15158,6 +16398,7 @@
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalIncompletePayments": 6,
               "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
+              "totalWithdrawnPayments": 5,
               "instructedDateTime": "instructedDateTime",
               "payoutMemo": "payoutMemo",
               "payorName": "payorName"
@@ -15187,6 +16428,7 @@
         "description": "List Payments for payout",
         "example": {
           "summary": {
+            "withdrawnPayments": 2,
             "submitting": {
               "principal": "principal",
               "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -15271,15 +16513,16 @@
                 }
               },
               "paymentMemo": "Payment memo",
-              "paymentAmount": 2,
+              "paymentAmount": 7,
               "fundingStatus": "FUNDED",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 7.061401241503109,
+              "rate": 9.301444243932576,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
+              "withdrawable": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15314,7 +16557,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 9.301444243932576,
+              "invertedRate": 3.616076749251911,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
@@ -15323,6 +16566,7 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "payorPaymentId": "123123asdf",
               "rejectionReason": "rejectionReason",
@@ -15349,15 +16593,16 @@
                 }
               },
               "paymentMemo": "Payment memo",
-              "paymentAmount": 2,
+              "paymentAmount": 7,
               "fundingStatus": "FUNDED",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 7.061401241503109,
+              "rate": 9.301444243932576,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
+              "withdrawable": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15392,7 +16637,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 9.301444243932576,
+              "invertedRate": 3.616076749251911,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
@@ -15401,6 +16646,7 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "payorPaymentId": "123123asdf",
               "rejectionReason": "rejectionReason",
@@ -15472,15 +16718,16 @@
                 }
               },
               "paymentMemo": "Payment memo",
-              "paymentAmount": 2,
+              "paymentAmount": 7,
               "fundingStatus": "FUNDED",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 7.061401241503109,
+              "rate": 9.301444243932576,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
+              "withdrawable": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15515,7 +16762,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 9.301444243932576,
+              "invertedRate": 3.616076749251911,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
@@ -15524,6 +16771,7 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "payorPaymentId": "123123asdf",
               "rejectionReason": "rejectionReason",
@@ -15550,15 +16798,16 @@
                 }
               },
               "paymentMemo": "Payment memo",
-              "paymentAmount": 2,
+              "paymentAmount": 7,
               "fundingStatus": "FUNDED",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
               "filenameReference": "file ref",
-              "rate": 7.061401241503109,
+              "rate": 9.301444243932576,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "countryCode": "US",
               "returnReason": "Some Reason Value",
+              "withdrawable": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
@@ -15593,7 +16842,7 @@
               "payorName": "payorName",
               "sourceAccountName": "My Account",
               "paymentChannelId": "123asdf",
-              "invertedRate": 9.301444243932576,
+              "invertedRate": 3.616076749251911,
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
@@ -15602,6 +16851,7 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "payorPaymentId": "123123asdf",
               "rejectionReason": "rejectionReason",
@@ -15650,15 +16900,16 @@
             }
           },
           "paymentMemo": "Payment memo",
-          "paymentAmount": 2,
+          "paymentAmount": 7,
           "fundingStatus": "FUNDED",
           "railsBatchId": "railsBatchId",
           "paymentChannelName": "My Payment Channel",
           "filenameReference": "file ref",
-          "rate": 7.061401241503109,
+          "rate": 9.301444243932576,
           "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "countryCode": "US",
           "returnReason": "Some Reason Value",
+          "withdrawable": true,
           "submittedDateTime": "2000-01-23T04:56:07.000Z",
           "sourceAmount": 12345,
           "railsId": "asdf123",
@@ -15693,7 +16944,7 @@
           "payorName": "payorName",
           "sourceAccountName": "My Account",
           "paymentChannelId": "123asdf",
-          "invertedRate": 9.301444243932576,
+          "invertedRate": 3.616076749251911,
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "individualIdentificationNumber": "1231231adf",
           "railsPaymentId": "railsPaymentId",
@@ -15702,6 +16953,7 @@
           "remoteId": "aasdf123",
           "routingNumber": "123123123123",
           "returnCost": 1232,
+          "withdrawnReason": "withdrawnReason",
           "iban": "DE89 3704 0044 0532 0130 00",
           "payorPaymentId": "123123asdf",
           "rejectionReason": "rejectionReason",
@@ -15885,6 +17137,12 @@
           },
           "rejectionReason": {
             "type": "string"
+          },
+          "withdrawnReason": {
+            "type": "string"
+          },
+          "withdrawable": {
+            "type": "boolean"
           },
           "payout": {
             "$ref": "#/components/schemas/PaymentResponseV4_payout"
@@ -16281,6 +17539,7 @@
           ],
           "paymentsRejected": 0,
           "paymentsSubmitted": 10,
+          "paymentsWithdrawn": 0,
           "fxSummaries": [
             {
               "invertedRate": 1.12,
@@ -16366,6 +17625,10 @@
             "example": 0,
             "type": "integer"
           },
+          "paymentsWithdrawn": {
+            "example": 0,
+            "type": "integer"
+          },
           "fxSummaries": {
             "items": {
               "$ref": "#/components/schemas/QuoteFxSummary"
@@ -16395,6 +17658,7 @@
           "acceptedPayments",
           "accounts",
           "fxSummaries",
+          "paymentsWithdrawn",
           "rejectedPayments"
         ],
         "type": "object"
@@ -16434,6 +17698,224 @@
           "fxSummaries": {
             "items": {
               "$ref": "#/components/schemas/QuoteFxSummary"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "PagedPaymentsResponse": {
+        "description": "List Payees Response Object",
+        "example": {
+          "links": [
+            {
+              "rel": "rel",
+              "href": "href"
+            },
+            {
+              "rel": "rel",
+              "href": "href"
+            }
+          ],
+          "page": {
+            "numberOfElements": 0,
+            "totalPages": 1,
+            "pageSize": 5,
+            "page": 5,
+            "totalElements": 6
+          },
+          "content": [
+            {
+              "payee": {
+                "payorRefs": [
+                  {
+                    "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                    "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                    "invitationStatus": "ACCEPTED",
+                    "remoteId": "uniqueIdForRemoteEntity",
+                    "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+                  },
+                  {
+                    "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                    "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                    "invitationStatus": "ACCEPTED",
+                    "remoteId": "uniqueIdForRemoteEntity",
+                    "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+                  }
+                ],
+                "country": "US",
+                "cellphoneNumber": "1234567890",
+                "address": {
+                  "country": "US",
+                  "countyOrProvince": "FL",
+                  "line4": "line4",
+                  "city": "Key West",
+                  "line3": "line3",
+                  "line2": "line2",
+                  "line1": "500 Duval St",
+                  "zipOrPostcode": "33945"
+                },
+                "individual": {
+                  "name": {
+                    "firstName": "Bob",
+                    "lastName": "Smith",
+                    "otherNames": "A",
+                    "title": "Mr"
+                  },
+                  "nationalIdentification": "AB123456C",
+                  "dateOfBirth": "1985-01-01T00:00:00.000Z"
+                },
+                "displayName": "Bob",
+                "created": "2019-01-20T09:00:00.000Z",
+                "type": "Individual",
+                "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
+                "paymentChannel": {
+                  "paymentChannelName": "paymentChannelName",
+                  "routingNumber": "XXXXX6789",
+                  "accountName": "My account",
+                  "countryCode": "US",
+                  "iban": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
+                  "currency": "USD",
+                  "accountNumber": "XXXXXX5678"
+                },
+                "remoteId": "remoteId123",
+                "marketingOptIns": [
+                  {
+                    "optedIn": true,
+                    "timestamp": "2019-01-20T09:00:00.000Z"
+                  },
+                  {
+                    "optedIn": true,
+                    "timestamp": "2019-01-20T09:00:00.000Z"
+                  }
+                ],
+                "watchlistStatusUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
+                "challenge": {
+                  "description": "challenge description",
+                  "value": "challenge test"
+                },
+                "company": {
+                  "taxId": "123",
+                  "name": "ABC Ltd",
+                  "operatingName": "ABC"
+                },
+                "payeeId": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
+                "email": "bob@example.com",
+                "acceptTermsAndConditionsTimestamp": "2019-01-20T09:00:00.000Z"
+              },
+              "amount": 1234,
+              "paymentId": "paymentId",
+              "withdrawable": false,
+              "currency": "USD",
+              "payorPaymentId": "paymenIdVal123123",
+              "paymentMemo": "Payment memo",
+              "remoteId": "remoteIdVal123",
+              "sourceAccountName": "Chase",
+              "status": "SUBMITTED"
+            },
+            {
+              "payee": {
+                "payorRefs": [
+                  {
+                    "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                    "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                    "invitationStatus": "ACCEPTED",
+                    "remoteId": "uniqueIdForRemoteEntity",
+                    "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+                  },
+                  {
+                    "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                    "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                    "invitationStatus": "ACCEPTED",
+                    "remoteId": "uniqueIdForRemoteEntity",
+                    "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+                  }
+                ],
+                "country": "US",
+                "cellphoneNumber": "1234567890",
+                "address": {
+                  "country": "US",
+                  "countyOrProvince": "FL",
+                  "line4": "line4",
+                  "city": "Key West",
+                  "line3": "line3",
+                  "line2": "line2",
+                  "line1": "500 Duval St",
+                  "zipOrPostcode": "33945"
+                },
+                "individual": {
+                  "name": {
+                    "firstName": "Bob",
+                    "lastName": "Smith",
+                    "otherNames": "A",
+                    "title": "Mr"
+                  },
+                  "nationalIdentification": "AB123456C",
+                  "dateOfBirth": "1985-01-01T00:00:00.000Z"
+                },
+                "displayName": "Bob",
+                "created": "2019-01-20T09:00:00.000Z",
+                "type": "Individual",
+                "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
+                "paymentChannel": {
+                  "paymentChannelName": "paymentChannelName",
+                  "routingNumber": "XXXXX6789",
+                  "accountName": "My account",
+                  "countryCode": "US",
+                  "iban": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
+                  "currency": "USD",
+                  "accountNumber": "XXXXXX5678"
+                },
+                "remoteId": "remoteId123",
+                "marketingOptIns": [
+                  {
+                    "optedIn": true,
+                    "timestamp": "2019-01-20T09:00:00.000Z"
+                  },
+                  {
+                    "optedIn": true,
+                    "timestamp": "2019-01-20T09:00:00.000Z"
+                  }
+                ],
+                "watchlistStatusUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
+                "challenge": {
+                  "description": "challenge description",
+                  "value": "challenge test"
+                },
+                "company": {
+                  "taxId": "123",
+                  "name": "ABC Ltd",
+                  "operatingName": "ABC"
+                },
+                "payeeId": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
+                "email": "bob@example.com",
+                "acceptTermsAndConditionsTimestamp": "2019-01-20T09:00:00.000Z"
+              },
+              "amount": 1234,
+              "paymentId": "paymentId",
+              "withdrawable": false,
+              "currency": "USD",
+              "payorPaymentId": "paymenIdVal123123",
+              "paymentMemo": "Payment memo",
+              "remoteId": "remoteIdVal123",
+              "sourceAccountName": "Chase",
+              "status": "SUBMITTED"
+            }
+          ]
+        },
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/Payment"
             },
             "type": "array"
           }
@@ -16499,6 +17981,24 @@
             "type": "array"
           }
         },
+        "type": "object"
+      },
+      "WithdrawPaymentRequest": {
+        "example": {
+          "reason": "Payment submitted in error"
+        },
+        "properties": {
+          "reason": {
+            "description": "Reason for withdrawal",
+            "example": "Payment submitted in error",
+            "maxLength": 256,
+            "minLength": 2,
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
         "type": "object"
       },
       "SupportedCountriesResponse": {
@@ -18414,6 +19914,56 @@
         ],
         "type": "object"
       },
+      "Notifications_2": {
+        "example": {
+          "minimumBalance": 120000
+        },
+        "properties": {
+          "minimumBalance": {
+            "example": 120000,
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "AutoTopUpConfig_2": {
+        "example": {
+          "targetBalance": 300000,
+          "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "minBalance": 10000,
+          "enabled": true
+        },
+        "properties": {
+          "enabled": {
+            "description": "Is auto top-up enabled? automatically trigger funding to top-up the source account balance when the balance falls below the configured minimum level.",
+            "example": true,
+            "type": "boolean"
+          },
+          "minBalance": {
+            "description": "When the payor balance falls below this level then auto top-up will be triggered. Note - This is in minor units.",
+            "example": 10000,
+            "format": "int64",
+            "nullable": true,
+            "type": "integer"
+          },
+          "targetBalance": {
+            "description": "When the payor balance falls below the min balance then auto top-up will request funds bring the balance to this level. Note - this is in minor units.",
+            "example": 300000,
+            "format": "int64",
+            "nullable": true,
+            "type": "integer"
+          },
+          "fundingAccountId": {
+            "description": "Id of funding account from which to pull funds when auto top-up is triggered.  Note - if this is not set then auto top-up is effectively disabled.",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled"
+        ],
+        "type": "object"
+      },
       "LinkForResponse": {
         "example": {
           "rel": "rel",
@@ -18466,7 +20016,7 @@
           "amount": 2,
           "fundingId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "currency": {
-            "currencyCode": "currencyCode"
+            "currencyCode": "USD"
           },
           "status": "status"
         },
@@ -18868,6 +20418,7 @@
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalIncompletePayments": 6,
           "withdrawnDateTime": "2000-01-23T04:56:07.000Z",
+          "totalWithdrawnPayments": 5,
           "instructedDateTime": "instructedDateTime",
           "payoutMemo": "payoutMemo",
           "payorName": "payorName"
@@ -18905,6 +20456,9 @@
             "type": "integer"
           },
           "totalReturnedPayments": {
+            "type": "integer"
+          },
+          "totalWithdrawnPayments": {
             "type": "integer"
           },
           "sourceAccountSummary": {
@@ -19380,6 +20934,153 @@
           "reason",
           "remoteId",
           "sourceAccountName"
+        ],
+        "type": "object"
+      },
+      "Payment": {
+        "example": {
+          "payee": {
+            "payorRefs": [
+              {
+                "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                "invitationStatus": "ACCEPTED",
+                "remoteId": "uniqueIdForRemoteEntity",
+                "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+              },
+              {
+                "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                "invitationStatus": "ACCEPTED",
+                "remoteId": "uniqueIdForRemoteEntity",
+                "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+              }
+            ],
+            "country": "US",
+            "cellphoneNumber": "1234567890",
+            "address": {
+              "country": "US",
+              "countyOrProvince": "FL",
+              "line4": "line4",
+              "city": "Key West",
+              "line3": "line3",
+              "line2": "line2",
+              "line1": "500 Duval St",
+              "zipOrPostcode": "33945"
+            },
+            "individual": {
+              "name": {
+                "firstName": "Bob",
+                "lastName": "Smith",
+                "otherNames": "A",
+                "title": "Mr"
+              },
+              "nationalIdentification": "AB123456C",
+              "dateOfBirth": "1985-01-01T00:00:00.000Z"
+            },
+            "displayName": "Bob",
+            "created": "2019-01-20T09:00:00.000Z",
+            "type": "Individual",
+            "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
+            "paymentChannel": {
+              "paymentChannelName": "paymentChannelName",
+              "routingNumber": "XXXXX6789",
+              "accountName": "My account",
+              "countryCode": "US",
+              "iban": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
+              "currency": "USD",
+              "accountNumber": "XXXXXX5678"
+            },
+            "remoteId": "remoteId123",
+            "marketingOptIns": [
+              {
+                "optedIn": true,
+                "timestamp": "2019-01-20T09:00:00.000Z"
+              },
+              {
+                "optedIn": true,
+                "timestamp": "2019-01-20T09:00:00.000Z"
+              }
+            ],
+            "watchlistStatusUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
+            "challenge": {
+              "description": "challenge description",
+              "value": "challenge test"
+            },
+            "company": {
+              "taxId": "123",
+              "name": "ABC Ltd",
+              "operatingName": "ABC"
+            },
+            "payeeId": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
+            "email": "bob@example.com",
+            "acceptTermsAndConditionsTimestamp": "2019-01-20T09:00:00.000Z"
+          },
+          "amount": 1234,
+          "paymentId": "paymentId",
+          "withdrawable": false,
+          "currency": "USD",
+          "payorPaymentId": "paymenIdVal123123",
+          "paymentMemo": "Payment memo",
+          "remoteId": "remoteIdVal123",
+          "sourceAccountName": "Chase",
+          "status": "SUBMITTED"
+        },
+        "properties": {
+          "paymentId": {
+            "type": "string"
+          },
+          "remoteId": {
+            "example": "remoteIdVal123",
+            "type": "string"
+          },
+          "currency": {
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          },
+          "amount": {
+            "example": 1234,
+            "type": "integer"
+          },
+          "sourceAccountName": {
+            "example": "Chase",
+            "type": "string"
+          },
+          "payorPaymentId": {
+            "example": "paymenIdVal123123",
+            "type": "string"
+          },
+          "paymentMemo": {
+            "example": "Payment memo",
+            "type": "string"
+          },
+          "payee": {
+            "$ref": "#/components/schemas/Payee_2"
+          },
+          "withdrawable": {
+            "example": false,
+            "type": "boolean"
+          },
+          "status": {
+            "enum": [
+              "SUBMITTED",
+              "ACCEPTED",
+              "REJECTED",
+              "WITHDRAWN",
+              "RETURNED",
+              "AWAITING_FUNDS",
+              "FUNDED",
+              "UNFUNDED",
+              "CANCELLED",
+              "REQUESTED"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "paymentId"
         ],
         "type": "object"
       },
@@ -20846,10 +22547,11 @@
       },
       "CurrencyType": {
         "example": {
-          "currencyCode": "currencyCode"
+          "currencyCode": "USD"
         },
         "properties": {
           "currencyCode": {
+            "example": "USD",
             "maxLength": 3,
             "minLength": 3,
             "type": "string"
@@ -21811,6 +23513,38 @@
           }
         }
       },
+      "ListSourceAccountResponseV2_links": {
+        "example": {
+          "rel": "first",
+          "href": "https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+        },
+        "properties": {
+          "rel": {
+            "example": "first",
+            "type": "string"
+          },
+          "href": {
+            "example": "https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc",
+            "type": "string"
+          }
+        }
+      },
+      "ListSourceAccountResponseV3_links": {
+        "example": {
+          "rel": "first",
+          "href": "https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+        },
+        "properties": {
+          "rel": {
+            "example": "first",
+            "type": "string"
+          },
+          "href": {
+            "example": "https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc",
+            "type": "string"
+          }
+        }
+      },
       "GetFundingsResponse_allOf": {
         "properties": {
           "content": {
@@ -22008,6 +23742,7 @@
       },
       "GetPaymentsForPayoutResponseV4_summary": {
         "example": {
+          "withdrawnPayments": 2,
           "submitting": {
             "principal": "principal",
             "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -22110,6 +23845,10 @@
           },
           "returnedPayments": {
             "description": "The count of payments within the payout which have been returned.",
+            "type": "integer"
+          },
+          "withdrawnPayments": {
+            "description": "The count of payments within the payout which have been withdrawn.",
             "type": "integer"
           },
           "payoutType": {
@@ -22313,10 +24052,13 @@
       "tags": [
         "Submit Payout",
         "Get Payout",
+        "Retrieve Payments for Payout",
         "Quote Payout",
         "Instruct Payout",
         "Withdraw Payout",
-        "Payout History"
+        "Payout History",
+        "Payout History",
+        "Withdraw Payment"
       ]
     },
     {
