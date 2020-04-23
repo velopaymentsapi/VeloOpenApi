@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.79",
+    "version": "2.22.80",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -18248,6 +18248,7 @@
               "amount": 1299,
               "currency": "USD",
               "payorPaymentId": "123211321ABSD",
+              "transmissionType": "ACH",
               "paymentMemo": "my memo",
               "remoteId": "remoteId1234",
               "sourceAccountName": "MyAccountName"
@@ -18256,6 +18257,7 @@
               "amount": 1299,
               "currency": "USD",
               "payorPaymentId": "123211321ABSD",
+              "transmissionType": "ACH",
               "paymentMemo": "my memo",
               "remoteId": "remoteId1234",
               "sourceAccountName": "MyAccountName"
@@ -18264,6 +18266,7 @@
               "amount": 1299,
               "currency": "USD",
               "payorPaymentId": "123211321ABSD",
+              "transmissionType": "ACH",
               "paymentMemo": "my memo",
               "remoteId": "remoteId1234",
               "sourceAccountName": "MyAccountName"
@@ -18272,6 +18275,7 @@
               "amount": 1299,
               "currency": "USD",
               "payorPaymentId": "123211321ABSD",
+              "transmissionType": "ACH",
               "paymentMemo": "my memo",
               "remoteId": "remoteId1234",
               "sourceAccountName": "MyAccountName"
@@ -18280,6 +18284,7 @@
               "amount": 1299,
               "currency": "USD",
               "payorPaymentId": "123211321ABSD",
+              "transmissionType": "ACH",
               "paymentMemo": "my memo",
               "remoteId": "remoteId1234",
               "sourceAccountName": "MyAccountName"
@@ -18328,10 +18333,12 @@
         "type": "object"
       },
       "PaymentInstructionV3": {
+        "description": "Instruction for creating a payment",
         "example": {
           "amount": 1299,
           "currency": "USD",
           "payorPaymentId": "123211321ABSD",
+          "transmissionType": "ACH",
           "paymentMemo": "my memo",
           "remoteId": "remoteId1234",
           "sourceAccountName": "MyAccountName"
@@ -18377,6 +18384,9 @@
             "maxLength": 40,
             "minLength": 0,
             "type": "string"
+          },
+          "transmissionType": {
+            "$ref": "#/components/schemas/TransmissionType"
           }
         },
         "required": [
@@ -18619,6 +18629,7 @@
               "withdrawable": false,
               "currency": "USD",
               "payorPaymentId": "paymenIdVal123123",
+              "transmissionType": "ACH",
               "paymentMemo": "Payment memo",
               "remoteId": "remoteIdVal123",
               "sourceAccountName": "Chase",
@@ -18642,6 +18653,7 @@
               "withdrawable": false,
               "currency": "USD",
               "payorPaymentId": "paymenIdVal123123",
+              "transmissionType": "ACH",
               "paymentMemo": "Payment memo",
               "remoteId": "remoteIdVal123",
               "sourceAccountName": "Chase",
@@ -21496,6 +21508,16 @@
         "title": "ISO Currency Code",
         "type": "string"
       },
+      "TransmissionType": {
+        "description": "The transmission type that will be used to send a payment",
+        "enum": [
+          "SAME_DAY_ACH",
+          "WIRE",
+          "ACH"
+        ],
+        "example": "ACH",
+        "type": "string"
+      },
       "QuoteFxSummaryV3": {
         "example": {
           "invertedRate": 1.12,
@@ -21764,6 +21786,7 @@
           "withdrawable": false,
           "currency": "USD",
           "payorPaymentId": "paymenIdVal123123",
+          "transmissionType": "ACH",
           "paymentMemo": "Payment memo",
           "remoteId": "remoteIdVal123",
           "sourceAccountName": "Chase",
@@ -21820,6 +21843,9 @@
               "REQUESTED"
             ],
             "type": "string"
+          },
+          "transmissionType": {
+            "$ref": "#/components/schemas/TransmissionType"
           }
         },
         "required": [
