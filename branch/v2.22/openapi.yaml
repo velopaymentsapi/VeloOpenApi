@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.85
+  version: 2.22.88
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -1039,6 +1039,65 @@ paths:
             $ curl 'https://api.sandbox.velopayments.com/v2/users/self' -i -X GET \
                 -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \
                 -H 'Content-Type: application/json'
+  /v2/users/self/userDetailsUpdate:
+    post:
+      description: |
+        <p>Update the profile details for the given user</p>
+        <p>Only Payee user types are supported</p>
+      operationId: userDetailsUpdateForSelf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailsUpdateRequest'
+        description: The details of the user to update
+        required: true
+      responses:
+        '204':
+          description: request completed okay
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Update User Details for self
+      tags:
+        - Users
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/self/userDetailsUpdate' -i -X POST \
+                  -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                  -H 'Content-Type: application/json' \
+                  -d '{"firstName: "Foo", \
+                       "lastName": "Bar", \
+                       "primaryContactNumber": "+1234567890", \
+                       "secondaryContactNumber": "+!234567890", \
+                       "email": "foo@example.com", \
+                       "smsNumber": "+1234567890", \
+                       }'
   /v2/users/self/mfa/unregister:
     post:
       description: |
@@ -8515,15 +8574,15 @@ components:
           zipOrPostcode: '33945'
         includesReports: true
         allowsLanguageChoice: true
-        paymentPermissions:
-          wire: true
-          sameDayAch: true
         language: EN
         dbaName: Some Biz
         primaryContactPhone: 123-123-1234
         payeeGracePeriodDays: 0
         reminderEmailsOptOut: true
         maxMasterPayorAdmins: 6
+        transmissionTypes:
+          wire: true
+          sameDayAch: true
         manualLockout: true
         collectiveAlias: Payee
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -8602,8 +8661,8 @@ components:
           type: integer
         paymentRails:
           $ref: '#/components/schemas/PaymentRails'
-        paymentPermissions:
-          $ref: '#/components/schemas/PaymentPermissions'
+        transmissionTypes:
+          $ref: '#/components/schemas/TransmissionTypes'
       required:
         - payorId
         - payorName
@@ -11876,6 +11935,7 @@ components:
           totalElements: 33
         content:
           - physicalAccountName: VELO_FBO_MYBANKA_USD
+            country: US
             fundingRef: a1b2c3d4
             balance: 1203489
             pooled: true
@@ -11895,6 +11955,7 @@ components:
             notifications:
               minimumBalance: 120000
           - physicalAccountName: VELO_FBO_MYBANKA_USD
+            country: US
             fundingRef: a1b2c3d4
             balance: 1203489
             pooled: true
@@ -11928,6 +11989,7 @@ components:
     SourceAccountResponseV3:
       example:
         physicalAccountName: VELO_FBO_MYBANKA_USD
+        country: US
         fundingRef: a1b2c3d4
         balance: 1203489
         pooled: true
@@ -11993,6 +12055,12 @@ components:
           $ref: '#/components/schemas/Notifications_2'
         autoTopUpConfig:
           $ref: '#/components/schemas/AutoTopUpConfig_2'
+        country:
+          description: The two character ISO country code for the associated account
+          example: US
+          maxLength: 2
+          minLength: 2
+          type: string
       required:
         - autoTopUpConfig
         - balanceVisible
@@ -14334,7 +14402,7 @@ components:
         - WU
         - BOFA
       type: string
-    PaymentPermissions:
+    TransmissionTypes:
       example:
         wire: true
         sameDayAch: true
