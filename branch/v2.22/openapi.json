@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.92",
+    "version": "2.22.93",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -11620,6 +11620,11 @@
           "fundingAccountRoutingNumber": "123456789",
           "reminderEmailsOptOut": true,
           "maxMasterPayorAdmins": 6,
+          "transmissionTypes": {
+            "ACH": true,
+            "SAME_DAY_ACH": true,
+            "WIRE": true
+          },
           "manualLockout": true,
           "collectiveAlias": "Payee",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -11727,6 +11732,9 @@
           },
           "maxMasterPayorAdmins": {
             "type": "integer"
+          },
+          "transmissionTypes": {
+            "$ref": "#/components/schemas/TransmissionTypes"
           }
         },
         "required": [
@@ -11780,8 +11788,9 @@
           "reminderEmailsOptOut": true,
           "maxMasterPayorAdmins": 6,
           "transmissionTypes": {
-            "wire": true,
-            "sameDayAch": true
+            "ACH": true,
+            "SAME_DAY_ACH": true,
+            "WIRE": true
           },
           "manualLockout": true,
           "collectiveAlias": "Payee",
@@ -11884,7 +11893,7 @@
             "$ref": "#/components/schemas/PaymentRails"
           },
           "transmissionTypes": {
-            "$ref": "#/components/schemas/TransmissionTypes"
+            "$ref": "#/components/schemas/TransmissionTypes_2"
           }
         },
         "required": [
@@ -19083,6 +19092,33 @@
         "readOnly": true,
         "type": "string"
       },
+      "TransmissionTypes": {
+        "example": {
+          "ACH": true,
+          "SAME_DAY_ACH": true,
+          "WIRE": true
+        },
+        "properties": {
+          "ACH": {
+            "description": "Whether the Payor is allowed to pay via ACH",
+            "type": "boolean"
+          },
+          "SAME_DAY_ACH": {
+            "description": "Whether the Payor is allowed to pay via same day ACH",
+            "type": "boolean"
+          },
+          "WIRE": {
+            "description": "Whether the Payor is allowed to pay via wire",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ACH",
+          "SAME_DAY_ACH",
+          "WIRE"
+        ],
+        "type": "object"
+      },
       "Error": {
         "properties": {
           "errorMessage": {
@@ -19195,26 +19231,30 @@
         ],
         "type": "string"
       },
-      "TransmissionTypes": {
+      "TransmissionTypes_2": {
         "example": {
-          "wire": true,
-          "sameDayAch": true
+          "ACH": true,
+          "SAME_DAY_ACH": true,
+          "WIRE": true
         },
         "properties": {
-          "sameDayAch": {
-            "description": "Whether the payor is permitted to pay via same day ACH payments",
-            "nullable": false,
+          "ACH": {
+            "description": "Whether the Payor is allowed to pay via ACH",
             "type": "boolean"
           },
-          "wire": {
-            "description": "Whether the payor is permitted to pay via wire",
-            "nullable": false,
+          "SAME_DAY_ACH": {
+            "description": "Whether the Payor is allowed to pay via same day ACH",
+            "type": "boolean"
+          },
+          "WIRE": {
+            "description": "Whether the Payor is allowed to pay via wire",
             "type": "boolean"
           }
         },
         "required": [
-          "sameDayAch",
-          "wire"
+          "ACH",
+          "SAME_DAY_ACH",
+          "WIRE"
         ],
         "type": "object"
       },
