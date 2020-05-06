@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.100
+  version: 2.22.101
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -1014,7 +1014,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse_2'
+                $ref: '#/components/schemas/UserResponse'
           description: Get User Details
         '401':
           content:
@@ -1049,7 +1049,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserDetailsUpdateRequest'
+              $ref: '#/components/schemas/PayeeUserSelfUpdateRequest'
         description: The details of the user to update
         required: true
       responses:
@@ -8232,118 +8232,57 @@ components:
       required:
         - smsNumber
       type: object
-    UserResponse_2:
+    PayeeUserSelfUpdateRequest:
+      description: |
+        <p>All properties are optional</p>
+        <p>Only provided properties will be updated</p>
+        <p>Use null to null out a property that is allowed to be nullable</p>
       example:
-        lastName: Doe
-        roles:
-          - payor.admin
-        lockedOutTimestamp: 2000-01-23T04:56:07.000Z
-        smsNumber: '11235555555'
-        entityId: 7fffa261-ac68-49e6-b605-d24a444d9206
-        mfaStatus: REGISTERED
         firstName: John
+        lastName: Doe
         primaryContactNumber: '11235555555'
-        mfaType: TOTP
-        lockedOut: true
-        id: 8bbf301c-948f-4445-b411-357eec53e441
-        mfaVerified: false
-        email: foo@example.com
+        smsNumber: '11235555555'
         secondaryContactNumber: '11235555550'
-        status: ENABLED
+        email: foo@example.com
       properties:
-        id:
-          description: The id of the user
-          example: 8bbf301c-948f-4445-b411-357eec53e441
-          format: uuid
-          type: string
-        status:
-          description: |
-            The status of the user
-            when the user has been invited but not yet enrolled they will have a PENDING status
-          enum:
-            - ENABLED
-            - DISABLED
-            - PENDING
-          example: ENABLED
-          type: string
-        email:
-          description: the email address of the user
-          example: foo@example.com
-          format: email
-          type: string
-        smsNumber:
-          description: |
-            The phone number of a device that the user can receive sms messages on
-          example: '11235555555'
-          pattern: '^\+?[1-9]\d{1,14}$'
-          type: string
         primaryContactNumber:
           description: |
             The main contact number for the user
           example: '11235555555'
+          nullable: true
           pattern: '^\+?[1-9]\d{1,14}$'
           type: string
         secondaryContactNumber:
           description: |
             The secondary contact number for the user
           example: '11235555550'
+          nullable: true
           pattern: '^\+?[1-9]\d{1,14}$'
           type: string
         firstName:
           example: John
           maxLength: 128
           minLength: 1
+          nullable: true
           type: string
         lastName:
           example: Doe
           maxLength: 128
           minLength: 1
-          type: string
-        entityId:
-          description: |
-            The payorId or payeeId or null if the user is not a payor or payee user
-          example: 7fffa261-ac68-49e6-b605-d24a444d9206
-          format: uuid
-          type: string
-        roles:
-          description: |
-            The role(s) for the user
-          example:
-            - payor.admin
-          items:
-            $ref: '#/components/schemas/UserResponse_2_roles'
-          minItems: 1
-          type: array
-        mfaType:
-          description: The type of the MFA device
-          enum:
-            - SMS
-            - YUBIKEY
-            - TOTP
-          example: TOTP
-          type: string
-        mfaVerified:
-          description: |
-            Will be true if the user has logged in successfully using the MFA Device
-          example: false
-          type: boolean
-        mfaStatus:
-          description: The status of the MFA device
-          enum:
-            - REGISTERED
-            - UNREGISTERED
-          example: REGISTERED
-          type: string
-        lockedOut:
-          description: If true the user is currently locked out and unable to log in
-          example: true
-          type: boolean
-        lockedOutTimestamp:
-          description: |
-            A timestamp showing when the user was locked out
-            If null then the user is not currently locked out
-          format: date-time
           nullable: true
+          type: string
+        email:
+          description: the email address of the user
+          example: foo@example.com
+          format: email
+          nullable: true
+          type: string
+        smsNumber:
+          description: |
+            The phone number of a device that the user can receive sms messages on
+          example: '11235555555'
+          nullable: true
+          pattern: '^\+?[1-9]\d{1,14}$'
           type: string
       type: object
     SelfMFATypeUnregisterRequest:
@@ -18542,10 +18481,6 @@ components:
           type: string
         href:
           example: 'https://api.sandbox.velopayments.com/v2/users??type=PAYOR&page=1&pageSize=10'
-          type: string
-    UserResponse_2_roles:
-      properties:
-        name:
           type: string
     PayorLinksResponse_links:
       example:
