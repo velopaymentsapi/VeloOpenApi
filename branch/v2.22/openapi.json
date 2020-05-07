@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.105",
+    "version": "2.22.106",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -7209,15 +7209,30 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/CreateFundingAccountRequestFbo"
-                  },
-                  {
-                    "$ref": "#/components/schemas/CreateFundingAccountRequestWubsDecoupled"
+              "examples": {
+                "fbo": {
+                  "summary": "FBO Example",
+                  "value": {
+                    "type": "FBO",
+                    "name": "My FBO Account",
+                    "payorId": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
+                    "accountName": "My Account Name",
+                    "accountNumber": 1231231234556,
+                    "routingNumber": 123456789
                   }
-                ]
+                },
+                "wubs": {
+                  "summary": "WUBS",
+                  "value": {
+                    "type": "WUBS_DECOUPLED",
+                    "name": "My WUBS Account",
+                    "payorId": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
+                    "currency": "USD"
+                  }
+                }
+              },
+              "schema": {
+                "$ref": "#/components/schemas/CreateFundingAccountRequestV2"
               }
             }
           }
@@ -15810,7 +15825,16 @@
         },
         "type": "object"
       },
-      "CreateFundingAccountRequestFbo": {
+      "CreateFundingAccountRequestV2": {
+        "example": {
+          "routingNumber": "routingNumber",
+          "accountName": "accountName",
+          "name": "name",
+          "currency": "USD",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "type": "FBO",
+          "accountNumber": "accountNumber"
+        },
         "properties": {
           "type": {
             "enum": [
@@ -15829,51 +15853,25 @@
             "type": "string"
           },
           "accountName": {
+            "description": "Required if type is FBO",
             "maxLength": 22,
             "minLength": 1,
             "type": "string"
           },
           "accountNumber": {
+            "description": "Required if type is FBO",
             "maxLength": 17,
             "minLength": 4,
             "type": "string"
           },
           "routingNumber": {
+            "description": "Required if type is FBO",
             "maxLength": 9,
             "minLength": 9,
             "type": "string"
-          }
-        },
-        "required": [
-          "accountName",
-          "accountNumber",
-          "name",
-          "payorId",
-          "routingNumber",
-          "type"
-        ],
-        "type": "object"
-      },
-      "CreateFundingAccountRequestWubsDecoupled": {
-        "properties": {
-          "type": {
-            "enum": [
-              "FBO",
-              "WUBS_DECOUPLED"
-            ],
-            "type": "string"
-          },
-          "name": {
-            "maxLength": 30,
-            "minLength": 3,
-            "type": "string"
-          },
-          "payorId": {
-            "format": "uuid",
-            "type": "string"
           },
           "currency": {
-            "description": "ISO 4217 currency code",
+            "description": "ISO 4217 currency code, Required if type is WUBS_DECOUPLED",
             "example": "USD",
             "maxLength": 3,
             "minLength": 3,
@@ -15881,7 +15879,6 @@
           }
         },
         "required": [
-          "currency",
           "name",
           "payorId",
           "type"
