@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.102
+  version: 2.22.103
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -4983,7 +4983,7 @@ paths:
             maximum: 100
             minimum: 1
             type: integer
-        - description: 'List of sort fields (e.g. ?sort=accountName:asc,name:asc) Default is accountName:asc The supported sort fields are - accountName, name.'
+        - description: 'List of sort fields (e.g. ?sort=accountName:asc,name:asc) Default is accountName:asc The supported sort fields are - accountName, name and currency.'
           in: query
           name: sort
           required: false
@@ -5172,16 +5172,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateFundingAccountRequest'
+              oneOf:
+                - $ref: '#/components/schemas/CreateFundingAccountRequestFbo'
+                - $ref: '#/components/schemas/CreateFundingAccountRequestWubsDecoupled'
       responses:
         '202':
-          description: Funding Account Created
+          description: Funding Account Creation Request Accepted
           headers:
             Location:
-              description: Reference to created account
+              description: Reference to status object
               schema:
                 format: uri
                 type: string
+            Retry-After:
+              description: How long the user agent should wait before making a follow-up request (seconds)
+              schema:
+                type: integer
         '400':
           content:
             application/json:
@@ -5347,6 +5353,12 @@ paths:
           schema:
             format: uuid
             type: string
+        - description: The type of source account.
+          in: query
+          name: type
+          required: false
+          schema:
+            $ref: '#/components/schemas/SourceAccountType'
         - description: Page number. Default is 1.
           in: query
           name: page
@@ -11289,6 +11301,7 @@ components:
           totalElements: 1
         content:
           - physicalAccountName: VELO_FBO_MYBANKA_USD
+            accountType: FBO
             fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             fundingRef: a1b2c3d4
             balance: 1203489
@@ -11302,6 +11315,7 @@ components:
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           - physicalAccountName: VELO_FBO_MYBANKA_USD
+            accountType: FBO
             fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             fundingRef: a1b2c3d4
             balance: 1203489
@@ -11329,6 +11343,7 @@ components:
     SourceAccountResponse:
       example:
         physicalAccountName: VELO_FBO_MYBANKA_USD
+        accountType: FBO
         fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         fundingRef: a1b2c3d4
         balance: 1203489
@@ -11388,6 +11403,9 @@ components:
           format: uuid
           nullable: true
           type: string
+        accountType:
+          example: FBO
+          type: string
       type: object
     FundingRequestV1:
       example:
@@ -11444,6 +11462,7 @@ components:
           totalElements: 33
         content:
           - physicalAccountName: VELO_FBO_MYBANKA_USD
+            accountType: FBO
             fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             fundingRef: a1b2c3d4
             balance: 1203489
@@ -11463,6 +11482,7 @@ components:
             notifications:
               minimumBalance: 120000
           - physicalAccountName: VELO_FBO_MYBANKA_USD
+            accountType: FBO
             fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             fundingRef: a1b2c3d4
             balance: 1203489
@@ -11496,6 +11516,7 @@ components:
     SourceAccountResponseV2:
       example:
         physicalAccountName: VELO_FBO_MYBANKA_USD
+        accountType: FBO
         fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         fundingRef: a1b2c3d4
         balance: 1203489
@@ -11565,8 +11586,11 @@ components:
           type: string
         autoTopUpConfig:
           $ref: '#/components/schemas/AutoTopUpConfig'
+        accountType:
+          example: FBO
+          type: string
       required:
-        - autoTopUpConfig
+        - accountType
         - balanceVisible
         - fundingRef
         - id
@@ -11714,6 +11738,7 @@ components:
     FundingAccountType:
       enum:
         - FBO
+        - WUBS_DECOUPLED
       type: string
     ListFundingAccountsResponse_2:
       description: List Funding Accounts Response Object
@@ -11760,17 +11785,19 @@ components:
             $ref: '#/components/schemas/FundingAccountResponse_2'
           type: array
       type: object
-    CreateFundingAccountRequest:
-      example:
-        routingNumber: routingNumber
-        accountName: accountName
-        name: name
-        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        accountNumber: accountNumber
+    CreateFundingAccountRequestFbo:
       properties:
+        type:
+          enum:
+            - FBO
+            - WUBS_DECOUPLED
+          type: string
         name:
           maxLength: 30
-          minLength: 1
+          minLength: 3
+          type: string
+        payorId:
+          format: uuid
           type: string
         accountName:
           maxLength: 22
@@ -11784,15 +11811,39 @@ components:
           maxLength: 9
           minLength: 9
           type: string
-        payorId:
-          format: uuid
-          type: string
       required:
         - accountName
         - accountNumber
         - name
         - payorId
         - routingNumber
+        - type
+      type: object
+    CreateFundingAccountRequestWubsDecoupled:
+      properties:
+        type:
+          enum:
+            - FBO
+            - WUBS_DECOUPLED
+          type: string
+        name:
+          maxLength: 30
+          minLength: 3
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        currency:
+          description: ISO 4217 currency code
+          example: USD
+          maxLength: 3
+          minLength: 3
+          type: string
+      required:
+        - currency
+        - name
+        - payorId
+        - type
       type: object
     FundingAccountResponse_2:
       example:
@@ -11865,6 +11916,11 @@ components:
         - amount
         - fundingAccountId
       type: object
+    SourceAccountType:
+      enum:
+        - FBO
+        - WUBS_DECOUPLED
+      type: string
     ListSourceAccountResponseV3:
       description: List Source Accounts Response Object
       example:
@@ -11882,6 +11938,7 @@ components:
         content:
           - physicalAccountName: VELO_FBO_MYBANKA_USD
             country: US
+            type: FBO
             fundingRef: a1b2c3d4
             balance: 1203489
             pooled: true
@@ -11890,18 +11947,18 @@ components:
             physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             autoTopUpConfig:
               targetBalance: 300000
-              fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+              fundingAccountId: 640ab1bd-8a6a-4603-a83a-1edbc3ed5689
               minBalance: 10000
               enabled: true
             currency: USD
             railsId: BOA_RAIL
-            balanceVisible: true
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             notifications:
               minimumBalance: 120000
           - physicalAccountName: VELO_FBO_MYBANKA_USD
             country: US
+            type: FBO
             fundingRef: a1b2c3d4
             balance: 1203489
             pooled: true
@@ -11910,12 +11967,11 @@ components:
             physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             autoTopUpConfig:
               targetBalance: 300000
-              fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+              fundingAccountId: 640ab1bd-8a6a-4603-a83a-1edbc3ed5689
               minBalance: 10000
               enabled: true
             currency: USD
             railsId: BOA_RAIL
-            balanceVisible: true
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             notifications:
@@ -11936,6 +11992,7 @@ components:
       example:
         physicalAccountName: VELO_FBO_MYBANKA_USD
         country: US
+        type: FBO
         fundingRef: a1b2c3d4
         balance: 1203489
         pooled: true
@@ -11944,12 +12001,11 @@ components:
         physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         autoTopUpConfig:
           targetBalance: 300000
-          fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          fundingAccountId: 640ab1bd-8a6a-4603-a83a-1edbc3ed5689
           minBalance: 10000
           enabled: true
         currency: USD
         railsId: BOA_RAIL
-        balanceVisible: true
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         notifications:
@@ -11967,14 +12023,20 @@ components:
         currency:
           enum:
             - USD
+            - EUR
+            - GBP
+            - CAD
+            - HKD
           example: USD
           maxLength: 3
           minLength: 3
           type: string
         fundingRef:
+          description: The funding reference (will not be set for DECOUPLED accounts).
           example: a1b2c3d4
           type: string
         physicalAccountName:
+          description: The physical account name (will not be set for DECOUPLED accounts).
           example: VELO_FBO_MYBANKA_USD
           type: string
         railsId:
@@ -11987,20 +12049,23 @@ components:
           example: MyAccountName
           type: string
         pooled:
-          type: boolean
-        balanceVisible:
+          description: The pooled account flag (will not be set for DECOUPLED accounts).
           type: boolean
         customerId:
           example: Joe Customer
           nullable: true
           type: string
         physicalAccountId:
+          description: The physical account id (will not be set for DECOUPLED accounts).
           format: uuid
           type: string
         notifications:
           $ref: '#/components/schemas/Notifications_2'
         autoTopUpConfig:
           $ref: '#/components/schemas/AutoTopUpConfig_2'
+        type:
+          example: FBO
+          type: string
         country:
           description: The two character ISO country code for the associated account
           example: US
@@ -12008,13 +12073,9 @@ components:
           minLength: 2
           type: string
       required:
-        - autoTopUpConfig
-        - balanceVisible
-        - fundingRef
         - id
-        - physicalAccountName
-        - pooled
         - railsId
+        - type
       type: object
     TransferRequest_2:
       properties:
@@ -12054,13 +12115,11 @@ components:
         content:
           - amount: 2
             fundingId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            currency:
-              currencyCode: USD
+            currency: USD
             status: status
           - amount: 2
             fundingId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            currency:
-              currencyCode: USD
+            currency: USD
             status: status
       properties:
         links:
@@ -15594,7 +15653,7 @@ components:
     AutoTopUpConfig_2:
       example:
         targetBalance: 300000
-        fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        fundingAccountId: 640ab1bd-8a6a-4603-a83a-1edbc3ed5689
         minBalance: 10000
         enabled: true
       properties:
@@ -15616,6 +15675,7 @@ components:
           type: integer
         fundingAccountId:
           description: Id of funding account from which to pull funds when auto top-up is triggered.  Note - if this is not set then auto top-up is effectively disabled.
+          example: 640ab1bd-8a6a-4603-a83a-1edbc3ed5689
           format: uuid
           type: string
       required:
@@ -15659,8 +15719,7 @@ components:
       example:
         amount: 2
         fundingId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        currency:
-          currencyCode: USD
+        currency: USD
         status: status
       properties:
         fundingId:
@@ -15670,7 +15729,13 @@ components:
           format: int64
           type: integer
         currency:
-          $ref: '#/components/schemas/CurrencyType'
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
+          type: string
         status:
           type: string
       type: object
@@ -17834,18 +17899,6 @@ components:
       required:
         - dateOfBirth
         - name
-      type: object
-    CurrencyType:
-      example:
-        currencyCode: USD
-      properties:
-        currencyCode:
-          example: USD
-          maxLength: 3
-          minLength: 3
-          type: string
-      required:
-        - currencyCode
       type: object
     FundingEvent:
       example:
