@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.22.115",
+    "version": "2.22.116",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -13413,12 +13413,12 @@
           "batchId": "cb6ff8c6-85e9-45a6-b7d9-d05305db67f3",
           "rejectedCsvRows": [
             {
-              "rejectedContent": "remoteId1,USD,-123.45,ref1",
+              "rejectedContent": "unable,to,process,csv,line",
               "lineNumber": 3,
               "message": "rejected message 1"
             },
             {
-              "rejectedContent": "remoteId1,USD,-123.45,ref1",
+              "rejectedContent": "unable,to,process,csv,line",
               "lineNumber": 3,
               "message": "rejected message 1"
             }
@@ -14757,12 +14757,12 @@
           "batchId": "cb6ff8c6-85e9-45a6-b7d9-d05305db67f3",
           "rejectedCsvRows": [
             {
-              "rejectedContent": "remoteId1,USD,-123.45,ref1",
+              "rejectedContent": "unable,to,process,csv,line",
               "lineNumber": 3,
               "message": "rejected message 1"
             },
             {
-              "rejectedContent": "remoteId1,USD,-123.45,ref1",
+              "rejectedContent": "unable,to,process,csv,line",
               "lineNumber": 3,
               "message": "rejected message 1"
             }
@@ -24511,7 +24511,7 @@
       },
       "CreatePayeesCSVResponse_rejectedCsvRows": {
         "example": {
-          "rejectedContent": "remoteId1,USD,-123.45,ref1",
+          "rejectedContent": "unable,to,process,csv,line",
           "lineNumber": 3,
           "message": "rejected message 1"
         },
@@ -24521,7 +24521,7 @@
             "type": "integer"
           },
           "rejectedContent": {
-            "example": "remoteId1,USD,-123.45,ref1",
+            "example": "unable,to,process,csv,line",
             "type": "string"
           },
           "message": {
