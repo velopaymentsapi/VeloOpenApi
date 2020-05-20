@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.120
+  version: 2.22.121
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -11942,6 +11942,7 @@ components:
           - physicalAccountName: VELO_FBO_MYBANKA_USD
             country: US
             type: FBO
+            archived: true
             fundingRef: a1b2c3d4
             balance: 1203489
             pooled: true
@@ -11962,6 +11963,7 @@ components:
           - physicalAccountName: VELO_FBO_MYBANKA_USD
             country: US
             type: FBO
+            archived: true
             fundingRef: a1b2c3d4
             balance: 1203489
             pooled: true
@@ -11996,6 +11998,7 @@ components:
         physicalAccountName: VELO_FBO_MYBANKA_USD
         country: US
         type: FBO
+        archived: true
         fundingRef: a1b2c3d4
         balance: 1203489
         pooled: true
@@ -12075,6 +12078,9 @@ components:
           maxLength: 2
           minLength: 2
           type: string
+        archived:
+          description: A flag for whether the source account has been archived.  Only present in the response if true.
+          type: boolean
       required:
         - id
         - railsId
