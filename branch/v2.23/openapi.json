@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.23.4",
+    "version": "2.23.5",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -15785,6 +15785,7 @@
             {
               "routingNumber": 12345678,
               "country": "US",
+              "archived": true,
               "accountName": "Payor Corp",
               "name": "My Funding Account",
               "currency": "USD",
@@ -15796,6 +15797,7 @@
             {
               "routingNumber": 12345678,
               "country": "US",
+              "archived": true,
               "accountName": "Payor Corp",
               "name": "My Funding Account",
               "currency": "USD",
@@ -15889,6 +15891,7 @@
         "example": {
           "routingNumber": 12345678,
           "country": "US",
+          "archived": true,
           "accountName": "Payor Corp",
           "name": "My Funding Account",
           "currency": "USD",
@@ -15945,6 +15948,10 @@
             "description": "Funding account type",
             "example": "FBO",
             "type": "string"
+          },
+          "archived": {
+            "description": "A flag for whether the funding account has been archived.  Only present in the response if true.",
+            "type": "boolean"
           }
         },
         "type": "object"
@@ -16006,6 +16013,7 @@
               "physicalAccountName": "VELO_FBO_MYBANKA_USD",
               "country": "US",
               "type": "FBO",
+              "archived": true,
               "fundingRef": "a1b2c3d4",
               "balance": 1203489,
               "pooled": true,
@@ -16030,6 +16038,7 @@
               "physicalAccountName": "VELO_FBO_MYBANKA_USD",
               "country": "US",
               "type": "FBO",
+              "archived": true,
               "fundingRef": "a1b2c3d4",
               "balance": 1203489,
               "pooled": true,
@@ -16076,6 +16085,7 @@
           "physicalAccountName": "VELO_FBO_MYBANKA_USD",
           "country": "US",
           "type": "FBO",
+          "archived": true,
           "fundingRef": "a1b2c3d4",
           "balance": 1203489,
           "pooled": true,
@@ -16173,6 +16183,10 @@
             "maxLength": 2,
             "minLength": 2,
             "type": "string"
+          },
+          "archived": {
+            "description": "A flag for whether the source account has been archived.  Only present in the response if true.",
+            "type": "boolean"
           }
         },
         "required": [
