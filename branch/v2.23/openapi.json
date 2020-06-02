@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.23.17",
+    "version": "2.23.18",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -4008,7 +4008,7 @@
     "/v2/payees": {
       "post": {
         "deprecated": true,
-        "description": "Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query\nfor status (201 - Created, 400 - invalid request body, 409 - if there is a duplicate remote id within the\nbatch / if there is a duplicate email within the batch).\n",
+        "description": "Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query\nfor status (201 - Created, 400 - invalid request body\n",
         "operationId": "v2CreatePayee",
         "requestBody": {
           "content": {
@@ -4238,16 +4238,6 @@
               }
             },
             "description": "The resource was not found or is no longer available\n"
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_409"
-                }
-              }
-            },
-            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Initiate Payee Creation",
@@ -5208,7 +5198,7 @@
         ]
       },
       "post": {
-        "description": "Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query\nfor status (201 - Created, 400 - invalid request body, 409 - if there is a duplicate remote id within the\nbatch / if there is a duplicate email within the batch).\n",
+        "description": "Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query\nfor status (201 - Created, 400 - invalid request body. In addition to standard semantic validations, a\n400 will also result if there is a duplicate remote id within the batch / if there is a duplicate email\nwithin the batch, i.e. if there is a conflict between the data provided for one payee within the batch and\nthat provided for another payee within the same batch). The validation at this stage is intra-batch only.\nValidation against payees who have already been invited occurs subsequently during processing of the batch.\n",
         "operationId": "v3CreatePayee",
         "requestBody": {
           "content": {
@@ -5438,16 +5428,6 @@
               }
             },
             "description": "The resource was not found or is no longer available\n"
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_409"
-                }
-              }
-            },
-            "description": "The request contained data that would result in a duplicate value\n"
           }
         },
         "summary": "Initiate Payee Creation",
