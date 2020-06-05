@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.23.21
+  version: 2.23.22
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -1343,11 +1343,12 @@ paths:
                 Content-Type: application/json;charset=UTF-8
               body:
                 payorId: 0a818933-087d-47f2-ad83-2f986ed087eb
+                payorXid: ABC_12345678
                 payorName: Joe
                 address:
                   line1: 101 California Street
                   city: San Francisco
-                  zipOrPostcode: '94111'
+                  zipOrPostcode: 94111
                   country: US
                 primaryContactName: Joe
                 primaryContactPhone: 1231231234
@@ -3326,6 +3327,7 @@ paths:
       tags:
         - Payees
     get:
+      deprecated: true
       description: Get Payee by Id
       operationId: getPayeeByIdV3
       parameters:
@@ -3522,6 +3524,7 @@ paths:
           contractPath: /v3/payees/026cc3c8-3a0c-4083-a05b-e908048c1b08
   /v3/payees:
     get:
+      deprecated: true
       description: Get a paginated response listing the payees for a payor.
       operationId: listPayeesV3
       parameters:
@@ -3747,6 +3750,7 @@ paths:
                 -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \
                 -H 'Content-Type: application/json'
     post:
+      deprecated: true
       description: |
         Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query
         for status (201 - Created, 400 - invalid request body. In addition to standard semantic validations, a
@@ -3937,6 +3941,7 @@ paths:
                 "taxId":"223344556"},"ofacOverride":false,"language":"FR"}]}'
   '/v3/payees/batch/{batchId}':
     get:
+      deprecated: true
       description: |
         Fetch the status of a specific batch of payees. The batch is fully processed when status is ACCEPTED and pendingCount is 0 ( 200 - OK, 404 - batch not found ).
       operationId: queryBatchStatusV3
@@ -3993,6 +3998,7 @@ paths:
                 -H 'Authorization: Bearer f01caad1-5ae5-454d-9467-5053e459fe45'
   '/v3/payees/{payeeId}/invite':
     post:
+      deprecated: true
       description: |
         <p>Resend an invite to the Payee The payee must have already been invited by the payor and not yet accepted or declined</p>
         <p>Any previous invites to the payee by this Payor will be invalidated</p>
@@ -4062,6 +4068,7 @@ paths:
                 -d '{"payorId":"545e29bd-75a8-4354-8192-ae68bab59d7b"}'
   '/v3/payees/payors/{payorId}/invitationStatus':
     get:
+      deprecated: true
       description: |
         Returns a filtered, paginated list of payees associated with a payor, along with invitation status and grace period end date.
       operationId: getPayeesInvitationStatusV3
@@ -4202,6 +4209,7 @@ paths:
                 -H 'Authorization: Bearer ed73aa9a-b51b-44cb-a8e9-11e2fb85046b'
   /v3/payees/deltas:
     get:
+      deprecated: true
       description: Get a paginated response listing payee changes.
       operationId: listPayeeChangesV3
       parameters:
@@ -4281,6 +4289,7 @@ paths:
                 -H 'Content-Type: application/json'
   '/v3/payees/{payeeId}/remoteIdUpdate':
     post:
+      deprecated: true
       description: |
         <p>Update the remote Id for the given Payee Id.</p>
       parameters:
@@ -4341,6 +4350,7 @@ paths:
         - Payees
   '/v3/payees/{payeeId}/payeeDetailsUpdate':
     post:
+      deprecated: true
       description: |
         <p>Update payee details for the given Payee Id.<p>
       operationId: payeeDetailsUpdateV3
@@ -8523,6 +8533,7 @@ components:
         primaryContactName: Joe Buck
         payeeGracePeriodProcessingEnabled: true
         supportContact: support@example.com
+        payorXid: ABC_201234
         address:
           country: US
           countyOrProvince: FL
@@ -8559,6 +8570,10 @@ components:
         payorName:
           description: The name of the payor.
           example: 'Example, Corp'
+          type: string
+        payorXid:
+          description: A unique identifier that an external system uses to reference the payor in their system
+          example: ABC_201234
           type: string
         address:
           $ref: '#/components/schemas/PayorAddressV2'
