@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.21.41
+  version: 2.22.123
   x-logo:
     url: https://apidocs.velopayments.com/velo-logo-e9573185_new.svg
 servers:
@@ -100,8 +100,9 @@ tags:
   name: Payors
 - description: Payout Service APIs allow you to create and instruct payouts to payees.
   name: Payouts
-- description: Payment Audit Service APIs allow you to see payment history to payees.
-  name: Payments
+- description: Payment Audit Service APIs allow you to see the history of fundings,
+    payouts, and payments to payees.
+  name: Payment Audit Service
 - description: |
     <p>When a payor creates a payee then an invite token is emailed to the invited payee</p>
     <p>Payees use this token to onboard to the platform</p>
@@ -299,13 +300,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: |
           List of sort fields (e.g. ?sort=email:asc,lastName:asc)
@@ -388,8 +391,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Delete a User
       tags:
       - Users
@@ -455,8 +459,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get User
       tags:
       - Users
@@ -509,8 +514,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Disable a User
       tags:
       - Users
@@ -564,8 +570,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Enable a User
       tags:
       - Users
@@ -621,7 +628,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/inline_response_412'
           description: |
             The request could not be completed as a precondition was not met
       summary: Invite a User
@@ -691,8 +698,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Update User Role
       tags:
       - Users
@@ -753,8 +761,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Unregister MFA for the user
       tags:
       - Users
@@ -862,8 +871,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Unlock a User
       tags:
       - Users
@@ -921,8 +931,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         409:
           content:
             application/json:
@@ -1006,7 +1017,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse_2'
+                $ref: '#/components/schemas/UserResponse'
           description: Get User Details
         401:
           content:
@@ -1031,6 +1042,65 @@ paths:
           $ curl 'https://api.sandbox.velopayments.com/v2/users/self' -i -X GET \
               -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \
               -H 'Content-Type: application/json'
+  /v2/users/self/userDetailsUpdate:
+    post:
+      description: |
+        <p>Update the profile details for the given user</p>
+        <p>Only Payee user types are supported</p>
+      operationId: userDetailsUpdateForSelf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayeeUserSelfUpdateRequest'
+        description: The details of the user to update
+        required: true
+      responses:
+        204:
+          description: request completed okay
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Update User Details for self
+      tags:
+      - Users
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v2/users/self/userDetailsUpdate' -i -X POST \
+                -H 'Authorization: Bearer 147c0008-2ec1-4009-9e2e-1f435f02a69b' \
+                -H 'Content-Type: application/json' \
+                -d '{"firstName: "Foo", \
+                     "lastName": "Bar", \
+                     "primaryContactNumber": "+1234567890", \
+                     "secondaryContactNumber": "+!234567890", \
+                     "email": "foo@example.com", \
+                     "smsNumber": "+1234567890", \
+                     }'
   /v2/users/self/mfa/unregister:
     post:
       description: |
@@ -1176,7 +1246,7 @@ paths:
         Get a Single Payor by Id.
       operationId: getPayorById
       parameters:
-      - description: The account owner Payor ID
+      - description: The Payor Id
         in: path
         name: payorId
         required: true
@@ -1256,7 +1326,7 @@ paths:
         Get a Single Payor by Id.
       operationId: getPayorByIdV2
       parameters:
-      - description: The account owner Payor ID
+      - description: The Payor Id
         in: path
         name: payorId
         required: true
@@ -1342,7 +1412,7 @@ paths:
         programatic users which can be assigned unique keys.
       operationId: payorCreateApplicationRequest
       parameters:
-      - description: The account owner Payor ID
+      - description: The Payor Id
         in: path
         name: payorId
         required: true
@@ -1398,8 +1468,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         403:
           content:
             application/json:
@@ -1435,7 +1506,7 @@ paths:
       description: Create an an API key for the given payor Id and application Id
       operationId: payorCreateApiKeyRequest
       parameters:
-      - description: The account owner Payor ID
+      - description: The Payor Id
         in: path
         name: payorId
         required: true
@@ -1522,8 +1593,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Create API Key
       tags:
       - Payors
@@ -1547,7 +1619,7 @@ paths:
         such as payees registering and onboarding.
       operationId: payorEmailOptOut
       parameters:
-      - description: The account owner Payor ID
+      - description: The Payor Id
         in: path
         name: payorId
         required: true
@@ -1624,7 +1696,7 @@ paths:
         sent to payees.
       operationId: payorAddPayorLogo
       parameters:
-      - description: The account owner Payor ID
+      - description: The Payor Id
         in: path
         name: payorId
         required: true
@@ -1659,8 +1731,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Add Logo
       tags:
       - Payors
@@ -1675,7 +1748,7 @@ paths:
       description: Get the payor branding details.
       operationId: payorGetBranding
       parameters:
-      - description: The account owner Payor ID
+      - description: The Payor Id
         in: path
         name: payorId
         required: true
@@ -1866,8 +1939,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         403:
           content:
             application/json:
@@ -1933,8 +2007,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         403:
           content:
             application/json:
@@ -2197,7 +2272,7 @@ paths:
           $ref: '#/components/schemas/OnboardedStatus'
       - description: Email address
         in: query
-        name: Email
+        name: email
         required: false
         schema:
           example: bob@example.com
@@ -2394,8 +2469,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         400:
           content:
             application/json:
@@ -2460,8 +2536,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         400:
           content:
             application/json:
@@ -2539,8 +2616,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         409:
           content:
             application/json:
@@ -2975,8 +3053,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         400:
           content:
             application/json:
@@ -3058,8 +3137,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         400:
           content:
             application/json:
@@ -3200,8 +3280,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         400:
           content:
             application/json:
@@ -3283,7 +3364,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PayeeResponseV3'
+                $ref: '#/components/schemas/PayeeDetailResponse'
           description: Success response, request completed okay
           x-contracts:
           - contractId: 1
@@ -3473,10 +3554,16 @@ paths:
             value: 0a818933-087d-47f2-ad83-2f986ed087eb
       - description: The watchlistStatus of the payees.
         in: query
-        name: ofacStatus
+        name: watchlistStatus
         required: false
         schema:
           $ref: '#/components/schemas/WatchlistStatus'
+      - description: Payee disabled
+        in: query
+        name: disabled
+        required: false
+        schema:
+          type: boolean
       - description: The onboarded status of the payees.
         in: query
         name: onboardedStatus
@@ -3485,7 +3572,7 @@ paths:
           $ref: '#/components/schemas/OnboardedStatus'
       - description: Email address
         in: query
-        name: Email
+        name: email
         required: false
         schema:
           example: bob@example.com
@@ -3616,8 +3703,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         400:
           content:
             application/json:
@@ -3808,8 +3896,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         400:
           content:
             application/json:
@@ -3889,8 +3978,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         400:
           content:
             application/json:
@@ -3949,8 +4039,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         400:
           content:
             application/json:
@@ -4097,8 +4188,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         400:
           content:
             application/json:
@@ -4253,8 +4345,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         409:
           content:
             application/json:
@@ -4265,6 +4358,88 @@ paths:
       summary: Update Payee Remote Id
       tags:
       - Payees
+  /v3/payees/{payeeId}/payeeDetailsUpdate:
+    post:
+      description: |
+        <p>Update payee details for the given Payee Id.<p>
+      operationId: payeeDetailsUpdateV3
+      parameters:
+      - description: The UUID of the payee.
+        in: path
+        name: payeeId
+        required: true
+        schema:
+          example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePayeeDetailsRequest'
+        description: Request to update payee details
+        required: true
+      responses:
+        204:
+          description: Request accepted
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Update Payee Details
+      tags:
+      - Payees
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v3/payees/77f84ae9-42df-49d7-941b-47360347f86f/payeeDetailsUpdate' -i -X POST \
+              -H 'Authorization: Bearer ed73aa9a-b51b-44cb-a8e9-11e2fb85046b' \
+              -H 'Content-Type: application/json' \
+              -d '{
+                      "address": {
+                          "line1": "line1",
+                          "line2": "line2",
+                          "line3": "line3",
+                          "line4": "line4",
+                          "city": "City",
+                          "countyOrProvince": "county",
+                          "zipOrPostcode": "BS11AA",
+                          "country": "US"
+                      },
+                      "individual": {
+                          "name": {
+                              "title": "Mr",
+                              "firstName": "A",
+                              "otherNames": "P",
+                              "lastName": "Smith"
+                          },
+                          "nationalIdentification": "987654321",
+                          "dateOfBirth": "1970-04-03"
+                      }
+                  }'
   /v1/sourceAccounts:
     description: List Source Accounts
     get:
@@ -4293,13 +4468,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: |
           List of sort fields e.g. ?sort=name:asc
@@ -4371,8 +4548,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get details about given source account.
       tags:
       - Funding Manager
@@ -4422,8 +4600,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Create Funding Request
       tags:
       - Funding Manager
@@ -4480,8 +4659,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Set notifications
       tags:
       - Funding Manager
@@ -4541,8 +4721,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Create Funding Request
       tags:
       - Funding Manager
@@ -4595,13 +4776,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: |
           List of sort fields e.g. ?sort=name:asc
@@ -4645,8 +4828,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get list of source accounts
       tags:
       - Funding Manager
@@ -4701,8 +4885,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get details about given source account.
       tags:
       - Funding Manager
@@ -4764,8 +4949,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Transfer Funds between source accounts
       tags:
       - Funding Manager
@@ -4802,16 +4988,19 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: List of sort fields (e.g. ?sort=accountName:asc,name:asc) Default
-          is accountName:asc The supported sort fields are - accountName, name.
+          is accountName:asc The supported sort fields are - accountName, name and
+          currency.
         in: query
         name: sort
         required: false
@@ -4894,8 +5083,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Funding Account
       tags:
       - Funding Manager
@@ -4944,13 +5134,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: List of sort fields (e.g. ?sort=accountName:asc,name:asc) Default
           is accountName:asc The supported sort fields are - accountName, name.
@@ -4997,17 +5189,39 @@ paths:
       requestBody:
         content:
           application/json:
+            examples:
+              fbo:
+                summary: FBO Example
+                value:
+                  type: FBO
+                  name: My FBO Account
+                  payorId: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+                  accountName: My Account Name
+                  accountNumber: 1231231234556
+                  routingNumber: 123456789
+              wubs:
+                summary: WUBS
+                value:
+                  type: WUBS_DECOUPLED
+                  name: My WUBS Account
+                  payorId: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+                  currency: USD
             schema:
-              $ref: '#/components/schemas/CreateFundingAccountRequest'
+              $ref: '#/components/schemas/CreateFundingAccountRequestV2'
       responses:
         202:
-          description: Funding Account Created
+          description: Funding Account Creation Request Accepted
           headers:
             Location:
-              description: Reference to created account
+              description: Reference to status object
               schema:
                 format: uri
                 type: string
+            Retry-After:
+              description: How long the user agent should wait before making a follow-up
+                request (seconds)
+              schema:
+                type: integer
         400:
           content:
             application/json:
@@ -5075,8 +5289,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Funding Account
       tags:
       - Funding Manager
@@ -5128,8 +5343,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Create Funding Request
       tags:
       - Funding Manager
@@ -5173,6 +5389,12 @@ paths:
         schema:
           format: uuid
           type: string
+      - description: The type of source account.
+        in: query
+        name: type
+        required: false
+        schema:
+          $ref: '#/components/schemas/SourceAccountType'
       - description: Page number. Default is 1.
         in: query
         name: page
@@ -5181,13 +5403,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: |
           List of sort fields e.g. ?sort=name:asc
@@ -5231,8 +5455,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get list of source accounts
       tags:
       - Funding Manager
@@ -5286,8 +5511,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get details about given source account.
       tags:
       - Funding Manager
@@ -5348,8 +5574,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Transfer Funds between source accounts
       tags:
       - Funding Manager
@@ -5385,13 +5612,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       responses:
         200:
@@ -5425,14 +5654,16 @@ paths:
       - Funding Manager
   /v1/paymentaudit/fundings:
     get:
+      deprecated: true
       description: |
-        Get a list of Fundings for a payor.
+        <p>Get a list of Fundings for a payor.</p>
+        <p>Deprecated (use v4/paymentaudit/fundings)</p>
       operationId: getFundingsV1
       parameters:
       - description: The account owner Payor ID
         in: query
         name: payorId
-        required: false
+        required: true
         schema:
           format: uuid
           type: string
@@ -5444,13 +5675,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: |
           List of sort fields. Example: ```?sort=destinationCurrency:asc,destinationAmount:asc```
@@ -5467,13 +5700,35 @@ paths:
                 $ref: '#/components/schemas/GetFundingsResponse'
           description: Get Fundings normal response
         400:
-          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         404:
-          description: Payor Id Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Fundings for Payor
       tags:
       - Payment Audit Service
-      - Funding Manager
       x-code-samples:
       - lang: shell
         source: |
@@ -5481,7 +5736,10 @@ paths:
               -H 'Authorization: Bearer 3667f994-7d41-4d20-990d-b79fa720e56b'
   /v1/paymentaudit/payoutStatistics:
     get:
-      description: Get payout statistics for a payor.
+      deprecated: true
+      description: |
+        <p>Get payout statistics for a payor.</p>
+        <p>Deprecated (Use /v4/paymentaudit/payoutStatistics)</p>
       operationId: getPayoutStatsV1
       parameters:
       - description: The account owner Payor ID. Required for external users.
@@ -5497,18 +5755,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetPayoutStatistics'
-          description: List Source Account response
+          description: Payout Statistics response
         400:
-          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         401:
-          description: Not Authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
         403:
-          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         404:
-          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payout Statistics
       tags:
-      - Payout History
+      - Payment Audit Service
       x-code-samples:
       - lang: shell
         source: |
@@ -5539,17 +5816,17 @@ paths:
         required: false
         schema:
           default: 1
-          example: 1
           format: int32
           type: integer
-      - description: Page size. Default is 100. Max allowable is 1000.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 100
-          example: 100
           format: int32
+          maximum: 1000
+          minimum: 1
           type: integer
       responses:
         200:
@@ -5573,7 +5850,8 @@ paths:
     get:
       deprecated: true
       description: |
-        Get List of payouts for payor
+        <p>Get List of payouts for payor</p>
+        <p>Deprecated Use v4</p>
       operationId: getPayoutsForPayorV3
       parameters:
       - description: The account owner Payor ID
@@ -5627,13 +5905,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: |
           List of sort fields (e.g. ?sort=submittedDateTime:asc,instructedDateTime:asc,status:asc)
@@ -5652,13 +5932,32 @@ paths:
                 $ref: '#/components/schemas/GetPayoutsResponseV3'
           description: Payor data found
         400:
-          description: Invalid Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         401:
-          description: Not Authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
         403:
-          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         404:
-          description: Payor Id Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payouts for Payor
       tags:
       - Payment Audit Service
@@ -5759,18 +6058,20 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: |
-          List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId
-          The supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,
-          routingNumber, accountNumber, remoteId, submittedDateTime and status
+          <p>List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId</p>
+          <p>The supported sort fields are: sourceAmount, sourceCurrency, paymentAmount, paymentCurrency,
+          routingNumber, accountNumber, remoteId, submittedDateTime and status</p>
         in: query
         name: sort
         required: false
@@ -5792,17 +6093,35 @@ paths:
                 $ref: '#/components/schemas/GetPaymentsForPayoutResponseV3'
           description: 200 response, data found okay
         400:
-          description: Invalid Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         401:
-          description: Not Authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
         403:
-          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         404:
-          description: Payout Id Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payments for Payout
       tags:
       - Payment Audit Service
-      - Payout History
       x-code-samples:
       - lang: shell
         source: |
@@ -5941,13 +6260,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: |
           List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId
@@ -5971,14 +6292,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListPaymentsResponse'
+                $ref: '#/components/schemas/ListPaymentsResponseV3'
           description: Details of Payee
         400:
-          description: Bad Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         401:
-          description: Not Authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
         403:
-          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
       summary: Get List of Payments
       tags:
       - Payment Audit Service
@@ -6011,12 +6346,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaymentResponseV3'
           description: 200 response, request completed okay
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         401:
-          description: Not Authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
         403:
-          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         404:
-          description: Payment Id Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payment
       tags:
       - Payment Audit Service
@@ -6025,6 +6381,72 @@ paths:
         source: |
           $ curl 'https://api.sandbox.velopayments.com/v3/paymentaudit/payments/c3a422c2-12ac-4416-84fe-964221bd9815' -i \
               -H 'Authorization: Bearer 67a1b299-69b1-4fdf-a576-96b81199a2b9'
+  /v3/paymentaudit/transactions:
+    get:
+      deprecated: true
+      description: Download a CSV file containing payments in a date range. Uses Transfer-Encoding
+        - chunked to stream to the client. Date range is inclusive of both the start
+        and end dates.
+      operationId: exportTransactionsCSVV3
+      parameters:
+      - description: |
+          The Payor ID for whom you wish to run the report.
+          For a Payor requesting the report, this could be their exact Payor, or it could be a child/descendant Payor.
+        in: query
+        name: payorId
+        required: false
+        schema:
+          format: uuid
+          type: string
+      - description: Start date, inclusive. Format is YYYY-MM-DD
+        in: query
+        name: startDate
+        required: false
+        schema:
+          format: date
+          type: string
+      - description: End date, inclusive. Format is YYYY-MM-DD
+        in: query
+        name: endDate
+        required: false
+        schema:
+          format: date
+          type: string
+      responses:
+        200:
+          content:
+            application/csv:
+              schema:
+                $ref: '#/components/schemas/PayorAmlTransactionV3'
+          description: Export Transactions response
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Export Transactions
+      tags:
+      - Payment Audit Service
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/transactions?startDate=2018-05-01&endDate=2018-05-31' -i -X GET \
+              -H 'Authorization: Bearer 76748e09-775d-4e2d-b889-f0555901d8eb'
   /v4/paymentaudit/payouts:
     get:
       description: |
@@ -6090,13 +6512,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: |
           List of sort fields (e.g. ?sort=submittedDateTime:asc,instructedDateTime:asc,status:asc)
@@ -6115,13 +6539,32 @@ paths:
                 $ref: '#/components/schemas/GetPayoutsResponseV4'
           description: Payor data found
         400:
-          description: Invalid Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         401:
-          description: Not Authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
         403:
-          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         404:
-          description: Payor Id Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payouts for Payor
       tags:
       - Payment Audit Service
@@ -6221,13 +6664,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: |
           List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by remoteId
@@ -6254,17 +6699,35 @@ paths:
                 $ref: '#/components/schemas/GetPaymentsForPayoutResponseV4'
           description: 200 response, data found okay
         400:
-          description: Invalid Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         401:
-          description: Not Authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
         403:
-          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         404:
-          description: Payout Id Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payments for Payout
       tags:
       - Payment Audit Service
-      - Payout History
       x-code-samples:
       - lang: shell
         source: |
@@ -6402,13 +6865,15 @@ paths:
           default: 1
           format: int32
           type: integer
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: |
           List of sort fields (e.g. ?sort=submittedDateTime:asc,status:asc). Default is sort by submittedDateTime:desc,paymentId:asc
@@ -6435,11 +6900,25 @@ paths:
                 $ref: '#/components/schemas/ListPaymentsResponseV4'
           description: Details of Payee
         400:
-          description: Bad Request Parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         401:
-          description: Not Authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
         403:
-          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
       summary: Get List of Payments
       tags:
       - Payment Audit Service
@@ -6471,12 +6950,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaymentResponseV4'
           description: 200 response, request completed okay
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         401:
-          description: Not Authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
         403:
-          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
         404:
-          description: Payment Id Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payment
       tags:
       - Payment Audit Service
@@ -6485,17 +6985,207 @@ paths:
         source: |
           $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/payments/c3a422c2-12ac-4416-84fe-964221bd9815' -i \
               -H 'Authorization: Bearer 67a1b299-69b1-4fdf-a576-96b81199a2b9'
-  /v3/paymentaudit/transactions:
+  /v4/paymentaudit/fundings:
+    get:
+      description: |
+        <p>Get a list of Fundings for a payor.</p>
+      operationId: getFundingsV4
+      parameters:
+      - description: The account owner Payor ID
+        in: query
+        name: payorId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: Page number. Default is 1.
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      - description: The number of results to return in a page
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 25
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+      - description: |
+          List of sort fields. Example: ```?sort=destinationCurrency:asc,destinationAmount:asc```
+          Default is no sort. The supported sort fields are: dateTime and amount.
+        in: query
+        name: sort
+        schema:
+          type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetFundingsResponse'
+          description: Get Fundings normal response
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Get Fundings for Payor
+      tags:
+      - Payment Audit Service
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/fundings?payorId=2a5d8af2-a1ed-4d7f-b9a7-ebe4b333be5a' -i -X GET \
+              -H 'Authorization: Bearer 3667f994-7d41-4d20-990d-b79fa720e56b'
+  /v4/paymentaudit/payoutStatistics:
     get:
       deprecated: true
+      description: |
+        <p>Get payout statistics for a payor.</p>
+      operationId: getPayoutStatsV4
+      parameters:
+      - description: The account owner Payor ID. Required for external users.
+        in: query
+        name: payorId
+        required: false
+        schema:
+          format: uuid
+          type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPayoutStatistics'
+          description: Payout Statistics response
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Get Payout Statistics
+      tags:
+      - Payment Audit Service
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/payoutStatistics?payorId=c61b32ac-8e50-433e-9372-b5b1c8180742' -i -X GET \
+              -H 'Authorization: Bearer e71d3dfe-3587-4df6-9f8d-59d3135d7bf7'
+  /v4/payments/deltas:
+    get:
+      description: Get a paginated response listing payment changes.
+      operationId: listPaymentChangesV4
+      parameters:
+      - description: The Payor ID to find associated Payments
+        in: query
+        name: payorId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      - description: The updatedSince filter in the format YYYY-MM-DDThh:mm:ss+hh:mm
+        in: query
+        name: updatedSince
+        required: true
+        schema:
+          format: date-time
+          type: string
+      - description: Page number. Default is 1.
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      - description: The number of results to return in a page
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 100
+          format: int32
+          maximum: 1000
+          minimum: 1
+          type: integer
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentDeltaResponseV4'
+          description: Details of Payment Changes
+        400:
+          description: Bad Request
+      summary: List Payment Changes
+      tags:
+      - Payment Audit Service
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v4/payments/deltas?pageSize=2&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \
+              -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \
+              -H 'Content-Type: application/json'
+  /v4/paymentaudit/transactions:
+    get:
       description: Download a CSV file containing payments in a date range. Uses Transfer-Encoding
         - chunked to stream to the client. Date range is inclusive of both the start
         and end dates.
-      operationId: exportTransactionsCSVV3
+      operationId: exportTransactionsCSVV4
       parameters:
       - description: |
-          The Payor ID for whom you wish to run the report.
-          For a Payor requesting the report, this could be their exact Payor, or it could be a child/descendant Payor.
+          <p>The Payor ID for whom you wish to run the report.</p>
+          <p>For a Payor requesting the report, this could be their exact Payor, or it could be a child/descendant Payor.</p>
         in: query
         name: payorId
         required: false
@@ -6516,64 +7206,13 @@ paths:
         schema:
           format: date
           type: string
-      responses:
-        200:
-          content:
-            application/csv:
-              schema:
-                $ref: '#/components/schemas/PayorAmlTransactionV3'
-          description: Export Transactions response
-        400:
-          description: invalid Request
-        401:
-          description: Not Authorized
-        403:
-          description: Forbidden
-      summary: Export Transactions
-      tags:
-      - Payment Audit Service
-      x-code-samples:
-      - lang: shell
-        source: |
-          $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/transactions?startDate=2018-05-01&endDate=2018-05-31' -i -X GET \
-              -H 'Authorization: Bearer 76748e09-775d-4e2d-b889-f0555901d8eb'
-  /v4/paymentaudit/transactions:
-    get:
-      description: Download a CSV file containing payments in a date range. Uses Transfer-Encoding
-        - chunked to stream to the client. Date range is inclusive of both the start
-        and end dates.
-      operationId: exportTransactionsCSVV4
-      parameters:
       - description: |
-          The Payor ID for whom you wish to run the report.
-          For a Payor requesting the report, this could be their exact Payor, or it could be a child/descendant Payor.
-        in: query
-        name: payorId
-        required: false
-        schema:
-          format: uuid
-          type: string
-      - description: Start date, inclusive. Format is YYYY-MM-DD
-        in: query
-        name: startDate
-        required: false
-        schema:
-          format: date
-          type: string
-      - description: Start date, inclusive. Format is YYYY-MM-DD
-        in: query
-        name: submittedDateFrom
-        required: false
-        schema:
-          format: date
-          type: string
-      - description: |
-          Mode to determine whether to include other Payor's data in the results.
-          May only be used if payorId is specified.
-          Can be omitted or set to 'payorOnly' or 'payorAndDescendants'.
-          payorOnly: Only include results for the specified Payor. This is the default if 'include' is omitted.
-          payorAndDescendants: Aggregate results for all descendant Payors of the specified Payor. Should only be used if the Payor with the specified payorId has at least one child Payor.
-                               Note when a Payor requests the report and include=payorAndDescendants is used, the following additional columns are included in the CSV: Payor Name, Payor Id
+          <p>Mode to determine whether to include other Payor's data in the results.</p>
+          <p>May only be used if payorId is specified.</p>
+          <p>Can be omitted or set to 'payorOnly' or 'payorAndDescendants'.</p>
+          <p>payorOnly: Only include results for the specified Payor. This is the default if 'include' is omitted.</p>
+          <p>payorAndDescendants: Aggregate results for all descendant Payors of the specified Payor. Should only be used if the Payor with the specified payorId has at least one child Payor.</p>
+          <p>Note when a Payor requests the report and include=payorAndDescendants is used, the following additional columns are included in the CSV: Payor Name, Payor Id</p>
         in: query
         name: include
         required: false
@@ -6611,12 +7250,12 @@ paths:
         <p>The results can be obtained by issuing a HTTP GET to the URL returned in the location header.</p>
         <p>**NOTE:** amount values in payments must be in 'minor units' format. E.g. cents for USD, pence for GBP etc.</p>
          with no decimal places.
-      operationId: submitPayout
+      operationId: submitPayoutV3
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreatePayoutRequest'
+              $ref: '#/components/schemas/CreatePayoutRequestV3'
           multipart/form-data:
             example: |
               remoteId,currency,amount,paymentMemo,sourceAccountName,payorPaymentId
@@ -6645,7 +7284,7 @@ paths:
                   description: Create a new payout from a CSV source file and return
                     a location header with a link to get the payout
                   items:
-                    $ref: '#/components/schemas/PaymentInstruction'
+                    $ref: '#/components/schemas/PaymentInstructionV3'
                   type: array
               type: object
         description: Post amount to transfer using stored funding account details.
@@ -6681,7 +7320,7 @@ paths:
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
       summary: Submit Payout
       tags:
-      - Submit Payout
+      - Payout Service
       x-code-samples:
       - lang: shell
         source: |
@@ -6694,6 +7333,7 @@ paths:
       description: Withdraw Payout will delete payout details from payout service
         and rails services but will just move the status of the payout to WITHDRAWN
         in payment audit.
+      operationId: withdrawPayoutV3
       parameters:
       - description: Id of the payout
         in: path
@@ -6729,11 +7369,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Withdraw Payout
       tags:
-      - Withdraw Payout
+      - Payout Service
       x-code-samples:
       - lang: shell
         source: |
@@ -6742,6 +7383,7 @@ paths:
               -H 'Content-Type: application/json'
     get:
       description: Get payout summary - returns the current state of the payout.
+      operationId: getPayoutSummaryV3
       parameters:
       - description: Id of the payout
         in: path
@@ -6755,7 +7397,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PayoutSummaryResponse'
+                $ref: '#/components/schemas/PayoutSummaryResponseV3'
           description: Details of Payout
         401:
           content:
@@ -6775,11 +7417,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payout Summary
       tags:
-      - Get Payout
+      - Payout Service
       x-code-samples:
       - lang: shell
         source: |
@@ -6788,6 +7431,7 @@ paths:
               -H 'Content-Type: application/json'
     post:
       description: Instruct a payout to be made for the specified payoutId.
+      operationId: instructPayoutV3
       parameters:
       - description: Id of the payout
         in: path
@@ -6823,8 +7467,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         409:
           content:
             application/json:
@@ -6834,7 +7479,7 @@ paths:
             The request contained data that would result in a duplicate value
       summary: Instruct Payout
       tags:
-      - Instruct Payout
+      - Payout Service
       x-code-samples:
       - lang: shell
         source: |
@@ -6844,6 +7489,7 @@ paths:
   /v3/payouts/{payoutId}/quote:
     post:
       description: Create quote for a payout
+      operationId: createQuoteForPayoutV3
       parameters:
       - description: Id of the payout
         in: path
@@ -6857,14 +7503,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuoteResponse'
+                $ref: '#/components/schemas/QuoteResponseV3'
           description: Quote for payout
         404:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
         409:
           content:
             application/json:
@@ -6874,7 +7521,7 @@ paths:
             The request contained data that would result in a duplicate value
       summary: Create a quote for the payout
       tags:
-      - Quote Payout
+      - Payout Service
       x-code-samples:
       - lang: shell
         source: |
@@ -6933,13 +7580,15 @@ paths:
         required: false
         schema:
           type: string
-      - description: Page size. Default is 25. Max allowable is 100.
+      - description: The number of results to return in a page
         in: query
         name: pageSize
         required: false
         schema:
           default: 25
           format: int32
+          maximum: 100
+          minimum: 1
           type: integer
       - description: Page number. Default is 1.
         in: query
@@ -6954,17 +7603,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PagedPaymentsResponse'
+                $ref: '#/components/schemas/PagedPaymentsResponseV3'
           description: Payments for payout
         404:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Retrieve payments for a payout
       tags:
-      - Payments for Payout
+      - Payout Service
       x-code-samples:
       - lang: shell
         source: |
@@ -6974,100 +7624,11 @@ paths:
   /v1/paymentChannelRules:
     get:
       description: List the country specific payment channel rules.
+      operationId: listPaymentChannelRulesV1
       responses:
         200:
           content:
             application/json:
-              example: |
-                HTTP/1.1 200 OK
-                Content-Length: 2158
-                Content-Type: application/json;charset=UTF-8
-
-                {
-                  "bank" : [ {
-                    "isoCountryCode" : "US",
-                    "rules" : [ {
-                      "element" : "accountName",
-                      "required" : true,
-                      "displayName" : "Account Holder Name",
-                      "minLength" : 1,
-                      "maxLength" : 100,
-                      "validation" : "^.*$",
-                      "displayOrder" : 1
-                    }, {
-                      "element" : "accountNumber",
-                      "required" : true,
-                      "displayName" : "Account Number",
-                      "minLength" : 6,
-                      "maxLength" : 11,
-                      "validation" : "^[0-9]{6,11}$",
-                      "displayOrder" : 3
-                    }, {
-                      "element" : "routingNumber",
-                      "required" : true,
-                      "displayName" : "Routing Number",
-                      "minLength" : 9,
-                      "maxLength" : 9,
-                      "validation" : "^[0-9]{9}$",
-                      "displayOrder" : 2
-                    }, {
-                      "element" : "paymentChannelName",
-                      "required" : false,
-                      "displayName" : "Payment Channel Name",
-                      "minLength" : 1,
-                      "maxLength" : 20,
-                      "validation" : "^.*$"
-                    }, {
-                      "element" : "currency",
-                      "required" : true,
-                      "displayName" : "Currency",
-                      "minLength" : 3,
-                      "maxLength" : 3,
-                      "validation" : "^[A-Z]{3}$"
-                    } ]
-                  }, {
-                    "isoCountryCode" : "GB",
-                    "rules" : [ {
-                      "element" : "accountName",
-                      "required" : true,
-                      "displayName" : "Account Holder Name",
-                      "minLength" : 1,
-                      "maxLength" : 100,
-                      "validation" : "^.*$",
-                      "displayOrder" : 1
-                    }, {
-                      "element" : "accountNumber",
-                      "required" : true,
-                      "displayName" : "Account Number",
-                      "minLength" : 8,
-                      "maxLength" : 8,
-                      "validation" : "^[0-9]{8}$",
-                      "displayOrder" : 3
-                    }, {
-                      "element" : "routingNumber",
-                      "required" : true,
-                      "displayName" : "Sort Code",
-                      "minLength" : 6,
-                      "maxLength" : 6,
-                      "validation" : "^[0-9]{6}$",
-                      "displayOrder" : 2
-                    }, {
-                      "element" : "paymentChannelName",
-                      "required" : false,
-                      "displayName" : "Payment Channel Name",
-                      "minLength" : 1,
-                      "maxLength" : 20,
-                      "validation" : "^.*$"
-                    }, {
-                      "element" : "currency",
-                      "required" : true,
-                      "displayName" : "Currency",
-                      "minLength" : 3,
-                      "maxLength" : 3,
-                      "validation" : "^[A-Z]{3}$"
-                    } ]
-                  } ]
-                }
               schema:
                 $ref: '#/components/schemas/PaymentChannelRulesResponse'
           description: List Payment Channel Country Rules
@@ -7137,11 +7698,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Resource not found
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Withdraw a Payment
       tags:
-      - Withdraw Payment
+      - Payout Service
       x-code-samples:
       - lang: shell
         source: |
@@ -7175,13 +7737,13 @@ paths:
   /v2/supportedCountries:
     get:
       description: List the supported countries.
-      operationId: listSupportedCountries
+      operationId: listSupportedCountriesV2
       responses:
         200:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SupportedCountriesResponse_2'
+                $ref: '#/components/schemas/SupportedCountriesResponseV2'
           description: List of Supported Countries
       security: []
       summary: List Supported Countries
@@ -7194,13 +7756,13 @@ paths:
   /v2/currencies:
     get:
       description: List the supported currencies.
-      operationId: listSupportedCurrencies
+      operationId: listSupportedCurrenciesV2
       responses:
         200:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SupportedCurrencyResponse'
+                $ref: '#/components/schemas/SupportedCurrencyResponseV2'
           description: List Supported Currencies
       security: []
       summary: List Supported Currencies
@@ -7516,24 +8078,6 @@ components:
           nullable: true
           type: string
       type: object
-    ErrorResponse:
-      description: Error response returned by all error conditions in Velo Services
-      properties:
-        errors:
-          description: one or more errors
-          items:
-            $ref: '#/components/schemas/Error'
-          minItems: 1
-          nullable: true
-          type: array
-        correlationId:
-          description: a unique identifier to track a request or related sequence
-            of requests
-          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
-          format: uuid
-          nullable: true
-          type: string
-      type: object
     InviteUserRequest:
       example:
         firstName: John
@@ -7782,119 +8326,57 @@ components:
       required:
       - smsNumber
       type: object
-    UserResponse_2:
+    PayeeUserSelfUpdateRequest:
+      description: |
+        <p>All properties are optional</p>
+        <p>Only provided properties will be updated</p>
+        <p>Use null to null out a property that is allowed to be nullable</p>
       example:
-        lastName: Doe
-        roles:
-        - payor.admin
-        lockedOutTimestamp: 2000-01-23T04:56:07.000+00:00
-        smsNumber: "11235555555"
-        entityId: 7fffa261-ac68-49e6-b605-d24a444d9206
-        mfaStatus: REGISTERED
         firstName: John
+        lastName: Doe
         primaryContactNumber: "11235555555"
-        mfaType: TOTP
-        lockedOut: true
-        id: 8bbf301c-948f-4445-b411-357eec53e441
-        mfaVerified: false
-        email: foo@example.com
+        smsNumber: "11235555555"
         secondaryContactNumber: "11235555550"
-        status: ENABLED
+        email: foo@example.com
       properties:
-        id:
-          description: The id of the user
-          example: 8bbf301c-948f-4445-b411-357eec53e441
-          format: uuid
-          type: string
-        status:
-          description: |
-            The status of the user
-            when the user has been invited but not yet enrolled they will have a PENDING status
-          enum:
-          - ENABLED
-          - DISABLED
-          - PENDING
-          example: ENABLED
-          type: string
-        email:
-          description: the email address of the user
-          example: foo@example.com
-          format: email
-          type: string
-        smsNumber:
-          description: |
-            The phone number of a device that the user can receive sms messages on
-          example: "11235555555"
-          pattern: ^\+?[1-9]\d{1,14}$
-          type: string
         primaryContactNumber:
           description: |
             The main contact number for the user
           example: "11235555555"
+          nullable: true
           pattern: ^\+?[1-9]\d{1,14}$
           type: string
         secondaryContactNumber:
           description: |
             The secondary contact number for the user
           example: "11235555550"
+          nullable: true
           pattern: ^\+?[1-9]\d{1,14}$
           type: string
         firstName:
           example: John
           maxLength: 128
           minLength: 1
+          nullable: true
           type: string
         lastName:
           example: Doe
           maxLength: 128
           minLength: 1
-          type: string
-        entityId:
-          description: |
-            The payorId or payeeId or null if the user is not a payor or payee user
-          example: 7fffa261-ac68-49e6-b605-d24a444d9206
-          format: uuid
-          type: string
-        roles:
-          description: |
-            The role(s) for the user
-          example:
-          - payor.admin
-          items:
-            $ref: '#/components/schemas/UserResponse_2_roles'
-          minItems: 1
-          type: array
-        mfaType:
-          description: The type of the MFA device
-          enum:
-          - SMS
-          - YUBIKEY
-          - TOTP
-          example: TOTP
-          type: string
-        mfaVerified:
-          description: |
-            Will be true if the user has logged in successfully using the MFA Device
-          example: false
-          type: boolean
-        mfaStatus:
-          description: The status of the MFA device
-          enum:
-          - REGISTERED
-          - UNREGISTERED
-          example: REGISTERED
-          type: string
-        lockedOut:
-          description: If true the user is currently locked out and unable to log
-            in
-          example: true
-          type: boolean
-        lockedOutTimestamp:
-          description: |
-            A timestamp showing when the user was locked out
-            If null then the user is not currently locked out
-          format: date-time
           nullable: true
+          type: string
+        email:
+          description: the email address of the user
+          example: foo@example.com
+          format: email
+          nullable: true
+          type: string
+        smsNumber:
+          description: |
+            The phone number of a device that the user can receive sms messages on
+          example: "11235555555"
+          nullable: true
+          pattern: ^\+?[1-9]\d{1,14}$
           type: string
       type: object
     SelfMFATypeUnregisterRequest:
@@ -8004,6 +8486,10 @@ components:
         fundingAccountRoutingNumber: "123456789"
         reminderEmailsOptOut: true
         maxMasterPayorAdmins: 6
+        transmissionTypes:
+          ACH: true
+          SAME_DAY_ACH: true
+          WIRE: true
         manualLockout: true
         collectiveAlias: Payee
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -8090,8 +8576,28 @@ components:
           type: boolean
         maxMasterPayorAdmins:
           type: integer
+        transmissionTypes:
+          $ref: '#/components/schemas/TransmissionTypes'
       required:
       - payorName
+      type: object
+    ErrorResponse:
+      description: Error response returned by all error conditions in Velo Services
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/Error'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence
+            of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
       type: object
     PayorV2:
       example:
@@ -8115,6 +8621,10 @@ components:
         payeeGracePeriodDays: 0
         reminderEmailsOptOut: true
         maxMasterPayorAdmins: 6
+        transmissionTypes:
+          ACH: true
+          SAME_DAY_ACH: true
+          WIRE: true
         manualLockout: true
         collectiveAlias: Payee
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -8194,6 +8704,8 @@ components:
           type: integer
         paymentRails:
           $ref: '#/components/schemas/PaymentRails'
+        transmissionTypes:
+          $ref: '#/components/schemas/TransmissionTypes_2'
       required:
       - payorId
       - payorName
@@ -9432,10 +9944,10 @@ components:
       example:
         batchId: cb6ff8c6-85e9-45a6-b7d9-d05305db67f3
         rejectedCsvRows:
-        - rejectedContent: remoteId1,USD,-123.45,ref1
+        - rejectedContent: unable,to,process,csv,line
           lineNumber: 3
           message: rejected message 1
-        - rejectedContent: remoteId1,USD,-123.45,ref1
+        - rejectedContent: unable,to,process,csv,line
           lineNumber: 3
           message: rejected message 1
       properties:
@@ -9633,17 +10145,15 @@ components:
             $ref: '#/components/schemas/PayeeInvitationStatusResponse'
           type: array
       type: object
-    PayeeResponseV3:
+    PayeeDetailResponse:
       example:
         payorRefs:
         - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
           invitationStatusTimestamp: 2019-01-20T09:00:00Z
-          invitationStatus: ACCEPTED
           remoteId: uniqueIdForRemoteEntity
           paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
         - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
           invitationStatusTimestamp: 2019-01-20T09:00:00Z
-          invitationStatus: ACCEPTED
           remoteId: uniqueIdForRemoteEntity
           paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
         watchlistOverrideComment: watchlist override comment
@@ -9687,6 +10197,9 @@ components:
         marketingOptInDecision: true
         watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00+00:00
         disabledComment: reason for disabled
+        challenge:
+          description: challenge description
+          value: challenge test
       properties:
         payeeId:
           example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
@@ -9788,6 +10301,8 @@ components:
           nullable: true
           readOnly: true
           type: string
+        challenge:
+          $ref: '#/components/schemas/Challenge_2'
       type: object
     WatchlistStatus:
       enum:
@@ -9821,111 +10336,61 @@ components:
         - payorRefs:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00Z
-            invitationStatus: ACCEPTED
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00Z
-            invitationStatus: ACCEPTED
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          watchlistOverrideComment: Example reason for the watchlist status being
+            overridden
           country: US
-          cellphoneNumber: "1234567890"
-          address:
-            country: US
-            countyOrProvince: FL
-            line4: line4
-            city: Key West
-            line3: line3
-            line2: line2
-            line1: 500 Duval St
-            zipOrPostcode: "33945"
+          disabledUpdatedTimestamp: 2019-01-20T09:00:00Z
           individual:
             name:
               firstName: Bob
               lastName: Smith
-              otherNames: A
+              otherNames: H
               title: Mr
-          displayName: ABC
           created: 2019-01-20T09:00:00Z
-          gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-          paymentChannel:
-            paymentChannelName: My payment channel
-            routingNumber: XXXXX6789
-            accountName: My account
-            countryCode: UK
-            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-            currency: USD
-            accountNumber: XXXXXX5678
-          marketingOptIns:
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00Z
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00Z
+          displayName: ABC
           watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00+00:00
-          challenge:
-            description: challenge description
-            value: challenge test
+          disabledComment: reason for disabled
+          disabled: true
           company:
-            name: ABC Ltd.
-            operatingName: ABC
+            name: ABC Group Plc
+            operatingName: ABC Co
           payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
           email: bob@example.com
-          acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00Z
         - payorRefs:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00Z
-            invitationStatus: ACCEPTED
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00Z
-            invitationStatus: ACCEPTED
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          watchlistOverrideComment: Example reason for the watchlist status being
+            overridden
           country: US
-          cellphoneNumber: "1234567890"
-          address:
-            country: US
-            countyOrProvince: FL
-            line4: line4
-            city: Key West
-            line3: line3
-            line2: line2
-            line1: 500 Duval St
-            zipOrPostcode: "33945"
+          disabledUpdatedTimestamp: 2019-01-20T09:00:00Z
           individual:
             name:
               firstName: Bob
               lastName: Smith
-              otherNames: A
+              otherNames: H
               title: Mr
-          displayName: ABC
           created: 2019-01-20T09:00:00Z
-          gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-          paymentChannel:
-            paymentChannelName: My payment channel
-            routingNumber: XXXXX6789
-            accountName: My account
-            countryCode: UK
-            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-            currency: USD
-            accountNumber: XXXXXX5678
-          marketingOptIns:
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00Z
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00Z
+          displayName: ABC
           watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00+00:00
-          challenge:
-            description: challenge description
-            value: challenge test
+          disabledComment: reason for disabled
+          disabled: true
           company:
-            name: ABC Ltd.
-            operatingName: ABC
+            name: ABC Group Plc
+            operatingName: ABC Co
           payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
           email: bob@example.com
-          acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00Z
       properties:
         summary:
           $ref: '#/components/schemas/PagedPayeeResponse_2_summary'
@@ -9937,7 +10402,7 @@ components:
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PayeeResponse_2'
+            $ref: '#/components/schemas/GetPayeeListResponse'
           type: array
       type: object
     CreatePayeesRequest_2:
@@ -10623,10 +11088,10 @@ components:
       example:
         batchId: cb6ff8c6-85e9-45a6-b7d9-d05305db67f3
         rejectedCsvRows:
-        - rejectedContent: remoteId1,USD,-123.45,ref1
+        - rejectedContent: unable,to,process,csv,line
           lineNumber: 3
           message: rejected message 1
-        - rejectedContent: remoteId1,USD,-123.45,ref1
+        - rejectedContent: unable,to,process,csv,line
           lineNumber: 3
           message: rejected message 1
       properties:
@@ -10868,6 +11333,52 @@ components:
             $ref: '#/components/schemas/PayeeDelta_2'
           type: array
       type: object
+    UpdatePayeeDetailsRequest:
+      example:
+        address:
+          country: US
+          countyOrProvince: FL
+          line4: line4
+          city: Key West
+          line3: line3
+          line2: line2
+          line1: 500 Duval St
+          zipOrPostcode: "33945"
+        individual:
+          name:
+            firstName: Bob
+            lastName: Smith
+            otherNames: A
+            title: Mr
+          nationalIdentification: AB123456C
+          dateOfBirth: 1985-01-01
+        challenge:
+          description: challenge description
+          value: challenge test
+        company:
+          taxId: "123123123"
+          name: ABC Group Plc
+          operatingName: ABC Co
+        email: bob@example.com
+      properties:
+        address:
+          $ref: '#/components/schemas/PayeeAddress_2'
+        individual:
+          $ref: '#/components/schemas/Individual_2'
+        company:
+          $ref: '#/components/schemas/Company_2'
+        language:
+          $ref: '#/components/schemas/Language_2'
+        payeeType:
+          $ref: '#/components/schemas/PayeeType_2'
+        challenge:
+          $ref: '#/components/schemas/Challenge_2'
+        email:
+          example: bob@example.com
+          format: email
+          nullable: true
+          type: string
+      type: object
     ListSourceAccountResponse:
       description: List Source Accounts Response Object
       example:
@@ -10884,6 +11395,7 @@ components:
           totalElements: 1
         content:
         - physicalAccountName: VELO_FBO_MYBANKA_USD
+          accountType: FBO
           fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           fundingRef: a1b2c3d4
           balance: 1203489
@@ -10897,6 +11409,7 @@ components:
           id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         - physicalAccountName: VELO_FBO_MYBANKA_USD
+          accountType: FBO
           fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           fundingRef: a1b2c3d4
           balance: 1203489
@@ -10924,6 +11437,7 @@ components:
     SourceAccountResponse:
       example:
         physicalAccountName: VELO_FBO_MYBANKA_USD
+        accountType: FBO
         fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         fundingRef: a1b2c3d4
         balance: 1203489
@@ -10983,6 +11497,9 @@ components:
           format: uuid
           nullable: true
           type: string
+        accountType:
+          example: FBO
+          type: string
       type: object
     FundingRequestV1:
       example:
@@ -11039,6 +11556,7 @@ components:
           totalElements: 33
         content:
         - physicalAccountName: VELO_FBO_MYBANKA_USD
+          accountType: FBO
           fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           fundingRef: a1b2c3d4
           balance: 1203489
@@ -11058,6 +11576,7 @@ components:
           notifications:
             minimumBalance: 120000
         - physicalAccountName: VELO_FBO_MYBANKA_USD
+          accountType: FBO
           fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           fundingRef: a1b2c3d4
           balance: 1203489
@@ -11091,6 +11610,7 @@ components:
     SourceAccountResponseV2:
       example:
         physicalAccountName: VELO_FBO_MYBANKA_USD
+        accountType: FBO
         fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         fundingRef: a1b2c3d4
         balance: 1203489
@@ -11160,8 +11680,11 @@ components:
           type: string
         autoTopUpConfig:
           $ref: '#/components/schemas/AutoTopUpConfig'
+        accountType:
+          example: FBO
+          type: string
       required:
-      - autoTopUpConfig
+      - accountType
       - balanceVisible
       - fundingRef
       - id
@@ -11309,6 +11832,7 @@ components:
     FundingAccountType:
       enum:
       - FBO
+      - WUBS_DECOUPLED
       type: string
     ListFundingAccountsResponse_2:
       description: List Funding Accounts Response Object
@@ -11355,39 +11879,53 @@ components:
             $ref: '#/components/schemas/FundingAccountResponse_2'
           type: array
       type: object
-    CreateFundingAccountRequest:
+    CreateFundingAccountRequestV2:
       example:
         routingNumber: routingNumber
         accountName: accountName
         name: name
+        currency: USD
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        type: FBO
         accountNumber: accountNumber
       properties:
+        type:
+          enum:
+          - FBO
+          - WUBS_DECOUPLED
+          type: string
         name:
           maxLength: 30
-          minLength: 1
-          type: string
-        accountName:
-          maxLength: 22
-          minLength: 1
-          type: string
-        accountNumber:
-          maxLength: 17
-          minLength: 4
-          type: string
-        routingNumber:
-          maxLength: 9
-          minLength: 9
+          minLength: 3
           type: string
         payorId:
           format: uuid
           type: string
+        accountName:
+          description: Required if type is FBO
+          maxLength: 22
+          minLength: 1
+          type: string
+        accountNumber:
+          description: Required if type is FBO
+          maxLength: 17
+          minLength: 4
+          type: string
+        routingNumber:
+          description: Required if type is FBO
+          maxLength: 9
+          minLength: 9
+          type: string
+        currency:
+          description: ISO 4217 currency code, Required if type is WUBS_DECOUPLED
+          example: USD
+          maxLength: 3
+          minLength: 3
+          type: string
       required:
-      - accountName
-      - accountNumber
       - name
       - payorId
-      - routingNumber
+      - type
       type: object
     FundingAccountResponse_2:
       example:
@@ -11460,6 +11998,11 @@ components:
       - amount
       - fundingAccountId
       type: object
+    SourceAccountType:
+      enum:
+      - FBO
+      - WUBS_DECOUPLED
+      type: string
     ListSourceAccountResponseV3:
       description: List Source Accounts Response Object
       example:
@@ -11476,6 +12019,9 @@ components:
           totalElements: 33
         content:
         - physicalAccountName: VELO_FBO_MYBANKA_USD
+          country: US
+          type: FBO
+          archived: true
           fundingRef: a1b2c3d4
           balance: 1203489
           pooled: true
@@ -11484,17 +12030,19 @@ components:
           physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           autoTopUpConfig:
             targetBalance: 300000
-            fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            fundingAccountId: 640ab1bd-8a6a-4603-a83a-1edbc3ed5689
             minBalance: 10000
             enabled: true
           currency: USD
           railsId: BOA_RAIL
-          balanceVisible: true
           id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           notifications:
             minimumBalance: 120000
         - physicalAccountName: VELO_FBO_MYBANKA_USD
+          country: US
+          type: FBO
+          archived: true
           fundingRef: a1b2c3d4
           balance: 1203489
           pooled: true
@@ -11503,12 +12051,11 @@ components:
           physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           autoTopUpConfig:
             targetBalance: 300000
-            fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            fundingAccountId: 640ab1bd-8a6a-4603-a83a-1edbc3ed5689
             minBalance: 10000
             enabled: true
           currency: USD
           railsId: BOA_RAIL
-          balanceVisible: true
           id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           notifications:
@@ -11528,6 +12075,9 @@ components:
     SourceAccountResponseV3:
       example:
         physicalAccountName: VELO_FBO_MYBANKA_USD
+        country: US
+        type: FBO
+        archived: true
         fundingRef: a1b2c3d4
         balance: 1203489
         pooled: true
@@ -11536,12 +12086,11 @@ components:
         physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         autoTopUpConfig:
           targetBalance: 300000
-          fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          fundingAccountId: 640ab1bd-8a6a-4603-a83a-1edbc3ed5689
           minBalance: 10000
           enabled: true
         currency: USD
         railsId: BOA_RAIL
-        balanceVisible: true
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         notifications:
@@ -11559,14 +12108,20 @@ components:
         currency:
           enum:
           - USD
+          - EUR
+          - GBP
+          - CAD
+          - HKD
           example: USD
           maxLength: 3
           minLength: 3
           type: string
         fundingRef:
+          description: The funding reference (will not be set for DECOUPLED accounts).
           example: a1b2c3d4
           type: string
         physicalAccountName:
+          description: The physical account name (will not be set for DECOUPLED accounts).
           example: VELO_FBO_MYBANKA_USD
           type: string
         railsId:
@@ -11579,28 +12134,37 @@ components:
           example: MyAccountName
           type: string
         pooled:
-          type: boolean
-        balanceVisible:
+          description: The pooled account flag (will not be set for DECOUPLED accounts).
           type: boolean
         customerId:
           example: Joe Customer
           nullable: true
           type: string
         physicalAccountId:
+          description: The physical account id (will not be set for DECOUPLED accounts).
           format: uuid
           type: string
         notifications:
           $ref: '#/components/schemas/Notifications_2'
         autoTopUpConfig:
           $ref: '#/components/schemas/AutoTopUpConfig_2'
+        type:
+          example: FBO
+          type: string
+        country:
+          description: The two character ISO country code for the associated account
+          example: US
+          maxLength: 2
+          minLength: 2
+          type: string
+        archived:
+          description: A flag for whether the source account has been archived.  Only
+            present in the response if true.
+          type: boolean
       required:
-      - autoTopUpConfig
-      - balanceVisible
-      - fundingRef
       - id
-      - physicalAccountName
-      - pooled
       - railsId
+      - type
       type: object
     TransferRequest_2:
       properties:
@@ -11640,13 +12204,11 @@ components:
         content:
         - amount: 2
           fundingId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          currency:
-            currencyCode: USD
+          currency: USD
           status: status
         - amount: 2
           fundingId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          currency:
-            currencyCode: USD
+          currency: USD
           status: status
       properties:
         links:
@@ -11664,9 +12226,61 @@ components:
           type: array
       type: object
     GetFundingsResponse:
-      allOf:
-      - $ref: '#/components/schemas/PagedResponse'
-      - $ref: '#/components/schemas/GetFundingsResponse_allOf'
+      description: List Users Response Object
+      example:
+        links:
+        - rel: first
+          href: https://api.sandbox.velopayments.com/v1/paymentaudit/fundings?payorId=2a5d8af2-a1ed-4d7f-b9a7-ebe4b333be5a&page=1&pageSize=10
+        - rel: first
+          href: https://api.sandbox.velopayments.com/v1/paymentaudit/fundings?payorId=2a5d8af2-a1ed-4d7f-b9a7-ebe4b333be5a&page=1&pageSize=10
+        page:
+          numberOfElements: 12
+          totalPages: 2
+          pageSize: 25
+          page: 1
+          totalElements: 33
+        content:
+        - dateTime: 2000-01-23T04:56:07.000+00:00
+          fundingAccountName: fundingAccountName
+          amount: 120000
+          fundingType: ACH
+          currency: USD
+          topupType: AUTOMATIC
+          events:
+          - principal: principal
+            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            eventDateTime: 2000-01-23T04:56:07.000+00:00
+          - principal: principal
+            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            eventDateTime: 2000-01-23T04:56:07.000+00:00
+          status: PENDING
+          sourceAccountName: sourceAccountName
+        - dateTime: 2000-01-23T04:56:07.000+00:00
+          fundingAccountName: fundingAccountName
+          amount: 120000
+          fundingType: ACH
+          currency: USD
+          topupType: AUTOMATIC
+          events:
+          - principal: principal
+            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            eventDateTime: 2000-01-23T04:56:07.000+00:00
+          - principal: principal
+            eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            eventDateTime: 2000-01-23T04:56:07.000+00:00
+          status: PENDING
+          sourceAccountName: sourceAccountName
+      properties:
+        page:
+          $ref: '#/components/schemas/PagedUserResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/GetFundingsResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/FundingAudit'
+          type: array
       type: object
     GetPayoutStatistics:
       example:
@@ -11961,7 +12575,7 @@ components:
             $ref: '#/components/schemas/PaymentResponseV3'
           type: array
       type: object
-    ListPaymentsResponse:
+    ListPaymentsResponseV3:
       description: List Payments Response Object
       example:
         links:
@@ -12086,7 +12700,7 @@ components:
           status: ACCEPTED
       properties:
         page:
-          $ref: '#/components/schemas/ListPaymentsResponse_page'
+          $ref: '#/components/schemas/ListPaymentsResponseV3_page'
         links:
           items:
             $ref: '#/components/schemas/GetPayoutsResponseV3_links'
@@ -12312,6 +12926,105 @@ components:
       - status
       - submittedDateTime
       type: object
+    PayorAmlTransactionV3:
+      example:
+        debitCurrency: debitCurrency
+        payeeType: payeeType
+        fxApplied: 5.962133916683182
+        transactionTime: transactionTime
+        paymentMemo: paymentMemo
+        paymentAmount: 1
+        paymentType: paymentType
+        returnCode: returnCode
+        payeeName: payeeName
+        rejectReason: rejectReason
+        fundingType: fundingType
+        paymentRails: paymentRails
+        debit: 0
+        credit: 6
+        paymentStatus: paymentStatus
+        payeeEmail: payeeEmail
+        sourceAccount: sourceAccount
+        returnFeeDescription: returnFeeDescription
+        returnDescription: returnDescription
+        transactionDate: 2000-01-23
+        remoteId: remoteId
+        returnFee: returnFee
+        returnFeeCurrency: returnFeeCurrency
+        dateFundingRequested: dateFundingRequested
+        payorPaymentId: payorPaymentId
+        creditCurrency: creditCurrency
+        paymentCurrency: paymentCurrency
+        reportTransactionType: reportTransactionType
+      properties:
+        transactionDate:
+          format: date
+          type: string
+        transactionTime:
+          type: string
+        reportTransactionType:
+          type: string
+        debit:
+          format: int64
+          type: integer
+        debitCurrency:
+          description: ISO 4217 3 character currency code
+          type: string
+        credit:
+          format: int64
+          type: integer
+        creditCurrency:
+          description: ISO 4217 3 character currency code
+          type: string
+        returnFee:
+          type: string
+        returnFeeCurrency:
+          description: ISO 4217 3 character currency code
+          type: string
+        returnFeeDescription:
+          type: string
+        returnCode:
+          type: string
+        returnDescription:
+          type: string
+        fundingType:
+          type: string
+        dateFundingRequested:
+          type: string
+        payeeName:
+          type: string
+        remoteId:
+          description: Remote ID of the Payee, set by Payor
+          type: string
+        payeeType:
+          type: string
+        payeeEmail:
+          format: email
+          type: string
+        sourceAccount:
+          type: string
+        paymentAmount:
+          format: int64
+          type: integer
+        paymentCurrency:
+          description: ISO 4217 3 character currency code
+          type: string
+        paymentMemo:
+          type: string
+        paymentType:
+          type: string
+        paymentRails:
+          type: string
+        payorPaymentId:
+          type: string
+        paymentStatus:
+          type: string
+        rejectReason:
+          type: string
+        fxApplied:
+          format: double
+          type: number
+      type: object
     GetPayoutsResponseV4:
       description: List Payouts Response
       example:
@@ -12489,6 +13202,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
           railsId: asdf123
@@ -12559,6 +13273,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
           railsId: asdf123
@@ -12658,6 +13373,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
           railsId: asdf123
@@ -12728,6 +13444,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
           railsId: asdf123
@@ -12773,7 +13490,7 @@ components:
           status: ACCEPTED
       properties:
         page:
-          $ref: '#/components/schemas/ListPaymentsResponse_page'
+          $ref: '#/components/schemas/ListPaymentsResponseV3_page'
         links:
           items:
             $ref: '#/components/schemas/GetPayoutsResponseV3_links'
@@ -12812,6 +13529,7 @@ components:
         countryCode: US
         returnReason: Some Reason Value
         withdrawable: true
+        isPaymentCcyBaseCcy: true
         submittedDateTime: 2000-01-23T04:56:07.000+00:00
         sourceAmount: 12345
         railsId: asdf123
@@ -12911,6 +13629,8 @@ components:
             displayed
           format: double
           type: number
+        isPaymentCcyBaseCcy:
+          type: boolean
         submittedDateTime:
           format: date-time
           type: string
@@ -13021,75 +13741,48 @@ components:
       - status
       - submittedDateTime
       type: object
-    PayorAmlTransactionV3:
+    PaymentDeltaResponseV4:
+      description: List Payment Changes Response Object
+      example:
+        links:
+        - rel: rel
+          href: href
+        - rel: rel
+          href: href
+        page:
+          numberOfElements: 0
+          totalPages: 1
+          pageSize: 5
+          page: 5
+          totalElements: 6
+        content:
+        - paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          payorPaymentId: payorPaymentId
+          sourceCurrency: sourceCurrency
+          sourceAmount: 6
+          payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          paymentCurrency: paymentCurrency
+          paymentAmount: 0
+          status: status
+        - paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          payorPaymentId: payorPaymentId
+          sourceCurrency: sourceCurrency
+          sourceAmount: 6
+          payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          paymentCurrency: paymentCurrency
+          paymentAmount: 0
+          status: status
       properties:
-        transactionDate:
-          format: date
-          type: string
-        transactionTime:
-          type: string
-        reportTransactionType:
-          type: string
-        debit:
-          format: int64
-          type: integer
-        debitCurrency:
-          description: ISO 4217 3 character currency code
-          type: string
-        credit:
-          format: int64
-          type: integer
-        creditCurrency:
-          description: ISO 4217 3 character currency code
-          type: string
-        returnFee:
-          type: string
-        returnFeeCurrency:
-          description: ISO 4217 3 character currency code
-          type: string
-        returnFeeDescription:
-          type: string
-        returnCode:
-          type: string
-        returnDescription:
-          type: string
-        fundingType:
-          type: string
-        dateFundingRequested:
-          type: string
-        payeeName:
-          type: string
-        remoteId:
-          description: Remote ID of the Payee, set by Payor
-          type: string
-        payeeType:
-          type: string
-        payeeEmail:
-          format: email
-          type: string
-        sourceAccount:
-          type: string
-        paymentAmount:
-          format: int64
-          type: integer
-        paymentCurrency:
-          description: ISO 4217 3 character currency code
-          type: string
-        paymentMemo:
-          type: string
-        paymentType:
-          type: string
-        paymentRails:
-          type: string
-        payorPaymentId:
-          type: string
-        paymentStatus:
-          type: string
-        rejectReason:
-          type: string
-        fxApplied:
-          format: double
-          type: number
+        page:
+          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/PagedPayeeResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/PaymentDeltaV4'
+          type: array
       type: object
     PayorAmlTransactionV4:
       properties:
@@ -13161,7 +13854,7 @@ components:
           format: double
           type: number
       type: object
-    CreatePayoutRequest:
+    CreatePayoutRequestV3:
       example:
         payoutFromPayorId: c4261044-13df-4a6c-b1d4-fa8be2b46f5a
         payoutToPayorId: 9afc6b39-de12-466a-a9ca-07c7a23b312d
@@ -13169,30 +13862,35 @@ components:
         - amount: 1299
           currency: USD
           payorPaymentId: 123211321ABSD
+          transmissionType: ACH
           paymentMemo: my memo
           remoteId: remoteId1234
           sourceAccountName: MyAccountName
         - amount: 1299
           currency: USD
           payorPaymentId: 123211321ABSD
+          transmissionType: ACH
           paymentMemo: my memo
           remoteId: remoteId1234
           sourceAccountName: MyAccountName
         - amount: 1299
           currency: USD
           payorPaymentId: 123211321ABSD
+          transmissionType: ACH
           paymentMemo: my memo
           remoteId: remoteId1234
           sourceAccountName: MyAccountName
         - amount: 1299
           currency: USD
           payorPaymentId: 123211321ABSD
+          transmissionType: ACH
           paymentMemo: my memo
           remoteId: remoteId1234
           sourceAccountName: MyAccountName
         - amount: 1299
           currency: USD
           payorPaymentId: 123211321ABSD
+          transmissionType: ACH
           paymentMemo: my memo
           remoteId: remoteId1234
           sourceAccountName: MyAccountName
@@ -13225,18 +13923,20 @@ components:
           type: string
         payments:
           items:
-            $ref: '#/components/schemas/PaymentInstruction'
+            $ref: '#/components/schemas/PaymentInstructionV3'
           maxItems: 2000
           minItems: 1
           type: array
       required:
       - payments
       type: object
-    PaymentInstruction:
+    PaymentInstructionV3:
+      description: Instruction for creating a payment
       example:
         amount: 1299
         currency: USD
         payorPaymentId: 123211321ABSD
+        transmissionType: ACH
         paymentMemo: my memo
         remoteId: remoteId1234
         sourceAccountName: MyAccountName
@@ -13279,13 +13979,15 @@ components:
           maxLength: 40
           minLength: 0
           type: string
+        transmissionType:
+          $ref: '#/components/schemas/TransmissionType'
       required:
       - amount
       - currency
       - remoteId
       - sourceAccountName
       type: object
-    PayoutSummaryResponse:
+    PayoutSummaryResponseV3:
       example:
         rejectedPayments:
         - currencyType: USD
@@ -13380,19 +14082,19 @@ components:
           type: integer
         fxSummaries:
           items:
-            $ref: '#/components/schemas/QuoteFxSummary'
+            $ref: '#/components/schemas/QuoteFxSummaryV3'
           type: array
         accounts:
           items:
-            $ref: '#/components/schemas/SourceAccount'
+            $ref: '#/components/schemas/SourceAccountV3'
           type: array
         acceptedPayments:
           items:
-            $ref: '#/components/schemas/AcceptedPayment'
+            $ref: '#/components/schemas/AcceptedPaymentV3'
           type: array
         rejectedPayments:
           items:
-            $ref: '#/components/schemas/RejectedPayment'
+            $ref: '#/components/schemas/RejectedPaymentV3'
           type: array
       required:
       - acceptedPayments
@@ -13401,7 +14103,7 @@ components:
       - paymentsWithdrawn
       - rejectedPayments
       type: object
-    QuoteResponse:
+    QuoteResponseV3:
       example:
         fxSummaries:
         - invertedRate: 1.12
@@ -13429,10 +14131,10 @@ components:
       properties:
         fxSummaries:
           items:
-            $ref: '#/components/schemas/QuoteFxSummary'
+            $ref: '#/components/schemas/QuoteFxSummaryV3'
           type: array
       type: object
-    PagedPaymentsResponse:
+    PagedPaymentsResponseV3:
       description: List Payees Response Object
       example:
         links:
@@ -13448,139 +14150,37 @@ components:
           totalElements: 6
         content:
         - payee:
-            payorRefs:
-            - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-              invitationStatusTimestamp: 2019-01-20T09:00:00Z
-              invitationStatus: ACCEPTED
-              remoteId: uniqueIdForRemoteEntity
-              paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-            - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-              invitationStatusTimestamp: 2019-01-20T09:00:00Z
-              invitationStatus: ACCEPTED
-              remoteId: uniqueIdForRemoteEntity
-              paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-            country: US
-            cellphoneNumber: "1234567890"
-            address:
-              country: US
-              countyOrProvince: FL
-              line4: line4
-              city: Key West
-              line3: line3
-              line2: line2
-              line1: 500 Duval St
-              zipOrPostcode: "33945"
             individual:
               name:
-                firstName: Bob
-                lastName: Smith
-                otherNames: A
-                title: Mr
-              nationalIdentification: AB123456C
-              dateOfBirth: 1985-01-01
-            displayName: Bob
-            created: 2019-01-20T09:00:00Z
-            type: Individual
-            gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-            paymentChannel:
-              paymentChannelName: paymentChannelName
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: US
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            remoteId: remoteId123
-            marketingOptIns:
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00+00:00
-            challenge:
-              description: challenge description
-              value: challenge test
+                firstName: Fred
+                lastName: Flintstone
             company:
-              taxId: "123"
-              name: ABC Ltd
-              operatingName: ABC
-            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-            email: bob@example.com
-            acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00Z
+              companyName: ACME Anvils PLC
+            payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           amount: 1234
           paymentId: paymentId
           withdrawable: false
           currency: USD
           payorPaymentId: paymenIdVal123123
+          transmissionType: ACH
           paymentMemo: Payment memo
           remoteId: remoteIdVal123
           sourceAccountName: Chase
           status: SUBMITTED
         - payee:
-            payorRefs:
-            - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-              invitationStatusTimestamp: 2019-01-20T09:00:00Z
-              invitationStatus: ACCEPTED
-              remoteId: uniqueIdForRemoteEntity
-              paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-            - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-              invitationStatusTimestamp: 2019-01-20T09:00:00Z
-              invitationStatus: ACCEPTED
-              remoteId: uniqueIdForRemoteEntity
-              paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-            country: US
-            cellphoneNumber: "1234567890"
-            address:
-              country: US
-              countyOrProvince: FL
-              line4: line4
-              city: Key West
-              line3: line3
-              line2: line2
-              line1: 500 Duval St
-              zipOrPostcode: "33945"
             individual:
               name:
-                firstName: Bob
-                lastName: Smith
-                otherNames: A
-                title: Mr
-              nationalIdentification: AB123456C
-              dateOfBirth: 1985-01-01
-            displayName: Bob
-            created: 2019-01-20T09:00:00Z
-            type: Individual
-            gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-            paymentChannel:
-              paymentChannelName: paymentChannelName
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: US
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            remoteId: remoteId123
-            marketingOptIns:
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00+00:00
-            challenge:
-              description: challenge description
-              value: challenge test
+                firstName: Fred
+                lastName: Flintstone
             company:
-              taxId: "123"
-              name: ABC Ltd
-              operatingName: ABC
-            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-            email: bob@example.com
-            acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00Z
+              companyName: ACME Anvils PLC
+            payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           amount: 1234
           paymentId: paymentId
           withdrawable: false
           currency: USD
           payorPaymentId: paymenIdVal123123
+          transmissionType: ACH
           paymentMemo: Payment memo
           remoteId: remoteIdVal123
           sourceAccountName: Chase
@@ -13594,7 +14194,7 @@ components:
           type: array
         content:
           items:
-            $ref: '#/components/schemas/Payment'
+            $ref: '#/components/schemas/PaymentV3'
           type: array
       type: object
     PaymentChannelRulesResponse:
@@ -13668,7 +14268,7 @@ components:
             $ref: '#/components/schemas/SupportedCountry'
           type: array
       type: object
-    SupportedCountriesResponse_2:
+    SupportedCountriesResponseV2:
       example:
         countries:
         - regions:
@@ -13692,10 +14292,10 @@ components:
       properties:
         countries:
           items:
-            $ref: '#/components/schemas/SupportedCountry_2'
+            $ref: '#/components/schemas/SupportedCountryV2'
           type: array
       type: object
-    SupportedCurrencyResponse:
+    SupportedCurrencyResponseV2:
       example:
         currencies:
         - currency: USD
@@ -13705,7 +14305,7 @@ components:
       properties:
         currencies:
           items:
-            $ref: '#/components/schemas/SupportedCurrency'
+            $ref: '#/components/schemas/SupportedCurrencyV2'
           type: array
       type: object
     UserInfo:
@@ -13734,35 +14334,6 @@ components:
           type: string
       required:
       - name
-      type: object
-    Error:
-      properties:
-        errorMessage:
-          description: |
-            verbose message indicating the nature of the error
-            Will be localised
-          example: smsNumber must be in the E.164 format e.g. +15551231234
-          type: string
-        location:
-          description: the property or object that caused the error
-          example: smsNumber
-          type: string
-        locationType:
-          description: |
-            the location type in the request that was the cause of the error
-          enum:
-          - requestBody
-          - queryParam
-          - requestParam
-          - header
-          - pathParam
-          example: requestBody
-          type: string
-        reasonCode:
-          description: a camel-cased string that can be used by clients to localise
-            client error messages
-          example: validationError
-          type: string
       type: object
     VerificationCode:
       description: |
@@ -13852,6 +14423,58 @@ components:
       example: PASSED_KYC
       readOnly: true
       type: string
+    TransmissionTypes:
+      example:
+        ACH: true
+        SAME_DAY_ACH: true
+        WIRE: true
+      properties:
+        ACH:
+          description: Whether the Payor is allowed to pay via ACH
+          example: true
+          type: boolean
+        SAME_DAY_ACH:
+          description: Whether the Payor is allowed to pay via same day ACH
+          example: true
+          type: boolean
+        WIRE:
+          description: Whether the Payor is allowed to pay via wire
+          example: true
+          type: boolean
+      required:
+      - ACH
+      - SAME_DAY_ACH
+      - WIRE
+      type: object
+    Error:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: smsNumber must be in the E.164 format e.g. +15551231234
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: smsNumber
+          type: string
+        locationType:
+          description: |
+            the location type in the request that was the cause of the error
+          enum:
+          - requestBody
+          - queryParam
+          - requestParam
+          - header
+          - pathParam
+          example: requestBody
+          type: string
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise
+            client error messages
+          example: validationError
+          type: string
+      type: object
     PayorAddressV2:
       example:
         country: US
@@ -13918,6 +14541,29 @@ components:
       - WU
       - BOFA
       type: string
+    TransmissionTypes_2:
+      example:
+        ACH: true
+        SAME_DAY_ACH: true
+        WIRE: true
+      properties:
+        ACH:
+          description: Whether the Payor is allowed to pay via ACH
+          example: true
+          type: boolean
+        SAME_DAY_ACH:
+          description: Whether the Payor is allowed to pay via same day ACH
+          example: true
+          type: boolean
+        WIRE:
+          description: Whether the Payor is allowed to pay via wire
+          example: true
+          type: boolean
+      required:
+      - ACH
+      - SAME_DAY_ACH
+      - WIRE
+      type: object
     PayeePayorRef:
       example:
         payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
@@ -14711,7 +15357,6 @@ components:
       example:
         payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
         invitationStatusTimestamp: 2019-01-20T09:00:00Z
-        invitationStatus: ACCEPTED
         remoteId: uniqueIdForRemoteEntity
         paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
       properties:
@@ -14723,12 +15368,7 @@ components:
           example: uniqueIdForRemoteEntity
           type: string
         invitationStatus:
-          enum:
-          - ACCEPTED
-          - PENDING
-          - DECLINED
-          example: ACCEPTED
-          type: string
+          $ref: '#/components/schemas/InvitationStatus_2'
         invitationStatusTimestamp:
           description: The timestamp when the invitation status is updated
           example: 2019-01-20T09:00:00Z
@@ -14798,62 +15438,55 @@ components:
       required:
       - name
       type: object
-    PayeeResponse_2:
+    Challenge_2:
+      example:
+        description: challenge description
+        value: challenge test
+      properties:
+        value:
+          example: challenge test
+          maxLength: 20
+          minLength: 3
+          type: string
+        description:
+          example: challenge description
+          maxLength: 255
+          minLength: 1
+          type: string
+      required:
+      - description
+      - value
+      type: object
+    GetPayeeListResponse:
       example:
         payorRefs:
         - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
           invitationStatusTimestamp: 2019-01-20T09:00:00Z
-          invitationStatus: ACCEPTED
           remoteId: uniqueIdForRemoteEntity
           paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
         - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
           invitationStatusTimestamp: 2019-01-20T09:00:00Z
-          invitationStatus: ACCEPTED
           remoteId: uniqueIdForRemoteEntity
           paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+        watchlistOverrideComment: Example reason for the watchlist status being overridden
         country: US
-        cellphoneNumber: "1234567890"
-        address:
-          country: US
-          countyOrProvince: FL
-          line4: line4
-          city: Key West
-          line3: line3
-          line2: line2
-          line1: 500 Duval St
-          zipOrPostcode: "33945"
+        disabledUpdatedTimestamp: 2019-01-20T09:00:00Z
         individual:
           name:
             firstName: Bob
             lastName: Smith
-            otherNames: A
+            otherNames: H
             title: Mr
-        displayName: ABC
         created: 2019-01-20T09:00:00Z
-        gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-        paymentChannel:
-          paymentChannelName: My payment channel
-          routingNumber: XXXXX6789
-          accountName: My account
-          countryCode: UK
-          iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-          currency: USD
-          accountNumber: XXXXXX5678
-        marketingOptIns:
-        - optedIn: true
-          timestamp: 2019-01-20T09:00:00Z
-        - optedIn: true
-          timestamp: 2019-01-20T09:00:00Z
+        displayName: ABC
         watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00+00:00
-        challenge:
-          description: challenge description
-          value: challenge test
+        disabledComment: reason for disabled
+        disabled: true
         company:
-          name: ABC Ltd.
-          operatingName: ABC
+          name: ABC Group Plc
+          operatingName: ABC Co
         payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
         email: bob@example.com
-        acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00Z
       properties:
         payeeId:
           example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
@@ -14871,60 +15504,47 @@ components:
           format: email
           nullable: true
           type: string
-        address:
-          $ref: '#/components/schemas/PayeeAddress'
-        country:
-          example: US
-          type: string
-        displayName:
-          example: ABC
-          type: string
-        paymentChannel:
-          $ref: '#/components/schemas/PayeePaymentChannel'
-        challenge:
-          $ref: '#/components/schemas/Challenge'
-        language:
-          $ref: '#/components/schemas/Language'
-        acceptTermsAndConditionsTimestamp:
-          description: The timestamp when the payee last accepted T&Cs
-          example: 2019-01-20T09:00:00Z
-          format: date-time
-          nullable: true
-          readOnly: true
-          type: string
-        cellphoneNumber:
-          example: "1234567890"
-          type: string
-        payeeType:
-          $ref: '#/components/schemas/PayeeType'
-        company:
-          $ref: '#/components/schemas/CompanyResponse'
-        individual:
-          $ref: '#/components/schemas/IndividualResponse'
-        created:
-          example: 2019-01-20T09:00:00Z
-          format: date-time
-          type: string
-        gracePeriodEndDate:
-          example: 2019-01-20
-          format: date
-          nullable: true
-          readOnly: true
-          type: string
+        onboardedStatus:
+          $ref: '#/components/schemas/OnboardedStatus_2'
+        watchlistStatus:
+          $ref: '#/components/schemas/WatchlistStatus'
         watchlistStatusUpdatedTimestamp:
           example: 2019-01-20T09:00:00+00:00
           format: date_time
           nullable: true
           readOnly: true
           type: string
-        marketingOptIns:
-          items:
-            $ref: '#/components/schemas/MarketingOptIn'
-          type: array
-        watchlistStatus:
-          $ref: '#/components/schemas/WatchlistStatus'
-        onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus'
+        watchlistOverrideComment:
+          example: Example reason for the watchlist status being overridden
+          nullable: true
+          type: string
+        language:
+          $ref: '#/components/schemas/Language_2'
+        created:
+          example: 2019-01-20T09:00:00Z
+          format: date-time
+          type: string
+        country:
+          example: US
+          type: string
+        displayName:
+          example: ABC
+          type: string
+        payeeType:
+          $ref: '#/components/schemas/PayeeType'
+        disabled:
+          type: boolean
+        disabledComment:
+          example: reason for disabled
+          type: string
+        disabledUpdatedTimestamp:
+          example: 2019-01-20T09:00:00Z
+          format: date-time
+          type: string
+        individual:
+          $ref: '#/components/schemas/GetPayeeListResponseIndividual'
+        company:
+          $ref: '#/components/schemas/GetPayeeListResponseCompany'
       type: object
     CreatePayee_2:
       properties:
@@ -14957,11 +15577,11 @@ components:
         paymentChannel:
           $ref: '#/components/schemas/CreatePaymentChannel_2'
         challenge:
-          $ref: '#/components/schemas/Challenge'
+          $ref: '#/components/schemas/Challenge_2'
         language:
-          $ref: '#/components/schemas/Language'
+          $ref: '#/components/schemas/Language_2'
         company:
-          $ref: '#/components/schemas/CompanyV1'
+          $ref: '#/components/schemas/Company_2'
         individual:
           $ref: '#/components/schemas/CreateIndividual_2'
       required:
@@ -15102,6 +15722,11 @@ components:
       - payeeId
       - remoteId
       type: object
+    PayeeType_2:
+      enum:
+      - INDIVIDUAL
+      - COMPANY
+      type: string
     Notifications:
       example:
         minimumBalance: 120000
@@ -15151,7 +15776,7 @@ components:
     AutoTopUpConfig_2:
       example:
         targetBalance: 300000
-        fundingAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        fundingAccountId: 640ab1bd-8a6a-4603-a83a-1edbc3ed5689
         minBalance: 10000
         enabled: true
       properties:
@@ -15180,6 +15805,7 @@ components:
           description: Id of funding account from which to pull funds when auto top-up
             is triggered.  Note - if this is not set then auto top-up is effectively
             disabled.
+          example: 640ab1bd-8a6a-4603-a83a-1edbc3ed5689
           format: uuid
           type: string
       required:
@@ -15223,8 +15849,7 @@ components:
       example:
         amount: 2
         fundingId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        currency:
-          currencyCode: USD
+        currency: USD
         status: status
       properties:
         fundingId:
@@ -15234,24 +15859,44 @@ components:
           format: int64
           type: integer
         currency:
-          $ref: '#/components/schemas/CurrencyType'
+          description: Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html"
+            target="_blank" a>ISO specification</a> for details.
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]{3}$
+          title: ISO Currency Code
+          type: string
         status:
           type: string
       type: object
-    PagedResponse:
-      properties:
-        page:
-          $ref: '#/components/schemas/PagedResponse_page'
-        links:
-          items:
-            type: object
-          type: array
-      type: object
     FundingAudit:
+      example:
+        dateTime: 2000-01-23T04:56:07.000+00:00
+        fundingAccountName: fundingAccountName
+        amount: 120000
+        fundingType: ACH
+        currency: USD
+        topupType: AUTOMATIC
+        events:
+        - principal: principal
+          eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          eventDateTime: 2000-01-23T04:56:07.000+00:00
+        - principal: principal
+          eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          eventDateTime: 2000-01-23T04:56:07.000+00:00
+        status: PENDING
+        sourceAccountName: sourceAccountName
       properties:
         amount:
+          description: The amount funded
+          example: 120000
           format: double
           type: number
+        currency:
+          description: The currency of the funding
+          example: USD
+          type: string
         dateTime:
           format: date-time
           type: string
@@ -15261,8 +15906,6 @@ components:
           - FAILED
           - CREDIT
           - DEBIT
-          type: string
-        currency:
           type: string
         sourceAccountName:
           type: string
@@ -15732,6 +16375,47 @@ components:
       - eventId
       - eventType
       type: object
+    PaymentDeltaV4:
+      example:
+        paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payorPaymentId: payorPaymentId
+        sourceCurrency: sourceCurrency
+        sourceAmount: 6
+        payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        paymentCurrency: paymentCurrency
+        paymentAmount: 0
+        status: status
+      properties:
+        paymentId:
+          format: uuid
+          readOnly: true
+          type: string
+        payoutId:
+          format: uuid
+          readOnly: true
+          type: string
+        payorPaymentId:
+          nullable: true
+          type: string
+        paymentCurrency:
+          nullable: true
+          type: string
+        paymentAmount:
+          nullable: true
+          type: integer
+        status:
+          nullable: true
+          type: string
+        sourceCurrency:
+          nullable: true
+          type: string
+        sourceAmount:
+          nullable: true
+          type: integer
+      required:
+      - paymentId
+      - payoutId
+      type: object
     IsoCurrency:
       description: Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html"
         target="_blank" a>ISO specification</a> for details.
@@ -15741,7 +16425,15 @@ components:
       pattern: ^[A-Z]{3}$
       title: ISO Currency Code
       type: string
-    QuoteFxSummary:
+    TransmissionType:
+      description: The transmission type that will be used to send a payment
+      enum:
+      - SAME_DAY_ACH
+      - WIRE
+      - ACH
+      example: ACH
+      type: string
+    QuoteFxSummaryV3:
       example:
         invertedRate: 1.12
         creationTime: 2000-01-23T04:56:07.000+00:00
@@ -15823,7 +16515,7 @@ components:
       - totalPaymentAmount
       - totalSourceAmount
       type: object
-    SourceAccount:
+    SourceAccountV3:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         currency: USD
@@ -15854,7 +16546,7 @@ components:
       - sourceAccountName
       - totalPayoutCost
       type: object
-    AcceptedPayment:
+    AcceptedPaymentV3:
       example:
         currencyType: USD
         amount: 1234
@@ -15894,7 +16586,7 @@ components:
       - remoteId
       - sourceAccountName
       type: object
-    RejectedPayment:
+    RejectedPaymentV3:
       example:
         currencyType: USD
         reason: The payee has not been onboarded
@@ -15949,73 +16641,22 @@ components:
       - remoteId
       - sourceAccountName
       type: object
-    Payment:
+    PaymentV3:
       example:
         payee:
-          payorRefs:
-          - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-            invitationStatusTimestamp: 2019-01-20T09:00:00Z
-            invitationStatus: ACCEPTED
-            remoteId: uniqueIdForRemoteEntity
-            paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-          - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-            invitationStatusTimestamp: 2019-01-20T09:00:00Z
-            invitationStatus: ACCEPTED
-            remoteId: uniqueIdForRemoteEntity
-            paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-          country: US
-          cellphoneNumber: "1234567890"
-          address:
-            country: US
-            countyOrProvince: FL
-            line4: line4
-            city: Key West
-            line3: line3
-            line2: line2
-            line1: 500 Duval St
-            zipOrPostcode: "33945"
           individual:
             name:
-              firstName: Bob
-              lastName: Smith
-              otherNames: A
-              title: Mr
-            nationalIdentification: AB123456C
-            dateOfBirth: 1985-01-01
-          displayName: Bob
-          created: 2019-01-20T09:00:00Z
-          type: Individual
-          gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-          paymentChannel:
-            paymentChannelName: paymentChannelName
-            routingNumber: XXXXX6789
-            accountName: My account
-            countryCode: US
-            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-            currency: USD
-            accountNumber: XXXXXX5678
-          remoteId: remoteId123
-          marketingOptIns:
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00Z
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00Z
-          watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00+00:00
-          challenge:
-            description: challenge description
-            value: challenge test
+              firstName: Fred
+              lastName: Flintstone
           company:
-            taxId: "123"
-            name: ABC Ltd
-            operatingName: ABC
-          payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-          email: bob@example.com
-          acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00Z
+            companyName: ACME Anvils PLC
+          payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         amount: 1234
         paymentId: paymentId
         withdrawable: false
         currency: USD
         payorPaymentId: paymenIdVal123123
+        transmissionType: ACH
         paymentMemo: Payment memo
         remoteId: remoteIdVal123
         sourceAccountName: Chase
@@ -16044,7 +16685,7 @@ components:
           example: Payment memo
           type: string
         payee:
-          $ref: '#/components/schemas/Payee_2'
+          $ref: '#/components/schemas/PayoutPayeeV3'
         withdrawable:
           example: false
           type: boolean
@@ -16061,6 +16702,8 @@ components:
           - CANCELLED
           - REQUESTED
           type: string
+        transmissionType:
+          $ref: '#/components/schemas/TransmissionType'
       required:
       - paymentId
       type: object
@@ -16117,7 +16760,7 @@ components:
             $ref: '#/components/schemas/IsoCurrency'
           type: array
       type: object
-    SupportedCountry_2:
+    SupportedCountryV2:
       example:
         regions:
         - name: California
@@ -16144,10 +16787,10 @@ components:
           type: array
         regions:
           items:
-            $ref: '#/components/schemas/Region'
+            $ref: '#/components/schemas/RegionV2'
           type: array
       type: object
-    SupportedCurrency:
+    SupportedCurrencyV2:
       example:
         currency: USD
         maxPaymentAmount: 100000
@@ -16753,6 +17396,40 @@ components:
           example: remoteId123
           maxLength: 100
           minLength: 1
+          type: string
+      type: object
+    InvitationStatus_2:
+      enum:
+      - ACCEPTED
+      - PENDING
+      - DECLINED
+      type: string
+    GetPayeeListResponseIndividual:
+      example:
+        name:
+          firstName: Bob
+          lastName: Smith
+          otherNames: H
+          title: Mr
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+      type: object
+    GetPayeeListResponseCompany:
+      example:
+        name: ABC Group Plc
+        operatingName: ABC Co
+      properties:
+        name:
+          example: ABC Group Plc
+          maxLength: 40
+          minLength: 1
+          type: string
+        operatingName:
+          example: ABC Co
+          maxLength: 100
+          minLength: 1
+          nullable: true
           type: string
       type: object
     CreatePayeeAddress_2:
@@ -17373,19 +18050,11 @@ components:
       - dateOfBirth
       - name
       type: object
-    CurrencyType:
-      example:
-        currencyCode: USD
-      properties:
-        currencyCode:
-          example: USD
-          maxLength: 3
-          minLength: 3
-          type: string
-      required:
-      - currencyCode
-      type: object
     FundingEvent:
+      example:
+        principal: principal
+        eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        eventDateTime: 2000-01-23T04:56:07.000+00:00
       properties:
         eventId:
           format: uuid
@@ -17573,6 +18242,28 @@ components:
       - totalCost
       - totalPaymentAmount
       type: object
+    PayoutPayeeV3:
+      description: Payee data associated with a payment. Either individual or company
+        must be populated
+      example:
+        individual:
+          name:
+            firstName: Fred
+            lastName: Flintstone
+        company:
+          companyName: ACME Anvils PLC
+        payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        payeeId:
+          format: uuid
+          type: string
+        individual:
+          $ref: '#/components/schemas/PayoutIndividualV3'
+        company:
+          $ref: '#/components/schemas/PayoutCompanyV3'
+      required:
+      - payeeId
+      type: object
     PaymentChannelRule:
       description: Rules that will get applied when creating or updating a payment
         channel for the given country
@@ -17627,7 +18318,7 @@ components:
       pattern: ^[A-Z]{2}$
       title: ISO 3166 2 Character Country Code
       type: string
-    Region:
+    RegionV2:
       example:
         name: California
         abbreviation: CA
@@ -17691,6 +18382,34 @@ components:
       - currency
       - routingNumber
       type: object
+    Name:
+      example:
+        firstName: Bob
+        lastName: Smith
+        otherNames: H
+        title: Mr
+      properties:
+        title:
+          example: Mr
+          maxLength: 10
+          minLength: 1
+          type: string
+        firstName:
+          example: Bob
+          maxLength: 40
+          minLength: 1
+          type: string
+        otherNames:
+          example: H
+          maxLength: 40
+          minLength: 1
+          type: string
+        lastName:
+          example: Smith
+          maxLength: 40
+          minLength: 1
+          type: string
+      type: object
     FundingEventType:
       enum:
       - PAYOR_FUNDING_DETECTED
@@ -17701,6 +18420,42 @@ components:
       - PAYOR_FUNDING_ENTRY_DETAIL_RECEIVED
       - FUNDING_DEALLOCATED
       type: string
+    PayoutIndividualV3:
+      example:
+        name:
+          firstName: Fred
+          lastName: Flintstone
+      properties:
+        name:
+          $ref: '#/components/schemas/PayoutNameV3'
+      required:
+      - name
+      type: object
+    PayoutCompanyV3:
+      example:
+        companyName: ACME Anvils PLC
+      properties:
+        companyName:
+          example: ACME Anvils PLC
+          type: string
+      required:
+      - companyName
+      type: object
+    PayoutNameV3:
+      example:
+        firstName: Fred
+        lastName: Flintstone
+      properties:
+        firstName:
+          example: Fred
+          type: string
+        lastName:
+          example: Flintstone
+          type: string
+      required:
+      - firstName
+      - lastName
+      type: object
     inline_response_401_errors:
       properties:
         errorMessage:
@@ -17808,6 +18563,41 @@ components:
           format: uuid
           nullable: true
           type: string
+    inline_response_404_errors:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: The resource was not found
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: paymentId
+          type: string
+        locationType:
+          $ref: '#/components/schemas/LocationType'
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise
+            client error messages
+          example: permissions
+          type: string
+    inline_response_404:
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/inline_response_404_errors'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence
+            of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
     inline_response_409_errors:
       properties:
         errorMessage:
@@ -17833,6 +18623,42 @@ components:
           description: one or more errors
           items:
             $ref: '#/components/schemas/inline_response_409_errors'
+          minItems: 1
+          nullable: true
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence
+            of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          nullable: true
+          type: string
+    inline_response_412_errors:
+      properties:
+        errorMessage:
+          description: |
+            verbose message indicating the nature of the error
+            Will be localised
+          example: The request could not be completed as the pre conditions have not
+            been met
+          type: string
+        location:
+          description: the property or object that caused the error
+          example: accessToken
+          type: string
+        locationType:
+          $ref: '#/components/schemas/LocationType'
+        reasonCode:
+          description: a camel-cased string that can be used by clients to localise
+            client error messages
+          example: permissions
+          type: string
+    inline_response_412:
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/inline_response_412_errors'
           minItems: 1
           nullable: true
           type: array
@@ -17876,10 +18702,6 @@ components:
           type: string
         href:
           example: https://api.sandbox.velopayments.com/v2/users??type=PAYOR&page=1&pageSize=10
-          type: string
-    UserResponse_2_roles:
-      properties:
-        name:
           type: string
     PayorLinksResponse_links:
       example:
@@ -18020,7 +18842,7 @@ components:
           type: string
     CreatePayeesCSVResponse_rejectedCsvRows:
       example:
-        rejectedContent: remoteId1,USD,-123.45,ref1
+        rejectedContent: unable,to,process,csv,line
         lineNumber: 3
         message: rejected message 1
       properties:
@@ -18028,7 +18850,7 @@ components:
           example: 3
           type: integer
         rejectedContent:
-          example: remoteId1,USD,-123.45,ref1
+          example: unable,to,process,csv,line
           type: string
         message:
           example: rejected message 1
@@ -18141,12 +18963,17 @@ components:
         href:
           example: https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc
           type: string
-    GetFundingsResponse_allOf:
+    GetFundingsResponse_links:
+      example:
+        rel: first
+        href: https://api.sandbox.velopayments.com/v1/paymentaudit/fundings?payorId=2a5d8af2-a1ed-4d7f-b9a7-ebe4b333be5a&page=1&pageSize=10
       properties:
-        content:
-          items:
-            $ref: '#/components/schemas/FundingAudit'
-          type: array
+        rel:
+          example: first
+          type: string
+        href:
+          example: https://api.sandbox.velopayments.com/v1/paymentaudit/fundings?payorId=2a5d8af2-a1ed-4d7f-b9a7-ebe4b333be5a&page=1&pageSize=10
+          type: string
     GetPayoutsResponseV3_page:
       example:
         numberOfElements: 12
@@ -18267,7 +19094,7 @@ components:
         pageSize:
           example: 25
           type: integer
-    ListPaymentsResponse_page:
+    ListPaymentsResponseV3_page:
       example:
         numberOfElements: 12
         totalPages: 12
@@ -18448,23 +19275,6 @@ components:
       required:
       - firstName
       - lastName
-    PagedResponse_page:
-      properties:
-        numberOfElements:
-          format: int64
-          type: integer
-        totalElements:
-          format: int64
-          type: integer
-        totalPages:
-          format: int64
-          type: integer
-        page:
-          format: int64
-          type: integer
-        pageSize:
-          format: int64
-          type: integer
     CreateIndividual_2_name:
       properties:
         title:
@@ -18524,18 +19334,9 @@ x-tagGroups:
   - Invites
 - name: Payouts
   tags:
-  - Submit Payout
-  - Get Payout
-  - Retrieve Payments for Payout
-  - Quote Payout
-  - Instruct Payout
-  - Withdraw Payout
-  - Payout History
-  - Payout History
-  - Withdraw Payment
+  - Payout Service
 - name: Reporting
   tags:
-  - Payments
   - Payment Audit Service
 - name: Auth
   tags:
