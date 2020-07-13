@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.23.74",
+    "version": "2.23.75",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -206,6 +206,17 @@
       "post": {
         "description": "<p>The second part of login involves validating using an MFA device</p>\n<p>An access token with PRE_AUTH authorities is required</p>\n",
         "operationId": "validateAccessToken",
+        "parameters": [
+          {
+            "description": "Bearer token authorization leg of validate",
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1364,6 +1375,17 @@
       "post": {
         "description": "<p>Unregister the MFA device for the user </p>\n<p>If the user does not require further verification then a register new MFA device token will be sent to them via their email address</p>\n",
         "operationId": "unregisterMFAForSelf",
+        "parameters": [
+          {
+            "description": "Bearer token authorization leg of validate",
+            "in": "header",
+            "name": "Authorization",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -7615,7 +7637,7 @@
     },
     "/v4/payees/deltas": {
       "get": {
-        "description": "Get a paginated response listing payee changes.",
+        "description": "Get a paginated response listing payee changes (updated since a particular time) to a limited set of fields:\n- dbaName\n- displayName\n- email\n- onboardedStatus\n- payeeCountry\n- payeeId\n- remoteId\n",
         "operationId": "listPayeeChangesV4",
         "parameters": [
           {
@@ -12480,6 +12502,30 @@
         "operationId": "listWebhooksV1",
         "parameters": [
           {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The number of results to return in a page",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
             "description": "The Payor ID",
             "in": "query",
             "name": "payorId",
@@ -12898,19 +12944,19 @@
           "smsNumber": {
             "description": "The phone number of a device that the user can receive sms messages on\n",
             "example": "11235555555",
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           },
           "primaryContactNumber": {
             "description": "The main contact number for the user\n",
             "example": "11235555555",
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           },
           "secondaryContactNumber": {
             "description": "The secondary contact number for the user\n",
             "example": "11235555550",
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           },
           "firstName": {
@@ -13010,20 +13056,20 @@
           "smsNumber": {
             "description": "The phone number of a device that the user can receive sms messages on\n",
             "example": "11235555555",
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           },
           "primaryContactNumber": {
             "description": "The main contact number for the user\n",
             "example": "11235555555",
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           },
           "secondaryContactNumber": {
             "description": "The secondary contact number for the user\n",
             "example": "11235555550",
             "nullable": true,
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           },
           "roles": {
@@ -13180,14 +13226,14 @@
             "description": "The main contact number for the user\n",
             "example": "11235555555",
             "nullable": true,
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           },
           "secondaryContactNumber": {
             "description": "The secondary contact number for the user\n",
             "example": "11235555550",
             "nullable": true,
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           },
           "firstName": {
@@ -13215,7 +13261,7 @@
             "description": "The phone number of a device that the user can receive sms messages on\n",
             "example": "11235555555",
             "nullable": true,
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           },
           "mfaType": {
@@ -13240,7 +13286,7 @@
           "smsNumber": {
             "description": "The phone number of a device that the user can receive sms messages on\n",
             "example": "11235555555",
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           }
         },
@@ -13264,14 +13310,14 @@
             "description": "The main contact number for the user\n",
             "example": "11235555555",
             "nullable": true,
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           },
           "secondaryContactNumber": {
             "description": "The secondary contact number for the user\n",
             "example": "11235555550",
             "nullable": true,
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           },
           "firstName": {
@@ -13299,7 +13345,7 @@
             "description": "The phone number of a device that the user can receive sms messages on\n",
             "example": "11235555555",
             "nullable": true,
-            "pattern": "^\\+?[1-9]\\d{1,14}$",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           }
         },
@@ -21103,6 +21149,7 @@
             "maxLength": 1000,
             "minLength": 4,
             "nullable": true,
+            "pattern": ".*",
             "type": "string"
           },
           "enabled": {
@@ -21729,7 +21776,7 @@
           "name": {
             "example": "ABC Ltd",
             "maxLength": 40,
-            "minLength": 1,
+            "minLength": 3,
             "type": "string"
           },
           "taxId": {
@@ -22249,7 +22296,7 @@
           "name": {
             "example": "ABC Group Plc",
             "maxLength": 40,
-            "minLength": 1,
+            "minLength": 3,
             "type": "string"
           },
           "taxId": {
@@ -22597,7 +22644,7 @@
           "name": {
             "example": "ABC Group Plc",
             "maxLength": 40,
-            "minLength": 1,
+            "minLength": 3,
             "type": "string"
           },
           "taxId": {
