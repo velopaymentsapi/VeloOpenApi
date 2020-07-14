@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.23.75",
+    "version": "2.23.76",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -12346,6 +12346,155 @@
         ]
       }
     },
+    "/v1/webhooks": {
+      "description": "List the details about the webhooks for the given payor.",
+      "get": {
+        "description": "List the details about the webhooks for the given payor.",
+        "operationId": "listWebhooksV1",
+        "parameters": [
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The number of results to return in a page",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The Payor ID",
+            "in": "query",
+            "name": "payorId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WebhooksResponse"
+                }
+              }
+            },
+            "description": "Webhook response"
+          },
+          "400": {
+            "description": "Invalid Request Parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "List the details about the webhooks for the given payor.",
+        "tags": [
+          "Webhooks"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/webhooks?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
+          }
+        ]
+      },
+      "post": {
+        "description": "Create Webhook",
+        "operationId": "createWebhookV1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebhookRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Webhook Created",
+            "headers": {
+              "Location": {
+                "description": "Reference to Webhook object",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "Create Webhook",
+        "tags": [
+          "Webhooks"
+        ]
+      },
+      "summary": "List Webhooks"
+    },
     "/v1/webhooks/{webhookId}": {
       "description": "Get details about the given webhook.",
       "get": {
@@ -12495,40 +12644,15 @@
       },
       "summary": "Get Webhook"
     },
-    "/v1/webhooks": {
-      "description": "List the details about the webhooks for the given payor.",
-      "get": {
-        "description": "List the details about the webhooks for the given payor.",
-        "operationId": "listWebhooksV1",
+    "/v1/webhooks/{webhookId}/ping": {
+      "description": "Trigger an immediate ping notification to the webhook",
+      "post": {
+        "operationId": "pingWebhookV1",
         "parameters": [
           {
-            "description": "Page number. Default is 1.",
-            "in": "query",
-            "name": "page",
-            "required": false,
-            "schema": {
-              "default": 1,
-              "format": "int32",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "The number of results to return in a page",
-            "in": "query",
-            "name": "pageSize",
-            "required": false,
-            "schema": {
-              "default": 25,
-              "format": "int32",
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer"
-            }
-          },
-          {
-            "description": "The Payor ID",
-            "in": "query",
-            "name": "payorId",
+            "description": "Webhook id",
+            "in": "path",
+            "name": "webhookId",
             "required": true,
             "schema": {
               "format": "uuid",
@@ -12537,18 +12661,18 @@
           }
         ],
         "responses": {
-          "200": {
+          "202": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/WebhooksResponse"
+                  "$ref": "#/components/schemas/PingResponse"
                 }
               }
             },
-            "description": "Webhook response"
+            "description": "Send ping"
           },
           "400": {
-            "description": "Invalid Request Parameters"
+            "description": "Bad Request, Invalid path parameter"
           },
           "401": {
             "content": {
@@ -12569,80 +12693,23 @@
               }
             },
             "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          }
-        },
-        "summary": "List the details about the webhooks for the given payor.",
-        "tags": [
-          "Webhooks"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/webhooks?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
-          }
-        ]
-      },
-      "post": {
-        "description": "Create Webhook",
-        "operationId": "createWebhookV1",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateWebhookRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Webhook Created",
-            "headers": {
-              "Location": {
-                "description": "Reference to Webhook object",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
           },
-          "400": {
+          "404": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
+                  "$ref": "#/components/schemas/inline_response_404"
                 }
               }
             },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+            "description": "The resource was not found or is no longer available\n"
           }
         },
-        "summary": "Create Webhook",
         "tags": [
           "Webhooks"
         ]
       },
-      "summary": "List Webhooks"
+      "summary": "Ping Webhook"
     }
   },
   "components": {
@@ -21104,60 +21171,6 @@
         },
         "type": "object"
       },
-      "WebhookResponse": {
-        "example": {
-          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "authorizationHeader": "authorizationHeader",
-          "webhookUrl": "webhookUrl",
-          "enabled": true
-        },
-        "properties": {
-          "id": {
-            "format": "uuid",
-            "type": "string"
-          },
-          "payorId": {
-            "format": "uuid",
-            "type": "string"
-          },
-          "webhookUrl": {
-            "type": "string"
-          },
-          "authorizationHeader": {
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
-      "UpdateWebhookRequest": {
-        "example": {
-          "authorizationHeader": "authorizationHeader",
-          "webhookUrl": "webhookUrl",
-          "enabled": true
-        },
-        "properties": {
-          "webhookUrl": {
-            "maxLength": 2000,
-            "minLength": 6,
-            "type": "string"
-          },
-          "authorizationHeader": {
-            "maxLength": 1000,
-            "minLength": 4,
-            "nullable": true,
-            "pattern": ".*",
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
       "WebhooksResponse": {
         "description": "List Webhooks Object",
         "example": {
@@ -21246,6 +21259,77 @@
           "payorId",
           "webhookUrl"
         ],
+        "type": "object"
+      },
+      "WebhookResponse": {
+        "example": {
+          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "authorizationHeader": "authorizationHeader",
+          "webhookUrl": "webhookUrl",
+          "enabled": true
+        },
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "webhookUrl": {
+            "type": "string"
+          },
+          "authorizationHeader": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateWebhookRequest": {
+        "example": {
+          "authorizationHeader": "authorizationHeader",
+          "webhookUrl": "webhookUrl",
+          "enabled": true
+        },
+        "properties": {
+          "webhookUrl": {
+            "maxLength": 2000,
+            "minLength": 6,
+            "type": "string"
+          },
+          "authorizationHeader": {
+            "maxLength": 1000,
+            "minLength": 4,
+            "nullable": true,
+            "pattern": ".*",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "PingResponse": {
+        "example": {
+          "webhookId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "webhookId": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
         "type": "object"
       },
       "UserInfo": {
