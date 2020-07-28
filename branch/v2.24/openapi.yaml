@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.24.17
+  version: 2.24.18
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -7404,7 +7404,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListPaymentsResponseV3'
-          description: Details of Payee
+          description: Paginated list of payments
         '400':
           content:
             application/json:
@@ -7759,6 +7759,20 @@ paths:
           schema:
             format: date
             type: string
+        - description: |
+            Transmission Type
+            * ACH
+            * SAME_DAY_ACH
+            * WIRE
+          in: query
+          name: transmissionType
+          required: false
+          schema:
+            enum:
+              - ACH
+              - SAME_DAY_ACH
+              - WIRE
+            type: string
         - description: Page number. Default is 1.
           in: query
           name: page
@@ -7885,6 +7899,20 @@ paths:
               - RETURNED
               - WITHDRAWN
             type: string
+        - description: |
+            Transmission Type
+            * ACH
+            * SAME_DAY_ACH
+            * WIRE
+          in: query
+          name: transmissionType
+          required: false
+          schema:
+            enum:
+              - ACH
+              - SAME_DAY_ACH
+              - WIRE
+            type: string
         - description: The source account name filter. This filters via a case insensitive substring match.
           in: query
           name: sourceAccountName
@@ -7992,7 +8020,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ListPaymentsResponseV4'
-          description: Details of Payee
+          description: Paginated list of payments
         '400':
           content:
             application/json:
@@ -14390,7 +14418,6 @@ components:
         transactionTime: transactionTime
         paymentMemo: paymentMemo
         paymentAmount: 1
-        paymentType: paymentType
         returnCode: returnCode
         payeeName: payeeName
         rejectReason: rejectReason
@@ -14466,8 +14493,6 @@ components:
           description: ISO 4217 3 character currency code
           type: string
         paymentMemo:
-          type: string
-        paymentType:
           type: string
         paymentRails:
           type: string
@@ -14662,6 +14687,7 @@ components:
             submittedDateTime: 2000-01-23T04:56:07.000Z
             sourceAmount: 12345
             railsId: asdf123
+            transmissionType: transmissionType
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             events:
@@ -14733,6 +14759,7 @@ components:
             submittedDateTime: 2000-01-23T04:56:07.000Z
             sourceAmount: 12345
             railsId: asdf123
+            transmissionType: transmissionType
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             events:
@@ -14833,6 +14860,7 @@ components:
             submittedDateTime: 2000-01-23T04:56:07.000Z
             sourceAmount: 12345
             railsId: asdf123
+            transmissionType: transmissionType
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             events:
@@ -14904,6 +14932,7 @@ components:
             submittedDateTime: 2000-01-23T04:56:07.000Z
             sourceAmount: 12345
             railsId: asdf123
+            transmissionType: transmissionType
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             events:
@@ -14989,6 +15018,7 @@ components:
         submittedDateTime: 2000-01-23T04:56:07.000Z
         sourceAmount: 12345
         railsId: asdf123
+        transmissionType: transmissionType
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         events:
@@ -15175,6 +15205,9 @@ components:
           type: string
         withdrawable:
           type: boolean
+        transmissionType:
+          description: 'The transmission type of the payment, e.g. ACH, SAME_DAY_ACH, WIRE'
+          type: string
         payout:
           $ref: '#/components/schemas/PaymentResponseV4_payout'
       required:
@@ -15288,8 +15321,6 @@ components:
           description: ISO 4217 3 character currency code
           type: string
         paymentMemo:
-          type: string
-        paymentType:
           type: string
         paymentRails:
           type: string
