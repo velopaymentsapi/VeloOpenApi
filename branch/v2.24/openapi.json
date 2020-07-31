@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.24.21",
+    "version": "2.24.22",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -21139,6 +21139,10 @@
           "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "authorizationHeader": "authorizationHeader",
+          "categories": [
+            null,
+            null
+          ],
           "webhookUrl": "webhookUrl",
           "enabled": true
         },
@@ -21159,6 +21163,12 @@
           },
           "enabled": {
             "type": "boolean"
+          },
+          "categories": {
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            },
+            "type": "array"
           }
         },
         "type": "object"
@@ -21166,16 +21176,22 @@
       "UpdateWebhookRequest": {
         "example": {
           "authorizationHeader": "authorizationHeader",
+          "categories": [
+            null,
+            null
+          ],
           "webhookUrl": "webhookUrl",
           "enabled": true
         },
         "properties": {
           "webhookUrl": {
+            "description": "the webhook URL to use.",
             "maxLength": 2000,
             "minLength": 6,
             "type": "string"
           },
           "authorizationHeader": {
+            "description": "the authorization header to include with the notification.",
             "maxLength": 1000,
             "minLength": 4,
             "nullable": true,
@@ -21183,7 +21199,16 @@
             "type": "string"
           },
           "enabled": {
+            "description": "whether the webhook is enabled.",
             "type": "boolean"
+          },
+          "categories": {
+            "description": "The notification categories to enable.",
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            },
+            "nullable": true,
+            "type": "array"
           }
         },
         "type": "object"
@@ -21213,6 +21238,10 @@
               "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "authorizationHeader": "authorizationHeader",
+              "categories": [
+                null,
+                null
+              ],
               "webhookUrl": "webhookUrl",
               "enabled": true
             },
@@ -21220,6 +21249,10 @@
               "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "authorizationHeader": "authorizationHeader",
+              "categories": [
+                null,
+                null
+              ],
               "webhookUrl": "webhookUrl",
               "enabled": true
             }
@@ -21248,6 +21281,10 @@
         "example": {
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "authorizationHeader": "authorizationHeader",
+          "categories": [
+            null,
+            null
+          ],
           "webhookUrl": "webhookUrl",
           "enabled": true
         },
@@ -21257,18 +21294,28 @@
             "type": "string"
           },
           "webhookUrl": {
+            "description": "the webhook URL to use.",
             "maxLength": 2000,
             "minLength": 6,
             "type": "string"
           },
           "authorizationHeader": {
+            "description": "the authorization header to include with the notification.",
             "maxLength": 1000,
             "minLength": 4,
             "pattern": ".*",
             "type": "string"
           },
           "enabled": {
+            "description": "whether the webhook is enabled.",
             "type": "boolean"
+          },
+          "categories": {
+            "description": "the categories to enable.",
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -24494,6 +24541,14 @@
           }
         },
         "type": "object"
+      },
+      "Category": {
+        "description": "The notification category.  One of \"payment\" or \"payee\".",
+        "enum": [
+          "payment",
+          "payee"
+        ],
+        "type": "string"
       },
       "UserType_2": {
         "enum": [
