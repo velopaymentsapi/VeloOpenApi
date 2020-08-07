@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.24.29
+  version: 2.24.30
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -11461,10 +11461,22 @@ components:
         payorRefs:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+            payableStatus: true
+            payableIssues:
+              - code: '3'
+                message: payee-disabled
+              - code: '3'
+                message: payee-disabled
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+            payableStatus: true
+            payableIssues:
+              - code: '3'
+                message: payee-disabled
+              - code: '3'
+                message: payee-disabled
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
         watchlistOverrideComment: watchlist override comment
@@ -11647,10 +11659,22 @@ components:
           - payorRefs:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                payableStatus: true
+                payableIssues:
+                  - code: '3'
+                    message: payee-disabled
+                  - code: '3'
+                    message: payee-disabled
                 remoteId: uniqueIdForRemoteEntity
                 paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                payableStatus: true
+                payableIssues:
+                  - code: '3'
+                    message: payee-disabled
+                  - code: '3'
+                    message: payee-disabled
                 remoteId: uniqueIdForRemoteEntity
                 paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
             watchlistOverrideComment: Example reason for the watchlist status being overridden
@@ -11675,10 +11699,22 @@ components:
           - payorRefs:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                payableStatus: true
+                payableIssues:
+                  - code: '3'
+                    message: payee-disabled
+                  - code: '3'
+                    message: payee-disabled
                 remoteId: uniqueIdForRemoteEntity
                 paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+                payableStatus: true
+                payableIssues:
+                  - code: '3'
+                    message: payee-disabled
+                  - code: '3'
+                    message: payee-disabled
                 remoteId: uniqueIdForRemoteEntity
                 paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
             watchlistOverrideComment: Example reason for the watchlist status being overridden
@@ -12691,10 +12727,22 @@ components:
         payorRefs:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+            payableStatus: true
+            payableIssues:
+              - code: '3'
+                message: payee-disabled
+              - code: '3'
+                message: payee-disabled
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+            payableStatus: true
+            payableIssues:
+              - code: '3'
+                message: payee-disabled
+              - code: '3'
+                message: payee-disabled
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
         watchlistOverrideComment: watchlist override comment
@@ -16963,6 +17011,12 @@ components:
       example:
         payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
         invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+        payableStatus: true
+        payableIssues:
+          - code: '3'
+            message: payee-disabled
+          - code: '3'
+            message: payee-disabled
         remoteId: uniqueIdForRemoteEntity
         paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
       properties:
@@ -16985,6 +17039,14 @@ components:
           example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
           format: uuid
           type: string
+        payableStatus:
+          description: Indicates if the payee is payable for this payor
+          type: boolean
+        payableIssues:
+          description: Indicates any conditions which prevent the payee from being payable for this payor
+          items:
+            $ref: '#/components/schemas/PayableIssue'
+          type: array
       type: object
     Individual_2:
       example:
@@ -17066,10 +17128,22 @@ components:
         payorRefs:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+            payableStatus: true
+            payableIssues:
+              - code: '3'
+                message: payee-disabled
+              - code: '3'
+                message: payee-disabled
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+            payableStatus: true
+            payableIssues:
+              - code: '3'
+                message: payee-disabled
+              - code: '3'
+                message: payee-disabled
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
         watchlistOverrideComment: Example reason for the watchlist status being overridden
@@ -17335,6 +17409,12 @@ components:
       example:
         payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
         invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+        payableStatus: true
+        payableIssues:
+          - code: '3'
+            message: payee-disabled
+          - code: '3'
+            message: payee-disabled
         remoteId: uniqueIdForRemoteEntity
         paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
       properties:
@@ -17357,6 +17437,14 @@ components:
           example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
           format: uuid
           type: string
+        payableStatus:
+          description: Indicates if the payee is payable for this payor
+          type: boolean
+        payableIssues:
+          description: Indicates any conditions which prevent the payee from being payable for this payor
+          items:
+            $ref: '#/components/schemas/PayableIssue_2'
+          type: array
       type: object
     WatchlistStatus_2:
       enum:
@@ -19020,6 +19108,22 @@ components:
         - PENDING
         - DECLINED
       type: string
+    PayableIssue:
+      description: payable issues for the payee and payor combination
+      example:
+        code: '3'
+        message: payee-disabled
+      properties:
+        code:
+          example: '3'
+          type: string
+        message:
+          example: payee-disabled
+          type: string
+      required:
+        - code
+        - message
+      type: object
     GetPayeeListResponseIndividual:
       example:
         name:
@@ -19662,6 +19766,22 @@ components:
       required:
         - dateOfBirth
         - name
+      type: object
+    PayableIssue_2:
+      description: payable issues for the payee and payor combination
+      example:
+        code: '3'
+        message: payee-disabled
+      properties:
+        code:
+          example: '3'
+          type: string
+        message:
+          example: payee-disabled
+          type: string
+      required:
+        - code
+        - message
       type: object
     FundingEvent:
       example:
