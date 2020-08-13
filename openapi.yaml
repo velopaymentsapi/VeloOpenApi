@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.22.123
+  version: 2.23.124
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -226,6 +226,13 @@ paths:
         <p>The second part of login involves validating using an MFA device</p>
         <p>An access token with PRE_AUTH authorities is required</p>
       operationId: validateAccessToken
+      parameters:
+        - description: Bearer token authorization leg of validate
+          in: header
+          name: Authorization
+          required: false
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -1104,6 +1111,13 @@ paths:
         <p>Unregister the MFA device for the user </p>
         <p>If the user does not require further verification then a register new MFA device token will be sent to them via their email address</p>
       operationId: unregisterMFAForSelf
+      parameters:
+        - description: Bearer token authorization leg of validate
+          in: header
+          name: Authorization
+          required: false
+          schema:
+            type: string
       requestBody:
         content:
           application/json:
@@ -1343,11 +1357,12 @@ paths:
                 Content-Type: application/json;charset=UTF-8
               body:
                 payorId: 0a818933-087d-47f2-ad83-2f986ed087eb
+                payorXid: ABC_12345678
                 payorName: Joe
                 address:
                   line1: 101 California Street
                   city: San Francisco
-                  zipOrPostcode: '94111'
+                  zipOrPostcode: 94111
                   country: US
                 primaryContactName: Joe
                 primaryContactPhone: 1231231234
@@ -2915,8 +2930,7 @@ paths:
       deprecated: true
       description: |
         Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query
-        for status (201 - Created, 400 - invalid request body, 409 - if there is a duplicate remote id within the
-        batch / if there is a duplicate email within the batch).
+        for status (201 - Created, 400 - invalid request body
       operationId: v2CreatePayee
       requestBody:
         content:
@@ -3070,13 +3084,6 @@ paths:
                 $ref: '#/components/schemas/inline_response_404'
           description: |
             The resource was not found or is no longer available
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_409'
-          description: |
-            The request contained data that would result in a duplicate value
       summary: Initiate Payee Creation
       tags:
         - Payee Invitation
@@ -3334,6 +3341,7 @@ paths:
       tags:
         - Payees
     get:
+      deprecated: true
       description: Get Payee by Id
       operationId: getPayeeByIdV3
       parameters:
@@ -3530,6 +3538,7 @@ paths:
           contractPath: /v3/payees/026cc3c8-3a0c-4083-a05b-e908048c1b08
   /v3/payees:
     get:
+      deprecated: true
       description: Get a paginated response listing the payees for a payor.
       operationId: listPayeesV3
       parameters:
@@ -3755,10 +3764,14 @@ paths:
                 -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \
                 -H 'Content-Type: application/json'
     post:
+      deprecated: true
       description: |
         Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query
-        for status (201 - Created, 400 - invalid request body, 409 - if there is a duplicate remote id within the
-        batch / if there is a duplicate email within the batch).
+        for status (201 - Created, 400 - invalid request body. In addition to standard semantic validations, a
+        400 will also result if there is a duplicate remote id within the batch / if there is a duplicate email
+        within the batch, i.e. if there is a conflict between the data provided for one payee within the batch and
+        that provided for another payee within the same batch). The validation at this stage is intra-batch only.
+        Validation against payees who have already been invited occurs subsequently during processing of the batch.
       operationId: v3CreatePayee
       requestBody:
         content:
@@ -3912,13 +3925,6 @@ paths:
                 $ref: '#/components/schemas/inline_response_404'
           description: |
             The resource was not found or is no longer available
-        '409':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_409'
-          description: |
-            The request contained data that would result in a duplicate value
       summary: Initiate Payee Creation
       tags:
         - Payee Invitation
@@ -3949,6 +3955,7 @@ paths:
                 "taxId":"223344556"},"ofacOverride":false,"language":"FR"}]}'
   '/v3/payees/batch/{batchId}':
     get:
+      deprecated: true
       description: |
         Fetch the status of a specific batch of payees. The batch is fully processed when status is ACCEPTED and pendingCount is 0 ( 200 - OK, 404 - batch not found ).
       operationId: queryBatchStatusV3
@@ -4005,6 +4012,7 @@ paths:
                 -H 'Authorization: Bearer f01caad1-5ae5-454d-9467-5053e459fe45'
   '/v3/payees/{payeeId}/invite':
     post:
+      deprecated: true
       description: |
         <p>Resend an invite to the Payee The payee must have already been invited by the payor and not yet accepted or declined</p>
         <p>Any previous invites to the payee by this Payor will be invalidated</p>
@@ -4074,6 +4082,7 @@ paths:
                 -d '{"payorId":"545e29bd-75a8-4354-8192-ae68bab59d7b"}'
   '/v3/payees/payors/{payorId}/invitationStatus':
     get:
+      deprecated: true
       description: |
         Returns a filtered, paginated list of payees associated with a payor, along with invitation status and grace period end date.
       operationId: getPayeesInvitationStatusV3
@@ -4214,6 +4223,7 @@ paths:
                 -H 'Authorization: Bearer ed73aa9a-b51b-44cb-a8e9-11e2fb85046b'
   /v3/payees/deltas:
     get:
+      deprecated: true
       description: Get a paginated response listing payee changes.
       operationId: listPayeeChangesV3
       parameters:
@@ -4293,6 +4303,7 @@ paths:
                 -H 'Content-Type: application/json'
   '/v3/payees/{payeeId}/remoteIdUpdate':
     post:
+      deprecated: true
       description: |
         <p>Update the remote Id for the given Payee Id.</p>
       parameters:
@@ -4353,6 +4364,7 @@ paths:
         - Payees
   '/v3/payees/{payeeId}/payeeDetailsUpdate':
     post:
+      deprecated: true
       description: |
         <p>Update payee details for the given Payee Id.<p>
       operationId: payeeDetailsUpdateV3
@@ -4433,6 +4445,1144 @@ paths:
                             "dateOfBirth": "1970-04-03"
                         }
                     }'
+  '/v4/payees/{payeeId}':
+    delete:
+      description: |
+        <p>This API will delete Payee by Id (UUID). Deletion by ID is not allowed if:</p>
+        <p>* Payee ID is not found</p>
+        <p>* If Payee has not been on-boarded</p>
+        <p>* If Payee is in grace period</p>
+        <p>* If Payee has existing payments</p>
+      operationId: deletePayeeByIdV4
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: No content. Payee Id accepted for deletion.
+        '400':
+          description: Bad Request. Payee Id failed validation for deletion.
+        '404':
+          description: Payee Id not found
+      summary: Delete Payee by Id
+      tags:
+        - Payees
+    get:
+      description: Get Payee by Id
+      operationId: getPayeeByIdV4
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+        - description: |
+            Optional. If omitted or set to false, any Personal Identifiable Information (PII) values are returned masked.
+            If set to true, and you have permission, the PII values will be returned as their original unmasked values.
+          in: query
+          name: sensitive
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayeeDetailResponse_2'
+          description: 'Success response, request completed okay'
+          x-contracts:
+            - contractId: 1
+              headers:
+                Content-Type: application/json
+              body:
+                payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+                payorRefs:
+                  - payorId: 9ac75325-5dcd-42d5-b992-175d7e0a035e
+                    remoteId: remoteId
+                    invitationStatus: PENDING
+                email: bob@example.com
+                onboardedStatus: CREATED
+                watchlistStatus: PENDING
+                watchlistOverrideExpiresAtTimestamp: 2019-02-04T00:00:00.000Z
+                watchlistOverrideComment: watchlist override comment
+                language: FR
+                created: 2018-01-02T00:00:00.000Z
+                country: US
+                displayName: display name
+                payeeType: Individual
+                disabled: false
+                disabledComment: disabled comment
+                disabledUpdatedTimestamp: 2018-02-03T00:00:00.000Z
+                address:
+                  line1: 100 Battery Street
+                  line2: line2
+                  line3: line3
+                  line4: line4
+                  city: San Francisco
+                  countyOrProvince: California
+                  zipOrPostcode: '94018'
+                  country: US
+                individual:
+                  name:
+                    title: Mr
+                    firstName: Barney
+                    otherNames: Grubb
+                    lastName: Cuthbert
+                  nationalIdentification: XXXXX4321
+                  dateOfBirth: XXXX-XX-XX
+                cellphoneNumber: 0800800800
+                watchlistStatusUpdatedTimestamp: 2018-02-04T00:00:00.000Z
+                gracePeriodEndDate: 2019-12-23T00:00:00.000Z
+                enhancedKycCompleted: true
+                kycCompletedTimestamp: 2018-02-04T00:00:00.000Z
+                pausePayment: false
+                pausePaymentTimestamp: 2018-02-04T00:00:00.000Z
+                marketingOptInDecision: true
+                marketingOptInTimestamp: 2018-02-03T00:00:00.000Z
+                acceptTermsAndConditionsTimestamp: 2018-01-02T00:00:00.000Z
+            - contractId: 2
+              headers:
+                Content-Type: application/json
+              body:
+                payeeId: 01b51877-2a17-427a-b2b0-d73f2b136315
+                payorRefs:
+                  - payorId: 9ac75325-5dcd-42d5-b992-175d7e0a035e
+                    remoteId: remoteId
+                    invitationStatus: PENDING
+                email: bob@example.com
+                onboardedStatus: CREATED
+                watchlistStatus: PENDING
+                watchlistOverrideExpiresAtTimestamp: 2019-02-04T00:00:00.000Z
+                watchlistOverrideComment: watchlist override comment
+                language: FR
+                created: 2018-01-02T00:00:00.000Z
+                country: US
+                displayName: display name
+                payeeType: Company
+                disabled: false
+                disabledComment: disabled comment
+                disabledUpdatedTimestamp: 2018-02-03T00:00:00.000Z
+                address:
+                  line1: 100 Battery Street
+                  line2: line2
+                  line3: line3
+                  line4: line4
+                  city: San Francisco
+                  countyOrProvince: California
+                  zipOrPostcode: '94018'
+                  country: US
+                company:
+                  name: WIDGET CORP
+                  taxId: '223344556'
+                  operatingName: SAMPLE DBA NAME
+                cellphoneNumber: 0800800800
+                watchlistStatusUpdatedTimestamp: 2018-02-04T00:00:00.000Z
+                gracePeriodEndDate: 2019-12-23T00:00:00.000Z
+                enhancedKycCompleted: true
+                kycCompletedTimestamp: 2018-02-04T00:00:00.000Z
+                pausePayment: false
+                pausePaymentTimestamp: 2018-02-04T00:00:00.000Z
+                marketingOptInDecision: true
+                marketingOptInTimestamp: 2018-02-03T00:00:00.000Z
+                acceptTermsAndConditionsTimestamp: 2018-01-02T00:00:00.000Z
+            - contractId: 4
+              headers:
+                Content-Type: application/json
+              body:
+                payeeId: 026cc3c8-3a0c-4083-a05b-e908048c1b08
+                payorRefs:
+                  - payorId: 9ac75325-5dcd-42d5-b992-175d7e0a035e
+                    remoteId: remoteId
+                    invitationStatus: PENDING
+                email: bob@example.com
+                onboardedStatus: CREATED
+                watchlistStatus: PENDING
+                watchlistOverrideExpiresAtTimestamp: 2019-02-04T00:00:00.000Z
+                watchlistOverrideComment: watchlist override comment
+                language: FR
+                created: 2018-01-02T00:00:00.000Z
+                country: US
+                displayName: display name
+                payeeType: Individual
+                disabled: false
+                disabledComment: disabled comment
+                disabledUpdatedTimestamp: 2018-02-03T00:00:00.000Z
+                address:
+                  line1: 100 Battery Street
+                  line2: line2
+                  line3: line3
+                  line4: line4
+                  city: San Francisco
+                  countyOrProvince: California
+                  zipOrPostcode: '94018'
+                  country: US
+                individual:
+                  name:
+                    title: Mr
+                    firstName: Barney
+                    otherNames: Grubb
+                    lastName: Cuthbert
+                  nationalIdentification: '987654321'
+                  dateOfBirth: 1970-05-20T00:00:00.000Z
+                cellphoneNumber: 0800800800
+                watchlistStatusUpdatedTimestamp: 2018-02-04T00:00:00.000Z
+                gracePeriodEndDate: 2019-12-23T00:00:00.000Z
+                enhancedKycCompleted: true
+                kycCompletedTimestamp: 2018-02-04T00:00:00.000Z
+                pausePayment: false
+                pausePaymentTimestamp: 2018-02-04T00:00:00.000Z
+                marketingOptInDecision: true
+                marketingOptInTimestamp: 2018-02-03T00:00:00.000Z
+                acceptTermsAndConditionsTimestamp: 2018-01-02T00:00:00.000Z
+        '404':
+          description: Payee Not found
+          x-contracts:
+            - contractId: 3
+      summary: Get Payee by Id
+      tags:
+        - Payees
+      x-contracts:
+        - contractId: 1
+          name: Get Individual Payee v4
+          serviceName: payee-service
+          contractPath: /v4/payees/2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+        - contractId: 2
+          name: Get Company Payee v4
+          serviceName: payee-service
+          contractPath: /v4/payees/01b51877-2a17-427a-b2b0-d73f2b136315
+        - contractId: 3
+          name: Payee Id Not Found v4
+          serviceName: payee-service
+          contractPath: /v4/payees/e67cbda6-c031-4aae-8e72-922fe76c7a24
+        - contractId: 4
+          name: Get Payee sensitve true v4
+          serviceName: payee-service
+          contractPath: /v4/payees/026cc3c8-3a0c-4083-a05b-e908048c1b08
+  '/v4/payees/{payeeId}/payeeDetailsUpdate':
+    post:
+      description: |
+        <p>Update payee details for the given Payee Id.<p>
+      operationId: payeeDetailsUpdateV4
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePayeeDetailsRequest_2'
+        description: Request to update payee details
+        required: true
+      responses:
+        '204':
+          description: Request accepted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Update Payee Details
+      tags:
+        - Payees
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/payees/77f84ae9-42df-49d7-941b-47360347f86f/payeeDetailsUpdate' -i -X POST \
+                -H 'Authorization: Bearer ed73aa9a-b51b-44cb-a8e9-11e2fb85046b' \
+                -H 'Content-Type: application/json' \
+                -d '{
+                        "address": {
+                            "line1": "line1",
+                            "line2": "line2",
+                            "line3": "line3",
+                            "line4": "line4",
+                            "city": "City",
+                            "countyOrProvince": "county",
+                            "zipOrPostcode": "BS11AA",
+                            "country": "US"
+                        },
+                        "individual": {
+                            "name": {
+                                "title": "Mr",
+                                "firstName": "A",
+                                "otherNames": "P",
+                                "lastName": "Smith"
+                            },
+                            "nationalIdentification": "987654321",
+                            "dateOfBirth": "1970-04-03"
+                        }
+                    }'
+  '/v4/payees/{payeeId}/remoteIdUpdate':
+    post:
+      description: |
+        <p>Update the remote Id for the given Payee Id.</p>
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRemoteIdRequest'
+        description: Request to update payee remote id v4
+        required: true
+      responses:
+        '204':
+          description: 'Accepted, No Content'
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Update Payee Remote Id
+      tags:
+        - Payees
+  /v4/payees:
+    get:
+      description: Get a paginated response listing the payees for a payor.
+      operationId: listPayeesV4
+      parameters:
+        - description: The account owner Payor ID
+          in: query
+          name: payorId
+          required: true
+          schema:
+            format: uuid
+            type: string
+          x-contracts:
+            - contractId: 1
+              value: 0a818933-087d-47f2-ad83-2f986ed087eb
+              matchers:
+                - type: equal_to
+                  value: 0a818933-087d-47f2-ad83-2f986ed087eb
+        - description: The watchlistStatus of the payees.
+          in: query
+          name: watchlistStatus
+          required: false
+          schema:
+            $ref: '#/components/schemas/WatchlistStatus'
+        - description: Payee disabled
+          in: query
+          name: disabled
+          required: false
+          schema:
+            type: boolean
+        - description: The onboarded status of the payees.
+          in: query
+          name: onboardedStatus
+          required: false
+          schema:
+            $ref: '#/components/schemas/OnboardedStatus'
+        - description: Email address
+          in: query
+          name: email
+          required: false
+          schema:
+            example: bob@example.com
+            format: email
+            type: string
+        - description: The display name of the payees.
+          in: query
+          name: displayName
+          required: false
+          schema:
+            example: Bob Smith
+            type: string
+        - description: The remote id of the payees.
+          in: query
+          name: remoteId
+          required: false
+          schema:
+            example: remoteId123
+            type: string
+        - description: The onboarded status of the payees.
+          in: query
+          name: payeeType
+          required: false
+          schema:
+            $ref: '#/components/schemas/PayeeType'
+        - description: The country of the payee - 2 letter ISO 3166-1 country code (upper case)
+          in: query
+          name: payeeCountry
+          required: false
+          schema:
+            example: US
+            type: string
+        - description: The ofacStatus of the payees.
+          in: query
+          name: ofacStatus
+          required: false
+          schema:
+            $ref: '#/components/schemas/OfacStatus'
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            example: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            example: 25
+            format: int32
+            type: integer
+        - description: |
+            List of sort fields (e.g. ?sort=onboardedStatus:asc,name:asc) Default is name:asc 'name' is treated as company name for companies - last name + ',' + firstName for individuals The supported sort fields are - payeeId, displayName, payoutStatus, onboardedStatus.
+          in: query
+          name: sort
+          required: false
+          schema:
+            default: 'displayName:asc'
+            example: 'displayName:asc'
+            pattern: '[a-zA-Z]+[:desc|:asc]'
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedPayeeResponse_2'
+          description: Details of Payee
+          x-contracts:
+            - contractId: 1
+              headers:
+                Content-Type: application/json
+              body:
+                page:
+                  numberOfElements: 1
+                  totalElements: 1
+                  totalPages: 23
+                  page: '9,'
+                  pageSize: 2
+                links:
+                  - rel: first
+                    href: 'https://api.sandbox.velopayments.com/v4/payees?payorId=1982b223-73b7-419d-a2e1-e64362b0ee8b&page=1&pageSize=2&sort=displayName:asc'
+                content:
+                  - payeeId: ee2cc9a1-34dd-4ab6-91e3-db111d08d995
+              matchers:
+                headers:
+                  - key: Content-Type
+                    regex: application/json.*
+                body:
+                  - path: $.page.numberOfElements
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.totalElements
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.totalPages
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.page
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.pageSize
+                    type: by_regex
+                    predefined: number
+                  - path: $.links
+                    type: by_type
+                    minOccurrence: 1
+                    maxOccurrence: 5
+                  - path: '$.links[0].href'
+                    type: by_regex
+                    predefined: url
+                  - path: $.content
+                    type: by_type
+                    minOccurrence: 1
+                  - path: '$.content[0].payeeId'
+                    type: by_regex
+                    predefined: uuid
+                  - path: '$.content[0].email'
+                    type: by_regex
+                    predefined: email
+                  - path: '$.content[0].created'
+                    type: by_regex
+                    value: '([\d]{4})-([\d]{2})-([\d]{2})T([\d]{2}):([\d]{2}):([\d]{2})*(.([\d]{1,3}))Z'
+                  - path: '$.content[0].payorRefs[0].payorId'
+                    type: by_regex
+                    predefined: uuid
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: List Payees
+      tags:
+        - Payees
+      x-contracts:
+        - contractId: 1
+          name: Test List Payees All params for v4
+          headers:
+            Content-Type: application/json
+          request:
+            queryParameters:
+              - key: page
+                value: 1
+              - key: pageSize
+                value: 30
+              - key: watchlistStatus
+                value: PASSED
+              - key: onboardedStatus
+                value: CREATED
+              - key: email
+                value: testemail@example.com
+              - key: displayName
+                value: foo
+              - key: remoteId
+                value: 123123123asdf
+              - key: payeeType
+                value: Individual
+              - key: payeeCountry
+                value: US
+          serviceName: payee-service
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/payees?pageSize=2&page=8&payorId=9cade13d-0c55-41a7-9e6d-164e8b138b40&watchlistStatus=PASSED&onboardedStatus=INVITED&email=foo@example.com&displayName=Bar&remoteId=remote&payeeCountry=US&payeeType=Individual' -i -X GET \
+                -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \
+                -H 'Content-Type: application/json'
+    post:
+      description: |
+        Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query
+        for status (201 - Created, 400 - invalid request body. In addition to standard semantic validations, a
+        400 will also result if there is a duplicate remote id within the batch / if there is a duplicate email
+        within the batch, i.e. if there is a conflict between the data provided for one payee within the batch and
+        that provided for another payee within the same batch). The validation at this stage is intra-batch only.
+        Validation against payees who have already been invited occurs subsequently during processing of the batch.
+      operationId: v4CreatePayee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePayeesRequest_2'
+          multipart/form-data:
+            schema:
+              properties:
+                payorId:
+                  format: uuid
+                  type: string
+                file:
+                  description: CSV File of payee data
+                  items:
+                    $ref: '#/components/schemas/CreatePayeesCSVRequest_2'
+                  type: array
+              type: object
+        description: Post payees to create.
+        x-contracts:
+          - contractId: 1
+            headers:
+              Content-Type: application/json
+            body:
+              payorId: 0a818933-087d-47f2-ad83-2f986ed087eb
+              payees:
+                - type: Individual
+                  remoteId: remoteId
+                  email: bob@example.com
+                  address:
+                    line1: 100 Battery Street
+                    line2: line2
+                    line3: line3
+                    line4: line4
+                    city: San Francisco
+                    countyOrProvince: California
+                    zipOrPostcode: '94018'
+                    country: US
+                  paymentChannel:
+                    paymentChannelName: My Payment Channel
+                    accountNumber: '12345678'
+                    routingNumber: '123456789'
+                    countryCode: US
+                    currency: USD
+                    accountName: Foo Account
+                  individual:
+                    name:
+                      title: Mr
+                      firstName: Barney
+                      otherNames: Grubb
+                      lastName: Cuthbert
+                    nationalIdentification: '987654321'
+                    dateOfBirth: 1970-05-20T00:00:00.000Z
+                  language: FR
+                - type: Company
+                  remoteId: remoteId
+                  email: bob@example.com
+                  address:
+                    line1: 100 Battery Street
+                    line2: line2
+                    line3: line3
+                    line4: line4
+                    city: San Francisco
+                    countyOrProvince: California
+                    zipOrPostcode: '94018'
+                    country: US
+                  paymentChannel:
+                    paymentChannelName: My Payment Channel
+                    accountNumber: '12345678'
+                    routingNumber: '123456789'
+                    countryCode: US
+                    currency: USD
+                    accountName: Foo Account
+                  company:
+                    name: ABC Payee Corp
+                    taxId: '223344556'
+                  language: FR
+            matchers:
+              headers:
+                - key: Content-Type
+                  regex: application/json.*
+              body:
+                - path: $.payorId
+                  type: by_regex
+                  predefined: uuid
+                - path: $.payees
+                  type: by_regex
+                  predefined: non_empty
+          - contractId: 2
+            headers:
+              Content-Type: multipart/form-data
+            multipart:
+              params:
+                payorId: 0a818933-087d-47f2-ad83-2f986ed087eb
+              named:
+                - paramName: file
+                  fileName: filename.csv
+                  fileContent: |
+                    type,remoteId,email,addressLine1,addressLine2,addressLine3,addressLine4,addressCity,addressCountyOrProvince,addressZipOrPostcode,addressCountry,individualNationalIdentification,individualDateOfBirth,individualTitle,individualFirstName,individualOtherNames,individualLastName,companyName,companyEIN,paymentChannelAccountNumber,paymentChannelRoutingNumber,paymentChannelIban,paymentChannelAccountName,paymentChannelCountryCode,paymentChannelCurrency,challengeDescription,challengeValue,payeeLanguage\n Individual,remoteId123,bob@example.com,Address line 1,Address line 2,Address line 3,Address line 4,The City,The County,The Zip,GB,123456789,1970-02-25,Mr,Bob,Hungry,Wiggins,,,12345678,123456789,,Account name,US,USD,Challenge Description,Challenge Value,EN\n Company,remoteId1234,jim@example.com,Address line 1,Address line 2,Address line 3,Address line 4,The City,The County,The Zip,GB,,,,,,,ABC Corp,987654321,,,1234567890123456789012345678901234,Account name,US,USD,,,FR\n
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePayeesCSVResponse_2'
+          description: HTTP Created. Body created only on CSV requests
+          x-contracts:
+            - contractId: 1
+              headers:
+                Location: 'https://api.sandbox.velopayments.com/v4/payees/batch/dbe7df3a-6b75-4bcb-97c5-45d25f828267'
+              matchers:
+                headers:
+                  - key: Location
+                    type: by_regex
+                    predefined: url
+            - contractId: 2
+              headers:
+                Content-Type: application/json
+                Location: 'https://api.sandbox.velopayments.com/v4/payees/batch/dbe7df3a-6b75-4bcb-97c5-45d25f828267'
+              matchers:
+                headers:
+                  - key: Location
+                    type: by_regex
+                    predefined: url
+                  - key: Content-Type
+                    regex: application/json.*
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Initiate Payee Creation
+      tags:
+        - Payee Invitation
+      x-contracts:
+        - contractId: 1
+          name: Create Payees by JSON v4
+          serviceName: payee-service
+        - contractId: 2
+          name: Create Payees by CSV v4
+          serviceName: payee-service
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/payees' -i -X POST \
+                -H 'Content-Type: application/json' \
+                -H 'Authorization: Bearer 829d8ec0-00a3-4c95-8234-ad09500bb627' \
+                -d '{"payorId":"7ddebfed-0624-4bce-848d-40ffe818a2df","payees":[{"type":"Individual","remoteId":"remoteId",
+                "email":"bob@example.com","address":{"line1":"100 Battery Street","line2":"line2","line3":"line3",
+                "line4":"line4","city":"San Francisco","countyOrProvince":"California","zipOrPostcode":"94018","country":"US"},
+                "paymentChannel":{"paymentChannelName":"My Payment Channel","accountNumber":"12345678","routingNumber":"123456789",
+                "countryCode":"US","currency":"USD","accountName":"Foo Account"},"individual":{"name":{"title":"Mr",
+                "firstName":"Barney","otherNames":"Grubb","lastName":"Cuthbert"},"nationalIdentification":"987654321",
+                "dateOfBirth":"1970-05-20"},"ofacOverride":false,"language":"FR"},{"type":"Company","remoteId":"remoteId",
+                "email":"bob@example.com","address":{"line1":"100 Battery Street","line2":"line2","line3":"line3",
+                "line4":"line4","city":"San Francisco","countyOrProvince":"California","zipOrPostcode":"94018","country":"US"},
+                "paymentChannel":{"paymentChannelName":"My Payment Channel","accountNumber":"12345678","routingNumber":"123456789",
+                "countryCode":"US","currency":"USD","accountName":"Foo Account"},"company":{"name":"ABC Payee Corp",
+                "taxId":"223344556"},"ofacOverride":false,"language":"FR"}]}'
+  '/v4/payees/batch/{batchId}':
+    get:
+      description: |
+        Fetch the status of a specific batch of payees. The batch is fully processed when status is ACCEPTED and pendingCount is 0 ( 200 - OK, 404 - batch not found ).
+      operationId: queryBatchStatusV4
+      parameters:
+        - description: Batch Id
+          in: path
+          name: batchId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryBatchResponse_2'
+          description: Get Batch Status
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Query Batch Status
+      tags:
+        - Payee Invitation
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/payees/batch/cb6ff8c6-85e9-45a6-b7d9-d05305db67f3' -i -X GET \
+                -H 'Content-Type: application/json' \
+                -H 'Authorization: Bearer f01caad1-5ae5-454d-9467-5053e459fe45'
+  '/v4/payees/{payeeId}/invite':
+    post:
+      description: |
+        <p>Resend an invite to the Payee The payee must have already been invited by the payor and not yet accepted or declined</p>
+        <p>Any previous invites to the payee by this Payor will be invalidated</p>
+      operationId: resendPayeeInviteV4
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvitePayeeRequest_2'
+        description: Provide Payor Id in body of request
+        required: true
+      responses:
+        '200':
+          description: the request was accepted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Resend Payee Invite
+      tags:
+        - Payee Invitation
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/payees/5032e339-2e24-4fca-bfc9-f6a66e3157dd/invite' -i -X POST \
+                -H 'Authorization: Bearer 5e40dde3-ff1c-4d69-94b0-3a6e96fd789e' \
+                -H 'Content-Type: application/json' \
+                -d '{"payorId":"545e29bd-75a8-4354-8192-ae68bab59d7b"}'
+  '/v4/payees/payors/{payorId}/invitationStatus':
+    get:
+      description: |
+        Returns a filtered, paginated list of payees associated with a payor, along with invitation status and grace period end date.
+      operationId: getPayeesInvitationStatusV4
+      parameters:
+        - description: The account owner Payor ID
+          in: path
+          name: payorId
+          required: true
+          schema:
+            example: 9ac75325-5dcd-42d5-b992-175d7e0a035e
+            format: uuid
+            type: string
+        - description: The UUID of the payee.
+          in: query
+          name: payeeId
+          required: false
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+        - description: The invitation status of the payees.
+          in: query
+          name: invitationStatus
+          required: false
+          schema:
+            $ref: '#/components/schemas/InvitationStatus'
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            example: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 25. Max allowable is 100.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            example: 25
+            format: int32
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_2'
+          description: Get Payees with Invitaion status - filters of payeeId and invitationStatus
+          x-contracts:
+            - contractId: 1
+              headers:
+                Content-Type: application/json
+              body:
+                page:
+                  numberOfElements: 1
+                  totalElements: 1
+                  totalPages: 1
+                  page: 1
+                  pageSize: 25
+                links:
+                  - rel: first
+                    href: 'http://localhost:62142/v4/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED&page=1&pageSize=25'
+                content:
+                  - payeeId: c3d60e1f-a4d0-4273-b501-bfa81c70d56b
+              matchers:
+                headers:
+                  - key: Content-Type
+                    regex: application/json.*
+                body:
+                  - path: $.page
+                    type: by_type
+                    minOccurrence: 1
+                  - path: $.page.numberOfElements
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.totalElements
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.totalPages
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.page
+                    type: by_regex
+                    predefined: number
+                  - path: $.page.pageSize
+                    type: by_regex
+                    predefined: number
+                  - path: $.links
+                    type: by_type
+                    minOccurrence: 1
+                    maxOccurrence: 5
+                  - path: '$.links[0].href'
+                    type: by_regex
+                    predefined: url
+                  - path: $.content
+                    type: by_type
+                    minOccurrence: 1
+                  - path: '$.content[0].payeeId'
+                    type: by_regex
+                    predefined: uuid
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Get Payee Invitation Status
+      tags:
+        - Payee Invitation
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/payees/payors/f20b038b-e841-4d80-9175-b47c6cf19bc1/invitationStatus?payeeId=c3d60e1f-a4d0-4273-b501-bfa81c70d56b&invitationStatus=ACCEPTED' -i -X GET \
+                -H 'Authorization: Bearer ed73aa9a-b51b-44cb-a8e9-11e2fb85046b'
+  /v4/payees/deltas:
+    get:
+      description: |
+        Get a paginated response listing payee changes (updated since a particular time) to a limited set of fields:
+        - dbaName
+        - displayName
+        - email
+        - onboardedStatus
+        - payeeCountry
+        - payeeId
+        - remoteId
+      operationId: listPayeeChangesV4
+      parameters:
+        - description: The Payor ID to find associated Payees
+          in: query
+          name: payorId
+          required: true
+          schema:
+            format: uuid
+            type: string
+          x-contracts:
+            - contractId: 1
+              value: 0a818933-087d-47f2-ad83-2f986ed087eb
+              matchers:
+                - type: equal_to
+                  value: 0a818933-087d-47f2-ad83-2f986ed087eb
+        - description: 'The updatedSince filter in the format YYYY-MM-DDThh:mm:ss+hh:mm'
+          in: query
+          name: updatedSince
+          required: true
+          schema:
+            format: date-time
+            type: string
+          x-contracts:
+            - contractId: 1
+              value: 2019-01-20T09:00:00.000Z
+              matchers:
+                - type: equal_to
+                  value: 2019-01-20T09:00:00.000Z
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            example: 1
+            format: int32
+            type: integer
+        - description: Page size. Default is 100. Max allowable is 1000.
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 100
+            example: 100
+            format: int32
+            type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PayeeDeltaResponse_2'
+          description: Details of Payee Changes
+          x-contracts: null
+        '400':
+          description: Bad Request
+      summary: List Payee Changes
+      tags:
+        - Payees
+      x-contracts:
+        - contractId: 1
+          name: Test List Payee Changes V4
+          ignored: true
+          request:
+            queryParameters:
+              - key: page
+                value: 1
+              - key: pageSize
+                value: 30
+          serviceName: payee-service
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v4/payees/deltas?pageSize=2&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \
+                -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \
+                -H 'Content-Type: application/json'
   /v1/sourceAccounts:
     description: List Source Accounts
     get:
@@ -7707,6 +8857,254 @@ paths:
         - lang: shell
           source: |
             $ curl 'https://api.sandbox.velopayments.com/v2/currencies' -i -X GET
+  /v1/webhooks:
+    description: List the details about the webhooks for the given payor.
+    get:
+      description: List the details about the webhooks for the given payor.
+      operationId: listWebhooksV1
+      parameters:
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: The number of results to return in a page
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            maximum: 100
+            minimum: 1
+            type: integer
+        - description: The Payor ID
+          in: query
+          name: payorId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhooksResponse'
+          description: Webhook response
+        '400':
+          description: Invalid Request Parameters
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: List the details about the webhooks for the given payor.
+      tags:
+        - Webhooks
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/webhooks?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \
+                -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'
+    post:
+      description: Create Webhook
+      operationId: createWebhookV1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWebhookRequest'
+      responses:
+        '201':
+          description: Webhook Created
+          headers:
+            Location:
+              description: Reference to Webhook object
+              schema:
+                type: string
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Create Webhook
+      tags:
+        - Webhooks
+    summary: List Webhooks
+  '/v1/webhooks/{webhookId}':
+    description: Get details about the given webhook.
+    get:
+      description: Get details about the given webhook.
+      operationId: getWebhookV1
+      parameters:
+        - description: Webhook id
+          in: path
+          name: webhookId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+          description: Webhook response
+        '400':
+          description: 'Bad Request, Invalid path parameter'
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Get details about the given webhook.
+      tags:
+        - Webhooks
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/webhooks/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \
+                -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
+    post:
+      description: Update Webhook
+      operationId: updateWebhookV1
+      parameters:
+        - description: Webhook id
+          in: path
+          name: webhookId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWebhookRequest'
+      responses:
+        '204':
+          description: Webhook Updated
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Update Webhook
+      tags:
+        - Webhooks
+    summary: Get Webhook
+  '/v1/webhooks/{webhookId}/ping':
+    description: Trigger an immediate ping notification to the webhook
+    post:
+      operationId: pingWebhookV1
+      parameters:
+        - description: Webhook id
+          in: path
+          name: webhookId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PingResponse'
+          description: Send ping
+        '400':
+          description: 'Bad Request, Invalid path parameter'
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      tags:
+        - Webhooks
+    summary: Ping Webhook
 components:
   schemas:
     AuthResponse:
@@ -7945,19 +9343,19 @@ components:
           description: |
             The phone number of a device that the user can receive sms messages on
           example: '11235555555'
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
         primaryContactNumber:
           description: |
             The main contact number for the user
           example: '11235555555'
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
         secondaryContactNumber:
           description: |
             The secondary contact number for the user
           example: '11235555550'
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
         firstName:
           example: John
@@ -8044,20 +9442,20 @@ components:
           description: |
             The phone number of a device that the user can receive sms messages on
           example: '11235555555'
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
         primaryContactNumber:
           description: |
             The main contact number for the user
           example: '11235555555'
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
         secondaryContactNumber:
           description: |
             The secondary contact number for the user
           example: '11235555550'
           nullable: true
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
         roles:
           description: |
@@ -8200,14 +9598,14 @@ components:
             The main contact number for the user
           example: '11235555555'
           nullable: true
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
         secondaryContactNumber:
           description: |
             The secondary contact number for the user
           example: '11235555550'
           nullable: true
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
         firstName:
           example: John
@@ -8232,7 +9630,7 @@ components:
             The phone number of a device that the user can receive sms messages on
           example: '11235555555'
           nullable: true
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
         mfaType:
           $ref: '#/components/schemas/MFAType'
@@ -8254,7 +9652,7 @@ components:
           description: |
             The phone number of a device that the user can receive sms messages on
           example: '11235555555'
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
       required:
         - smsNumber
@@ -8277,14 +9675,14 @@ components:
             The main contact number for the user
           example: '11235555555'
           nullable: true
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
         secondaryContactNumber:
           description: |
             The secondary contact number for the user
           example: '11235555550'
           nullable: true
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
         firstName:
           example: John
@@ -8309,7 +9707,7 @@ components:
             The phone number of a device that the user can receive sms messages on
           example: '11235555555'
           nullable: true
-          pattern: '^\+?[1-9]\d{1,14}$'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
       type: object
     SelfMFATypeUnregisterRequest:
@@ -8535,6 +9933,7 @@ components:
         primaryContactName: Joe Buck
         payeeGracePeriodProcessingEnabled: true
         supportContact: support@example.com
+        payorXid: ABC_201234
         address:
           country: US
           countyOrProvince: FL
@@ -8571,6 +9970,10 @@ components:
         payorName:
           description: The name of the payor.
           example: 'Example, Corp'
+          type: string
+        payorXid:
+          description: A unique identifier that an external system uses to reference the payor in their system
+          example: ABC_201234
           type: string
         address:
           $ref: '#/components/schemas/PayorAddressV2'
@@ -11300,6 +12703,185 @@ components:
           nullable: true
           type: string
       type: object
+    PayeeDetailResponse_2:
+      example:
+        payorRefs:
+          - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+            invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+            remoteId: uniqueIdForRemoteEntity
+            paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+            invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+            remoteId: uniqueIdForRemoteEntity
+            paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+        watchlistOverrideComment: watchlist override comment
+        country: US
+        cellphoneNumber: '1234567890'
+        displayName: Bob
+        kycCompletedTimestamp: 2019-01-20T09:00:00.000Z
+        marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
+        watchlistOverrideExpiresAtTimestamp: 2019-01-20T09:00:00.000Z
+        disabled: true
+        company:
+          taxId: '123123123'
+          name: ABC Group Plc
+          operatingName: ABC Co
+        payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+        pausePaymentTimestamp: 2019-01-20T09:00:00.000Z
+        email: bob@example.com
+        acceptTermsAndConditionsTimestamp: 2019-01-20T09:00:00.000Z
+        disabledUpdatedTimestamp: 2019-01-20T09:00:00.000Z
+        address:
+          country: US
+          countyOrProvince: FL
+          line4: line4
+          city: Key West
+          line3: line3
+          line2: line2
+          line1: 500 Duval St
+          zipOrPostcode: '33945'
+        individual:
+          name:
+            firstName: Bob
+            lastName: Smith
+            otherNames: A
+            title: Mr
+          nationalIdentification: AB123456C
+          dateOfBirth: 1985-01-01T00:00:00.000Z
+        created: 2019-01-20T09:00:00.000Z
+        enhancedKycCompleted: true
+        pausePayment: true
+        gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
+        marketingOptInDecision: true
+        watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
+        disabledComment: reason for disabled
+        challenge:
+          description: challenge description
+          value: challenge test
+      properties:
+        payeeId:
+          example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+          format: uuid
+          readOnly: true
+          type: string
+        payorRefs:
+          items:
+            $ref: '#/components/schemas/PayeePayorRef_2'
+          nullable: true
+          readOnly: true
+          type: array
+        email:
+          example: bob@example.com
+          format: email
+          nullable: true
+          type: string
+        onboardedStatus:
+          $ref: '#/components/schemas/OnboardedStatus_2'
+        watchlistStatus:
+          $ref: '#/components/schemas/WatchlistStatus_2'
+        watchlistOverrideExpiresAtTimestamp:
+          example: 2019-01-20T09:00:00.000Z
+          format: date-time
+          nullable: true
+          type: string
+        watchlistOverrideComment:
+          example: watchlist override comment
+          type: string
+        language:
+          $ref: '#/components/schemas/Language_2'
+        created:
+          example: 2019-01-20T09:00:00.000Z
+          format: date-time
+          type: string
+        country:
+          example: US
+          type: string
+        displayName:
+          example: Bob
+          type: string
+        payeeType:
+          $ref: '#/components/schemas/PayeeType'
+        disabled:
+          type: boolean
+        disabledComment:
+          example: reason for disabled
+          type: string
+        disabledUpdatedTimestamp:
+          example: 2019-01-20T09:00:00.000Z
+          format: date-time
+          type: string
+        address:
+          $ref: '#/components/schemas/PayeeAddress_2'
+        individual:
+          $ref: '#/components/schemas/Individual_2'
+        company:
+          $ref: '#/components/schemas/Company_2'
+        cellphoneNumber:
+          example: '1234567890'
+          type: string
+        watchlistStatusUpdatedTimestamp:
+          example: 2019-01-20T09:00:00.000Z
+          format: date_time
+          nullable: true
+          readOnly: true
+          type: string
+        gracePeriodEndDate:
+          example: 2019-01-20T00:00:00.000Z
+          format: date
+          nullable: true
+          readOnly: true
+          type: string
+        enhancedKycCompleted:
+          type: boolean
+        kycCompletedTimestamp:
+          example: 2019-01-20T09:00:00.000Z
+          format: date_time
+          nullable: true
+          type: string
+        pausePayment:
+          type: boolean
+        pausePaymentTimestamp:
+          example: 2019-01-20T09:00:00.000Z
+          format: date_time
+          nullable: true
+          type: string
+        marketingOptInDecision:
+          type: boolean
+        marketingOptInTimestamp:
+          example: 2019-01-20T09:00:00.000Z
+          format: date_time
+          nullable: true
+          type: string
+        acceptTermsAndConditionsTimestamp:
+          description: The timestamp when the payee last accepted T&Cs
+          example: 2019-01-20T09:00:00.000Z
+          format: date-time
+          nullable: true
+          readOnly: true
+          type: string
+        challenge:
+          $ref: '#/components/schemas/Challenge_2'
+      type: object
+    UpdatePayeeDetailsRequest_2:
+      properties:
+        address:
+          $ref: '#/components/schemas/PayeeAddress_2'
+        individual:
+          $ref: '#/components/schemas/Individual_2'
+        company:
+          $ref: '#/components/schemas/Company_2'
+        language:
+          $ref: '#/components/schemas/Language_2'
+        payeeType:
+          $ref: '#/components/schemas/PayeeType_2'
+        challenge:
+          $ref: '#/components/schemas/Challenge_2'
+        email:
+          example: bob@example.com
+          format: email
+          nullable: true
+          type: string
+      type: object
     ListSourceAccountResponse:
       description: List Source Accounts Response Object
       example:
@@ -11772,6 +13354,7 @@ components:
         content:
           - routingNumber: 12345678
             country: US
+            archived: true
             accountName: Payor Corp
             name: My Funding Account
             currency: USD
@@ -11781,6 +13364,7 @@ components:
             type: FBO
           - routingNumber: 12345678
             country: US
+            archived: true
             accountName: Payor Corp
             name: My Funding Account
             currency: USD
@@ -11852,6 +13436,7 @@ components:
       example:
         routingNumber: 12345678
         country: US
+        archived: true
         accountName: Payor Corp
         name: My Funding Account
         currency: USD
@@ -11899,6 +13484,9 @@ components:
           description: Funding account type
           example: FBO
           type: string
+        archived:
+          description: A flag for whether the funding account has been archived.  Only present in the response if true.
+          type: boolean
       type: object
     FundingRequestV3:
       example:
@@ -14207,6 +15795,121 @@ components:
             $ref: '#/components/schemas/SupportedCurrencyV2'
           type: array
       type: object
+    WebhooksResponse:
+      description: List Webhooks Object
+      example:
+        links:
+          - rel: rel
+            href: href
+          - rel: rel
+            href: href
+        page:
+          numberOfElements: 0
+          totalPages: 1
+          pageSize: 5
+          page: 5
+          totalElements: 6
+        content:
+          - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            authorizationHeader: authorizationHeader
+            webhookUrl: webhookUrl
+            enabled: true
+          - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            authorizationHeader: authorizationHeader
+            webhookUrl: webhookUrl
+            enabled: true
+      properties:
+        page:
+          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponse_page'
+        links:
+          items:
+            $ref: '#/components/schemas/PagedPayeeResponse_links'
+          type: array
+        content:
+          items:
+            $ref: '#/components/schemas/WebhookResponse'
+          type: array
+      type: object
+    CreateWebhookRequest:
+      example:
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        authorizationHeader: authorizationHeader
+        webhookUrl: webhookUrl
+        enabled: true
+      properties:
+        payorId:
+          format: uuid
+          type: string
+        webhookUrl:
+          maxLength: 2000
+          minLength: 6
+          type: string
+        authorizationHeader:
+          maxLength: 1000
+          minLength: 4
+          pattern: .*
+          type: string
+        enabled:
+          type: boolean
+      required:
+        - enabled
+        - payorId
+        - webhookUrl
+      type: object
+    WebhookResponse:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        authorizationHeader: authorizationHeader
+        webhookUrl: webhookUrl
+        enabled: true
+      properties:
+        id:
+          format: uuid
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        webhookUrl:
+          type: string
+        authorizationHeader:
+          type: string
+        enabled:
+          type: boolean
+      type: object
+    UpdateWebhookRequest:
+      example:
+        authorizationHeader: authorizationHeader
+        webhookUrl: webhookUrl
+        enabled: true
+      properties:
+        webhookUrl:
+          maxLength: 2000
+          minLength: 6
+          type: string
+        authorizationHeader:
+          maxLength: 1000
+          minLength: 4
+          nullable: true
+          pattern: .*
+          type: string
+        enabled:
+          type: boolean
+      type: object
+    PingResponse:
+      example:
+        webhookId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        webhookId:
+          format: uuid
+          type: string
+      type: object
     UserInfo:
       example:
         mfa_details:
@@ -14638,7 +16341,7 @@ components:
         name:
           example: ABC Ltd
           maxLength: 40
-          minLength: 1
+          minLength: 3
           type: string
         taxId:
           description: 'Company Tax Id (EIN) must be 9 numeric characters. Must match the regular expression ```[\d]{9}```.'
@@ -15043,7 +16746,7 @@ components:
         name:
           example: ABC Group Plc
           maxLength: 40
-          minLength: 1
+          minLength: 3
           type: string
         taxId:
           description: Company Tax Id must be between 6 and 30 characters long
@@ -15311,7 +17014,7 @@ components:
         name:
           example: ABC Group Plc
           maxLength: 40
-          minLength: 1
+          minLength: 3
           type: string
         taxId:
           description: Company Tax Id must be between 6 and 30 characters long
@@ -15617,6 +17320,41 @@ components:
       enum:
         - INDIVIDUAL
         - COMPANY
+      type: string
+    PayeePayorRef_2:
+      example:
+        payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
+        invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
+        remoteId: uniqueIdForRemoteEntity
+        paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+      properties:
+        payorId:
+          example: ba08877f-9d96-41e4-9c26-44a872d856ae
+          format: uuid
+          type: string
+        remoteId:
+          example: uniqueIdForRemoteEntity
+          type: string
+        invitationStatus:
+          $ref: '#/components/schemas/InvitationStatus_2'
+        invitationStatusTimestamp:
+          description: The timestamp when the invitation status is updated
+          example: 2019-01-20T09:00:00.000Z
+          format: date-time
+          nullable: true
+          type: string
+        paymentChannelId:
+          example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          format: uuid
+          type: string
+      type: object
+    WatchlistStatus_2:
+      enum:
+        - NONE
+        - PENDING
+        - REVIEW
+        - PASSED
+        - FAILED
       type: string
     Notifications:
       example:
@@ -19165,6 +20903,7 @@ x-tagGroups:
     tags:
       - Payors
       - Funding Manager
+      - Webhooks
   - name: Payee Operations
     tags:
       - Payees
