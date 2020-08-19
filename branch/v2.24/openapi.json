@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.24.49",
+    "version": "2.24.50",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -12671,6 +12671,583 @@
         ]
       },
       "summary": "List Webhooks"
+    },
+    "/v1/payins/debitAccounts": {
+      "get": {
+        "description": "List the details about the debit accounts for the given payor",
+        "operationId": "listDebitAccountsV1",
+        "parameters": [
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The number of results to return in a page",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The Payor ID",
+            "in": "query",
+            "name": "payorId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DebitAccountsResponse"
+                }
+              }
+            },
+            "description": "Debit accounts response"
+          },
+          "400": {
+            "description": "Invalid Request Parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "List debit accounts",
+        "tags": [
+          "Payins"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payins/debitAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
+          }
+        ]
+      },
+      "post": {
+        "description": "Create a debit account for the given payor",
+        "operationId": "createDebitAccountV1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDebitAccountRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Debit account created",
+            "headers": {
+              "Location": {
+                "description": "Reference to the debit account object",
+                "schema": {
+                  "format": "uri",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "Create debit account",
+        "tags": [
+          "Payins"
+        ]
+      }
+    },
+    "/v1/payins/debitAccounts/{debitAccountId}": {
+      "get": {
+        "description": "Get the details about the given debit account",
+        "operationId": "getDebitAccountV1",
+        "parameters": [
+          {
+            "description": "Debit account id",
+            "in": "path",
+            "name": "debitAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DebitAccountResponse"
+                }
+              }
+            },
+            "description": "Debit account response"
+          },
+          "400": {
+            "description": "Invalid Request Parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Get debit account",
+        "tags": [
+          "Payins"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payins/debitAccounts?debitAccountId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
+          }
+        ]
+      },
+      "post": {
+        "description": "Update the details of the debit account",
+        "operationId": "updateDebitAccountV1",
+        "parameters": [
+          {
+            "description": "Debit account id",
+            "in": "path",
+            "name": "debitAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDebitAccountRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Debit account updated"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Update debit account",
+        "tags": [
+          "Payins"
+        ]
+      }
+    },
+    "/v1/payins/debitTransactions": {
+      "post": {
+        "description": "Instruct a debit transaction from the given debit account",
+        "operationId": "instructDebitTransactionV1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstructDebitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Debit transaction instructed",
+            "headers": {
+              "Location": {
+                "description": "Reference to the debit transaction",
+                "schema": {
+                  "format": "uri",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Instruct debit transaction",
+        "tags": [
+          "Payins"
+        ]
+      }
+    },
+    "/v1/payins/debitTransactions/{debitTransactionId}": {
+      "get": {
+        "description": "Get the details of the given debit transaction",
+        "operationId": "getDebitTransactionV1",
+        "parameters": [
+          {
+            "description": "Debit transaction id",
+            "in": "path",
+            "name": "debitTransactionId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DebitTransactionResponse"
+                }
+              }
+            },
+            "description": "Debit transaction response"
+          },
+          "400": {
+            "description": "Invalid Request Parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Get debit transaction",
+        "tags": [
+          "Payins"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payins/debitTransactions?debitAccountId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
+          }
+        ]
+      }
+    },
+    "/v1/payins/payors": {
+      "post": {
+        "description": "Create a payor enabled for debit transactions",
+        "operationId": "createPayinsPayorV1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePayorRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Payor enabled",
+            "headers": {
+              "Location": {
+                "description": "Reference to the payor",
+                "schema": {
+                  "format": "uri",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "Create payor",
+        "tags": [
+          "Payins"
+        ]
+      }
+    },
+    "/v1/payins/payors/{payorId}": {
+      "get": {
+        "description": "Get the given payor",
+        "operationId": "getPayinsPayorV1",
+        "parameters": [
+          {
+            "description": "The payor id",
+            "in": "path",
+            "name": "payorId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PayorResponse"
+                }
+              }
+            },
+            "description": "Payor response"
+          },
+          "400": {
+            "description": "Invalid Request Parameters"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Get payor",
+        "tags": [
+          "Payins"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payins/payors/a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -21410,6 +21987,351 @@
           "enabled",
           "payorId",
           "webhookUrl"
+        ],
+        "type": "object"
+      },
+      "DebitAccountsResponse": {
+        "example": {
+          "links": [
+            {
+              "rel": "rel",
+              "href": "href"
+            },
+            {
+              "rel": "rel",
+              "href": "href"
+            }
+          ],
+          "page": {
+            "numberOfElements": 0,
+            "totalPages": 1,
+            "pageSize": 5,
+            "page": 5,
+            "totalElements": 6
+          },
+          "content": [
+            {
+              "routingNumber": "routingNumber",
+              "draweeName": "draweeName",
+              "debitAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "accountNumber": "accountNumber",
+              "remoteAccountId": "remoteAccountId"
+            },
+            {
+              "routingNumber": "routingNumber",
+              "draweeName": "draweeName",
+              "debitAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "accountNumber": "accountNumber",
+              "remoteAccountId": "remoteAccountId"
+            }
+          ]
+        },
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/DebitAccountResponse"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CreateDebitAccountRequest": {
+        "example": {
+          "routingNumber": "123456789",
+          "draweeName": "draweeName",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "accountNumber": "23453856",
+          "remoteAccountId": "remoteAccountId"
+        },
+        "properties": {
+          "payorId": {
+            "description": "The payor id",
+            "format": "uuid",
+            "type": "string"
+          },
+          "remoteAccountId": {
+            "description": "Payor provided id to uniquely identify a debit account",
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "accountNumber": {
+            "description": "Account number",
+            "example": "23453856",
+            "maxLength": 17,
+            "minLength": 6,
+            "pattern": "^[0-9]+$",
+            "type": "string"
+          },
+          "routingNumber": {
+            "description": "Routing number",
+            "example": "123456789",
+            "maxLength": 9,
+            "minLength": 8,
+            "pattern": "^[0-9]+$",
+            "type": "string"
+          },
+          "draweeName": {
+            "description": "Name of debit account holder",
+            "maxLength": 40,
+            "minLength": 3,
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountNumber",
+          "draweeName",
+          "payorId",
+          "remoteAccountId",
+          "routingNumber"
+        ],
+        "type": "object"
+      },
+      "DebitAccountResponse": {
+        "example": {
+          "routingNumber": "routingNumber",
+          "draweeName": "draweeName",
+          "debitAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "accountNumber": "accountNumber",
+          "remoteAccountId": "remoteAccountId"
+        },
+        "properties": {
+          "debitAccountId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "remoteAccountId": {
+            "type": "string"
+          },
+          "accountNumber": {
+            "type": "string"
+          },
+          "routingNumber": {
+            "type": "string"
+          },
+          "draweeName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountNumber",
+          "debitAccountId",
+          "draweeName",
+          "payorId",
+          "remoteAccountId",
+          "routingNumber"
+        ],
+        "type": "object"
+      },
+      "UpdateDebitAccountRequest": {
+        "example": {
+          "routingNumber": "123456789",
+          "draweeName": "draweeName",
+          "accountNumber": "23453856",
+          "remoteAccountId": "remoteAccountId"
+        },
+        "properties": {
+          "remoteAccountId": {
+            "description": "Payor provided id to uniquely identify a debit account - updated if provided",
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "accountNumber": {
+            "description": "Account number - updated if provided",
+            "example": "23453856",
+            "maxLength": 17,
+            "minLength": 6,
+            "pattern": "^[0-9]+$",
+            "type": "string"
+          },
+          "routingNumber": {
+            "description": "Routing number - updated if provided",
+            "example": "123456789",
+            "maxLength": 9,
+            "minLength": 8,
+            "pattern": "^[0-9]+$",
+            "type": "string"
+          },
+          "draweeName": {
+            "description": "Name of debit account holder - updated if provided",
+            "maxLength": 40,
+            "minLength": 3,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "InstructDebitRequest": {
+        "example": {
+          "amount": 1299,
+          "currency": "CAD",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "remoteAccountId": "remoteAccountId"
+        },
+        "properties": {
+          "payorId": {
+            "description": "The Velo id of the Payor that will receive the funds",
+            "format": "uuid",
+            "type": "string"
+          },
+          "remoteAccountId": {
+            "description": "Payor provided id to uniquely identify a debit account",
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "amount": {
+            "description": "The amount of the debit transaction to instruct",
+            "example": 1299,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "currency": {
+            "description": "Valid ISO 4217 3 letter currency code. See the <a href=\"https://www.iso.org/iso-4217-currency-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
+            "example": "CAD",
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "title": "ISO Currency Code",
+            "type": "string"
+          }
+        },
+        "required": [
+          "amount",
+          "currency",
+          "payorId",
+          "remoteAccountId"
+        ],
+        "type": "object"
+      },
+      "DebitTransactionResponse": {
+        "example": {
+          "debitTransactionId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "createdAt": "2000-01-23T04:56:07.000Z",
+          "amount": 1299,
+          "debitAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "currency": "CAD",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "remoteAccountId": "remoteAccountId",
+          "status": "PENDING"
+        },
+        "properties": {
+          "debitTransactionId": {
+            "description": "The Velo id of the debit transaction",
+            "format": "uuid",
+            "type": "string"
+          },
+          "debitAccountId": {
+            "description": "The Velo id of the debit account",
+            "format": "uuid",
+            "type": "string"
+          },
+          "payorId": {
+            "description": "The Velo id of the Payor that will receive the funds",
+            "format": "uuid",
+            "type": "string"
+          },
+          "remoteAccountId": {
+            "description": "Payor provided id to uniquely identify a debit account",
+            "maxLength": 40,
+            "minLength": 1,
+            "type": "string"
+          },
+          "amount": {
+            "description": "The amount of the debit transaction to instruct",
+            "example": 1299,
+            "format": "int64",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "currency": {
+            "description": "Valid ISO 4217 3 letter currency code. See the <a href=\"https://www.iso.org/iso-4217-currency-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
+            "example": "CAD",
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "title": "ISO Currency Code",
+            "type": "string"
+          },
+          "status": {
+            "description": "The status of the debit transaction",
+            "enum": [
+              "PENDING",
+              "PROCESSING",
+              "REJECTED",
+              "RELEASED"
+            ],
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "amount",
+          "createdAt",
+          "currency",
+          "debitAccountId",
+          "debitTransactionId",
+          "payorId",
+          "remoteAccountId",
+          "status"
+        ],
+        "type": "object"
+      },
+      "CreatePayorRequest": {
+        "example": {
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+        },
+        "properties": {
+          "payorId": {
+            "description": "The id of the payor to enable for debit transactions",
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "payorId"
+        ],
+        "type": "object"
+      },
+      "PayorResponse": {
+        "example": {
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "enabled": true
+        },
+        "properties": {
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "enabled",
+          "payorId"
         ],
         "type": "object"
       },
