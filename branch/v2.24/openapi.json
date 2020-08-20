@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.24.52",
+    "version": "2.24.53",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -25619,10 +25619,11 @@
         "type": "object"
       },
       "Category": {
-        "description": "The notification category.  One of \"payment\" or \"payee\".",
+        "description": "The notification category.  One of \"payment\", \"payee\", \"debit\".",
         "enum": [
           "payment",
-          "payee"
+          "payee",
+          "debit"
         ],
         "type": "string"
       },

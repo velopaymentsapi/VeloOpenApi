@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.24.52
+  version: 2.24.53
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -19170,10 +19170,11 @@ components:
           type: integer
       type: object
     Category:
-      description: The notification category.  One of "payment" or "payee".
+      description: 'The notification category.  One of "payment", "payee", "debit".'
       enum:
         - payment
         - payee
+        - debit
       type: string
     UserType_2:
       enum:
