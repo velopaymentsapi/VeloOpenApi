@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.24.87
+  version: 2.24.88
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -10623,6 +10623,7 @@ components:
         displayName: Bob
         created: 2019-01-20T09:00:00.000Z
         lastOfacCheckTimestamp: 2019-01-20T09:00:00.000Z
+        language: en-US
         gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
         paymentChannel:
           paymentChannelName: My payment channel
@@ -10677,7 +10678,11 @@ components:
         challenge:
           $ref: '#/components/schemas/Challenge'
         language:
-          $ref: '#/components/schemas/Language'
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
+          type: string
         acceptTermsAndConditionsTimestamp:
           description: The timestamp when the payee last accepted T&Cs
           example: 2019-01-20T09:00:00.000Z
@@ -10785,6 +10790,7 @@ components:
             displayName: ABC
             created: 2019-01-20T09:00:00.000Z
             lastOfacCheckTimestamp: 2019-01-20T09:00:00.000Z
+            language: en-US
             gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
             paymentChannel:
               paymentChannelName: My payment channel
@@ -10835,6 +10841,7 @@ components:
             displayName: ABC
             created: 2019-01-20T09:00:00.000Z
             lastOfacCheckTimestamp: 2019-01-20T09:00:00.000Z
+            language: en-US
             gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
             paymentChannel:
               paymentChannelName: My payment channel
@@ -10979,6 +10986,7 @@ components:
         ofacOverrideReason: ofac override reason
         kycCompletedTimestamp: 2019-01-20T09:00:00.000Z
         marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
+        language: en-US
         disabled: true
         company:
           taxId: '123123123'
@@ -11036,7 +11044,11 @@ components:
         ofacStatus:
           $ref: '#/components/schemas/OfacStatus_2'
         language:
-          $ref: '#/components/schemas/Language_2'
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
+          type: string
         created:
           example: 2019-01-20T09:00:00.000Z
           format: date-time
@@ -11152,6 +11164,7 @@ components:
             challenge:
               description: challenge description
               value: challenge test
+            language: en-US
             company:
               taxId: '123'
               name: ABC Ltd
@@ -11198,6 +11211,7 @@ components:
             challenge:
               description: challenge description
               value: challenge test
+            language: en-US
             company:
               taxId: '123'
               name: ABC Ltd
@@ -11618,18 +11632,10 @@ components:
           minLength: 3
           type: string
         payeeLanguage:
-          enum:
-            - AR
-            - EN
-            - ES
-            - FR
-            - HE
-            - HI
-            - JA
-            - PT
-            - RU
-            - UR
-            - ZH
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
           type: string
       required:
         - addressCity
@@ -11696,6 +11702,7 @@ components:
                 dateOfBirth: 1985-01-01T00:00:00.000Z
               displayName: Bob
               created: 2019-01-20T09:00:00.000Z
+              language: en-US
               type: Individual
               gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
               paymentChannel:
@@ -11757,6 +11764,7 @@ components:
                 dateOfBirth: 1985-01-01T00:00:00.000Z
               displayName: Bob
               created: 2019-01-20T09:00:00.000Z
+              language: en-US
               type: Individual
               gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
               paymentChannel:
@@ -11874,6 +11882,7 @@ components:
         displayName: Bob
         kycCompletedTimestamp: 2019-01-20T09:00:00.000Z
         marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
+        language: en-US
         watchlistOverrideExpiresAtTimestamp: 2019-01-20T09:00:00.000Z
         disabled: true
         company:
@@ -11942,7 +11951,11 @@ components:
           example: watchlist override comment
           type: string
         language:
-          $ref: '#/components/schemas/Language_2'
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
+          type: string
         created:
           example: 2019-01-20T09:00:00.000Z
           format: date-time
@@ -12077,6 +12090,7 @@ components:
                 title: Mr
             created: 2019-01-20T09:00:00.000Z
             displayName: ABC
+            language: en-US
             watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             disabledComment: reason for disabled
             disabled: true
@@ -12117,6 +12131,7 @@ components:
                 title: Mr
             created: 2019-01-20T09:00:00.000Z
             displayName: ABC
+            language: en-US
             watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             disabledComment: reason for disabled
             disabled: true
@@ -12794,18 +12809,10 @@ components:
           minLength: 3
           type: string
         payeeLanguage:
-          enum:
-            - AR
-            - EN
-            - ES
-            - FR
-            - HE
-            - HI
-            - JA
-            - PT
-            - RU
-            - UR
-            - ZH
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
           type: string
       required:
         - addressCity
@@ -12872,6 +12879,7 @@ components:
                 dateOfBirth: 1985-01-01T00:00:00.000Z
               displayName: Bob
               created: 2019-01-20T09:00:00.000Z
+              language: en-US
               type: Individual
               gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
               paymentChannel:
@@ -12933,6 +12941,7 @@ components:
                 dateOfBirth: 1985-01-01T00:00:00.000Z
               displayName: Bob
               created: 2019-01-20T09:00:00.000Z
+              language: en-US
               type: Individual
               gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
               paymentChannel:
@@ -13091,6 +13100,7 @@ components:
           taxId: '123123123'
           name: ABC Group Plc
           operatingName: ABC Co
+        language: en-US
         email: bob@example.com
       properties:
         address:
@@ -13100,7 +13110,11 @@ components:
         company:
           $ref: '#/components/schemas/Company_2'
         language:
-          $ref: '#/components/schemas/Language_2'
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
+          type: string
         payeeType:
           $ref: '#/components/schemas/PayeeType_2'
         challenge:
@@ -13140,6 +13154,7 @@ components:
         displayName: Bob
         kycCompletedTimestamp: 2019-01-20T09:00:00.000Z
         marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
+        language: en-US
         watchlistOverrideExpiresAtTimestamp: 2019-01-20T09:00:00.000Z
         disabled: true
         company:
@@ -13208,7 +13223,11 @@ components:
           example: watchlist override comment
           type: string
         language:
-          $ref: '#/components/schemas/Language_2'
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
+          type: string
         created:
           example: 2019-01-20T09:00:00.000Z
           format: date-time
@@ -13291,7 +13310,11 @@ components:
         company:
           $ref: '#/components/schemas/Company_2'
         language:
-          $ref: '#/components/schemas/Language_2'
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
+          type: string
         payeeType:
           $ref: '#/components/schemas/PayeeType_2'
         challenge:
@@ -17032,19 +17055,12 @@ components:
         - value
       type: object
     Language:
-      description: Available Payee Language codes
-      enum:
-        - AR
-        - EN
-        - ES
-        - FR
-        - HE
-        - HI
-        - JA
-        - PT
-        - RU
-        - UR
-        - ZH
+      $ref: '#/components/schemas/SupportedLanguage'
+    SupportedLanguage:
+      description: |
+        An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+        See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+      example: en-US
       type: string
     CompanyV1:
       example:
@@ -17142,6 +17158,7 @@ components:
         displayName: ABC
         created: 2019-01-20T09:00:00.000Z
         lastOfacCheckTimestamp: 2019-01-20T09:00:00.000Z
+        language: en-US
         gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
         paymentChannel:
           paymentChannelName: My payment channel
@@ -17195,7 +17212,11 @@ components:
         challenge:
           $ref: '#/components/schemas/Challenge'
         language:
-          $ref: '#/components/schemas/Language'
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
+          type: string
         acceptTermsAndConditionsTimestamp:
           description: The timestamp when the payee last accepted T&Cs
           example: 2019-01-20T09:00:00.000Z
@@ -17347,21 +17368,6 @@ components:
         - PASSED
         - FAILED
       type: string
-    Language_2:
-      description: Available Payee Language codes
-      enum:
-        - AR
-        - EN
-        - ES
-        - FR
-        - HE
-        - HI
-        - JA
-        - PT
-        - RU
-        - UR
-        - ZH
-      type: string
     PayeeAddress_2:
       example:
         country: US
@@ -17512,6 +17518,7 @@ components:
         challenge:
           description: challenge description
           value: challenge test
+        language: en-US
         company:
           taxId: '123'
           name: ABC Ltd
@@ -17559,7 +17566,11 @@ components:
         challenge:
           $ref: '#/components/schemas/Challenge'
         language:
-          $ref: '#/components/schemas/Language'
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
+          type: string
         company:
           $ref: '#/components/schemas/CompanyV1'
         individual:
@@ -17605,6 +17616,7 @@ components:
             dateOfBirth: 1985-01-01T00:00:00.000Z
           displayName: Bob
           created: 2019-01-20T09:00:00.000Z
+          language: en-US
           type: Individual
           gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
           paymentChannel:
@@ -17814,6 +17826,7 @@ components:
             title: Mr
         created: 2019-01-20T09:00:00.000Z
         displayName: ABC
+        language: en-US
         watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
         disabledComment: reason for disabled
         disabled: true
@@ -17854,7 +17867,11 @@ components:
           nullable: true
           type: string
         language:
-          $ref: '#/components/schemas/Language_2'
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
+          type: string
         created:
           example: 2019-01-20T09:00:00.000Z
           format: date-time
@@ -17914,7 +17931,11 @@ components:
         challenge:
           $ref: '#/components/schemas/Challenge_2'
         language:
-          $ref: '#/components/schemas/Language_2'
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
+          type: string
         company:
           $ref: '#/components/schemas/Company_2'
         individual:
@@ -17960,6 +17981,7 @@ components:
             dateOfBirth: 1985-01-01T00:00:00.000Z
           displayName: Bob
           created: 2019-01-20T09:00:00.000Z
+          language: en-US
           type: Individual
           gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
           paymentChannel:
@@ -19652,6 +19674,7 @@ components:
           dateOfBirth: 1985-01-01T00:00:00.000Z
         displayName: Bob
         created: 2019-01-20T09:00:00.000Z
+        language: en-US
         type: Individual
         gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
         paymentChannel:
@@ -19714,7 +19737,11 @@ components:
         challenge:
           $ref: '#/components/schemas/Challenge'
         language:
-          $ref: '#/components/schemas/Language_2'
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
+          type: string
         acceptTermsAndConditionsTimestamp:
           description: The timestamp when the payee last accepted T&Cs
           example: 2019-01-20T09:00:00.000Z
