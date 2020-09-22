@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.24.90
+  version: 2.24.91
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -9513,17 +9513,42 @@ components:
         - access_token
         - token_type
       type: object
-    LocationType:
-      description: |
-        the location type in the request that was the cause of the error
-      enum:
-        - requestBody
-        - queryParam
-        - requestParam
-        - header
-        - pathParam
-      example: requestBody
-      type: string
+    Error:
+      properties:
+        errorMessage:
+          description: English language message indicating the nature of the error
+          example: size must be between 0 and 10
+          type: string
+        errorCode:
+          description: Unique numeric code that can be used for switching client behavior or to drive translated or customised error messages
+          example: '20110003'
+          type: string
+        localisationDetails:
+          $ref: '#/components/schemas/LocalisationDetails'
+        location:
+          description: the property or object that caused the error
+          example: firstName
+          type: string
+        locationType:
+          deprecated: true
+          description: |
+            the location type in the request that was the cause of the error
+          enum:
+            - requestBody
+            - queryParam
+            - requestParam
+            - header
+            - pathParam
+          example: requestBody
+          type: string
+        reasonCode:
+          deprecated: true
+          description: a camel-cased string that can be used by clients to localise client error messages (deprecated)
+          example: validationError
+          type: string
+        errorData:
+          $ref: '#/components/schemas/ErrorData'
+      type: object
     ResetPasswordRequest:
       example:
         email: foo@example.com
@@ -10291,14 +10316,16 @@ components:
           items:
             $ref: '#/components/schemas/Error'
           minItems: 1
-          nullable: true
           type: array
         correlationId:
           description: a unique identifier to track a request or related sequence of requests
           example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
           format: uuid
-          nullable: true
           type: string
+        httpStatusCode:
+          description: this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity
+          example: 400
+          type: integer
       type: object
     PayorV2:
       example:
@@ -16648,6 +16675,31 @@ components:
         - enabled
         - payorId
       type: object
+    LocalisationDetails:
+      properties:
+        template:
+          description: the English language message template used to construct the error message
+          example: 'size must be between {min} and {max}'
+          type: string
+        parameters:
+          additionalProperties:
+            type: string
+          description: name to value map containing any named parameters that appear in the message template
+          example:
+            min: '0'
+            max: '10'
+          type: object
+      type: object
+    ErrorData:
+      properties:
+        description:
+          description: The description of the error data content
+          example: The rejected CSV rows
+          type: string
+        content:
+          description: Object containing typed error data specific to the API
+          type: object
+      type: object
     UserInfo:
       example:
         mfa_details:
@@ -16785,34 +16837,6 @@ components:
         - ACH
         - SAME_DAY_ACH
         - WIRE
-      type: object
-    Error:
-      properties:
-        errorMessage:
-          description: |
-            verbose message indicating the nature of the error
-            Will be localised
-          example: smsNumber must be in the E.164 format e.g. +15551231234
-          type: string
-        location:
-          description: the property or object that caused the error
-          example: smsNumber
-          type: string
-        locationType:
-          description: |
-            the location type in the request that was the cause of the error
-          enum:
-            - requestBody
-            - queryParam
-            - requestParam
-            - header
-            - pathParam
-          example: requestBody
-          type: string
-        reasonCode:
-          description: a camel-cased string that can be used by clients to localise client error messages
-          example: validationError
-          type: string
       type: object
     PayorAddressV2:
       example:
@@ -20871,30 +20895,12 @@ components:
         - firstName
         - lastName
       type: object
-    inline_response_401_errors:
-      properties:
-        errorMessage:
-          description: |
-            verbose message indicating the nature of the error
-            Will be localised
-          example: Authentication is required and has not been provided or access has expired
-          type: string
-        location:
-          description: the property or object that caused the error
-          example: accessToken
-          type: string
-        locationType:
-          $ref: '#/components/schemas/LocationType'
-        reasonCode:
-          description: a camel-cased string that can be used by clients to localise client error messages
-          example: tokenExpired
-          type: string
     inline_response_401:
       properties:
         errors:
           description: one or more errors
           items:
-            $ref: '#/components/schemas/inline_response_401_errors'
+            $ref: '#/components/schemas/Error'
           minItems: 1
           nullable: true
           type: array
@@ -20904,30 +20910,16 @@ components:
           format: uuid
           nullable: true
           type: string
-    inline_response_403_errors:
-      properties:
-        errorMessage:
-          description: |
-            verbose message indicating the nature of the error
-            Will be localised
-          example: The invoker does not have the required permissions to access the resource
-          type: string
-        location:
-          description: the property or object that caused the error
-          example: accessToken
-          type: string
-        locationType:
-          $ref: '#/components/schemas/LocationType'
-        reasonCode:
-          description: a camel-cased string that can be used by clients to localise client error messages
-          example: permissions
-          type: string
+        httpStatusCode:
+          description: this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity
+          example: 401
+          type: integer
     inline_response_403:
       properties:
         errors:
           description: one or more errors
           items:
-            $ref: '#/components/schemas/inline_response_403_errors'
+            $ref: '#/components/schemas/Error'
           minItems: 1
           nullable: true
           type: array
@@ -20937,30 +20929,16 @@ components:
           format: uuid
           nullable: true
           type: string
-    inline_response_400_errors:
-      properties:
-        errorMessage:
-          description: |
-            verbose message indicating the nature of the error
-            Will be localised
-          example: smsNumber must be in the E.164 format e.g. +15551231234
-          type: string
-        location:
-          description: the property or object that caused the error
-          example: smsNumber
-          type: string
-        locationType:
-          $ref: '#/components/schemas/LocationType'
-        reasonCode:
-          description: a camel-cased string that can be used by clients to localise client error messages
-          example: validationError
-          type: string
+        httpStatusCode:
+          description: this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity
+          example: 403
+          type: integer
     inline_response_400:
       properties:
         errors:
           description: one or more errors
           items:
-            $ref: '#/components/schemas/inline_response_400_errors'
+            $ref: '#/components/schemas/Error'
           minItems: 1
           nullable: true
           type: array
@@ -20970,30 +20948,16 @@ components:
           format: uuid
           nullable: true
           type: string
-    inline_response_404_errors:
-      properties:
-        errorMessage:
-          description: |
-            verbose message indicating the nature of the error
-            Will be localised
-          example: The resource was not found
-          type: string
-        location:
-          description: the property or object that caused the error
-          example: paymentId
-          type: string
-        locationType:
-          $ref: '#/components/schemas/LocationType'
-        reasonCode:
-          description: a camel-cased string that can be used by clients to localise client error messages
-          example: permissions
-          type: string
+        httpStatusCode:
+          description: this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity
+          example: 400
+          type: integer
     inline_response_404:
       properties:
         errors:
           description: one or more errors
           items:
-            $ref: '#/components/schemas/inline_response_404_errors'
+            $ref: '#/components/schemas/Error'
           minItems: 1
           nullable: true
           type: array
@@ -21003,30 +20967,16 @@ components:
           format: uuid
           nullable: true
           type: string
-    inline_response_409_errors:
-      properties:
-        errorMessage:
-          description: |
-            verbose message indicating the nature of the error
-            Will be localised
-          example: The resource already exists
-          type: string
-        location:
-          description: the property or object that caused the error
-          example: email
-          type: string
-        locationType:
-          $ref: '#/components/schemas/LocationType'
-        reasonCode:
-          description: a camel-cased string that can be used by clients to localise client error messages
-          example: duplicateEmail
-          type: string
+        httpStatusCode:
+          description: this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity
+          example: 404
+          type: integer
     inline_response_409:
       properties:
         errors:
           description: one or more errors
           items:
-            $ref: '#/components/schemas/inline_response_409_errors'
+            $ref: '#/components/schemas/Error'
           minItems: 1
           nullable: true
           type: array
@@ -21036,30 +20986,16 @@ components:
           format: uuid
           nullable: true
           type: string
-    inline_response_412_errors:
-      properties:
-        errorMessage:
-          description: |
-            verbose message indicating the nature of the error
-            Will be localised
-          example: The request could not be completed as the pre conditions have not been met
-          type: string
-        location:
-          description: the property or object that caused the error
-          example: accessToken
-          type: string
-        locationType:
-          $ref: '#/components/schemas/LocationType'
-        reasonCode:
-          description: a camel-cased string that can be used by clients to localise client error messages
-          example: permissions
-          type: string
+        httpStatusCode:
+          description: this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity
+          example: 409
+          type: integer
     inline_response_412:
       properties:
         errors:
           description: one or more errors
           items:
-            $ref: '#/components/schemas/inline_response_412_errors'
+            $ref: '#/components/schemas/Error'
           minItems: 1
           nullable: true
           type: array
@@ -21069,6 +21005,10 @@ components:
           format: uuid
           nullable: true
           type: string
+        httpStatusCode:
+          description: this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity
+          example: 412
+          type: integer
     PagedUserResponse_page:
       example:
         numberOfElements: 12
