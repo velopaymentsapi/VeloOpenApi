@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.23.124",
+    "version": "2.24.95",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -10330,7 +10330,7 @@
                 }
               }
             },
-            "description": "Details of Payee"
+            "description": "Paginated list of payments"
           },
           "400": {
             "content": {
@@ -10828,6 +10828,20 @@
             }
           },
           {
+            "description": "Transmission Type\n* ACH\n* SAME_DAY_ACH\n* WIRE\n",
+            "in": "query",
+            "name": "transmissionType",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ACH",
+                "SAME_DAY_ACH",
+                "WIRE"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "description": "Page number. Default is 1.",
             "in": "query",
             "name": "page",
@@ -11000,6 +11014,20 @@
             }
           },
           {
+            "description": "Transmission Type\n* ACH\n* SAME_DAY_ACH\n* WIRE\n",
+            "in": "query",
+            "name": "transmissionType",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ACH",
+                "SAME_DAY_ACH",
+                "WIRE"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "description": "The source account name filter. This filters via a case insensitive substring match.",
             "in": "query",
             "name": "sourceAccountName",
@@ -11147,7 +11175,7 @@
                 }
               }
             },
-            "description": "Details of Payee"
+            "description": "Paginated list of payments"
           },
           "400": {
             "content": {
@@ -12346,155 +12374,6 @@
         ]
       }
     },
-    "/v1/webhooks": {
-      "description": "List the details about the webhooks for the given payor.",
-      "get": {
-        "description": "List the details about the webhooks for the given payor.",
-        "operationId": "listWebhooksV1",
-        "parameters": [
-          {
-            "description": "Page number. Default is 1.",
-            "in": "query",
-            "name": "page",
-            "required": false,
-            "schema": {
-              "default": 1,
-              "format": "int32",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "The number of results to return in a page",
-            "in": "query",
-            "name": "pageSize",
-            "required": false,
-            "schema": {
-              "default": 25,
-              "format": "int32",
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer"
-            }
-          },
-          {
-            "description": "The Payor ID",
-            "in": "query",
-            "name": "payorId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WebhooksResponse"
-                }
-              }
-            },
-            "description": "Webhook response"
-          },
-          "400": {
-            "description": "Invalid Request Parameters"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          }
-        },
-        "summary": "List the details about the webhooks for the given payor.",
-        "tags": [
-          "Webhooks"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/webhooks?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
-          }
-        ]
-      },
-      "post": {
-        "description": "Create Webhook",
-        "operationId": "createWebhookV1",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateWebhookRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Webhook Created",
-            "headers": {
-              "Location": {
-                "description": "Reference to Webhook object",
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          }
-        },
-        "summary": "Create Webhook",
-        "tags": [
-          "Webhooks"
-        ]
-      },
-      "summary": "List Webhooks"
-    },
     "/v1/webhooks/{webhookId}": {
       "description": "Get details about the given webhook.",
       "get": {
@@ -12644,15 +12523,40 @@
       },
       "summary": "Get Webhook"
     },
-    "/v1/webhooks/{webhookId}/ping": {
-      "description": "Trigger an immediate ping notification to the webhook",
-      "post": {
-        "operationId": "pingWebhookV1",
+    "/v1/webhooks": {
+      "description": "List the details about the webhooks for the given payor.",
+      "get": {
+        "description": "List the details about the webhooks for the given payor.",
+        "operationId": "listWebhooksV1",
         "parameters": [
           {
-            "description": "Webhook id",
-            "in": "path",
-            "name": "webhookId",
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The number of results to return in a page",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The Payor ID",
+            "in": "query",
+            "name": "payorId",
             "required": true,
             "schema": {
               "format": "uuid",
@@ -12661,18 +12565,18 @@
           }
         ],
         "responses": {
-          "202": {
+          "200": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PingResponse"
+                  "$ref": "#/components/schemas/WebhooksResponse"
                 }
               }
             },
-            "description": "Send ping"
+            "description": "Webhook response"
           },
           "400": {
-            "description": "Bad Request, Invalid path parameter"
+            "description": "Invalid Request Parameters"
           },
           "401": {
             "content": {
@@ -12693,23 +12597,80 @@
               }
             },
             "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "List the details about the webhooks for the given payor.",
+        "tags": [
+          "Webhooks"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/webhooks?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
+          }
+        ]
+      },
+      "post": {
+        "description": "Create Webhook",
+        "operationId": "createWebhookV1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateWebhookRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Webhook Created",
+            "headers": {
+              "Location": {
+                "description": "Reference to Webhook object",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
           },
-          "404": {
+          "400": {
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/inline_response_404"
+                  "$ref": "#/components/schemas/inline_response_400"
                 }
               }
             },
-            "description": "The resource was not found or is no longer available\n"
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
           }
         },
+        "summary": "Create Webhook",
         "tags": [
           "Webhooks"
         ]
       },
-      "summary": "Ping Webhook"
+      "summary": "List Webhooks"
     }
   },
   "components": {
@@ -12760,17 +12721,50 @@
         ],
         "type": "object"
       },
-      "LocationType": {
-        "description": "the location type in the request that was the cause of the error\n",
-        "enum": [
-          "requestBody",
-          "queryParam",
-          "requestParam",
-          "header",
-          "pathParam"
-        ],
-        "example": "requestBody",
-        "type": "string"
+      "Error": {
+        "properties": {
+          "errorMessage": {
+            "description": "English language message indicating the nature of the error",
+            "example": "size must be between 0 and 10",
+            "type": "string"
+          },
+          "errorCode": {
+            "description": "Unique numeric code that can be used for switching client behavior or to drive translated or customised error messages",
+            "example": "20110003",
+            "type": "string"
+          },
+          "localisationDetails": {
+            "$ref": "#/components/schemas/LocalisationDetails"
+          },
+          "location": {
+            "description": "the property or object that caused the error",
+            "example": "firstName",
+            "type": "string"
+          },
+          "locationType": {
+            "deprecated": true,
+            "description": "the location type in the request that was the cause of the error\n",
+            "enum": [
+              "requestBody",
+              "queryParam",
+              "requestParam",
+              "header",
+              "pathParam"
+            ],
+            "example": "requestBody",
+            "type": "string"
+          },
+          "reasonCode": {
+            "deprecated": true,
+            "description": "a camel-cased string that can be used by clients to localise client error messages (deprecated)",
+            "example": "validationError",
+            "type": "string"
+          },
+          "errorData": {
+            "$ref": "#/components/schemas/ErrorData"
+          }
+        },
+        "type": "object"
       },
       "ResetPasswordRequest": {
         "example": {
@@ -13680,15 +13674,18 @@
               "$ref": "#/components/schemas/Error"
             },
             "minItems": 1,
-            "nullable": true,
             "type": "array"
           },
           "correlationId": {
             "description": "a unique identifier to track a request or related sequence of requests",
             "example": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
             "format": "uuid",
-            "nullable": true,
             "type": "string"
+          },
+          "httpStatusCode": {
+            "description": "this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity",
+            "example": 400,
+            "type": "integer"
           }
         },
         "type": "object"
@@ -14117,6 +14114,7 @@
           "displayName": "Bob",
           "created": "2019-01-20T09:00:00.000Z",
           "lastOfacCheckTimestamp": "2019-01-20T09:00:00.000Z",
+          "language": "en-US",
           "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
           "paymentChannel": {
             "paymentChannelName": "My payment channel",
@@ -14189,7 +14187,9 @@
             "$ref": "#/components/schemas/Challenge"
           },
           "language": {
-            "$ref": "#/components/schemas/Language"
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
+            "type": "string"
           },
           "acceptTermsAndConditionsTimestamp": {
             "description": "The timestamp when the payee last accepted T&Cs",
@@ -14334,6 +14334,7 @@
               "displayName": "ABC",
               "created": "2019-01-20T09:00:00.000Z",
               "lastOfacCheckTimestamp": "2019-01-20T09:00:00.000Z",
+              "language": "en-US",
               "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
               "paymentChannel": {
                 "paymentChannelName": "My payment channel",
@@ -14402,6 +14403,7 @@
               "displayName": "ABC",
               "created": "2019-01-20T09:00:00.000Z",
               "lastOfacCheckTimestamp": "2019-01-20T09:00:00.000Z",
+              "language": "en-US",
               "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
               "paymentChannel": {
                 "paymentChannelName": "My payment channel",
@@ -14611,6 +14613,7 @@
           "ofacOverrideReason": "ofac override reason",
           "kycCompletedTimestamp": "2019-01-20T09:00:00.000Z",
           "marketingOptInTimestamp": "2019-01-20T09:00:00.000Z",
+          "language": "en-US",
           "disabled": true,
           "company": {
             "taxId": "123123123",
@@ -14679,7 +14682,9 @@
             "$ref": "#/components/schemas/OfacStatus_2"
           },
           "language": {
-            "$ref": "#/components/schemas/Language_2"
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
+            "type": "string"
           },
           "created": {
             "example": "2019-01-20T09:00:00.000Z",
@@ -14831,6 +14836,7 @@
                 "description": "challenge description",
                 "value": "challenge test"
               },
+              "language": "en-US",
               "company": {
                 "taxId": "123",
                 "name": "ABC Ltd",
@@ -14890,6 +14896,7 @@
                 "description": "challenge description",
                 "value": "challenge test"
               },
+              "language": "en-US",
               "company": {
                 "taxId": "123",
                 "name": "ABC Ltd",
@@ -15351,19 +15358,8 @@
             "type": "string"
           },
           "payeeLanguage": {
-            "enum": [
-              "AR",
-              "EN",
-              "ES",
-              "FR",
-              "HE",
-              "HI",
-              "JA",
-              "PT",
-              "RU",
-              "UR",
-              "ZH"
-            ],
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
             "type": "string"
           }
         },
@@ -15454,6 +15450,7 @@
                 },
                 "displayName": "Bob",
                 "created": "2019-01-20T09:00:00.000Z",
+                "language": "en-US",
                 "type": "Individual",
                 "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
                 "paymentChannel": {
@@ -15534,6 +15531,7 @@
                 },
                 "displayName": "Bob",
                 "created": "2019-01-20T09:00:00.000Z",
+                "language": "en-US",
                 "type": "Individual",
                 "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
                 "paymentChannel": {
@@ -15669,12 +15667,34 @@
             {
               "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
               "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+              "payableStatus": true,
+              "payableIssues": [
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                },
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                }
+              ],
               "remoteId": "uniqueIdForRemoteEntity",
               "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
             },
             {
               "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
               "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+              "payableStatus": true,
+              "payableIssues": [
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                },
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                }
+              ],
               "remoteId": "uniqueIdForRemoteEntity",
               "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
             }
@@ -15685,6 +15705,7 @@
           "displayName": "Bob",
           "kycCompletedTimestamp": "2019-01-20T09:00:00.000Z",
           "marketingOptInTimestamp": "2019-01-20T09:00:00.000Z",
+          "language": "en-US",
           "watchlistOverrideExpiresAtTimestamp": "2019-01-20T09:00:00.000Z",
           "disabled": true,
           "company": {
@@ -15767,7 +15788,9 @@
             "type": "string"
           },
           "language": {
-            "$ref": "#/components/schemas/Language_2"
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
+            "type": "string"
           },
           "created": {
             "example": "2019-01-20T09:00:00.000Z",
@@ -15908,12 +15931,34 @@
                 {
                   "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                  "payableStatus": true,
+                  "payableIssues": [
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    },
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    }
+                  ],
                   "remoteId": "uniqueIdForRemoteEntity",
                   "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
                 },
                 {
                   "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                  "payableStatus": true,
+                  "payableIssues": [
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    },
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    }
+                  ],
                   "remoteId": "uniqueIdForRemoteEntity",
                   "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
                 }
@@ -15931,6 +15976,7 @@
               },
               "created": "2019-01-20T09:00:00.000Z",
               "displayName": "ABC",
+              "language": "en-US",
               "watchlistStatusUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
               "disabledComment": "reason for disabled",
               "disabled": true,
@@ -15946,12 +15992,34 @@
                 {
                   "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                  "payableStatus": true,
+                  "payableIssues": [
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    },
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    }
+                  ],
                   "remoteId": "uniqueIdForRemoteEntity",
                   "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
                 },
                 {
                   "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
                   "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                  "payableStatus": true,
+                  "payableIssues": [
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    },
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    }
+                  ],
                   "remoteId": "uniqueIdForRemoteEntity",
                   "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
                 }
@@ -15969,6 +16037,7 @@
               },
               "created": "2019-01-20T09:00:00.000Z",
               "displayName": "ABC",
+              "language": "en-US",
               "watchlistStatusUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
               "disabledComment": "reason for disabled",
               "disabled": true,
@@ -16695,19 +16764,8 @@
             "type": "string"
           },
           "payeeLanguage": {
-            "enum": [
-              "AR",
-              "EN",
-              "ES",
-              "FR",
-              "HE",
-              "HI",
-              "JA",
-              "PT",
-              "RU",
-              "UR",
-              "ZH"
-            ],
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
             "type": "string"
           }
         },
@@ -16798,6 +16856,7 @@
                 },
                 "displayName": "Bob",
                 "created": "2019-01-20T09:00:00.000Z",
+                "language": "en-US",
                 "type": "Individual",
                 "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
                 "paymentChannel": {
@@ -16878,6 +16937,7 @@
                 },
                 "displayName": "Bob",
                 "created": "2019-01-20T09:00:00.000Z",
+                "language": "en-US",
                 "type": "Individual",
                 "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
                 "paymentChannel": {
@@ -17103,6 +17163,7 @@
             "name": "ABC Group Plc",
             "operatingName": "ABC Co"
           },
+          "language": "en-US",
           "email": "bob@example.com"
         },
         "properties": {
@@ -17116,7 +17177,9 @@
             "$ref": "#/components/schemas/Company_2"
           },
           "language": {
-            "$ref": "#/components/schemas/Language_2"
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
+            "type": "string"
           },
           "payeeType": {
             "$ref": "#/components/schemas/PayeeType_2"
@@ -17139,12 +17202,34 @@
             {
               "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
               "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+              "payableStatus": true,
+              "payableIssues": [
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                },
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                }
+              ],
               "remoteId": "uniqueIdForRemoteEntity",
               "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
             },
             {
               "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
               "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+              "payableStatus": true,
+              "payableIssues": [
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                },
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                }
+              ],
               "remoteId": "uniqueIdForRemoteEntity",
               "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
             }
@@ -17155,6 +17240,7 @@
           "displayName": "Bob",
           "kycCompletedTimestamp": "2019-01-20T09:00:00.000Z",
           "marketingOptInTimestamp": "2019-01-20T09:00:00.000Z",
+          "language": "en-US",
           "watchlistOverrideExpiresAtTimestamp": "2019-01-20T09:00:00.000Z",
           "disabled": true,
           "company": {
@@ -17237,7 +17323,9 @@
             "type": "string"
           },
           "language": {
-            "$ref": "#/components/schemas/Language_2"
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
+            "type": "string"
           },
           "created": {
             "example": "2019-01-20T09:00:00.000Z",
@@ -17347,7 +17435,9 @@
             "$ref": "#/components/schemas/Company_2"
           },
           "language": {
-            "$ref": "#/components/schemas/Language_2"
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
+            "type": "string"
           },
           "payeeType": {
             "$ref": "#/components/schemas/PayeeType_2"
@@ -19385,7 +19475,6 @@
           "transactionTime": "transactionTime",
           "paymentMemo": "paymentMemo",
           "paymentAmount": 1,
-          "paymentType": "paymentType",
           "returnCode": "returnCode",
           "payeeName": "payeeName",
           "rejectReason": "rejectReason",
@@ -19483,9 +19572,6 @@
             "type": "string"
           },
           "paymentMemo": {
-            "type": "string"
-          },
-          "paymentType": {
             "type": "string"
           },
           "paymentRails": {
@@ -19744,6 +19830,7 @@
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
+              "transmissionType": "transmissionType",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
@@ -19825,6 +19912,7 @@
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
+              "transmissionType": "transmissionType",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
@@ -19951,6 +20039,7 @@
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
+              "transmissionType": "transmissionType",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
@@ -20032,6 +20121,7 @@
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
               "railsId": "asdf123",
+              "transmissionType": "transmissionType",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
@@ -20135,6 +20225,7 @@
           "submittedDateTime": "2000-01-23T04:56:07.000Z",
           "sourceAmount": 12345,
           "railsId": "asdf123",
+          "transmissionType": "transmissionType",
           "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "events": [
@@ -20369,6 +20460,10 @@
           "withdrawable": {
             "type": "boolean"
           },
+          "transmissionType": {
+            "description": "The transmission type of the payment, e.g. ACH, SAME_DAY_ACH, WIRE",
+            "type": "string"
+          },
           "payout": {
             "$ref": "#/components/schemas/PaymentResponseV4_payout"
           }
@@ -20526,9 +20621,6 @@
             "type": "string"
           },
           "paymentMemo": {
-            "type": "string"
-          },
-          "paymentType": {
             "type": "string"
           },
           "paymentRails": {
@@ -21171,6 +21263,85 @@
         },
         "type": "object"
       },
+      "WebhookResponse": {
+        "example": {
+          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "authorizationHeader": "authorizationHeader",
+          "categories": [
+            null,
+            null
+          ],
+          "webhookUrl": "webhookUrl",
+          "enabled": true
+        },
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "webhookUrl": {
+            "type": "string"
+          },
+          "authorizationHeader": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "categories": {
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "UpdateWebhookRequest": {
+        "example": {
+          "authorizationHeader": "authorizationHeader",
+          "categories": [
+            null,
+            null
+          ],
+          "webhookUrl": "webhookUrl",
+          "enabled": true
+        },
+        "properties": {
+          "webhookUrl": {
+            "description": "the webhook URL to use.",
+            "maxLength": 2000,
+            "minLength": 6,
+            "type": "string"
+          },
+          "authorizationHeader": {
+            "description": "the authorization header to include with the notification.",
+            "maxLength": 1000,
+            "minLength": 4,
+            "nullable": true,
+            "pattern": ".*",
+            "type": "string"
+          },
+          "enabled": {
+            "description": "whether the webhook is enabled.",
+            "type": "boolean"
+          },
+          "categories": {
+            "description": "The notification categories to enable.",
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            },
+            "nullable": true,
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "WebhooksResponse": {
         "description": "List Webhooks Object",
         "example": {
@@ -21196,6 +21367,10 @@
               "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "authorizationHeader": "authorizationHeader",
+              "categories": [
+                null,
+                null
+              ],
               "webhookUrl": "webhookUrl",
               "enabled": true
             },
@@ -21203,6 +21378,10 @@
               "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "authorizationHeader": "authorizationHeader",
+              "categories": [
+                null,
+                null
+              ],
               "webhookUrl": "webhookUrl",
               "enabled": true
             }
@@ -21231,6 +21410,10 @@
         "example": {
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "authorizationHeader": "authorizationHeader",
+          "categories": [
+            null,
+            null
+          ],
           "webhookUrl": "webhookUrl",
           "enabled": true
         },
@@ -21240,18 +21423,28 @@
             "type": "string"
           },
           "webhookUrl": {
+            "description": "the webhook URL to use.",
             "maxLength": 2000,
             "minLength": 6,
             "type": "string"
           },
           "authorizationHeader": {
+            "description": "the authorization header to include with the notification.",
             "maxLength": 1000,
             "minLength": 4,
             "pattern": ".*",
             "type": "string"
           },
           "enabled": {
+            "description": "whether the webhook is enabled.",
             "type": "boolean"
+          },
+          "categories": {
+            "description": "the categories to enable.",
+            "items": {
+              "$ref": "#/components/schemas/Category"
+            },
+            "type": "array"
           }
         },
         "required": [
@@ -21261,73 +21454,37 @@
         ],
         "type": "object"
       },
-      "WebhookResponse": {
-        "example": {
-          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "authorizationHeader": "authorizationHeader",
-          "webhookUrl": "webhookUrl",
-          "enabled": true
-        },
+      "LocalisationDetails": {
         "properties": {
-          "id": {
-            "format": "uuid",
+          "template": {
+            "description": "the English language message template used to construct the error message",
+            "example": "size must be between {min} and {max}",
             "type": "string"
           },
-          "payorId": {
-            "format": "uuid",
-            "type": "string"
-          },
-          "webhookUrl": {
-            "type": "string"
-          },
-          "authorizationHeader": {
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
+          "parameters": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "name to value map containing any named parameters that appear in the message template",
+            "example": {
+              "min": "0",
+              "max": "10"
+            },
+            "type": "object"
           }
         },
         "type": "object"
       },
-      "UpdateWebhookRequest": {
-        "example": {
-          "authorizationHeader": "authorizationHeader",
-          "webhookUrl": "webhookUrl",
-          "enabled": true
-        },
+      "ErrorData": {
         "properties": {
-          "webhookUrl": {
-            "maxLength": 2000,
-            "minLength": 6,
+          "description": {
+            "description": "The description of the error data content",
+            "example": "The rejected CSV rows",
             "type": "string"
           },
-          "authorizationHeader": {
-            "maxLength": 1000,
-            "minLength": 4,
-            "nullable": true,
-            "pattern": ".*",
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          }
-        },
-        "type": "object"
-      },
-      "PingResponse": {
-        "example": {
-          "webhookId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-        },
-        "properties": {
-          "id": {
-            "format": "uuid",
-            "type": "string"
-          },
-          "webhookId": {
-            "format": "uuid",
-            "type": "string"
+          "content": {
+            "description": "Object containing typed error data specific to the API",
+            "type": "object"
           }
         },
         "type": "object"
@@ -21501,38 +21658,6 @@
           "SAME_DAY_ACH",
           "WIRE"
         ],
-        "type": "object"
-      },
-      "Error": {
-        "properties": {
-          "errorMessage": {
-            "description": "verbose message indicating the nature of the error\nWill be localised\n",
-            "example": "smsNumber must be in the E.164 format e.g. +15551231234",
-            "type": "string"
-          },
-          "location": {
-            "description": "the property or object that caused the error",
-            "example": "smsNumber",
-            "type": "string"
-          },
-          "locationType": {
-            "description": "the location type in the request that was the cause of the error\n",
-            "enum": [
-              "requestBody",
-              "queryParam",
-              "requestParam",
-              "header",
-              "pathParam"
-            ],
-            "example": "requestBody",
-            "type": "string"
-          },
-          "reasonCode": {
-            "description": "a camel-cased string that can be used by clients to localise client error messages",
-            "example": "validationError",
-            "type": "string"
-          }
-        },
         "type": "object"
       },
       "PayorAddressV2": {
@@ -21833,20 +21958,11 @@
         "type": "object"
       },
       "Language": {
-        "description": "Available Payee Language codes",
-        "enum": [
-          "AR",
-          "EN",
-          "ES",
-          "FR",
-          "HE",
-          "HI",
-          "JA",
-          "PT",
-          "RU",
-          "UR",
-          "ZH"
-        ],
+        "$ref": "#/components/schemas/SupportedLanguage"
+      },
+      "SupportedLanguage": {
+        "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+        "example": "en-US",
         "type": "string"
       },
       "CompanyV1": {
@@ -21973,6 +22089,7 @@
           "displayName": "ABC",
           "created": "2019-01-20T09:00:00.000Z",
           "lastOfacCheckTimestamp": "2019-01-20T09:00:00.000Z",
+          "language": "en-US",
           "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
           "paymentChannel": {
             "paymentChannelName": "My payment channel",
@@ -22044,7 +22161,9 @@
             "$ref": "#/components/schemas/Challenge"
           },
           "language": {
-            "$ref": "#/components/schemas/Language"
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
+            "type": "string"
           },
           "acceptTermsAndConditionsTimestamp": {
             "description": "The timestamp when the payee last accepted T&Cs",
@@ -22243,23 +22362,6 @@
         ],
         "type": "string"
       },
-      "Language_2": {
-        "description": "Available Payee Language codes",
-        "enum": [
-          "AR",
-          "EN",
-          "ES",
-          "FR",
-          "HE",
-          "HI",
-          "JA",
-          "PT",
-          "RU",
-          "UR",
-          "ZH"
-        ],
-        "type": "string"
-      },
       "PayeeAddress_2": {
         "example": {
           "country": "US",
@@ -22446,6 +22548,7 @@
             "description": "challenge description",
             "value": "challenge test"
           },
+          "language": "en-US",
           "company": {
             "taxId": "123",
             "name": "ABC Ltd",
@@ -22505,7 +22608,9 @@
             "$ref": "#/components/schemas/Challenge"
           },
           "language": {
-            "$ref": "#/components/schemas/Language"
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
+            "type": "string"
           },
           "company": {
             "$ref": "#/components/schemas/CompanyV1"
@@ -22565,6 +22670,7 @@
             },
             "displayName": "Bob",
             "created": "2019-01-20T09:00:00.000Z",
+            "language": "en-US",
             "type": "Individual",
             "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
             "paymentChannel": {
@@ -22650,6 +22756,17 @@
         "example": {
           "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
           "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+          "payableStatus": true,
+          "payableIssues": [
+            {
+              "code": "3",
+              "message": "payee-disabled"
+            },
+            {
+              "code": "3",
+              "message": "payee-disabled"
+            }
+          ],
           "remoteId": "uniqueIdForRemoteEntity",
           "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
         },
@@ -22677,6 +22794,17 @@
             "example": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3",
             "format": "uuid",
             "type": "string"
+          },
+          "payableStatus": {
+            "description": "Indicates if the payee is payable for this payor",
+            "type": "boolean"
+          },
+          "payableIssues": {
+            "description": "Indicates any conditions which prevent the payee from being payable for this payor",
+            "items": {
+              "$ref": "#/components/schemas/PayableIssue"
+            },
+            "type": "array"
           }
         },
         "type": "object"
@@ -22783,12 +22911,34 @@
             {
               "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
               "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+              "payableStatus": true,
+              "payableIssues": [
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                },
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                }
+              ],
               "remoteId": "uniqueIdForRemoteEntity",
               "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
             },
             {
               "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
               "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+              "payableStatus": true,
+              "payableIssues": [
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                },
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                }
+              ],
               "remoteId": "uniqueIdForRemoteEntity",
               "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
             }
@@ -22806,6 +22956,7 @@
           },
           "created": "2019-01-20T09:00:00.000Z",
           "displayName": "ABC",
+          "language": "en-US",
           "watchlistStatusUpdatedTimestamp": "2019-01-20T09:00:00.000Z",
           "disabledComment": "reason for disabled",
           "disabled": true,
@@ -22856,7 +23007,9 @@
             "type": "string"
           },
           "language": {
-            "$ref": "#/components/schemas/Language_2"
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
+            "type": "string"
           },
           "created": {
             "example": "2019-01-20T09:00:00.000Z",
@@ -22937,7 +23090,9 @@
             "$ref": "#/components/schemas/Challenge_2"
           },
           "language": {
-            "$ref": "#/components/schemas/Language_2"
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
+            "type": "string"
           },
           "company": {
             "$ref": "#/components/schemas/Company_2"
@@ -22997,6 +23152,7 @@
             },
             "displayName": "Bob",
             "created": "2019-01-20T09:00:00.000Z",
+            "language": "en-US",
             "type": "Individual",
             "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
             "paymentChannel": {
@@ -23138,6 +23294,17 @@
         "example": {
           "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
           "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+          "payableStatus": true,
+          "payableIssues": [
+            {
+              "code": "3",
+              "message": "payee-disabled"
+            },
+            {
+              "code": "3",
+              "message": "payee-disabled"
+            }
+          ],
           "remoteId": "uniqueIdForRemoteEntity",
           "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
         },
@@ -23165,6 +23332,17 @@
             "example": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3",
             "format": "uuid",
             "type": "string"
+          },
+          "payableStatus": {
+            "description": "Indicates if the payee is payable for this payor",
+            "type": "boolean"
+          },
+          "payableIssues": {
+            "description": "Indicates any conditions which prevent the payee from being payable for this payor",
+            "items": {
+              "$ref": "#/components/schemas/PayableIssue_2"
+            },
+            "type": "array"
           }
         },
         "type": "object"
@@ -24549,6 +24727,15 @@
         },
         "type": "object"
       },
+      "Category": {
+        "description": "The notification category.  One of \"payment\", \"payee\", \"debit\".",
+        "enum": [
+          "payment",
+          "payee",
+          "debit"
+        ],
+        "type": "string"
+      },
       "UserType_2": {
         "enum": [
           "BACKOFFICE",
@@ -25085,6 +25272,7 @@
           },
           "displayName": "Bob",
           "created": "2019-01-20T09:00:00.000Z",
+          "language": "en-US",
           "type": "Individual",
           "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
           "paymentChannel": {
@@ -25167,7 +25355,9 @@
             "$ref": "#/components/schemas/Challenge"
           },
           "language": {
-            "$ref": "#/components/schemas/Language_2"
+            "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+            "example": "en-US",
+            "type": "string"
           },
           "acceptTermsAndConditionsTimestamp": {
             "description": "The timestamp when the payee last accepted T&Cs",
@@ -25235,6 +25425,28 @@
           "DECLINED"
         ],
         "type": "string"
+      },
+      "PayableIssue": {
+        "description": "payable issues for the payee and payor combination",
+        "example": {
+          "code": "3",
+          "message": "payee-disabled"
+        },
+        "properties": {
+          "code": {
+            "example": "3",
+            "type": "string"
+          },
+          "message": {
+            "example": "payee-disabled",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object"
       },
       "GetPayeeListResponseIndividual": {
         "example": {
@@ -25919,6 +26131,28 @@
         ],
         "type": "object"
       },
+      "PayableIssue_2": {
+        "description": "payable issues for the payee and payor combination",
+        "example": {
+          "code": "3",
+          "message": "payee-disabled"
+        },
+        "properties": {
+          "code": {
+            "example": "3",
+            "type": "string"
+          },
+          "message": {
+            "example": "payee-disabled",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "type": "object"
+      },
       "FundingEvent": {
         "example": {
           "principal": "principal",
@@ -26442,34 +26676,12 @@
         ],
         "type": "object"
       },
-      "inline_response_401_errors": {
-        "properties": {
-          "errorMessage": {
-            "description": "verbose message indicating the nature of the error\nWill be localised\n",
-            "example": "Authentication is required and has not been provided or access has expired",
-            "type": "string"
-          },
-          "location": {
-            "description": "the property or object that caused the error",
-            "example": "accessToken",
-            "type": "string"
-          },
-          "locationType": {
-            "$ref": "#/components/schemas/LocationType"
-          },
-          "reasonCode": {
-            "description": "a camel-cased string that can be used by clients to localise client error messages",
-            "example": "tokenExpired",
-            "type": "string"
-          }
-        }
-      },
       "inline_response_401": {
         "properties": {
           "errors": {
             "description": "one or more errors",
             "items": {
-              "$ref": "#/components/schemas/inline_response_401_errors"
+              "$ref": "#/components/schemas/Error"
             },
             "minItems": 1,
             "nullable": true,
@@ -26481,28 +26693,11 @@
             "format": "uuid",
             "nullable": true,
             "type": "string"
-          }
-        }
-      },
-      "inline_response_403_errors": {
-        "properties": {
-          "errorMessage": {
-            "description": "verbose message indicating the nature of the error\nWill be localised\n",
-            "example": "The invoker does not have the required permissions to access the resource",
-            "type": "string"
           },
-          "location": {
-            "description": "the property or object that caused the error",
-            "example": "accessToken",
-            "type": "string"
-          },
-          "locationType": {
-            "$ref": "#/components/schemas/LocationType"
-          },
-          "reasonCode": {
-            "description": "a camel-cased string that can be used by clients to localise client error messages",
-            "example": "permissions",
-            "type": "string"
+          "httpStatusCode": {
+            "description": "this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity",
+            "example": 401,
+            "type": "integer"
           }
         }
       },
@@ -26511,7 +26706,7 @@
           "errors": {
             "description": "one or more errors",
             "items": {
-              "$ref": "#/components/schemas/inline_response_403_errors"
+              "$ref": "#/components/schemas/Error"
             },
             "minItems": 1,
             "nullable": true,
@@ -26523,28 +26718,11 @@
             "format": "uuid",
             "nullable": true,
             "type": "string"
-          }
-        }
-      },
-      "inline_response_400_errors": {
-        "properties": {
-          "errorMessage": {
-            "description": "verbose message indicating the nature of the error\nWill be localised\n",
-            "example": "smsNumber must be in the E.164 format e.g. +15551231234",
-            "type": "string"
           },
-          "location": {
-            "description": "the property or object that caused the error",
-            "example": "smsNumber",
-            "type": "string"
-          },
-          "locationType": {
-            "$ref": "#/components/schemas/LocationType"
-          },
-          "reasonCode": {
-            "description": "a camel-cased string that can be used by clients to localise client error messages",
-            "example": "validationError",
-            "type": "string"
+          "httpStatusCode": {
+            "description": "this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity",
+            "example": 403,
+            "type": "integer"
           }
         }
       },
@@ -26553,7 +26731,7 @@
           "errors": {
             "description": "one or more errors",
             "items": {
-              "$ref": "#/components/schemas/inline_response_400_errors"
+              "$ref": "#/components/schemas/Error"
             },
             "minItems": 1,
             "nullable": true,
@@ -26565,28 +26743,11 @@
             "format": "uuid",
             "nullable": true,
             "type": "string"
-          }
-        }
-      },
-      "inline_response_404_errors": {
-        "properties": {
-          "errorMessage": {
-            "description": "verbose message indicating the nature of the error\nWill be localised\n",
-            "example": "The resource was not found",
-            "type": "string"
           },
-          "location": {
-            "description": "the property or object that caused the error",
-            "example": "paymentId",
-            "type": "string"
-          },
-          "locationType": {
-            "$ref": "#/components/schemas/LocationType"
-          },
-          "reasonCode": {
-            "description": "a camel-cased string that can be used by clients to localise client error messages",
-            "example": "permissions",
-            "type": "string"
+          "httpStatusCode": {
+            "description": "this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity",
+            "example": 400,
+            "type": "integer"
           }
         }
       },
@@ -26595,7 +26756,7 @@
           "errors": {
             "description": "one or more errors",
             "items": {
-              "$ref": "#/components/schemas/inline_response_404_errors"
+              "$ref": "#/components/schemas/Error"
             },
             "minItems": 1,
             "nullable": true,
@@ -26607,28 +26768,11 @@
             "format": "uuid",
             "nullable": true,
             "type": "string"
-          }
-        }
-      },
-      "inline_response_409_errors": {
-        "properties": {
-          "errorMessage": {
-            "description": "verbose message indicating the nature of the error\nWill be localised\n",
-            "example": "The resource already exists",
-            "type": "string"
           },
-          "location": {
-            "description": "the property or object that caused the error",
-            "example": "email",
-            "type": "string"
-          },
-          "locationType": {
-            "$ref": "#/components/schemas/LocationType"
-          },
-          "reasonCode": {
-            "description": "a camel-cased string that can be used by clients to localise client error messages",
-            "example": "duplicateEmail",
-            "type": "string"
+          "httpStatusCode": {
+            "description": "this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity",
+            "example": 404,
+            "type": "integer"
           }
         }
       },
@@ -26637,7 +26781,7 @@
           "errors": {
             "description": "one or more errors",
             "items": {
-              "$ref": "#/components/schemas/inline_response_409_errors"
+              "$ref": "#/components/schemas/Error"
             },
             "minItems": 1,
             "nullable": true,
@@ -26649,28 +26793,11 @@
             "format": "uuid",
             "nullable": true,
             "type": "string"
-          }
-        }
-      },
-      "inline_response_412_errors": {
-        "properties": {
-          "errorMessage": {
-            "description": "verbose message indicating the nature of the error\nWill be localised\n",
-            "example": "The request could not be completed as the pre conditions have not been met",
-            "type": "string"
           },
-          "location": {
-            "description": "the property or object that caused the error",
-            "example": "accessToken",
-            "type": "string"
-          },
-          "locationType": {
-            "$ref": "#/components/schemas/LocationType"
-          },
-          "reasonCode": {
-            "description": "a camel-cased string that can be used by clients to localise client error messages",
-            "example": "permissions",
-            "type": "string"
+          "httpStatusCode": {
+            "description": "this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity",
+            "example": 409,
+            "type": "integer"
           }
         }
       },
@@ -26679,7 +26806,7 @@
           "errors": {
             "description": "one or more errors",
             "items": {
-              "$ref": "#/components/schemas/inline_response_412_errors"
+              "$ref": "#/components/schemas/Error"
             },
             "minItems": 1,
             "nullable": true,
@@ -26691,6 +26818,11 @@
             "format": "uuid",
             "nullable": true,
             "type": "string"
+          },
+          "httpStatusCode": {
+            "description": "this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity",
+            "example": 412,
+            "type": "integer"
           }
         }
       },
@@ -27577,7 +27709,8 @@
       "tags": [
         "Payors",
         "Funding Manager",
-        "Webhooks"
+        "Webhooks",
+        "Payins"
       ]
     },
     {
