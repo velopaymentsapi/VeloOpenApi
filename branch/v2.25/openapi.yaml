@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.25.50
+  version: 2.25.51
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -2036,6 +2036,7 @@ paths:
   '/v3/payees/{payeeId}':
     delete:
       description: |
+        <p>Use v4 instead</p>
         <p>This API will delete Payee by Id (UUID). Deletion by ID is not allowed if:</p>
         <p>* Payee ID is not found</p>
         <p>* If Payee has not been on-boarded</p>
@@ -2262,7 +2263,9 @@ paths:
   /v3/payees:
     get:
       deprecated: true
-      description: Get a paginated response listing the payees for a payor.
+      description: |
+        <p>Use v4 instead</p>
+        Get a paginated response listing the payees for a payor.
       operationId: listPayeesV3
       parameters:
         - description: The account owner Payor ID
@@ -9061,7 +9064,6 @@ components:
         language:
           description: |
             An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
-            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
           example: en-US
           type: string
         created:
@@ -10403,7 +10405,6 @@ components:
         language:
           description: |
             An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
-            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
           example: en-US
           type: string
         payeeType:
@@ -15041,11 +15042,8 @@ components:
         - ONBOARDED
       type: string
     Language:
-      $ref: '#/components/schemas/SupportedLanguage'
-    SupportedLanguage:
       description: |
         An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
-        See the /v1/supportedLanguages endpoint to list the available codes for an environment.
       example: en-US
       type: string
     PayeeAddress:
@@ -15261,7 +15259,6 @@ components:
         language:
           description: |
             An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
-            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
           example: en-US
           type: string
         created:
@@ -15383,7 +15380,6 @@ components:
         language:
           description: |
             An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
-            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
           example: en-US
           type: string
         company:
@@ -15396,6 +15392,12 @@ components:
         - remoteId
         - type
       type: object
+    SupportedLanguage:
+      description: |
+        An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+        See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+      example: en-US
+      type: string
     FailedSubmission:
       example:
         failedSubmission:
@@ -15595,6 +15597,12 @@ components:
         - REVIEW
         - PASSED
         - FAILED
+      type: string
+    Language_2:
+      description: |
+        An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+        See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+      example: en-US
       type: string
     PayeeAddress_2:
       example:
@@ -17922,7 +17930,6 @@ components:
         language:
           description: |
             An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
-            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
           example: en-US
           type: string
         payorRefs:
