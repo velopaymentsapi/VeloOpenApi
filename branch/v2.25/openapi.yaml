@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.25.53
+  version: 2.25.54
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -2035,6 +2035,7 @@ paths:
         - Payors Private
   '/v3/payees/{payeeId}':
     delete:
+      deprecated: true
       description: |
         <p>Use v4 instead</p>
         <p>This API will delete Payee by Id (UUID). Deletion by ID is not allowed if:</p>
