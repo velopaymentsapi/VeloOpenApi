@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.24.95
+  version: 2.24.101
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -16422,8 +16422,6 @@ components:
         - value
       type: object
     Language:
-      $ref: '#/components/schemas/SupportedLanguage'
-    SupportedLanguage:
       description: |
         An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
         See the /v1/supportedLanguages endpoint to list the available codes for an environment.
@@ -16735,6 +16733,12 @@ components:
         - PASSED
         - FAILED
       type: string
+    Language_2:
+      description: |
+        An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+        See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+      example: en-US
+      type: string
     PayeeAddress_2:
       example:
         country: US
@@ -16948,6 +16952,12 @@ components:
         - remoteId
         - type
       type: object
+    SupportedLanguage:
+      description: |
+        An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+        See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+      example: en-US
+      type: string
     FailedSubmission:
       example:
         failedSubmission:

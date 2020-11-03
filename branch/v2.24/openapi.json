@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.24.95",
+    "version": "2.24.101",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -21958,9 +21958,6 @@
         "type": "object"
       },
       "Language": {
-        "$ref": "#/components/schemas/SupportedLanguage"
-      },
-      "SupportedLanguage": {
         "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
         "example": "en-US",
         "type": "string"
@@ -22362,6 +22359,11 @@
         ],
         "type": "string"
       },
+      "Language_2": {
+        "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+        "example": "en-US",
+        "type": "string"
+      },
       "PayeeAddress_2": {
         "example": {
           "country": "US",
@@ -22626,6 +22628,11 @@
           "type"
         ],
         "type": "object"
+      },
+      "SupportedLanguage": {
+        "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
+        "example": "en-US",
+        "type": "string"
       },
       "FailedSubmission": {
         "example": {
