@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.25.84
+  version: 2.25.85
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -8705,6 +8705,9 @@ components:
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         kycState: PASSED_KYC
         wuCustomerId: wuCustomerId
+        remoteSystemIds:
+          - REMOTE_SYSTEM_ID
+          - REMOTE_SYSTEM_ID
         primaryContactEmail: joe.buck@example.com
         payorName: 'Example, Corp'
       properties:
@@ -8784,6 +8787,12 @@ components:
           $ref: '#/components/schemas/PaymentRails'
         transmissionTypes:
           $ref: '#/components/schemas/TransmissionTypes_2'
+        remoteSystemIds:
+          description: The payor’s supported remote systems by id
+          items:
+            example: REMOTE_SYSTEM_ID
+            type: string
+          type: array
       required:
         - payorId
         - payorName
