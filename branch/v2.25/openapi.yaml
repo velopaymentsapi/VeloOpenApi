@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.25.91
+  version: 2.25.92
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -7422,6 +7422,20 @@ paths:
           required: false
           schema:
             type: string
+        - description: |
+            Transmission Type
+            * ACH
+            * SAME_DAY_ACH
+            * WIRE
+          in: query
+          name: transmissionType
+          required: false
+          schema:
+            enum:
+              - ACH
+              - SAME_DAY_ACH
+              - WIRE
+            type: string
         - description: Payment Memo of the Payment
           in: query
           name: paymentMemo
@@ -14171,60 +14185,70 @@ components:
         payoutToPayorId: 9afc6b39-de12-466a-a9ca-07c7a23b312d
         payments:
           - amount: 1299
+            paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             currency: USD
             payorPaymentId: 123211321ABSD
             transmissionType: ACH
             paymentMemo: my memo
+            remoteSystemId: remoteSystemId
             remoteId: remoteId1234
             sourceAccountName: MyAccountName
           - amount: 1299
+            paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             currency: USD
             payorPaymentId: 123211321ABSD
             transmissionType: ACH
             paymentMemo: my memo
+            remoteSystemId: remoteSystemId
             remoteId: remoteId1234
             sourceAccountName: MyAccountName
           - amount: 1299
+            paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             currency: USD
             payorPaymentId: 123211321ABSD
             transmissionType: ACH
             paymentMemo: my memo
+            remoteSystemId: remoteSystemId
             remoteId: remoteId1234
             sourceAccountName: MyAccountName
           - amount: 1299
+            paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             currency: USD
             payorPaymentId: 123211321ABSD
             transmissionType: ACH
             paymentMemo: my memo
+            remoteSystemId: remoteSystemId
             remoteId: remoteId1234
             sourceAccountName: MyAccountName
           - amount: 1299
+            paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             currency: USD
             payorPaymentId: 123211321ABSD
             transmissionType: ACH
             paymentMemo: my memo
+            remoteSystemId: remoteSystemId
             remoteId: remoteId1234
             sourceAccountName: MyAccountName
-        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payoutMemo: Monthly Payment
       properties:
-        payorId:
-          deprecated: true
-          description: Deprecated in v2.16. Any value supplied here will be ignored.
-          format: uuid
-          type: string
         payoutFromPayorId:
-          description: The id of the payor whose source account(s) will be debited. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.
+          description: |
+            <p>The id of the payor whose source account(s) will be debited</p>
+            <p>payoutFromPayorId and payoutToPayorId must be both supplied or both omitted</p>
           example: c4261044-13df-4a6c-b1d4-fa8be2b46f5a
           format: uuid
           type: string
         payoutToPayorId:
-          description: The id of the payor whose payees will be paid. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.
+          description: |
+            <p>The id of the payor whose payees will be paid</p>
+            <p>payoutFromPayorId and payoutToPayorId must be both supplied or both omitted</p>
           example: 9afc6b39-de12-466a-a9ca-07c7a23b312d
           format: uuid
           type: string
         payoutMemo:
-          description: Text applied to all payment memos unless specified explicitly on a payment. This should be the reference field on the statement seen by the payee (but not via ACH)
+          description: |
+            <p>Text applied to all payment memos unless specified explicitly on a payment</p>
+            <p>This should be the reference field on the statement seen by the payee (but not via ACH)</p>
           example: Monthly Payment
           maxLength: 40
           type: string
@@ -14241,10 +14265,12 @@ components:
       description: Instruction for creating a payment
       example:
         amount: 1299
+        paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
         currency: USD
         payorPaymentId: 123211321ABSD
         transmissionType: ACH
         paymentMemo: my memo
+        remoteSystemId: remoteSystemId
         remoteId: remoteId1234
         sourceAccountName: MyAccountName
       properties:
@@ -14271,22 +14297,42 @@ components:
           minimum: 1
           type: integer
         paymentMemo:
+          description: |
+            <p>Any value here will override the memo value in the parent payout</p>
+            <p>This should be the reference field on the statement seen by the payee (but not via ACH)</p>
           example: my memo
           maxLength: 40
           minLength: 0
           type: string
         sourceAccountName:
+          description: Must match a valid source account name belonging to the payor
           example: MyAccountName
           maxLength: 64
           minLength: 1
           type: string
         payorPaymentId:
+          description: A reference identifier for the payor for the given payee payment
           example: 123211321ABSD
           maxLength: 40
           minLength: 0
           type: string
         transmissionType:
           $ref: '#/components/schemas/TransmissionType'
+        remoteSystemId:
+          description: |
+            <p>The identifier for the remote payments system if not Velo</p>
+            <p>Should only be used after consultation with Velo Payments</p>
+          maxLength: 100
+          minLength: 1
+          type: string
+        paymentMetadata:
+          description: |
+            <p>Metadata about the payment that may be relevant to the specific rails or remote system making the payout</p>
+            <p>The structure of the data will be dictated by the requirements of the payment rails</p>
+          example: 'invoiceeId_123|abc001:12345|xyz002:4567'
+          maxLength: 512
+          minLength: 0
+          type: string
       required:
         - amount
         - currency
@@ -14299,8 +14345,10 @@ components:
           - currencyType: USD
             reason: The payee has not been onboarded
             amount: 1234
+            paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             payorPaymentId: paymenIdVal123123
             reasonCode: PAYMENT_VALUE_TOO_HIGH
+            remoteSystemId: Remote_System_Id_101234
             lineNumber: 10
             message: Payment cannot be processed because of the Payee's OFAC or Compliance Status
             remoteId: remoteIdVal123
@@ -14308,8 +14356,10 @@ components:
           - currencyType: USD
             reason: The payee has not been onboarded
             amount: 1234
+            paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             payorPaymentId: paymenIdVal123123
             reasonCode: PAYMENT_VALUE_TOO_HIGH
+            remoteSystemId: Remote_System_Id_101234
             lineNumber: 10
             message: Payment cannot be processed because of the Payee's OFAC or Compliance Status
             remoteId: remoteIdVal123
@@ -14353,14 +14403,18 @@ components:
         acceptedPayments:
           - currencyType: USD
             amount: 1234
+            paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             payorPaymentId: paymenIdVal123123
             paymentMemo: Payment memo
+            remoteSystemId: Remote_System_Id_101234
             remoteId: remoteIdVal123
             sourceAccountName: Chase
           - currencyType: USD
             amount: 1234
+            paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             payorPaymentId: paymenIdVal123123
             paymentMemo: Payment memo
+            remoteSystemId: Remote_System_Id_101234
             remoteId: remoteIdVal123
             sourceAccountName: Chase
         status: COMPLETED
@@ -14453,7 +14507,10 @@ components:
           page: 5
           totalElements: 6
         content:
-          - payee:
+          - amount: 1234
+            paymentMemo: Payment memo
+            remoteId: remoteIdVal123
+            payee:
               individual:
                 name:
                   firstName: Fred
@@ -14461,17 +14518,19 @@ components:
               company:
                 companyName: ACME Anvils PLC
               payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            amount: 1234
             paymentId: paymentId
             withdrawable: false
+            paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             currency: USD
             payorPaymentId: paymenIdVal123123
             transmissionType: ACH
-            paymentMemo: Payment memo
-            remoteId: remoteIdVal123
+            remoteSystemId: Remote_System_Id_101234
             sourceAccountName: Chase
             status: SUBMITTED
-          - payee:
+          - amount: 1234
+            paymentMemo: Payment memo
+            remoteId: remoteIdVal123
+            payee:
               individual:
                 name:
                   firstName: Fred
@@ -14479,14 +14538,13 @@ components:
               company:
                 companyName: ACME Anvils PLC
               payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            amount: 1234
             paymentId: paymentId
             withdrawable: false
+            paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             currency: USD
             payorPaymentId: paymenIdVal123123
             transmissionType: ACH
-            paymentMemo: Payment memo
-            remoteId: remoteIdVal123
+            remoteSystemId: Remote_System_Id_101234
             sourceAccountName: Chase
             status: SUBMITTED
       properties:
@@ -16735,7 +16793,9 @@ components:
       title: ISO Currency Code
       type: string
     TransmissionType:
-      description: The transmission type that will be used to send a payment
+      description: |
+        <p>The transmission type that will be used to send a payment</p>
+        <p>If omitted, a default will be provided by the payment rails</p>
       enum:
         - SAME_DAY_ACH
         - WIRE
@@ -16856,8 +16916,10 @@ components:
       example:
         currencyType: USD
         amount: 1234
+        paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
         payorPaymentId: paymenIdVal123123
         paymentMemo: Payment memo
+        remoteSystemId: Remote_System_Id_101234
         remoteId: remoteIdVal123
         sourceAccountName: Chase
       properties:
@@ -16884,6 +16946,12 @@ components:
         paymentMemo:
           example: Payment memo
           type: string
+        remoteSystemId:
+          example: Remote_System_Id_101234
+          type: string
+        paymentMetadata:
+          example: 'invoiceeId_123|abc001:12345|xyz002:4567'
+          type: string
       required:
         - amount
         - currencyType
@@ -16896,8 +16964,10 @@ components:
         currencyType: USD
         reason: The payee has not been onboarded
         amount: 1234
+        paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
         payorPaymentId: paymenIdVal123123
         reasonCode: PAYMENT_VALUE_TOO_HIGH
+        remoteSystemId: Remote_System_Id_101234
         lineNumber: 10
         message: Payment cannot be processed because of the Payee's OFAC or Compliance Status
         remoteId: remoteIdVal123
@@ -16923,6 +16993,12 @@ components:
         payorPaymentId:
           example: paymenIdVal123123
           type: string
+        remoteSystemId:
+          example: Remote_System_Id_101234
+          type: string
+        paymentMetadata:
+          example: 'invoiceeId_123|abc001:12345|xyz002:4567'
+          type: string
         reason:
           example: The payee has not been onboarded
           type: string
@@ -16945,6 +17021,9 @@ components:
       type: object
     PaymentV3:
       example:
+        amount: 1234
+        paymentMemo: Payment memo
+        remoteId: remoteIdVal123
         payee:
           individual:
             name:
@@ -16953,14 +17032,13 @@ components:
           company:
             companyName: ACME Anvils PLC
           payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        amount: 1234
         paymentId: paymentId
         withdrawable: false
+        paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
         currency: USD
         payorPaymentId: paymenIdVal123123
         transmissionType: ACH
-        paymentMemo: Payment memo
-        remoteId: remoteIdVal123
+        remoteSystemId: Remote_System_Id_101234
         sourceAccountName: Chase
         status: SUBMITTED
       properties:
@@ -17006,6 +17084,12 @@ components:
           type: string
         transmissionType:
           $ref: '#/components/schemas/TransmissionType'
+        remoteSystemId:
+          example: Remote_System_Id_101234
+          type: string
+        paymentMetadata:
+          example: 'invoiceeId_123|abc001:12345|xyz002:4567'
+          type: string
       required:
         - paymentId
       type: object

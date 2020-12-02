@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.25.91",
+    "version": "2.25.92",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -10262,6 +10262,20 @@
             }
           },
           {
+            "description": "Transmission Type\n* ACH\n* SAME_DAY_ACH\n* WIRE\n",
+            "in": "query",
+            "name": "transmissionType",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ACH",
+                "SAME_DAY_ACH",
+                "WIRE"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "description": "Payment Memo of the Payment",
             "in": "query",
             "name": "paymentMemo",
@@ -18800,74 +18814,77 @@
           "payments": [
             {
               "amount": 1299,
+              "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "currency": "USD",
               "payorPaymentId": "123211321ABSD",
               "transmissionType": "ACH",
               "paymentMemo": "my memo",
+              "remoteSystemId": "remoteSystemId",
               "remoteId": "remoteId1234",
               "sourceAccountName": "MyAccountName"
             },
             {
               "amount": 1299,
+              "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "currency": "USD",
               "payorPaymentId": "123211321ABSD",
               "transmissionType": "ACH",
               "paymentMemo": "my memo",
+              "remoteSystemId": "remoteSystemId",
               "remoteId": "remoteId1234",
               "sourceAccountName": "MyAccountName"
             },
             {
               "amount": 1299,
+              "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "currency": "USD",
               "payorPaymentId": "123211321ABSD",
               "transmissionType": "ACH",
               "paymentMemo": "my memo",
+              "remoteSystemId": "remoteSystemId",
               "remoteId": "remoteId1234",
               "sourceAccountName": "MyAccountName"
             },
             {
               "amount": 1299,
+              "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "currency": "USD",
               "payorPaymentId": "123211321ABSD",
               "transmissionType": "ACH",
               "paymentMemo": "my memo",
+              "remoteSystemId": "remoteSystemId",
               "remoteId": "remoteId1234",
               "sourceAccountName": "MyAccountName"
             },
             {
               "amount": 1299,
+              "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "currency": "USD",
               "payorPaymentId": "123211321ABSD",
               "transmissionType": "ACH",
               "paymentMemo": "my memo",
+              "remoteSystemId": "remoteSystemId",
               "remoteId": "remoteId1234",
               "sourceAccountName": "MyAccountName"
             }
           ],
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "payoutMemo": "Monthly Payment"
         },
         "properties": {
-          "payorId": {
-            "deprecated": true,
-            "description": "Deprecated in v2.16. Any value supplied here will be ignored.",
-            "format": "uuid",
-            "type": "string"
-          },
           "payoutFromPayorId": {
-            "description": "The id of the payor whose source account(s) will be debited. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.",
+            "description": "<p>The id of the payor whose source account(s) will be debited</p>\n<p>payoutFromPayorId and payoutToPayorId must be both supplied or both omitted</p>\n",
             "example": "c4261044-13df-4a6c-b1d4-fa8be2b46f5a",
             "format": "uuid",
             "type": "string"
           },
           "payoutToPayorId": {
-            "description": "The id of the payor whose payees will be paid. payoutFromPayorId and payoutToPayorId must be both supplied or both omitted.",
+            "description": "<p>The id of the payor whose payees will be paid</p>\n<p>payoutFromPayorId and payoutToPayorId must be both supplied or both omitted</p>\n",
             "example": "9afc6b39-de12-466a-a9ca-07c7a23b312d",
             "format": "uuid",
             "type": "string"
           },
           "payoutMemo": {
-            "description": "Text applied to all payment memos unless specified explicitly on a payment. This should be the reference field on the statement seen by the payee (but not via ACH)",
+            "description": "<p>Text applied to all payment memos unless specified explicitly on a payment</p>\n<p>This should be the reference field on the statement seen by the payee (but not via ACH)</p>\n",
             "example": "Monthly Payment",
             "maxLength": 40,
             "type": "string"
@@ -18890,10 +18907,12 @@
         "description": "Instruction for creating a payment",
         "example": {
           "amount": 1299,
+          "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
           "currency": "USD",
           "payorPaymentId": "123211321ABSD",
           "transmissionType": "ACH",
           "paymentMemo": "my memo",
+          "remoteSystemId": "remoteSystemId",
           "remoteId": "remoteId1234",
           "sourceAccountName": "MyAccountName"
         },
@@ -18922,18 +18941,21 @@
             "type": "integer"
           },
           "paymentMemo": {
+            "description": "<p>Any value here will override the memo value in the parent payout</p>\n<p>This should be the reference field on the statement seen by the payee (but not via ACH)</p>\n",
             "example": "my memo",
             "maxLength": 40,
             "minLength": 0,
             "type": "string"
           },
           "sourceAccountName": {
+            "description": "Must match a valid source account name belonging to the payor",
             "example": "MyAccountName",
             "maxLength": 64,
             "minLength": 1,
             "type": "string"
           },
           "payorPaymentId": {
+            "description": "A reference identifier for the payor for the given payee payment",
             "example": "123211321ABSD",
             "maxLength": 40,
             "minLength": 0,
@@ -18941,6 +18963,19 @@
           },
           "transmissionType": {
             "$ref": "#/components/schemas/TransmissionType"
+          },
+          "remoteSystemId": {
+            "description": "<p>The identifier for the remote payments system if not Velo</p>\n<p>Should only be used after consultation with Velo Payments</p>\n",
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "paymentMetadata": {
+            "description": "<p>Metadata about the payment that may be relevant to the specific rails or remote system making the payout</p>\n<p>The structure of the data will be dictated by the requirements of the payment rails</p>\n",
+            "example": "invoiceeId_123|abc001:12345|xyz002:4567",
+            "maxLength": 512,
+            "minLength": 0,
+            "type": "string"
           }
         },
         "required": [
@@ -18958,8 +18993,10 @@
               "currencyType": "USD",
               "reason": "The payee has not been onboarded",
               "amount": 1234,
+              "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "payorPaymentId": "paymenIdVal123123",
               "reasonCode": "PAYMENT_VALUE_TOO_HIGH",
+              "remoteSystemId": "Remote_System_Id_101234",
               "lineNumber": 10,
               "message": "Payment cannot be processed because of the Payee's OFAC or Compliance Status",
               "remoteId": "remoteIdVal123",
@@ -18969,8 +19006,10 @@
               "currencyType": "USD",
               "reason": "The payee has not been onboarded",
               "amount": 1234,
+              "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "payorPaymentId": "paymenIdVal123123",
               "reasonCode": "PAYMENT_VALUE_TOO_HIGH",
+              "remoteSystemId": "Remote_System_Id_101234",
               "lineNumber": 10,
               "message": "Payment cannot be processed because of the Payee's OFAC or Compliance Status",
               "remoteId": "remoteIdVal123",
@@ -19027,16 +19066,20 @@
             {
               "currencyType": "USD",
               "amount": 1234,
+              "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "payorPaymentId": "paymenIdVal123123",
               "paymentMemo": "Payment memo",
+              "remoteSystemId": "Remote_System_Id_101234",
               "remoteId": "remoteIdVal123",
               "sourceAccountName": "Chase"
             },
             {
               "currencyType": "USD",
               "amount": 1234,
+              "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "payorPaymentId": "paymenIdVal123123",
               "paymentMemo": "Payment memo",
+              "remoteSystemId": "Remote_System_Id_101234",
               "remoteId": "remoteIdVal123",
               "sourceAccountName": "Chase"
             }
@@ -19166,6 +19209,9 @@
           },
           "content": [
             {
+              "amount": 1234,
+              "paymentMemo": "Payment memo",
+              "remoteId": "remoteIdVal123",
               "payee": {
                 "individual": {
                   "name": {
@@ -19178,18 +19224,20 @@
                 },
                 "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
               },
-              "amount": 1234,
               "paymentId": "paymentId",
               "withdrawable": false,
+              "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "currency": "USD",
               "payorPaymentId": "paymenIdVal123123",
               "transmissionType": "ACH",
-              "paymentMemo": "Payment memo",
-              "remoteId": "remoteIdVal123",
+              "remoteSystemId": "Remote_System_Id_101234",
               "sourceAccountName": "Chase",
               "status": "SUBMITTED"
             },
             {
+              "amount": 1234,
+              "paymentMemo": "Payment memo",
+              "remoteId": "remoteIdVal123",
               "payee": {
                 "individual": {
                   "name": {
@@ -19202,14 +19250,13 @@
                 },
                 "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
               },
-              "amount": 1234,
               "paymentId": "paymentId",
               "withdrawable": false,
+              "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "currency": "USD",
               "payorPaymentId": "paymenIdVal123123",
               "transmissionType": "ACH",
-              "paymentMemo": "Payment memo",
-              "remoteId": "remoteIdVal123",
+              "remoteSystemId": "Remote_System_Id_101234",
               "sourceAccountName": "Chase",
               "status": "SUBMITTED"
             }
@@ -22189,7 +22236,7 @@
         "type": "string"
       },
       "TransmissionType": {
-        "description": "The transmission type that will be used to send a payment",
+        "description": "<p>The transmission type that will be used to send a payment</p>\n<p>If omitted, a default will be provided by the payment rails</p>\n",
         "enum": [
           "SAME_DAY_ACH",
           "WIRE",
@@ -22337,8 +22384,10 @@
         "example": {
           "currencyType": "USD",
           "amount": 1234,
+          "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
           "payorPaymentId": "paymenIdVal123123",
           "paymentMemo": "Payment memo",
+          "remoteSystemId": "Remote_System_Id_101234",
           "remoteId": "remoteIdVal123",
           "sourceAccountName": "Chase"
         },
@@ -22371,6 +22420,14 @@
           "paymentMemo": {
             "example": "Payment memo",
             "type": "string"
+          },
+          "remoteSystemId": {
+            "example": "Remote_System_Id_101234",
+            "type": "string"
+          },
+          "paymentMetadata": {
+            "example": "invoiceeId_123|abc001:12345|xyz002:4567",
+            "type": "string"
           }
         },
         "required": [
@@ -22387,8 +22444,10 @@
           "currencyType": "USD",
           "reason": "The payee has not been onboarded",
           "amount": 1234,
+          "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
           "payorPaymentId": "paymenIdVal123123",
           "reasonCode": "PAYMENT_VALUE_TOO_HIGH",
+          "remoteSystemId": "Remote_System_Id_101234",
           "lineNumber": 10,
           "message": "Payment cannot be processed because of the Payee's OFAC or Compliance Status",
           "remoteId": "remoteIdVal123",
@@ -22420,6 +22479,14 @@
             "example": "paymenIdVal123123",
             "type": "string"
           },
+          "remoteSystemId": {
+            "example": "Remote_System_Id_101234",
+            "type": "string"
+          },
+          "paymentMetadata": {
+            "example": "invoiceeId_123|abc001:12345|xyz002:4567",
+            "type": "string"
+          },
           "reason": {
             "example": "The payee has not been onboarded",
             "type": "string"
@@ -22449,6 +22516,9 @@
       },
       "PaymentV3": {
         "example": {
+          "amount": 1234,
+          "paymentMemo": "Payment memo",
+          "remoteId": "remoteIdVal123",
           "payee": {
             "individual": {
               "name": {
@@ -22461,14 +22531,13 @@
             },
             "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
           },
-          "amount": 1234,
           "paymentId": "paymentId",
           "withdrawable": false,
+          "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
           "currency": "USD",
           "payorPaymentId": "paymenIdVal123123",
           "transmissionType": "ACH",
-          "paymentMemo": "Payment memo",
-          "remoteId": "remoteIdVal123",
+          "remoteSystemId": "Remote_System_Id_101234",
           "sourceAccountName": "Chase",
           "status": "SUBMITTED"
         },
@@ -22526,6 +22595,14 @@
           },
           "transmissionType": {
             "$ref": "#/components/schemas/TransmissionType"
+          },
+          "remoteSystemId": {
+            "example": "Remote_System_Id_101234",
+            "type": "string"
+          },
+          "paymentMetadata": {
+            "example": "invoiceeId_123|abc001:12345|xyz002:4567",
+            "type": "string"
           }
         },
         "required": [
