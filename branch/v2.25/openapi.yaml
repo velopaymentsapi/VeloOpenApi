@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.25.93
+  version: 2.25.94
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -7480,7 +7480,7 @@ paths:
       x-code-samples:
         - lang: shell
           source: |
-            $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/quote' -i -X POST \
+            $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/payments?payoutId=fb2c5dd0-3573-11eb-a2c2-f2189898ab4d' -i -X GET \
                 -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f' \
                 -H 'Content-Type: application/json'
   /v1/paymentChannelRules:
