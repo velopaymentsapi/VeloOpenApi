@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.25.94
+  version: 2.25.97
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -5514,9 +5514,7 @@ paths:
   /v1/paymentaudit/fundings:
     get:
       deprecated: true
-      description: |
-        <p>Get a list of Fundings for a payor.</p>
-        <p>Deprecated (use v4/paymentaudit/fundings)</p>
+      description: Deprecated (use /v4/paymentaudit/fundings)
       operationId: getFundingsV1
       parameters:
         - description: The account owner Payor ID
@@ -5585,9 +5583,9 @@ paths:
                 $ref: '#/components/schemas/inline_response_404'
           description: |
             The resource was not found or is no longer available
-      summary: Get Fundings for Payor
+      summary: V1 Get Fundings for Payor
       tags:
-        - Payment Audit Service
+        - Payment Audit Service (Deprecated)
       x-code-samples:
         - lang: shell
           source: |
@@ -5596,9 +5594,7 @@ paths:
   /v1/paymentaudit/payoutStatistics:
     get:
       deprecated: true
-      description: |
-        <p>Get payout statistics for a payor.</p>
-        <p>Deprecated (Use /v4/paymentaudit/payoutStatistics)</p>
+      description: Deprecated (Use /v4/paymentaudit/payoutStatistics)
       operationId: getPayoutStatsV1
       parameters:
         - description: The account owner Payor ID. Required for external users.
@@ -5642,9 +5638,9 @@ paths:
                 $ref: '#/components/schemas/inline_response_404'
           description: |
             The resource was not found or is no longer available
-      summary: Get Payout Statistics
+      summary: V1 Get Payout Statistics
       tags:
-        - Payment Audit Service
+        - Payment Audit Service (Deprecated)
       x-code-samples:
         - lang: shell
           source: |
@@ -5652,7 +5648,8 @@ paths:
                 -H 'Authorization: Bearer e71d3dfe-3587-4df6-9f8d-59d3135d7bf7'
   /v1/deltas/payments:
     get:
-      description: Get a paginated response listing payment changes.
+      deprecated: true
+      description: Deprecated (use /v4/payments/deltas instead)
       operationId: listPaymentChanges
       parameters:
         - description: The Payor ID to find associated Payments
@@ -5692,13 +5689,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentDeltaResponse'
+                $ref: '#/components/schemas/PaymentDeltaResponseV1'
           description: Details of Payment Changes
         '400':
           description: Bad Request
-      summary: List Payment Changes
+      summary: V1 List Payment Changes
       tags:
-        - Payment Audit Service
+        - Payment Audit Service (Deprecated)
       x-code-samples:
         - lang: shell
           source: |
@@ -5708,9 +5705,7 @@ paths:
   /v3/paymentaudit/payouts:
     get:
       deprecated: true
-      description: |
-        <p>Get List of payouts for payor</p>
-        <p>Deprecated Use v4</p>
+      description: Deprecated (use /v4/paymentaudit/payouts instead)
       operationId: getPayoutsForPayorV3
       parameters:
         - description: The account owner Payor ID
@@ -5817,9 +5812,9 @@ paths:
                 $ref: '#/components/schemas/inline_response_404'
           description: |
             The resource was not found or is no longer available
-      summary: Get Payouts for Payor
+      summary: V3 Get Payouts for Payor
       tags:
-        - Payment Audit Service
+        - Payment Audit Service (Deprecated)
       x-code-samples:
         - lang: shell
           source: |
@@ -5828,9 +5823,8 @@ paths:
   '/v3/paymentaudit/payouts/{payoutId}':
     get:
       deprecated: true
-      description: |
-        Get List of payments for Payout
-      operationId: getPaymentsForPayout
+      description: Deprecated (use /v4/paymentaudit/payouts/<payoutId> instead)
+      operationId: getPaymentsForPayout_PA_V3
       parameters:
         - description: The id (UUID) of the payout.
           in: path
@@ -5974,9 +5968,9 @@ paths:
                 $ref: '#/components/schemas/inline_response_404'
           description: |
             The resource was not found or is no longer available
-      summary: Get Payments for Payout
+      summary: V3 Get Payments for Payout
       tags:
-        - Payment Audit Service
+        - Payment Audit Service (Deprecated)
       x-code-samples:
         - lang: shell
           source: |
@@ -5985,8 +5979,8 @@ paths:
   /v3/paymentaudit/payments:
     get:
       deprecated: true
-      description: Get payments for the given payor Id
-      operationId: listPaymentsAudit
+      description: Deprecated (use /v4/paymentaudit/payments instead)
+      operationId: listPaymentsAuditV3
       parameters:
         - description: The UUID of the payee.
           in: query
@@ -6160,15 +6154,14 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-      summary: Get List of Payments
+      summary: V3 Get List of Payments
       tags:
-        - Payment Audit Service
+        - Payment Audit Service (Deprecated)
   '/v3/paymentaudit/payments/{paymentId}':
     get:
       deprecated: true
-      description: |
-        Get the payment with the given id. This contains the payment history.
-      operationId: getPaymentDetails
+      description: Deprecated (use /v4/paymentaudit/payments/<paymentId> instead)
+      operationId: getPaymentDetailsV3
       parameters:
         - description: Payment Id
           in: path
@@ -6219,9 +6212,9 @@ paths:
                 $ref: '#/components/schemas/inline_response_404'
           description: |
             The resource was not found or is no longer available
-      summary: Get Payment
+      summary: V3 Get Payment
       tags:
-        - Payment Audit Service
+        - Payment Audit Service (Deprecated)
       x-code-samples:
         - lang: shell
           source: |
@@ -6230,7 +6223,7 @@ paths:
   /v3/paymentaudit/transactions:
     get:
       deprecated: true
-      description: Download a CSV file containing payments in a date range. Uses Transfer-Encoding - chunked to stream to the client. Date range is inclusive of both the start and end dates.
+      description: Deprecated (use /v4/paymentaudit/transactions instead)
       operationId: exportTransactionsCSVV3
       parameters:
         - description: |
@@ -6283,9 +6276,9 @@ paths:
           description: |
             The authentication does not have permissions to access the resource
             This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-      summary: Export Transactions
+      summary: V3 Export Transactions
       tags:
-        - Payment Audit Service
+        - Payment Audit Service (Deprecated)
       x-code-samples:
         - lang: shell
           source: |
@@ -6378,7 +6371,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GetPayoutsResponseV4'
+                $ref: '#/components/schemas/GetPayoutsResponse'
           description: Payor data found
         '400':
           content:
@@ -6431,6 +6424,12 @@ paths:
         - description: The remote id of the payees.
           in: query
           name: remoteId
+          required: false
+          schema:
+            type: string
+        - description: The id of the remote system that is orchestrating payments
+          in: query
+          name: remoteSystemId
           required: false
           schema:
             type: string
@@ -6613,6 +6612,12 @@ paths:
         - description: The remote id of the payees.
           in: query
           name: remoteId
+          required: false
+          schema:
+            type: string
+        - description: The id of the remote system that is orchestrating payments
+          in: query
+          name: remoteSystemId
           required: false
           schema:
             type: string
@@ -6924,7 +6929,6 @@ paths:
                 -H 'Authorization: Bearer 3667f994-7d41-4d20-990d-b79fa720e56b'
   /v4/paymentaudit/payoutStatistics:
     get:
-      deprecated: true
       description: |
         <p>Get payout statistics for a payor.</p>
       operationId: getPayoutStatsV4
@@ -7020,7 +7024,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentDeltaResponseV4'
+                $ref: '#/components/schemas/PaymentDeltaResponse'
           description: Details of Payment Changes
         '400':
           description: Bad Request
@@ -7081,7 +7085,7 @@ paths:
           content:
             application/csv:
               schema:
-                $ref: '#/components/schemas/PayorAmlTransactionV4'
+                $ref: '#/components/schemas/PayorAmlTransaction'
           description: Export Transactions response
         '400':
           description: invalid Request
@@ -12631,7 +12635,7 @@ components:
         - thisMonthFailedPaymentsCount
         - thisMonthPayoutsCount
       type: object
-    PaymentDeltaResponse:
+    PaymentDeltaResponseV1:
       description: List Payment Changes Response Object
       example:
         links:
@@ -12671,7 +12675,7 @@ components:
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PaymentDelta'
+            $ref: '#/components/schemas/PaymentDeltaV1'
           type: array
       type: object
     GetPayoutsResponseV3:
@@ -13264,14 +13268,12 @@ components:
         paymentMemo: paymentMemo
         paymentAmount: 1
         returnCode: returnCode
-        payeeName: payeeName
         rejectReason: rejectReason
         fundingType: fundingType
         paymentRails: paymentRails
         debit: 0
         credit: 6
         paymentStatus: paymentStatus
-        payeeEmail: payeeEmail
         sourceAccount: sourceAccount
         returnFeeDescription: returnFeeDescription
         returnDescription: returnDescription
@@ -13319,15 +13321,10 @@ components:
           type: string
         dateFundingRequested:
           type: string
-        payeeName:
-          type: string
         remoteId:
           description: 'Remote ID of the Payee, set by Payor'
           type: string
         payeeType:
-          type: string
-        payeeEmail:
-          format: email
           type: string
         sourceAccount:
           type: string
@@ -13351,7 +13348,7 @@ components:
           format: double
           type: number
       type: object
-    GetPayoutsResponseV4:
+    GetPayoutsResponse:
       description: List Payouts Response
       example:
         links:
@@ -13443,7 +13440,7 @@ components:
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PayoutSummaryAuditV4'
+            $ref: '#/components/schemas/PayoutSummaryAudit'
           type: array
       type: object
     GetPaymentsForPayoutResponseV4:
@@ -13462,7 +13459,6 @@ components:
           withdrawn:
             principal: principal
             principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-          payoutStatus: ACCEPTED
           totalPayments: 0
           payoutFrom:
             principal: principal
@@ -13503,6 +13499,7 @@ components:
         content:
           - traceNumber: abodu123
             accountName: My Account Name
+            remoteSystemPaymentId: remoteSystemPaymentId
             payout:
               payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               payoutFrom:
@@ -13570,11 +13567,15 @@ components:
             returnCost: 1232
             withdrawnReason: withdrawnReason
             iban: DE89 3704 0044 0532 0130 00
+            paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
+            remoteSystemId: REMOTE_SYSTEM_ID
             rejectionReason: rejectionReason
+            paymentTrackingReference: paymentTrackingReference
             status: ACCEPTED
           - traceNumber: abodu123
             accountName: My Account Name
+            remoteSystemPaymentId: remoteSystemPaymentId
             payout:
               payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               payoutFrom:
@@ -13642,8 +13643,11 @@ components:
             returnCost: 1232
             withdrawnReason: withdrawnReason
             iban: DE89 3704 0044 0532 0130 00
+            paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
+            remoteSystemId: REMOTE_SYSTEM_ID
             rejectionReason: rejectionReason
+            paymentTrackingReference: paymentTrackingReference
             status: ACCEPTED
       properties:
         summary:
@@ -13676,6 +13680,7 @@ components:
         content:
           - traceNumber: abodu123
             accountName: My Account Name
+            remoteSystemPaymentId: remoteSystemPaymentId
             payout:
               payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               payoutFrom:
@@ -13743,11 +13748,15 @@ components:
             returnCost: 1232
             withdrawnReason: withdrawnReason
             iban: DE89 3704 0044 0532 0130 00
+            paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
+            remoteSystemId: REMOTE_SYSTEM_ID
             rejectionReason: rejectionReason
+            paymentTrackingReference: paymentTrackingReference
             status: ACCEPTED
           - traceNumber: abodu123
             accountName: My Account Name
+            remoteSystemPaymentId: remoteSystemPaymentId
             payout:
               payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
               payoutFrom:
@@ -13815,8 +13824,11 @@ components:
             returnCost: 1232
             withdrawnReason: withdrawnReason
             iban: DE89 3704 0044 0532 0130 00
+            paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
+            remoteSystemId: REMOTE_SYSTEM_ID
             rejectionReason: rejectionReason
+            paymentTrackingReference: paymentTrackingReference
             status: ACCEPTED
       properties:
         page:
@@ -13834,6 +13846,7 @@ components:
       example:
         traceNumber: abodu123
         accountName: My Account Name
+        remoteSystemPaymentId: remoteSystemPaymentId
         payout:
           payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           payoutFrom:
@@ -13901,8 +13914,11 @@ components:
         returnCost: 1232
         withdrawnReason: withdrawnReason
         iban: DE89 3704 0044 0532 0130 00
+        paymentMetadata: sample metadata
         payorPaymentId: 123123asdf
+        remoteSystemId: REMOTE_SYSTEM_ID
         rejectionReason: rejectionReason
+        paymentTrackingReference: paymentTrackingReference
         status: ACCEPTED
       properties:
         paymentId:
@@ -13936,17 +13952,24 @@ components:
           description: The remote id by which the payor refers to the payee. Only populated once payment is confirmed
           example: aasdf123
           type: string
+        remoteSystemId:
+          description: The velo id of the remote system orchestrating the payment. Not populated for normal Velo payments.
+          example: REMOTE_SYSTEM_ID
+          type: string
+        remoteSystemPaymentId:
+          description: The id of the payment in the remote system. Not populated for normal Velo payments.
+          type: string
         sourceAmount:
           description: The source amount for the payment (amount debited to make the payment)
           example: 12345
           type: integer
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
+          $ref: '#/components/schemas/PaymentAuditCurrency'
         paymentAmount:
           description: The amount which the payee will receive
           type: integer
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
+          $ref: '#/components/schemas/PaymentAuditCurrency'
         rate:
           description: 'The FX rate for the payment, if FX was involved. **Note** that (depending on the role of the caller) this information may not be displayed'
           format: double
@@ -14031,7 +14054,7 @@ components:
           type: string
         events:
           items:
-            $ref: '#/components/schemas/PaymentEventResponseV4'
+            $ref: '#/components/schemas/PaymentEventResponse'
           type: array
         returnCost:
           description: The return cost if a returned payment.
@@ -14053,6 +14076,12 @@ components:
         transmissionType:
           description: 'The transmission type of the payment, e.g. ACH, SAME_DAY_ACH, WIRE'
           type: string
+        paymentTrackingReference:
+          type: string
+        paymentMetadata:
+          description: Metadata for the payment
+          example: sample metadata
+          type: string
         payout:
           $ref: '#/components/schemas/PaymentResponseV4_payout'
       required:
@@ -14068,7 +14097,7 @@ components:
         - status
         - submittedDateTime
       type: object
-    PaymentDeltaResponseV4:
+    PaymentDeltaResponse:
       description: List Payment Changes Response Object
       example:
         links:
@@ -14108,10 +14137,10 @@ components:
           type: array
         content:
           items:
-            $ref: '#/components/schemas/PaymentDeltaV4'
+            $ref: '#/components/schemas/PaymentDelta'
           type: array
       type: object
-    PayorAmlTransactionV4:
+    PayorAmlTransaction:
       properties:
         transactionDate:
           format: date
@@ -16295,7 +16324,7 @@ components:
             - MANUAL
           type: string
       type: object
-    PaymentDelta:
+    PaymentDeltaV1:
       example:
         paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorPaymentId: payorPaymentId
@@ -16508,7 +16537,7 @@ components:
         - eventId
         - eventType
       type: object
-    PayoutSummaryAuditV4:
+    PayoutSummaryAudit:
       example:
         dateTime: 2000-01-23T04:56:07.000Z
         sourceAccountSummary:
@@ -16552,7 +16581,7 @@ components:
           format: uuid
           type: string
         status:
-          $ref: '#/components/schemas/PayoutStatusV4'
+          $ref: '#/components/schemas/PayoutStatus'
         dateTime:
           format: date-time
           type: string
@@ -16573,16 +16602,16 @@ components:
           type: integer
         sourceAccountSummary:
           items:
-            $ref: '#/components/schemas/SourceAccountSummaryV4'
+            $ref: '#/components/schemas/SourceAccountSummary'
           type: array
         fxSummaries:
           items:
-            $ref: '#/components/schemas/FxSummaryV4'
+            $ref: '#/components/schemas/FxSummary'
           type: array
         payoutMemo:
           type: string
         payoutType:
-          $ref: '#/components/schemas/PayoutTypeV4'
+          $ref: '#/components/schemas/PayoutType'
         payorName:
           type: string
       required:
@@ -16591,14 +16620,26 @@ components:
         - status
         - submittedDateTime
       type: object
-    PayoutTypeV4:
+    PayoutStatus:
+      enum:
+        - ACCEPTED
+        - REJECTED
+        - SUBMITTED
+        - QUOTED
+        - INSTRUCTED
+        - COMPLETED
+        - INCOMPLETE
+        - CONFIRMED
+        - WITHDRAWN
+      type: string
+    PayoutType:
       description: The type of payout.
       enum:
         - STANDARD
         - AS
         - ON_BEHALF_OF
       type: string
-    PayoutPayorV4:
+    PayoutPayor:
       description: Details of payor and principal participating in a payout.
       example:
         principal: principal
@@ -16631,7 +16672,7 @@ components:
         - principal
         - principalId
       type: object
-    PayoutPrincipalV4:
+    PayoutPrincipal:
       description: Details of principal participating in a payout.
       example:
         principal: principal
@@ -16648,7 +16689,7 @@ components:
         - principal
         - principalId
       type: object
-    PaymentAuditCurrencyV4:
+    PaymentAuditCurrency:
       description: ISO 3 character currency code
       enum:
         - USD
@@ -16657,7 +16698,7 @@ components:
       maxLength: 3
       minLength: 3
       type: string
-    PaymentEventResponseV4:
+    PaymentEventResponse:
       example:
         principal: principal
         eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -16711,16 +16752,19 @@ components:
             - ACH_PAYMENT_RETURN_CANCELLED
             - RETURN_PAYMENT_CANCELLATION_REQUESTED
             - PAYOUT_WITHDRAWN
+            - ORCHESTRATED_PAYMENT_BATCH_REQUESTED
+            - ORCHESTRATED_PAYMENT_BATCH_CONFIRMED
+            - ORCHESTRATED_PAYMENT_REQUESTED
           type: string
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
+          $ref: '#/components/schemas/PaymentAuditCurrency'
         sourceAmount:
           description: The source amount exposed by the event.
           example: 1299
           format: int64
           type: integer
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
+          $ref: '#/components/schemas/PaymentAuditCurrency'
         paymentAmount:
           description: The destination amount exposed by the event.
           example: 1299
@@ -16743,7 +16787,7 @@ components:
         - eventId
         - eventType
       type: object
-    PaymentDeltaV4:
+    PaymentDelta:
       example:
         paymentId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorPaymentId: payorPaymentId
@@ -18977,19 +19021,7 @@ components:
         - totalCost
         - totalPaymentAmount
       type: object
-    PayoutStatusV4:
-      enum:
-        - ACCEPTED
-        - REJECTED
-        - SUBMITTED
-        - QUOTED
-        - INSTRUCTED
-        - COMPLETED
-        - INCOMPLETE
-        - CONFIRMED
-        - WITHDRAWN
-      type: string
-    SourceAccountSummaryV4:
+    SourceAccountSummary:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalCost: 3344
@@ -19002,12 +19034,12 @@ components:
           format: int64
           type: integer
         currency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
+          $ref: '#/components/schemas/PaymentAuditCurrency'
       required:
         - sourceAccountId
         - totalCost
       type: object
-    FxSummaryV4:
+    FxSummary:
       example:
         invertedRate: 123.23
         rate: 123.23
@@ -19038,9 +19070,9 @@ components:
           example: 34235
           type: integer
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
+          $ref: '#/components/schemas/PaymentAuditCurrency'
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV4'
+          $ref: '#/components/schemas/PaymentAuditCurrency'
         status:
           enum:
             - UNQUOTED
@@ -20563,7 +20595,6 @@ components:
         withdrawn:
           principal: principal
           principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        payoutStatus: ACCEPTED
         totalPayments: 0
         payoutFrom:
           principal: principal
@@ -20592,18 +20623,7 @@ components:
         payoutMemo: payoutMemo
       properties:
         payoutStatus:
-          description: The current status of the payout.
-          enum:
-            - ACCEPTED
-            - REJECTED
-            - SUBMITTED
-            - QUOTED
-            - INSTRUCTED
-            - COMPLETED
-            - INCOMPLETE
-            - CONFIRMED
-            - WITHDRAWN
-          type: string
+          $ref: '#/components/schemas/PayoutStatus'
         submittedDateTime:
           description: The date/time at which the payout was submitted.
           format: date-time
@@ -20641,19 +20661,19 @@ components:
           description: The count of payments within the payout which have been withdrawn.
           type: integer
         payoutType:
-          $ref: '#/components/schemas/PayoutTypeV4'
+          $ref: '#/components/schemas/PayoutType'
         submitting:
-          $ref: '#/components/schemas/PayoutPayorV4'
+          $ref: '#/components/schemas/PayoutPayor'
         payoutFrom:
-          $ref: '#/components/schemas/PayoutPayorV4'
+          $ref: '#/components/schemas/PayoutPayor'
         payoutTo:
-          $ref: '#/components/schemas/PayoutPayorV4'
+          $ref: '#/components/schemas/PayoutPayor'
         quoted:
-          $ref: '#/components/schemas/PayoutPrincipalV4'
+          $ref: '#/components/schemas/PayoutPrincipal'
         instructed:
-          $ref: '#/components/schemas/PayoutPrincipalV4'
+          $ref: '#/components/schemas/PayoutPrincipal'
         withdrawn:
-          $ref: '#/components/schemas/PayoutPrincipalV4'
+          $ref: '#/components/schemas/PayoutPrincipal'
     PaymentResponseV4_payout:
       example:
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -20674,9 +20694,9 @@ components:
           format: uuid
           type: string
         payoutFrom:
-          $ref: '#/components/schemas/PayoutPayorV4'
+          $ref: '#/components/schemas/PayoutPayor'
         payoutTo:
-          $ref: '#/components/schemas/PayoutPayorV4'
+          $ref: '#/components/schemas/PayoutPayor'
     Individual_name:
       example:
         firstName: Bob
