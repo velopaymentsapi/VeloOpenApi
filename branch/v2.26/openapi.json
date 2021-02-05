@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.26.24",
+    "version": "2.26.25",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -16565,9 +16565,11 @@
             {
               "physicalAccountName": "VELO_FBO_MYBANKA_USD",
               "country": "US",
+              "userDeleted": true,
               "type": "FBO",
-              "archived": true,
+              "deletedAt": "2021-01-27T10:08:25.701Z",
               "fundingRef": "a1b2c3d4",
+              "deleted": true,
               "balance": 1203489,
               "pooled": true,
               "name": "MyAccountName",
@@ -16590,9 +16592,11 @@
             {
               "physicalAccountName": "VELO_FBO_MYBANKA_USD",
               "country": "US",
+              "userDeleted": true,
               "type": "FBO",
-              "archived": true,
+              "deletedAt": "2021-01-27T10:08:25.701Z",
               "fundingRef": "a1b2c3d4",
+              "deleted": true,
               "balance": 1203489,
               "pooled": true,
               "name": "MyAccountName",
@@ -16637,9 +16641,11 @@
         "example": {
           "physicalAccountName": "VELO_FBO_MYBANKA_USD",
           "country": "US",
+          "userDeleted": true,
           "type": "FBO",
-          "archived": true,
+          "deletedAt": "2021-01-27T10:08:25.701Z",
           "fundingRef": "a1b2c3d4",
+          "deleted": true,
           "balance": 1203489,
           "pooled": true,
           "name": "MyAccountName",
@@ -16737,9 +16743,19 @@
             "minLength": 2,
             "type": "string"
           },
-          "archived": {
-            "description": "A flag for whether the source account has been archived.  Only present in the response if true.",
+          "deleted": {
+            "description": "An optional flag for whether the source account has been deleted. Only present in the response if true.",
             "type": "boolean"
+          },
+          "userDeleted": {
+            "description": "An optional flag for whether the source account has been deleted by a user. Only present in the response if true.",
+            "type": "boolean"
+          },
+          "deletedAt": {
+            "description": "An optional timestamp when the source account has been deleted. Only present in the response if deleted.",
+            "example": "2021-01-27T10:08:25.701Z",
+            "format": "date-time",
+            "type": "string"
           }
         },
         "required": [
