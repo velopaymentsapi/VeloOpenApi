@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.26.23",
+    "version": "2.26.24",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -7372,7 +7372,87 @@
       "summary": "List Source Accounts"
     },
     "/v3/sourceAccounts/{sourceAccountId}": {
-      "description": "Get details about given source account.",
+      "delete": {
+        "description": "Mark a source account as deleted by ID",
+        "operationId": "deleteSourceAccountV3",
+        "parameters": [
+          {
+            "description": "Source account id",
+            "in": "path",
+            "name": "sourceAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content - Source account is deleted"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_409"
+                }
+              }
+            },
+            "description": "The request contained data that would result in a duplicate value\n"
+          }
+        },
+        "summary": "Delete a source account by ID",
+        "tags": [
+          "Funding Manager Private"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X DELETE \\\n    -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'\n"
+          }
+        ]
+      },
       "get": {
         "description": "Get details about given source account.",
         "operationId": "getSourceAccountV3",
@@ -7450,8 +7530,7 @@
             "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \\\n    -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'\n"
           }
         ]
-      },
-      "summary": "Get Source Account"
+      }
     },
     "/v3/sourceAccounts/{sourceAccountId}/transfers": {
       "post": {
