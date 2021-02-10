@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.26.30
+  version: 2.26.33
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -5252,6 +5252,13 @@ paths:
           required: false
           schema:
             format: uuid
+            type: string
+        - description: A filter for retrieving both active accounts and user deleted ones
+          in: query
+          name: includeUserDeleted
+          required: false
+          schema:
+            format: boolean
             type: string
         - description: The type of source account.
           in: query
