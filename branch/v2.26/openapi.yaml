@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.26.78
+  version: 2.26.79
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -6347,13 +6347,12 @@ paths:
                 -H 'Authorization: Bearer 76748e09-775d-4e2d-b889-f0555901d8eb'
   /v1/paymentaudit/payor-balance-report:
     get:
-      description: Download a CSV file containing Payor Balance information in a given date range.
+      description: Download a CSV file containing Payor Balance information in a given date range. Backoffice user only.
       operationId: exportPayorBalanceReportCSVV1
       parameters:
         - description: |
-            <p>The Payor ID for whom you wish to run the report.</p>
-            <p>For a Backoffice user requesting the report, this parameter can be specified to run the report for a single Payor, or it can be omitted to run the report for all Payors.</p>
-            <p>For a Payor requesting the report, the parameter is mandatory. The Payor specified could be their exact Payor, or it could be a child/descendant Payor.</p>
+            <p>The Payor Id for whom you wish to run the report.</p>
+            <p>This parameter can be specified to run the report for a single Payor, or it can be omitted to run the report for all Payors.</p>
           in: query
           name: payorId
           required: false
