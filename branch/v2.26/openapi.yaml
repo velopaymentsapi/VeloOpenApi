@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.26.80
+  version: 2.26.81
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -6344,77 +6344,6 @@ paths:
         - lang: shell
           source: |
             $ curl 'https://api.sandbox.velopayments.com/v4/paymentaudit/transactions?startDate=2018-05-01&endDate=2018-05-31' -i -X GET \
-                -H 'Authorization: Bearer 76748e09-775d-4e2d-b889-f0555901d8eb'
-  /v1/paymentaudit/payor-balance-report:
-    get:
-      description: Download a CSV file containing Payor Balance information in a given date range. Backoffice user only.
-      operationId: exportPayorBalanceReportCSVV1
-      parameters:
-        - description: |
-            <p>The Payor Id for whom you wish to run the report.</p>
-            <p>This parameter can be specified to run the report for a single Payor, or it can be omitted to run the report for all Payors.</p>
-          in: query
-          name: payorId
-          required: false
-          schema:
-            format: uuid
-            type: string
-        - description: 'Start date, inclusive. Format is YYYY-MM-DD'
-          in: query
-          name: startDate
-          required: false
-          schema:
-            format: date
-            type: string
-        - description: 'End date, inclusive. Format is YYYY-MM-DD'
-          in: query
-          name: endDate
-          required: false
-          schema:
-            format: date
-            type: string
-        - description: 'Set this to true to produce a detail report, or false to produce a summary report.'
-          in: query
-          name: includeDetail
-          required: false
-          schema:
-            type: boolean
-      responses:
-        '200':
-          content:
-            application/csv:
-              schema:
-                type: string
-          description: Export Payor Balance Report response
-        '204':
-          description: No data matches the report query criteria
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-          description: Invalid request. See Error message payload for details of failure
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_401'
-          description: Invalid access token. May be expired or invalid
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_403'
-          description: |
-            The authentication does not have permissions to access the resource
-            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-      summary: Export Payor Balance Report
-      tags:
-        - Payment Audit Service
-      x-code-samples:
-        - lang: shell
-          source: |
-            $ curl 'https://api.sandbox.velopayments.com/v1/paymentaudit/payor-balance-report?startDate=2018-05-01&endDate=2018-05-31' -i -X GET \
                 -H 'Authorization: Bearer 76748e09-775d-4e2d-b889-f0555901d8eb'
   /v4/paymentaudit/payouts:
     get:
