@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.27.10",
+    "version": "2.27.11",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -10184,6 +10184,17 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InstructPayoutRequest"
+              }
+            }
+          },
+          "description": "Additional instruct payout parameters",
+          "required": false
+        },
         "responses": {
           "202": {
             "description": "HTTP 202 Accepted"
@@ -19225,6 +19236,18 @@
           "paymentsWithdrawn",
           "rejectedPayments"
         ],
+        "type": "object"
+      },
+      "InstructPayoutRequest": {
+        "example": {
+          "requote": true
+        },
+        "properties": {
+          "requote": {
+            "description": "Automatically re-quote if set true.",
+            "type": "boolean"
+          }
+        },
         "type": "object"
       },
       "QuoteResponseV3": {
