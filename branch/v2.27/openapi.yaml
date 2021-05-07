@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.27.18
+  version: 2.27.19
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -7706,107 +7706,6 @@ paths:
         - lang: shell
           source: |
             $ curl 'https://api.sandbox.velopayments.com/v2/currencies' -i -X GET
-  '/v1/webhooks/{webhookId}':
-    description: Get details about the given webhook.
-    get:
-      description: Get details about the given webhook.
-      operationId: getWebhookV1
-      parameters:
-        - description: Webhook id
-          in: path
-          name: webhookId
-          required: true
-          schema:
-            format: uuid
-            type: string
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WebhookResponse'
-          description: Webhook response
-        '400':
-          description: 'Bad Request, Invalid path parameter'
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_401'
-          description: Invalid access token. May be expired or invalid
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_403'
-          description: |
-            The authentication does not have permissions to access the resource
-            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_404'
-          description: |
-            The resource was not found or is no longer available
-      summary: Get details about the given webhook.
-      tags:
-        - Webhooks
-      x-code-samples:
-        - lang: shell
-          source: |
-            $ curl 'https://api.sandbox.velopayments.com/v1/webhooks/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \
-                -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
-    post:
-      description: Update Webhook
-      operationId: updateWebhookV1
-      parameters:
-        - description: Webhook id
-          in: path
-          name: webhookId
-          required: true
-          schema:
-            format: uuid
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateWebhookRequest'
-      responses:
-        '204':
-          description: Webhook Updated
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-          description: Invalid request. See Error message payload for details of failure
-        '401':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_401'
-          description: Invalid access token. May be expired or invalid
-        '403':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_403'
-          description: |
-            The authentication does not have permissions to access the resource
-            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_404'
-          description: |
-            The resource was not found or is no longer available
-      summary: Update Webhook
-      tags:
-        - Webhooks
-    summary: Get Webhook
   /v1/webhooks:
     description: List the details about the webhooks for the given payor.
     get:
@@ -7909,8 +7808,304 @@ paths:
       tags:
         - Webhooks
     summary: List Webhooks
+  '/v1/webhooks/{webhookId}':
+    description: Get details about the given webhook.
+    get:
+      description: Get details about the given webhook.
+      operationId: getWebhookV1
+      parameters:
+        - description: Webhook id
+          in: path
+          name: webhookId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+          description: Webhook response
+        '400':
+          description: 'Bad Request, Invalid path parameter'
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Get details about the given webhook.
+      tags:
+        - Webhooks
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v1/webhooks/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \
+                -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
+    post:
+      description: Update Webhook
+      operationId: updateWebhookV1
+      parameters:
+        - description: Webhook id
+          in: path
+          name: webhookId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWebhookRequest'
+      responses:
+        '204':
+          description: Webhook Updated
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Update Webhook
+      tags:
+        - Webhooks
+    summary: Get Webhook
+  '/v1/webhooks/{webhookId}/ping':
+    description: Trigger an immediate ping notification to the webhook
+    post:
+      operationId: pingWebhookV1
+      parameters:
+        - description: Webhook id
+          in: path
+          name: webhookId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PingResponse'
+          description: Send ping
+        '400':
+          description: 'Bad Request, Invalid path parameter'
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      tags:
+        - Webhooks
+    summary: Ping Webhook
 components:
   schemas:
+    Notification:
+      properties:
+        apiVersion:
+          description: The API version of the notification schema
+          example: '1'
+          type: string
+        sequenceNumber:
+          description: This is a payor specific sequence number starting at 1 for the first notification sent
+          example: 1234
+          format: int64
+          type: integer
+        category:
+          description: 'The category that the notification relates to. One of "payment", "payee", "debit" or "system"'
+          example: payment
+          type: string
+        eventName:
+          description: The name of event that led to this notification
+          example: payment.accepted
+          type: string
+        source:
+          description: One of the available set of source event payloads
+          discriminator:
+            mapping:
+              ping: '#/components/schemas/Ping'
+              payment_status_changed: '#/components/schemas/PaymentStatusChanged'
+              payment_rejected_or_returned: '#/components/schemas/PaymentRejectedOrReturned'
+              onboarding_status_changed: '#/components/schemas/OnboardingStatusChanged'
+              payable_status_changed: '#/components/schemas/PayableStatusChanged'
+              payee_details_changed: '#/components/schemas/PayeeDetailsChanged'
+              debit_status_changed: '#/components/schemas/DebitStatusChanged'
+            propertyName: sourceType
+          example:
+            type: payment_status_changed
+            eventId: 270ab907-27ec-4b83-8028-0ff432bbdec4
+            createdAt: 2020-06-18T15:09:42.000Z
+            paymentId: cbd9280f-8fde-4190-b014-979d88f3ec54
+            payoutPayorIds:
+              submittingPayorId: ac207f97-663c-4429-9d57-ba5b35d6672d
+              payoutFromPayorId: ac207f97-663c-4429-9d57-ba5b35d6672d
+              payoutToPayorId: ac207f97-663c-4429-9d57-ba5b35d6672d
+            payorPaymentId: ourpayment-id12345
+            status: ACCEPTED
+          oneOf:
+            - $ref: '#/components/schemas/Ping'
+            - $ref: '#/components/schemas/PaymentStatusChanged'
+            - $ref: '#/components/schemas/PaymentRejectedOrReturned'
+            - $ref: '#/components/schemas/OnboardingStatusChanged'
+            - $ref: '#/components/schemas/PayableStatusChanged'
+            - $ref: '#/components/schemas/PayeeDetailsChanged'
+            - $ref: '#/components/schemas/DebitStatusChanged'
+      required:
+        - apiVersion
+        - category
+        - eventName
+        - sequenceNumber
+      type: object
+    SourceEvent:
+      description: Base type for each source event payload
+      properties:
+        sourceType:
+          description: OA3 Schema type name for the source info which is used as the discriminator value to ensure that data binding works correctly
+          example: payment_status_changed
+          type: string
+        eventId:
+          description: UUID id of the source event in the Velo platform
+          example: 270ab907-27ec-4b83-8028-0ff432bbdec4
+          format: uuid
+          type: string
+        createdAt:
+          description: ISO8601 timestamp indicating when the source event was created
+          example: 2020-06-18T15:09:42.000Z
+          format: date-time
+          type: string
+      required:
+        - createdAt
+        - eventId
+        - sourceType
+      type: object
+    Ping:
+      allOf:
+        - $ref: '#/components/schemas/SourceEvent'
+      description: Ping event for testing the webhook integration. Can be initiated via the Web UI.
+    PaymentEvent:
+      allOf:
+        - $ref: '#/components/schemas/SourceEvent'
+        - $ref: '#/components/schemas/PaymentEvent_allOf'
+      description: Base type for all Payment Events
+    PaymentStatusChanged:
+      allOf:
+        - $ref: '#/components/schemas/PaymentEvent'
+        - $ref: '#/components/schemas/PaymentStatusChanged_allOf'
+      description: Base type for all payment status changed events
+    PaymentRejectedOrReturned:
+      allOf:
+        - $ref: '#/components/schemas/PaymentStatusChanged'
+        - $ref: '#/components/schemas/PaymentRejectedOrReturned_allOf'
+      description: Base type for all rejection or return payment events
+    PayoutPayorIds:
+      description: Holder for all payor ids associated with a Payout
+      properties:
+        submittingPayorId:
+          description: The ID of the Payor that is submitting the payout
+          example: ac207f97-663c-4429-9d57-ba5b35d6672d
+          format: uuid
+          type: string
+        payoutFromPayorId:
+          description: The ID of the Payor providing the source account for the payout
+          example: 35198f08-1c7b-4a91-8921-cd760ed92bca
+          format: uuid
+          type: string
+        payoutToPayorId:
+          description: The ID of the Payor that owns the Payee (on behalf of)
+          example: 3eb99144-6ebf-4b02-9483-ad86b2ff1bca
+          format: uuid
+          type: string
+      required:
+        - payoutFromPayorId
+        - payoutToPayorId
+        - submittingPayorId
+      type: object
+    PayeeEvent:
+      allOf:
+        - $ref: '#/components/schemas/SourceEvent'
+        - $ref: '#/components/schemas/PayeeEvent_allOf'
+      description: Base type for all Payee Events
+    OnboardingStatusChanged:
+      allOf:
+        - $ref: '#/components/schemas/PayeeEvent'
+        - type: object
+      description: Base type for all onboarding status changed events
+    PayableStatusChanged:
+      allOf:
+        - $ref: '#/components/schemas/PayeeEvent'
+        - type: object
+      description: Base type for all payable status changed events
+    PayeeDetailsChanged:
+      allOf:
+        - $ref: '#/components/schemas/PayeeEvent'
+        - type: object
+      description: Base type for all payee details changed events
+    DebitEvent:
+      allOf:
+        - $ref: '#/components/schemas/SourceEvent'
+        - $ref: '#/components/schemas/DebitEvent_allOf'
+      description: Base type for all Debit Events
+    DebitStatusChanged:
+      allOf:
+        - $ref: '#/components/schemas/DebitEvent'
+        - $ref: '#/components/schemas/DebitStatusChanged_allOf'
+      description: Base type for all debit status changed events
     AuthResponse:
       example:
         access_token: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -14745,65 +14940,6 @@ components:
             $ref: '#/components/schemas/SupportedCurrencyV2'
           type: array
       type: object
-    WebhookResponse:
-      example:
-        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        authorizationHeader: authorizationHeader
-        categories:
-          - null
-          - null
-        webhookUrl: webhookUrl
-        enabled: true
-      properties:
-        id:
-          format: uuid
-          type: string
-        payorId:
-          format: uuid
-          type: string
-        webhookUrl:
-          type: string
-        authorizationHeader:
-          type: string
-        enabled:
-          type: boolean
-        categories:
-          items:
-            $ref: '#/components/schemas/Category'
-          type: array
-      type: object
-    UpdateWebhookRequest:
-      example:
-        authorizationHeader: authorizationHeader
-        categories:
-          - null
-          - null
-        webhookUrl: webhookUrl
-        enabled: true
-      properties:
-        webhookUrl:
-          description: the webhook URL to use.
-          maxLength: 2000
-          minLength: 6
-          type: string
-        authorizationHeader:
-          description: the authorization header to include with the notification.
-          maxLength: 1000
-          minLength: 4
-          nullable: true
-          pattern: .*
-          type: string
-        enabled:
-          description: whether the webhook is enabled.
-          type: boolean
-        categories:
-          description: The notification categories to enable.
-          items:
-            $ref: '#/components/schemas/Category'
-          nullable: true
-          type: array
-      type: object
     WebhooksResponse:
       description: List Webhooks Object
       example:
@@ -14883,6 +15019,77 @@ components:
         - enabled
         - payorId
         - webhookUrl
+      type: object
+    WebhookResponse:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        authorizationHeader: authorizationHeader
+        categories:
+          - null
+          - null
+        webhookUrl: webhookUrl
+        enabled: true
+      properties:
+        id:
+          format: uuid
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        webhookUrl:
+          type: string
+        authorizationHeader:
+          type: string
+        enabled:
+          type: boolean
+        categories:
+          items:
+            $ref: '#/components/schemas/Category'
+          type: array
+      type: object
+    UpdateWebhookRequest:
+      example:
+        authorizationHeader: authorizationHeader
+        categories:
+          - null
+          - null
+        webhookUrl: webhookUrl
+        enabled: true
+      properties:
+        webhookUrl:
+          description: the webhook URL to use.
+          maxLength: 2000
+          minLength: 6
+          type: string
+        authorizationHeader:
+          description: the authorization header to include with the notification.
+          maxLength: 1000
+          minLength: 4
+          nullable: true
+          pattern: .*
+          type: string
+        enabled:
+          description: whether the webhook is enabled.
+          type: boolean
+        categories:
+          description: The notification categories to enable.
+          items:
+            $ref: '#/components/schemas/Category'
+          nullable: true
+          type: array
+      type: object
+    PingResponse:
+      example:
+        webhookId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        webhookId:
+          format: uuid
+          type: string
       type: object
     LocalisationDetails:
       properties:
@@ -19323,6 +19530,84 @@ components:
           description: this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity
           example: 412
           type: integer
+    PaymentEvent_allOf:
+      properties:
+        paymentId:
+          description: ID of this payment within the Velo platform
+          example: cbd9280f-8fde-4190-b014-979d88f3ec54
+          format: uuid
+          type: string
+        payoutPayorIds:
+          $ref: '#/components/schemas/PayoutPayorIds'
+        payorPaymentId:
+          description: ID of this payment in the payors system
+          example: ourpayment-id12345
+          type: string
+      required:
+        - paymentId
+    PaymentStatusChanged_allOf:
+      properties:
+        status:
+          description: The new status of the payment. One of "SUBMITTED" "ACCEPTED" "REJECTED" "ACCEPTED_BY_RAILS" "CONFIRMED" "RETURNED" "WITHDRAWN"
+          example: ACCEPTED
+          type: string
+      required:
+        - status
+    PaymentRejectedOrReturned_allOf:
+      properties:
+        reasonCode:
+          description: The Velo code that indicates why the payment was rejected or returned
+          example: VE0001
+          type: string
+        reasonMessage:
+          description: The description of why the payment was rejected or returned
+          example: VE0001
+          type: string
+      required:
+        - reasonCode
+        - reasonMessage
+    PayeeEvent_allOf_reasons:
+      properties:
+        code:
+          example: '00001'
+          type: string
+        message:
+          example: payment channel disabled
+          type: string
+      required:
+        - code
+        - message
+    PayeeEvent_allOf:
+      properties:
+        payeeId:
+          description: ID of this payee within the Velo platform
+          example: cbd9280f-8fde-4190-b014-979d88f3ec54
+          format: uuid
+          type: string
+        reasons:
+          description: The reasons for the event notification.
+          items:
+            $ref: '#/components/schemas/PayeeEvent_allOf_reasons'
+          type: array
+      required:
+        - payeeId
+    DebitEvent_allOf:
+      properties:
+        debitTransactionId:
+          description: ID of this debit transaction within the Velo platform
+          example: cbd9280f-8fde-4190-b014-979d88f3ec54
+          format: uuid
+          type: string
+      required:
+        - debitTransactionId
+    DebitStatusChanged_allOf:
+      properties:
+        status:
+          description: The new status of the debit. One of "PENDING" "PROCESSING" "REJECTED" "RELEASED"
+          example: PENDING
+          type: string
+      required:
+        - status
     PagedUserResponse_page:
       example:
         numberOfElements: 12
@@ -19973,3 +20258,19 @@ x-tagGroups:
   - name: Legal
     tags:
       - Legal
+x-webhooks:
+  veloWebhookNotification:
+    post:
+      summary: Webhook notifications
+      description: The webhook notifications that are sent to the payor's configured webhook endpoint URL
+      tags:
+        - Webhooks
+      operationId: veloWebhook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      responses:
+        '200':
+          description: A successful response indicates that the notification has been received by the customers system. Any other http status will result in the notification being retried.
