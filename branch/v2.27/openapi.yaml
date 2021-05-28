@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.27.40
+  version: 2.27.41
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -7555,6 +7555,71 @@ paths:
             $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/payments?payoutId=fb2c5dd0-3573-11eb-a2c2-f2189898ab4d' -i -X GET \
                 -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f' \
                 -H 'Content-Type: application/json'
+  '/v3/payouts/{payoutId}/schedule':
+    post:
+      description: Schedule a payout for auto-instruction in the future
+      operationId: scheduleForPayout
+      parameters:
+        - description: Id of the payout
+          in: path
+          name: payoutId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchedulePayoutRequest'
+        description: schedule payout parameters
+      responses:
+        '204':
+          description: Payout is scheduled successfully
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Schedule a payout
+      tags:
+        - Payout Service
+      x-code-samples:
+        - lang: shell
+          source: |
+            $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/schedule' -i -X POST \
+                -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f' \
+                -H 'Content-Type: application/json'
+                -d '{"scheduledFor": "2025-01-01T12:00:00Z", "notificationsEnabled": "true"}'
   /v1/paymentChannelRules:
     get:
       description: List the country specific payment channel rules.
@@ -14725,11 +14790,12 @@ components:
       type: object
     InstructPayoutRequest:
       example:
-        requote: true
+        fxRateDegredationThresholdPercentage: 0.8008282
       properties:
-        requote:
-          description: Automatically re-quote if set true.
-          type: boolean
+        fxRateDegredationThresholdPercentage:
+          description: Halt instruction if the FX rates have become worse since the last quote
+          format: float
+          type: number
       type: object
     QuoteResponseV3:
       example:
@@ -14828,6 +14894,24 @@ components:
           items:
             $ref: '#/components/schemas/PaymentV3'
           type: array
+      type: object
+    SchedulePayoutRequest:
+      example:
+        scheduledFor: 2025-01-01T10:00:00.000Z
+        notificationsEnabled: true
+      properties:
+        scheduledFor:
+          description: UTC timestamp for instructing the payout. Format is ISO-8601.
+          example: 2025-01-01T10:00:00.000Z
+          format: date-time
+          type: string
+        notificationsEnabled:
+          description: |
+            <p>Optional flag to indicate whether to receive notifications.<br />
+               Default is true if not supplied.</p>
+          type: boolean
+      required:
+        - scheduledFor
       type: object
     PaymentChannelRulesResponse:
       example:
