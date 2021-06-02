@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.27.46",
+    "version": "2.27.47",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -19806,11 +19806,12 @@
             "type": "string"
           },
           "notificationsEnabled": {
-            "description": "<p>Optional flag to indicate whether to receive notifications.<br />\n   Default is true if not supplied.</p>\n",
+            "description": "Flag to indicate whether to receive notifications when scheduled payout is processed",
             "type": "boolean"
           }
         },
         "required": [
+          "notificationsEnabled",
           "scheduledFor"
         ],
         "type": "object"

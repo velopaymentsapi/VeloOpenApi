@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.27.46
+  version: 2.27.47
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -14906,11 +14906,10 @@ components:
           format: date-time
           type: string
         notificationsEnabled:
-          description: |
-            <p>Optional flag to indicate whether to receive notifications.<br />
-               Default is true if not supplied.</p>
+          description: Flag to indicate whether to receive notifications when scheduled payout is processed
           type: boolean
       required:
+        - notificationsEnabled
         - scheduledFor
       type: object
     PaymentChannelRulesResponse:
