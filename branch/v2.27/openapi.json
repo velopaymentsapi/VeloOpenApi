@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.27.69",
+    "version": "2.27.70",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -8879,6 +8879,41 @@
             }
           },
           {
+            "description": "Filter payouts scheduled to run on or after the given date. Format is yyyy-MM-dd.",
+            "in": "query",
+            "name": "scheduledForDateFrom",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter payouts scheduled to run on or before the given date. Format is yyyy-MM-dd.",
+            "in": "query",
+            "name": "scheduledForDateTo",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Payout Schedule Status",
+            "in": "query",
+            "name": "scheduleStatus",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ANY",
+                "SCHEDULED",
+                "EXECUTED",
+                "FAILED"
+              ],
+              "type": "string"
+            }
+          },
+          {
             "description": "Page number. Default is 1.",
             "in": "query",
             "name": "page",
@@ -8903,7 +8938,7 @@
             }
           },
           {
-            "description": "List of sort fields (e.g. ?sort=submittedDateTime:asc,instructedDateTime:asc,status:asc)\nDefault is submittedDateTime:asc\nThe supported sort fields are: submittedDateTime, instructedDateTime, status, totalPayments, payoutId\n",
+            "description": "List of sort fields (e.g. ?sort=submittedDateTime:asc,instructedDateTime:asc,status:asc)\nDefault is submittedDateTime:asc\nThe supported sort fields are: submittedDateTime, instructedDateTime, status, totalPayments, payoutId, scheduledFor\n",
             "in": "query",
             "name": "sort",
             "required": false,
@@ -9393,6 +9428,41 @@
             "name": "paymentMemo",
             "required": false,
             "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter payouts scheduled to run on or after the given date. Format is yyyy-MM-dd.",
+            "in": "query",
+            "name": "scheduledForDateFrom",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter payouts scheduled to run on or before the given date. Format is yyyy-MM-dd.",
+            "in": "query",
+            "name": "scheduledForDateTo",
+            "required": false,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Payout Schedule Status",
+            "in": "query",
+            "name": "scheduleStatus",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ANY",
+                "SCHEDULED",
+                "EXECUTED",
+                "FAILED"
+              ],
               "type": "string"
             }
           },
@@ -10031,7 +10101,7 @@
     },
     "/v3/payouts/{payoutId}": {
       "delete": {
-        "description": "Withdraw Payout will delete payout details from payout service and rails services but will just move the status of the payout to WITHDRAWN in payment audit.",
+        "description": "Withdraw Payout will remove the payout details from the rails but the payout will still be accessible in payout service in WITHDRAWN status.",
         "operationId": "withdrawPayoutV3",
         "parameters": [
           {
@@ -10462,8 +10532,79 @@
       }
     },
     "/v3/payouts/{payoutId}/schedule": {
+      "delete": {
+        "description": "Remove the schedule for a scheduled payout",
+        "operationId": "deschedulePayout",
+        "parameters": [
+          {
+            "description": "Id of the payout",
+            "in": "path",
+            "name": "payoutId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Descheduled payout successfully"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_409"
+                }
+              }
+            },
+            "description": "The request contained data that would result in a duplicate value\n"
+          }
+        },
+        "summary": "Deschedule a payout",
+        "tags": [
+          "Payout Service"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/schedule' -i -X DELETE \\\n    -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f'\n"
+          }
+        ]
+      },
       "post": {
-        "description": "Schedule a payout for auto-instruction in the future",
+        "description": "<p>Schedule a payout for auto-instruction in the future\nor update existing payout schedule if the payout has been scheduled before.</p>\n",
         "operationId": "scheduleForPayout",
         "parameters": [
           {
@@ -18279,6 +18420,13 @@
               ],
               "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalPayments": 0,
+              "schedule": {
+                "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "notificationsEnabled": true,
+                "scheduledBy": "scheduledBy",
+                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledAt": "2000-01-23T04:56:07.000Z"
+              },
               "submittedDateTime": "submittedDateTime",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalIncompletePayments": 6,
@@ -18325,6 +18473,13 @@
               ],
               "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalPayments": 0,
+              "schedule": {
+                "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "notificationsEnabled": true,
+                "scheduledBy": "scheduledBy",
+                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledAt": "2000-01-23T04:56:07.000Z"
+              },
               "submittedDateTime": "submittedDateTime",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalIncompletePayments": 6,
@@ -18396,6 +18551,13 @@
               "principal": "principal",
               "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
             },
+            "schedule": {
+              "scheduledFor": "2000-01-23T04:56:07.000Z",
+              "notificationsEnabled": true,
+              "scheduledBy": "scheduledBy",
+              "scheduledByPrincipalId": "scheduledByPrincipalId",
+              "scheduledAt": "2000-01-23T04:56:07.000Z"
+            },
             "incompletePayments": 5,
             "submittedDateTime": "2000-01-23T04:56:07.000Z",
             "quotedDateTime": "2000-01-23T04:56:07.000Z",
@@ -18454,6 +18616,7 @@
               "countryCode": "US",
               "returnReason": "Some Reason Value",
               "withdrawable": true,
+              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
               "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
@@ -18499,6 +18662,13 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "schedule": {
+                "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "notificationsEnabled": true,
+                "scheduledBy": "scheduledBy",
+                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledAt": "2000-01-23T04:56:07.000Z"
+              },
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "paymentMetadata": "sample metadata",
@@ -18540,6 +18710,7 @@
               "countryCode": "US",
               "returnReason": "Some Reason Value",
               "withdrawable": true,
+              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
               "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
@@ -18585,6 +18756,13 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "schedule": {
+                "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "notificationsEnabled": true,
+                "scheduledBy": "scheduledBy",
+                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledAt": "2000-01-23T04:56:07.000Z"
+              },
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "paymentMetadata": "sample metadata",
@@ -18671,6 +18849,7 @@
               "countryCode": "US",
               "returnReason": "Some Reason Value",
               "withdrawable": true,
+              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
               "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
@@ -18716,6 +18895,13 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "schedule": {
+                "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "notificationsEnabled": true,
+                "scheduledBy": "scheduledBy",
+                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledAt": "2000-01-23T04:56:07.000Z"
+              },
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "paymentMetadata": "sample metadata",
@@ -18757,6 +18943,7 @@
               "countryCode": "US",
               "returnReason": "Some Reason Value",
               "withdrawable": true,
+              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
               "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 12345,
@@ -18802,6 +18989,13 @@
               "remoteId": "aasdf123",
               "routingNumber": "123123123123",
               "returnCost": 1232,
+              "schedule": {
+                "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "notificationsEnabled": true,
+                "scheduledBy": "scheduledBy",
+                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledAt": "2000-01-23T04:56:07.000Z"
+              },
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "paymentMetadata": "sample metadata",
@@ -18865,6 +19059,7 @@
           "countryCode": "US",
           "returnReason": "Some Reason Value",
           "withdrawable": true,
+          "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
           "isPaymentCcyBaseCcy": true,
           "submittedDateTime": "2000-01-23T04:56:07.000Z",
           "sourceAmount": 12345,
@@ -18910,6 +19105,13 @@
           "remoteId": "aasdf123",
           "routingNumber": "123123123123",
           "returnCost": 1232,
+          "schedule": {
+            "scheduledFor": "2000-01-23T04:56:07.000Z",
+            "notificationsEnabled": true,
+            "scheduledBy": "scheduledBy",
+            "scheduledByPrincipalId": "scheduledByPrincipalId",
+            "scheduledAt": "2000-01-23T04:56:07.000Z"
+          },
           "withdrawnReason": "withdrawnReason",
           "iban": "DE89 3704 0044 0532 0130 00",
           "paymentMetadata": "sample metadata",
@@ -19116,6 +19318,10 @@
           "withdrawable": {
             "type": "boolean"
           },
+          "autoWithdrawnReasonCode": {
+            "description": "Populated with rejection reason code if the payment was withdrawn automatically at instruct time",
+            "type": "string"
+          },
           "transmissionType": {
             "description": "The transmission type of the payment, e.g. ACH, SAME_DAY_ACH, WIRE",
             "type": "string"
@@ -19127,6 +19333,9 @@
             "description": "Metadata for the payment",
             "example": "sample metadata",
             "type": "string"
+          },
+          "schedule": {
+            "$ref": "#/components/schemas/PayoutSchedule"
           },
           "payout": {
             "$ref": "#/components/schemas/PaymentResponseV4_payout"
@@ -19515,6 +19724,12 @@
               "sourceAccountName": "Chase"
             }
           ],
+          "schedule": {
+            "scheduledFor": "2000-01-23T04:56:07.000Z",
+            "notificationsEnabled": true,
+            "scheduledByPrincipalId": "scheduledByPrincipalId",
+            "scheduledAt": "2000-01-23T04:56:07.000Z"
+          },
           "paymentsRejected": 0,
           "paymentsSubmitted": 10,
           "paymentsWithdrawn": 0,
@@ -19634,6 +19849,9 @@
               "$ref": "#/components/schemas/RejectedPaymentV3"
             },
             "type": "array"
+          },
+          "schedule": {
+            "$ref": "#/components/schemas/PayoutSchedule_2"
           }
         },
         "required": [
@@ -19738,6 +19956,7 @@
               },
               "paymentId": "paymentId",
               "withdrawable": false,
+              "autoWithdrawnReasonCode": "VE0003",
               "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "currency": "USD",
               "payorPaymentId": "paymenIdVal123123",
@@ -19764,6 +19983,7 @@
               },
               "paymentId": "paymentId",
               "withdrawable": false,
+              "autoWithdrawnReasonCode": "VE0003",
               "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "currency": "USD",
               "payorPaymentId": "paymenIdVal123123",
@@ -22407,6 +22627,13 @@
           ],
           "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalPayments": 0,
+          "schedule": {
+            "scheduledFor": "2000-01-23T04:56:07.000Z",
+            "notificationsEnabled": true,
+            "scheduledBy": "scheduledBy",
+            "scheduledByPrincipalId": "scheduledByPrincipalId",
+            "scheduledAt": "2000-01-23T04:56:07.000Z"
+          },
           "submittedDateTime": "submittedDateTime",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalIncompletePayments": 6,
@@ -22474,6 +22701,9 @@
           },
           "payorName": {
             "type": "string"
+          },
+          "schedule": {
+            "$ref": "#/components/schemas/PayoutSchedule"
           }
         },
         "required": [
@@ -22569,6 +22799,48 @@
         "required": [
           "principal",
           "principalId"
+        ],
+        "type": "object"
+      },
+      "PayoutSchedule": {
+        "description": "Details relating to a payout that was executed via a schedule or is still waiting to be executed",
+        "example": {
+          "scheduledFor": "2000-01-23T04:56:07.000Z",
+          "notificationsEnabled": true,
+          "scheduledBy": "scheduledBy",
+          "scheduledByPrincipalId": "scheduledByPrincipalId",
+          "scheduledAt": "2000-01-23T04:56:07.000Z"
+        },
+        "properties": {
+          "scheduleStatus": {
+            "$ref": "#/components/schemas/ScheduleStatus"
+          },
+          "scheduledAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "scheduledFor": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "scheduledByPrincipalId": {
+            "description": "ID of the user or application that scheduled the payout",
+            "type": "string"
+          },
+          "notificationsEnabled": {
+            "type": "boolean"
+          },
+          "scheduledBy": {
+            "description": "Optional display name as a hint for who scheduled the payout. Not populated if payout was scheduled by an application.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "notificationsEnabled",
+          "scheduleStatus",
+          "scheduledAt",
+          "scheduledByPrincipalId",
+          "scheduledFor"
         ],
         "type": "object"
       },
@@ -23030,6 +23302,43 @@
         ],
         "type": "object"
       },
+      "PayoutSchedule_2": {
+        "description": "Details relating to a payout that was executed via a schedule or is still waiting to be executed",
+        "example": {
+          "scheduledFor": "2000-01-23T04:56:07.000Z",
+          "notificationsEnabled": true,
+          "scheduledByPrincipalId": "scheduledByPrincipalId",
+          "scheduledAt": "2000-01-23T04:56:07.000Z"
+        },
+        "properties": {
+          "scheduleStatus": {
+            "$ref": "#/components/schemas/ScheduleStatus_2"
+          },
+          "scheduledAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "scheduledFor": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "scheduledByPrincipalId": {
+            "description": "ID of the user or application that scheduled the payout",
+            "type": "string"
+          },
+          "notificationsEnabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "notificationsEnabled",
+          "scheduleStatus",
+          "scheduledAt",
+          "scheduledByPrincipalId",
+          "scheduledFor"
+        ],
+        "type": "object"
+      },
       "PaymentV3": {
         "example": {
           "amount": 1234,
@@ -23049,6 +23358,7 @@
           },
           "paymentId": "paymentId",
           "withdrawable": false,
+          "autoWithdrawnReasonCode": "VE0003",
           "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
           "currency": "USD",
           "payorPaymentId": "paymenIdVal123123",
@@ -23118,6 +23428,11 @@
           },
           "paymentMetadata": {
             "example": "invoiceeId_123|abc001:12345|xyz002:4567",
+            "type": "string"
+          },
+          "autoWithdrawnReasonCode": {
+            "description": "Populated only if the payment was automatically withdrawn during instruction for being invalid",
+            "example": "VE0003",
             "type": "string"
           }
         },
@@ -25271,6 +25586,22 @@
         ],
         "type": "object"
       },
+      "ScheduleStatus": {
+        "enum": [
+          "SCHEDULED",
+          "EXECUTED",
+          "FAILED"
+        ],
+        "type": "string"
+      },
+      "ScheduleStatus_2": {
+        "enum": [
+          "SCHEDULED",
+          "EXECUTED",
+          "FAILED"
+        ],
+        "type": "string"
+      },
       "PayoutPayeeV3": {
         "description": "Payee data associated with a payment. Either individual or company must be populated",
         "example": {
@@ -26396,6 +26727,13 @@
             "principal": "principal",
             "principalId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
           },
+          "schedule": {
+            "scheduledFor": "2000-01-23T04:56:07.000Z",
+            "notificationsEnabled": true,
+            "scheduledBy": "scheduledBy",
+            "scheduledByPrincipalId": "scheduledByPrincipalId",
+            "scheduledAt": "2000-01-23T04:56:07.000Z"
+          },
           "incompletePayments": 5,
           "submittedDateTime": "2000-01-23T04:56:07.000Z",
           "quotedDateTime": "2000-01-23T04:56:07.000Z",
@@ -26475,6 +26813,9 @@
           },
           "withdrawn": {
             "$ref": "#/components/schemas/PayoutPrincipal"
+          },
+          "schedule": {
+            "$ref": "#/components/schemas/PayoutSchedule"
           }
         }
       },
