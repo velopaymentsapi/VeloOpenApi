@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.27.71",
+    "version": "2.27.72",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -18422,9 +18422,10 @@
               "totalPayments": 0,
               "schedule": {
                 "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "scheduleStatus": "SCHEDULED",
                 "notificationsEnabled": true,
-                "scheduledBy": "scheduledBy",
-                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledBy": "Aphra Behn",
+                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
                 "scheduledAt": "2000-01-23T04:56:07.000Z"
               },
               "submittedDateTime": "submittedDateTime",
@@ -18475,9 +18476,10 @@
               "totalPayments": 0,
               "schedule": {
                 "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "scheduleStatus": "SCHEDULED",
                 "notificationsEnabled": true,
-                "scheduledBy": "scheduledBy",
-                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledBy": "Aphra Behn",
+                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
                 "scheduledAt": "2000-01-23T04:56:07.000Z"
               },
               "submittedDateTime": "submittedDateTime",
@@ -18553,9 +18555,10 @@
             },
             "schedule": {
               "scheduledFor": "2000-01-23T04:56:07.000Z",
+              "scheduleStatus": "SCHEDULED",
               "notificationsEnabled": true,
-              "scheduledBy": "scheduledBy",
-              "scheduledByPrincipalId": "scheduledByPrincipalId",
+              "scheduledBy": "Aphra Behn",
+              "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
               "scheduledAt": "2000-01-23T04:56:07.000Z"
             },
             "incompletePayments": 5,
@@ -18664,9 +18667,10 @@
               "returnCost": 1232,
               "schedule": {
                 "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "scheduleStatus": "SCHEDULED",
                 "notificationsEnabled": true,
-                "scheduledBy": "scheduledBy",
-                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledBy": "Aphra Behn",
+                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
                 "scheduledAt": "2000-01-23T04:56:07.000Z"
               },
               "withdrawnReason": "withdrawnReason",
@@ -18758,9 +18762,10 @@
               "returnCost": 1232,
               "schedule": {
                 "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "scheduleStatus": "SCHEDULED",
                 "notificationsEnabled": true,
-                "scheduledBy": "scheduledBy",
-                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledBy": "Aphra Behn",
+                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
                 "scheduledAt": "2000-01-23T04:56:07.000Z"
               },
               "withdrawnReason": "withdrawnReason",
@@ -18897,9 +18902,10 @@
               "returnCost": 1232,
               "schedule": {
                 "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "scheduleStatus": "SCHEDULED",
                 "notificationsEnabled": true,
-                "scheduledBy": "scheduledBy",
-                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledBy": "Aphra Behn",
+                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
                 "scheduledAt": "2000-01-23T04:56:07.000Z"
               },
               "withdrawnReason": "withdrawnReason",
@@ -18991,9 +18997,10 @@
               "returnCost": 1232,
               "schedule": {
                 "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "scheduleStatus": "SCHEDULED",
                 "notificationsEnabled": true,
-                "scheduledBy": "scheduledBy",
-                "scheduledByPrincipalId": "scheduledByPrincipalId",
+                "scheduledBy": "Aphra Behn",
+                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
                 "scheduledAt": "2000-01-23T04:56:07.000Z"
               },
               "withdrawnReason": "withdrawnReason",
@@ -19107,9 +19114,10 @@
           "returnCost": 1232,
           "schedule": {
             "scheduledFor": "2000-01-23T04:56:07.000Z",
+            "scheduleStatus": "SCHEDULED",
             "notificationsEnabled": true,
-            "scheduledBy": "scheduledBy",
-            "scheduledByPrincipalId": "scheduledByPrincipalId",
+            "scheduledBy": "Aphra Behn",
+            "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
             "scheduledAt": "2000-01-23T04:56:07.000Z"
           },
           "withdrawnReason": "withdrawnReason",
@@ -19726,8 +19734,9 @@
           ],
           "schedule": {
             "scheduledFor": "2000-01-23T04:56:07.000Z",
+            "scheduleStatus": "SCHEDULED",
             "notificationsEnabled": true,
-            "scheduledByPrincipalId": "scheduledByPrincipalId",
+            "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
             "scheduledAt": "2000-01-23T04:56:07.000Z"
           },
           "paymentsRejected": 0,
@@ -22629,9 +22638,10 @@
           "totalPayments": 0,
           "schedule": {
             "scheduledFor": "2000-01-23T04:56:07.000Z",
+            "scheduleStatus": "SCHEDULED",
             "notificationsEnabled": true,
-            "scheduledBy": "scheduledBy",
-            "scheduledByPrincipalId": "scheduledByPrincipalId",
+            "scheduledBy": "Aphra Behn",
+            "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
             "scheduledAt": "2000-01-23T04:56:07.000Z"
           },
           "submittedDateTime": "submittedDateTime",
@@ -22806,9 +22816,10 @@
         "description": "Details relating to a payout that was executed via a schedule or is still waiting to be executed",
         "example": {
           "scheduledFor": "2000-01-23T04:56:07.000Z",
+          "scheduleStatus": "SCHEDULED",
           "notificationsEnabled": true,
-          "scheduledBy": "scheduledBy",
-          "scheduledByPrincipalId": "scheduledByPrincipalId",
+          "scheduledBy": "Aphra Behn",
+          "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
           "scheduledAt": "2000-01-23T04:56:07.000Z"
         },
         "properties": {
@@ -22825,6 +22836,7 @@
           },
           "scheduledByPrincipalId": {
             "description": "ID of the user or application that scheduled the payout",
+            "example": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
             "type": "string"
           },
           "notificationsEnabled": {
@@ -22832,6 +22844,7 @@
           },
           "scheduledBy": {
             "description": "Optional display name as a hint for who scheduled the payout. Not populated if payout was scheduled by an application.",
+            "example": "Aphra Behn",
             "type": "string"
           }
         },
@@ -23306,8 +23319,9 @@
         "description": "Details relating to a payout that was executed via a schedule or is still waiting to be executed",
         "example": {
           "scheduledFor": "2000-01-23T04:56:07.000Z",
+          "scheduleStatus": "SCHEDULED",
           "notificationsEnabled": true,
-          "scheduledByPrincipalId": "scheduledByPrincipalId",
+          "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
           "scheduledAt": "2000-01-23T04:56:07.000Z"
         },
         "properties": {
@@ -23324,6 +23338,7 @@
           },
           "scheduledByPrincipalId": {
             "description": "ID of the user or application that scheduled the payout",
+            "example": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
             "type": "string"
           },
           "notificationsEnabled": {
@@ -25592,6 +25607,7 @@
           "EXECUTED",
           "FAILED"
         ],
+        "example": "SCHEDULED",
         "type": "string"
       },
       "ScheduleStatus_2": {
@@ -25600,6 +25616,7 @@
           "EXECUTED",
           "FAILED"
         ],
+        "example": "SCHEDULED",
         "type": "string"
       },
       "PayoutPayeeV3": {
@@ -26729,9 +26746,10 @@
           },
           "schedule": {
             "scheduledFor": "2000-01-23T04:56:07.000Z",
+            "scheduleStatus": "SCHEDULED",
             "notificationsEnabled": true,
-            "scheduledBy": "scheduledBy",
-            "scheduledByPrincipalId": "scheduledByPrincipalId",
+            "scheduledBy": "Aphra Behn",
+            "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
             "scheduledAt": "2000-01-23T04:56:07.000Z"
           },
           "incompletePayments": 5,
