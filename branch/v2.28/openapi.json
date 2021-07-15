@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.28.1",
+    "version": "2.28.2",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -619,7 +619,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/disable' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8'\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/disable' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8'\n"
           }
         ]
       }
@@ -1501,7 +1501,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/users/self/password' -i -X POST \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"oldpassword\":\"abcd_12345\", \\\n          \"newPassword\": \"myNewPassword\"}'\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/self/password' -i -X POST \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"oldpassword\":\"abcd_12345\", \\\n          \"newPassword\": \"myNewPassword\"}'\n"
           }
         ]
       }
@@ -11934,10 +11934,11 @@
           "primaryContactNumber": "11235555555",
           "mfaType": "TOTP",
           "roles": [
-            "payor.admin"
+            "velo.payor.admin"
           ],
           "smsNumber": "11235555555",
           "entityId": "7fffa261-ac68-49e6-b605-d24a444d9206",
+          "userType": "PAYEE",
           "email": "foo@example.com",
           "secondaryContactNumber": "11235555550",
           "verificationCode": "123456"
@@ -11979,9 +11980,9 @@
             "type": "string"
           },
           "roles": {
-            "description": "The role(s) for the user\nThe role must exist\nThe role can be a custom role or a system role but the invoker must have the permissions to assign the role\nSystem roles are: backoffice.admin, payor.master_admin, payor.admin, payor.support\n",
+            "description": "The role(s) for the user\nThe role must exist\nThe role can be a custom role or a system role but the invoker must have the permissions to assign the role\nSystem roles are: velo.backoffice.admin, velo.payor.master_admin, velo.payor.admin, velo.payor.support, velo.payee.admin, velo.payee.support\n",
             "example": [
-              "payor.admin"
+              "velo.payor.admin"
             ],
             "items": {
               "type": "string"
@@ -12001,10 +12002,20 @@
             "type": "string"
           },
           "entityId": {
-            "description": "The payorId or null if the user is not a payor user\n",
+            "description": "The payorId or payeeId or null if the user is a backoffice admin\n",
             "example": "7fffa261-ac68-49e6-b605-d24a444d9206",
             "format": "uuid",
             "nullable": true,
+            "type": "string"
+          },
+          "userType": {
+            "description": "Will default to PAYOR if not provided but entityId is provided",
+            "enum": [
+              "BACKOFFICE",
+              "PAYOR",
+              "PAYEE"
+            ],
+            "example": "PAYEE",
             "type": "string"
           },
           "verificationCode": {
