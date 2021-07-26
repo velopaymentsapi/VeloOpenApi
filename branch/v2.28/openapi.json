@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.28.4",
+    "version": "2.28.5",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -11750,6 +11750,7 @@
           "content": [
             {
               "lastName": "Doe",
+              "companyName": "Acme Corp",
               "roles": [
                 "payor.admin"
               ],
@@ -11762,12 +11763,14 @@
               "mfaType": "TOTP",
               "lockedOut": true,
               "id": "8bbf301c-948f-4445-b411-357eec53e441",
+              "userType": "PAYOR",
               "email": "foo@example.com",
               "secondaryContactNumber": "11235555550",
               "status": "ENABLED"
             },
             {
               "lastName": "Doe",
+              "companyName": "Acme Corp",
               "roles": [
                 "payor.admin"
               ],
@@ -11780,6 +11783,7 @@
               "mfaType": "TOTP",
               "lockedOut": true,
               "id": "8bbf301c-948f-4445-b411-357eec53e441",
+              "userType": "PAYOR",
               "email": "foo@example.com",
               "secondaryContactNumber": "11235555550",
               "status": "ENABLED"
@@ -11808,6 +11812,7 @@
       "UserResponse": {
         "example": {
           "lastName": "Doe",
+          "companyName": "Acme Corp",
           "roles": [
             "payor.admin"
           ],
@@ -11820,6 +11825,7 @@
           "mfaType": "TOTP",
           "lockedOut": true,
           "id": "8bbf301c-948f-4445-b411-357eec53e441",
+          "userType": "PAYOR",
           "email": "foo@example.com",
           "secondaryContactNumber": "11235555550",
           "status": "ENABLED"
@@ -11883,6 +11889,13 @@
             "format": "uuid",
             "type": "string"
           },
+          "companyName": {
+            "description": "The payor or payee company name or null if the user is not a payor or payee user\n",
+            "example": "Acme Corp",
+            "maxLength": 128,
+            "minLength": 1,
+            "type": "string"
+          },
           "roles": {
             "description": "The role(s) for the user\n",
             "example": [
@@ -11893,6 +11906,16 @@
             },
             "minItems": 1,
             "type": "array"
+          },
+          "userType": {
+            "description": "Indicates the type of user. Could be BACKOFFICE, PAYOR or PAYEE.",
+            "enum": [
+              "BACKOFFICE",
+              "PAYOR",
+              "PAYEE"
+            ],
+            "example": "PAYOR",
+            "type": "string"
           },
           "mfaType": {
             "description": "The type of the MFA device",
