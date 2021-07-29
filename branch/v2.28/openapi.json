@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.28.5",
+    "version": "2.28.6",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -303,6 +303,15 @@
             "schema": {
               "format": "uuid",
               "type": "string"
+            }
+          },
+          {
+            "description": "The Type of the Payee entity. Either COMPANY or INDIVIDUAL.",
+            "in": "query",
+            "name": "payeeType",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/PayeeType"
             }
           },
           {
@@ -3125,7 +3134,7 @@
             "name": "payeeType",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/PayeeType"
+              "$ref": "#/components/schemas/PayeeType_2"
             }
           },
           {
@@ -4883,7 +4892,7 @@
             "name": "payeeType",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/PayeeType"
+              "$ref": "#/components/schemas/PayeeType_2"
             }
           },
           {
@@ -11727,6 +11736,14 @@
         "example": "ENABLED",
         "type": "string"
       },
+      "PayeeType": {
+        "enum": [
+          "COMPANY",
+          "INDIVIDUAL"
+        ],
+        "example": "COMPANY",
+        "type": "string"
+      },
       "PagedUserResponse": {
         "description": "List Users Response Object",
         "example": {
@@ -13111,7 +13128,7 @@
             "type": "string"
           },
           "payeeType": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "disabled": {
             "type": "boolean"
@@ -13212,7 +13229,7 @@
         ],
         "type": "string"
       },
-      "PayeeType": {
+      "PayeeType_2": {
         "description": "The type of the payee",
         "enum": [
           "Individual",
@@ -13581,7 +13598,7 @@
       "CreatePayeesCSVRequest": {
         "properties": {
           "type": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "remoteId": {
             "example": "remoteId123",
@@ -14710,7 +14727,7 @@
             "type": "string"
           },
           "payeeType": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "challenge": {
             "$ref": "#/components/schemas/Challenge"
@@ -14869,7 +14886,7 @@
             "type": "string"
           },
           "payeeType": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "disabled": {
             "type": "boolean"
@@ -14968,7 +14985,7 @@
             "type": "string"
           },
           "payeeType": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "challenge": {
             "$ref": "#/components/schemas/Challenge_2"
@@ -15208,7 +15225,7 @@
       "CreatePayeesCSVRequest_2": {
         "properties": {
           "type": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "remoteId": {
             "example": "remoteId123",
@@ -21143,7 +21160,7 @@
             "type": "string"
           },
           "payeeType": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "disabled": {
             "type": "boolean"
@@ -21276,7 +21293,7 @@
             "type": "string"
           },
           "type": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "address": {
             "$ref": "#/components/schemas/CreatePayeeAddress"
@@ -21849,7 +21866,7 @@
             "type": "string"
           },
           "payeeType": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "disabled": {
             "type": "boolean"
@@ -21902,7 +21919,7 @@
             "type": "string"
           },
           "type": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "address": {
             "$ref": "#/components/schemas/CreatePayeeAddress_2"
@@ -24510,7 +24527,7 @@
             "type": "string"
           },
           "type": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "address": {
             "$ref": "#/components/schemas/CreatePayeeAddress"
@@ -25375,7 +25392,7 @@
             "type": "string"
           },
           "type": {
-            "$ref": "#/components/schemas/PayeeType"
+            "$ref": "#/components/schemas/PayeeType_2"
           },
           "address": {
             "$ref": "#/components/schemas/CreatePayeeAddress_2"

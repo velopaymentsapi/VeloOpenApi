@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.28.5
+  version: 2.28.6
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -296,6 +296,12 @@ paths:
           schema:
             format: uuid
             type: string
+        - description: The Type of the Payee entity. Either COMPANY or INDIVIDUAL.
+          in: query
+          name: payeeType
+          required: false
+          schema:
+            $ref: '#/components/schemas/PayeeType'
         - description: Page number. Default is 1.
           in: query
           name: page
@@ -2327,7 +2333,7 @@ paths:
           name: payeeType
           required: false
           schema:
-            $ref: '#/components/schemas/PayeeType'
+            $ref: '#/components/schemas/PayeeType_2'
         - description: The country of the payee - 2 letter ISO 3166-1 country code (upper case)
           in: query
           name: payeeCountry
@@ -3608,7 +3614,7 @@ paths:
           name: payeeType
           required: false
           schema:
-            $ref: '#/components/schemas/PayeeType'
+            $ref: '#/components/schemas/PayeeType_2'
         - description: The country of the payee - 2 letter ISO 3166-1 country code (upper case)
           in: query
           name: payeeCountry
@@ -8435,6 +8441,12 @@ components:
         - PENDING
       example: ENABLED
       type: string
+    PayeeType:
+      enum:
+        - COMPANY
+        - INDIVIDUAL
+      example: COMPANY
+      type: string
     PagedUserResponse:
       description: List Users Response Object
       example:
@@ -9566,7 +9578,7 @@ components:
           example: Bob
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -9643,7 +9655,7 @@ components:
         - REGISTERED
         - ONBOARDED
       type: string
-    PayeeType:
+    PayeeType_2:
       description: The type of the payee
       enum:
         - Individual
@@ -9899,7 +9911,7 @@ components:
     CreatePayeesCSVRequest:
       properties:
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         remoteId:
           example: remoteId123
           maxLength: 100
@@ -10867,7 +10879,7 @@ components:
           example: en-US
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         challenge:
           $ref: '#/components/schemas/Challenge'
         email:
@@ -10990,7 +11002,7 @@ components:
           example: Bob
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -11067,7 +11079,7 @@ components:
           example: en-US
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         challenge:
           $ref: '#/components/schemas/Challenge_2'
         email:
@@ -11232,7 +11244,7 @@ components:
     CreatePayeesCSVRequest_2:
       properties:
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         remoteId:
           example: remoteId123
           maxLength: 100
@@ -15915,7 +15927,7 @@ components:
           example: ABC
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -16013,7 +16025,7 @@ components:
           minLength: 1
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         address:
           $ref: '#/components/schemas/CreatePayeeAddress'
         paymentChannel:
@@ -16454,7 +16466,7 @@ components:
           example: ABC
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -16494,7 +16506,7 @@ components:
           minLength: 1
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         address:
           $ref: '#/components/schemas/CreatePayeeAddress_2'
         paymentChannel:
@@ -18620,7 +18632,7 @@ components:
           example: Remote ID
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         address:
           $ref: '#/components/schemas/CreatePayeeAddress'
         paymentChannel:
@@ -19401,7 +19413,7 @@ components:
           example: Remote ID
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         address:
           $ref: '#/components/schemas/CreatePayeeAddress_2'
         paymentChannel:
