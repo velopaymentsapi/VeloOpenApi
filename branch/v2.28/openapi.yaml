@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.28.7
+  version: 2.28.8
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -3412,7 +3412,8 @@ paths:
   '/v4/payees/{payeeId}/payeeDetailsUpdate':
     post:
       description: |
-        <p>Update payee details for the given Payee Id.<p>
+        <p>Update payee details for the given Payee Id.</p>
+        <p>Payors may only update the payee details if the payee has not yet onboarded</p>
       operationId: payeeDetailsUpdateV4
       parameters:
         - description: The UUID of the payee.
@@ -10955,7 +10956,7 @@ components:
         disabledComment: reason for disabled
         challenge:
           description: challenge description
-          value: challenge test
+          value: '11984567'
       properties:
         payeeId:
           example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
@@ -11086,6 +11087,12 @@ components:
           example: bob@example.com
           format: email
           nullable: true
+          type: string
+        contactSmsNumber:
+          description: |
+            The phone number of a device that the payee wishes to receive sms messages on
+          example: '11235555555'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
       type: object
     UpdateRemoteIdRequest_2:
@@ -11961,7 +11968,7 @@ components:
                 dateOfBirth: '1970-05-20T00:00:00.000+0000'
               challenge:
                 description: challenge description
-                value: challenge test
+                value: '11984567'
               language: en-US
               company:
                 taxId: '123123123'
@@ -12020,7 +12027,7 @@ components:
                 dateOfBirth: '1970-05-20T00:00:00.000+0000'
               challenge:
                 description: challenge description
-                value: challenge test
+                value: '11984567'
               language: en-US
               company:
                 taxId: '123123123'
@@ -16357,12 +16364,16 @@ components:
         - name
       type: object
     Challenge_2:
+      description: |
+        <p>Used to override the default challenge presented to the payee when they onboard</p>
+        <p>Not used after the payee has onboarded</p>
       example:
         description: challenge description
-        value: challenge test
+        value: '11984567'
       properties:
         value:
-          example: challenge test
+          description: The value that the user will be asked to verify when they onboard
+          example: '11984567'
           maxLength: 20
           minLength: 3
           type: string
@@ -16572,7 +16583,7 @@ components:
             dateOfBirth: '1970-05-20T00:00:00.000+0000'
           challenge:
             description: challenge description
-            value: challenge test
+            value: '11984567'
           language: en-US
           company:
             taxId: '123123123'
@@ -19376,7 +19387,7 @@ components:
           dateOfBirth: '1970-05-20T00:00:00.000+0000'
         challenge:
           description: challenge description
-          value: challenge test
+          value: '11984567'
         language: en-US
         company:
           taxId: '123123123'
