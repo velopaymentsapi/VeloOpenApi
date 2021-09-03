@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.28.26
+  version: 2.28.27
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -9185,6 +9185,7 @@ components:
         dbaName: Some Biz
         primaryContactPhone: 123-123-1234
         payeeGracePeriodDays: 0
+        provider: provider
         reminderEmailsOptOut: true
         maxMasterPayorAdmins: 6
         transmissionTypes:
@@ -9213,6 +9214,9 @@ components:
         payorXid:
           description: A unique identifier that an external system uses to reference the payor in their system
           example: ABC_201234
+          type: string
+        provider:
+          description: 'The source of the payorXid, default is null which means Velo'
           type: string
         address:
           $ref: '#/components/schemas/PayorAddressV2'
@@ -9330,7 +9334,10 @@ components:
           nullable: true
           type: string
         roles:
-          description: A list of roles to assign to the key.
+          description: |
+            <p>A list of roles to assign to the key.</p>
+            <p>Only the first role name will be used</p>
+            <p>A later version will change this from a list to string</p>
           example:
             - payor.admin
           items:
