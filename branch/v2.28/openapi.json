@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.28.30",
+    "version": "2.28.31",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -12592,6 +12592,20 @@
           "payeeGracePeriodProcessingEnabled": true,
           "supportContact": "support@example.com",
           "payorXid": "ABC_201234",
+          "includesReports": true,
+          "allowsLanguageChoice": true,
+          "language": "EN",
+          "provider": "provider",
+          "maxMasterPayorAdmins": 6,
+          "transmissionTypes": {
+            "ACH": true,
+            "SAME_DAY_ACH": true,
+            "WIRE": true
+          },
+          "manualLockout": true,
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "primaryContactEmail": "joe.buck@example.com",
+          "payorName": "Example, Corp",
           "address": {
             "country": "US",
             "countyOrProvince": "FL",
@@ -12602,31 +12616,18 @@
             "line1": "500 Duval St",
             "zipOrPostcode": "33945"
           },
-          "includesReports": true,
-          "allowsLanguageChoice": true,
-          "language": "EN",
+          "openBankingEnabled": true,
           "dbaName": "Some Biz",
           "primaryContactPhone": "123-123-1234",
           "payeeGracePeriodDays": 0,
-          "provider": "provider",
           "reminderEmailsOptOut": true,
-          "maxMasterPayorAdmins": 6,
-          "transmissionTypes": {
-            "ACH": true,
-            "SAME_DAY_ACH": true,
-            "WIRE": true
-          },
-          "manualLockout": true,
           "collectiveAlias": "Payee",
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "kycState": "PASSED_KYC",
           "wuCustomerId": "wuCustomerId",
           "remoteSystemIds": [
             "REMOTE_SYSTEM_ID",
             "REMOTE_SYSTEM_ID"
-          ],
-          "primaryContactEmail": "joe.buck@example.com",
-          "payorName": "Example, Corp"
+          ]
         },
         "properties": {
           "payorId": {
@@ -12672,6 +12673,10 @@
           },
           "manualLockout": {
             "description": "Whether or not the payor has been manually locked by the backoffice.",
+            "type": "boolean"
+          },
+          "openBankingEnabled": {
+            "description": "Is Open Banking supported for this payor",
             "type": "boolean"
           },
           "payeeGracePeriodProcessingEnabled": {
