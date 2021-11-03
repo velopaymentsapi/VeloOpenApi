@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.26.127
+  version: 2.27.128
   x-logo:
     url: https://apidocs.velopayments.com/velo-logo-e9573185_new.svg
 servers:
@@ -6442,6 +6442,33 @@ paths:
         required: false
         schema:
           type: string
+      - description: Filter payouts scheduled to run on or after the given date. Format
+          is yyyy-MM-dd.
+        in: query
+        name: scheduledForDateFrom
+        required: false
+        schema:
+          format: date
+          type: string
+      - description: Filter payouts scheduled to run on or before the given date.
+          Format is yyyy-MM-dd.
+        in: query
+        name: scheduledForDateTo
+        required: false
+        schema:
+          format: date
+          type: string
+      - description: Payout Schedule Status
+        in: query
+        name: scheduleStatus
+        required: false
+        schema:
+          enum:
+          - ANY
+          - SCHEDULED
+          - EXECUTED
+          - FAILED
+          type: string
       - description: Page number. Default is 1.
         in: query
         name: page
@@ -6463,7 +6490,7 @@ paths:
       - description: |
           List of sort fields (e.g. ?sort=submittedDateTime:asc,instructedDateTime:asc,status:asc)
           Default is submittedDateTime:asc
-          The supported sort fields are: submittedDateTime, instructedDateTime, status, totalPayments, payoutId
+          The supported sort fields are: submittedDateTime, instructedDateTime, status, totalPayments, payoutId, scheduledFor
         in: query
         name: sort
         required: false
@@ -6834,6 +6861,33 @@ paths:
         name: paymentMemo
         required: false
         schema:
+          type: string
+      - description: Filter payouts scheduled to run on or after the given date. Format
+          is yyyy-MM-dd.
+        in: query
+        name: scheduledForDateFrom
+        required: false
+        schema:
+          format: date
+          type: string
+      - description: Filter payouts scheduled to run on or before the given date.
+          Format is yyyy-MM-dd.
+        in: query
+        name: scheduledForDateTo
+        required: false
+        schema:
+          format: date
+          type: string
+      - description: Payout Schedule Status
+        in: query
+        name: scheduleStatus
+        required: false
+        schema:
+          enum:
+          - ANY
+          - SCHEDULED
+          - EXECUTED
+          - FAILED
           type: string
       - description: Page number. Default is 1.
         in: query
@@ -7307,9 +7361,8 @@ paths:
           -d '{"payments":[{"remoteId":"myRemoteId01","currency":"USD","amount":12345,"sourceAccountName":"PAYOR_SRC_ACCT","payorPaymentId":"1111"},{"remoteId":"myRemoteId02","currency":"USD","amount":23456,"sourceAccountName":"PAYOR_SRC_ACCT","payorPaymentId":"2222"},{"remoteId":"myRemoteId01","currency":"USD","amount":1020,"sourceAccountName":"PAYOR_SRC_ACCT","payorPaymentId":"3333"},{"remoteId":"myRemoteId03","currency":"USD","amount":3456,"sourceAccountName":"PAYOR_SRC_ACCT","payorPaymentId":"4444"},{"remoteId":"myRemoteId04","currency":"USD","amount":8765,"sourceAccountName":"PAYOR_SRC_ACCT","payorPaymentId":"5555"}]}'
   /v3/payouts/{payoutId}:
     delete:
-      description: Withdraw Payout will delete payout details from payout service
-        and rails services but will just move the status of the payout to WITHDRAWN
-        in payment audit.
+      description: Withdraw Payout will remove the payout details from the rails but
+        the payout will still be accessible in payout service in WITHDRAWN status.
       operationId: withdrawPayoutV3
       parameters:
       - description: Id of the payout
@@ -7417,6 +7470,13 @@ paths:
         schema:
           format: uuid
           type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstructPayoutRequest'
+        description: Additional instruct payout parameters
+        required: false
       responses:
         202:
           description: HTTP 202 Accepted
@@ -7612,6 +7672,123 @@ paths:
           $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/payments?payoutId=fb2c5dd0-3573-11eb-a2c2-f2189898ab4d' -i -X GET \
               -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f' \
               -H 'Content-Type: application/json'
+  /v3/payouts/{payoutId}/schedule:
+    delete:
+      description: Remove the schedule for a scheduled payout
+      operationId: deschedulePayout
+      parameters:
+      - description: Id of the payout
+        in: path
+        name: payoutId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        204:
+          description: Descheduled payout successfully
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Deschedule a payout
+      tags:
+      - Payout Service
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/schedule' -i -X DELETE \
+              -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f'
+    post:
+      description: |
+        <p>Schedule a payout for auto-instruction in the future
+        or update existing payout schedule if the payout has been scheduled before.</p>
+      operationId: scheduleForPayout
+      parameters:
+      - description: Id of the payout
+        in: path
+        name: payoutId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchedulePayoutRequest'
+        description: schedule payout parameters
+      responses:
+        204:
+          description: Payout is scheduled successfully
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Schedule a payout
+      tags:
+      - Payout Service
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/schedule' -i -X POST \
+              -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f' \
+              -H 'Content-Type: application/json'
+              -d '{"scheduledFor": "2025-01-01T12:00:00Z", "notificationsEnabled": "true"}'
   /v1/paymentChannelRules:
     get:
       description: List the country specific payment channel rules.
@@ -13711,6 +13888,13 @@ components:
             status: UNQUOTED
           payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalPayments: 0
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           submittedDateTime: submittedDateTime
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalIncompletePayments: 6
@@ -13745,6 +13929,13 @@ components:
             status: UNQUOTED
           payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalPayments: 0
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           submittedDateTime: submittedDateTime
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalIncompletePayments: 6
@@ -13800,6 +13991,13 @@ components:
           instructed:
             principal: principal
             principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           incompletePayments: 5
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           quotedDateTime: 2000-01-23T04:56:07.000+00:00
@@ -13847,6 +14045,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          autoWithdrawnReasonCode: autoWithdrawnReasonCode
           isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
@@ -13887,6 +14086,13 @@ components:
           remoteId: aasdf123
           routingNumber: "123123123123"
           returnCost: 1232
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           withdrawnReason: withdrawnReason
           iban: DE89 3704 0044 0532 0130 00
           paymentMetadata: sample metadata
@@ -13923,6 +14129,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          autoWithdrawnReasonCode: autoWithdrawnReasonCode
           isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
@@ -13963,6 +14170,13 @@ components:
           remoteId: aasdf123
           routingNumber: "123123123123"
           returnCost: 1232
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           withdrawnReason: withdrawnReason
           iban: DE89 3704 0044 0532 0130 00
           paymentMetadata: sample metadata
@@ -14028,6 +14242,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          autoWithdrawnReasonCode: autoWithdrawnReasonCode
           isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
@@ -14068,6 +14283,13 @@ components:
           remoteId: aasdf123
           routingNumber: "123123123123"
           returnCost: 1232
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           withdrawnReason: withdrawnReason
           iban: DE89 3704 0044 0532 0130 00
           paymentMetadata: sample metadata
@@ -14104,6 +14326,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          autoWithdrawnReasonCode: autoWithdrawnReasonCode
           isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
@@ -14144,6 +14367,13 @@ components:
           remoteId: aasdf123
           routingNumber: "123123123123"
           returnCost: 1232
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           withdrawnReason: withdrawnReason
           iban: DE89 3704 0044 0532 0130 00
           paymentMetadata: sample metadata
@@ -14194,6 +14424,7 @@ components:
         countryCode: US
         returnReason: Some Reason Value
         withdrawable: true
+        autoWithdrawnReasonCode: autoWithdrawnReasonCode
         isPaymentCcyBaseCcy: true
         submittedDateTime: 2000-01-23T04:56:07.000+00:00
         sourceAmount: 12345
@@ -14234,6 +14465,13 @@ components:
         remoteId: aasdf123
         routingNumber: "123123123123"
         returnCost: 1232
+        schedule:
+          scheduledFor: 2000-01-23T04:56:07.000+00:00
+          scheduleStatus: SCHEDULED
+          notificationsEnabled: true
+          scheduledBy: Aphra Behn
+          scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          scheduledAt: 2000-01-23T04:56:07.000+00:00
         withdrawnReason: withdrawnReason
         iban: DE89 3704 0044 0532 0130 00
         paymentMetadata: sample metadata
@@ -14404,6 +14642,10 @@ components:
           type: string
         withdrawable:
           type: boolean
+        autoWithdrawnReasonCode:
+          description: Populated with rejection reason code if the payment was withdrawn
+            automatically at instruct time
+          type: string
         transmissionType:
           description: The transmission type of the payment, e.g. ACH, SAME_DAY_ACH,
             WIRE
@@ -14414,6 +14656,8 @@ components:
           description: Metadata for the payment
           example: sample metadata
           type: string
+        schedule:
+          $ref: '#/components/schemas/PayoutSchedule'
         payout:
           $ref: '#/components/schemas/PaymentResponseV4_payout'
       required:
@@ -14728,6 +14972,12 @@ components:
             Status
           remoteId: remoteIdVal123
           sourceAccountName: Chase
+        schedule:
+          scheduledFor: 2000-01-23T04:56:07.000+00:00
+          scheduleStatus: SCHEDULED
+          notificationsEnabled: true
+          scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          scheduledAt: 2000-01-23T04:56:07.000+00:00
         paymentsRejected: 0
         paymentsSubmitted: 10
         paymentsWithdrawn: 0
@@ -14818,12 +15068,24 @@ components:
           items:
             $ref: '#/components/schemas/RejectedPaymentV3'
           type: array
+        schedule:
+          $ref: '#/components/schemas/PayoutSchedule_2'
       required:
       - acceptedPayments
       - accounts
       - fxSummaries
       - paymentsWithdrawn
       - rejectedPayments
+      type: object
+    InstructPayoutRequest:
+      example:
+        fxRateDegredationThresholdPercentage: 0.8008282
+      properties:
+        fxRateDegredationThresholdPercentage:
+          description: Halt instruction if the FX rates have become worse since the
+            last quote
+          format: float
+          type: number
       type: object
     QuoteResponseV3:
       example:
@@ -14884,6 +15146,7 @@ components:
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           paymentId: paymentId
           withdrawable: false
+          autoWithdrawnReasonCode: VE0003
           paymentMetadata: invoiceeId_123|abc001:12345|xyz002:4567
           currency: USD
           payorPaymentId: paymenIdVal123123
@@ -14904,6 +15167,7 @@ components:
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           paymentId: paymentId
           withdrawable: false
+          autoWithdrawnReasonCode: VE0003
           paymentMetadata: invoiceeId_123|abc001:12345|xyz002:4567
           currency: USD
           payorPaymentId: paymenIdVal123123
@@ -14922,6 +15186,24 @@ components:
           items:
             $ref: '#/components/schemas/PaymentV3'
           type: array
+      type: object
+    SchedulePayoutRequest:
+      example:
+        scheduledFor: 2025-01-01T10:00:00Z
+        notificationsEnabled: true
+      properties:
+        scheduledFor:
+          description: UTC timestamp for instructing the payout. Format is ISO-8601.
+          example: 2025-01-01T10:00:00Z
+          format: date-time
+          type: string
+        notificationsEnabled:
+          description: Flag to indicate whether to receive notifications when scheduled
+            payout is processed
+          type: boolean
+      required:
+      - notificationsEnabled
+      - scheduledFor
       type: object
     PaymentChannelRulesResponse:
       example:
@@ -16899,6 +17181,13 @@ components:
           status: UNQUOTED
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalPayments: 0
+        schedule:
+          scheduledFor: 2000-01-23T04:56:07.000+00:00
+          scheduleStatus: SCHEDULED
+          notificationsEnabled: true
+          scheduledBy: Aphra Behn
+          scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          scheduledAt: 2000-01-23T04:56:07.000+00:00
         submittedDateTime: submittedDateTime
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalIncompletePayments: 6
@@ -16948,6 +17237,8 @@ components:
           $ref: '#/components/schemas/PayoutType'
         payorName:
           type: string
+        schedule:
+          $ref: '#/components/schemas/PayoutSchedule'
       required:
       - payorName
       - payoutType
@@ -17022,6 +17313,43 @@ components:
       required:
       - principal
       - principalId
+      type: object
+    PayoutSchedule:
+      description: Details relating to a payout that was executed via a schedule or
+        is still waiting to be executed
+      example:
+        scheduledFor: 2000-01-23T04:56:07.000+00:00
+        scheduleStatus: SCHEDULED
+        notificationsEnabled: true
+        scheduledBy: Aphra Behn
+        scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+        scheduledAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        scheduleStatus:
+          $ref: '#/components/schemas/ScheduleStatus'
+        scheduledAt:
+          format: date-time
+          type: string
+        scheduledFor:
+          format: date-time
+          type: string
+        scheduledByPrincipalId:
+          description: ID of the user or application that scheduled the payout
+          example: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          type: string
+        notificationsEnabled:
+          type: boolean
+        scheduledBy:
+          description: Optional display name as a hint for who scheduled the payout.
+            Not populated if payout was scheduled by an application.
+          example: Aphra Behn
+          type: string
+      required:
+      - notificationsEnabled
+      - scheduleStatus
+      - scheduledAt
+      - scheduledByPrincipalId
+      - scheduledFor
       type: object
     PaymentAuditCurrency:
       description: ISO 3 character currency code
@@ -17405,6 +17733,37 @@ components:
       - remoteId
       - sourceAccountName
       type: object
+    PayoutSchedule_2:
+      description: Details relating to a payout that was executed via a schedule or
+        is still waiting to be executed
+      example:
+        scheduledFor: 2000-01-23T04:56:07.000+00:00
+        scheduleStatus: SCHEDULED
+        notificationsEnabled: true
+        scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+        scheduledAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        scheduleStatus:
+          $ref: '#/components/schemas/ScheduleStatus_2'
+        scheduledAt:
+          format: date-time
+          type: string
+        scheduledFor:
+          format: date-time
+          type: string
+        scheduledByPrincipalId:
+          description: ID of the user or application that scheduled the payout
+          example: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          type: string
+        notificationsEnabled:
+          type: boolean
+      required:
+      - notificationsEnabled
+      - scheduleStatus
+      - scheduledAt
+      - scheduledByPrincipalId
+      - scheduledFor
+      type: object
     PaymentV3:
       example:
         amount: 1234
@@ -17420,6 +17779,7 @@ components:
           payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         paymentId: paymentId
         withdrawable: false
+        autoWithdrawnReasonCode: VE0003
         paymentMetadata: invoiceeId_123|abc001:12345|xyz002:4567
         currency: USD
         payorPaymentId: paymenIdVal123123
@@ -17475,6 +17835,11 @@ components:
           type: string
         paymentMetadata:
           example: invoiceeId_123|abc001:12345|xyz002:4567
+          type: string
+        autoWithdrawnReasonCode:
+          description: Populated only if the payment was automatically withdrawn during
+            instruction for being invalid
+          example: VE0003
           type: string
       required:
       - paymentId
@@ -19361,6 +19726,20 @@ components:
       - totalCost
       - totalPaymentAmount
       type: object
+    ScheduleStatus:
+      enum:
+      - SCHEDULED
+      - EXECUTED
+      - FAILED
+      example: SCHEDULED
+      type: string
+    ScheduleStatus_2:
+      enum:
+      - SCHEDULED
+      - EXECUTED
+      - FAILED
+      example: SCHEDULED
+      type: string
     PayoutPayeeV3:
       description: Payee data associated with a payment. Either individual or company
         must be populated
@@ -20216,6 +20595,13 @@ components:
         instructed:
           principal: principal
           principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        schedule:
+          scheduledFor: 2000-01-23T04:56:07.000+00:00
+          scheduleStatus: SCHEDULED
+          notificationsEnabled: true
+          scheduledBy: Aphra Behn
+          scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          scheduledAt: 2000-01-23T04:56:07.000+00:00
         incompletePayments: 5
         submittedDateTime: 2000-01-23T04:56:07.000+00:00
         quotedDateTime: 2000-01-23T04:56:07.000+00:00
@@ -20276,6 +20662,8 @@ components:
           $ref: '#/components/schemas/PayoutPrincipal'
         withdrawn:
           $ref: '#/components/schemas/PayoutPrincipal'
+        schedule:
+          $ref: '#/components/schemas/PayoutSchedule'
     PaymentResponseV4_payout:
       example:
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
