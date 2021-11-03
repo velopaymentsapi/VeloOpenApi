@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.27.128
+  version: 2.28.129
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -296,6 +296,12 @@ paths:
           schema:
             format: uuid
             type: string
+        - description: The Type of the Payee entity. Either COMPANY or INDIVIDUAL.
+          in: query
+          name: payeeType
+          required: false
+          schema:
+            $ref: '#/components/schemas/PayeeType'
         - description: Page number. Default is 1.
           in: query
           name: page
@@ -527,7 +533,7 @@ paths:
       x-code-samples:
         - lang: shell
           source: |
-            $ curl 'https://api.sandbox.velopayments.com/v1/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/disable' -i -X POST \
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/disable' -i -X POST \
                 -H 'Content-Type: application/json' \
                 -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8'
   '/v2/users/{userId}/enable':
@@ -1198,7 +1204,7 @@ paths:
       x-code-samples:
         - lang: shell
           source: |
-            $ curl 'https://api.sandbox.velopayments.com/v1/users/self/password' -i -X POST \
+            $ curl 'https://api.sandbox.velopayments.com/v2/users/self/password' -i -X POST \
                   -H 'Content-Type: application/json' \
                   -d '{"oldpassword":"abcd_12345", \
                       "newPassword": "myNewPassword"}'
@@ -2327,7 +2333,7 @@ paths:
           name: payeeType
           required: false
           schema:
-            $ref: '#/components/schemas/PayeeType'
+            $ref: '#/components/schemas/PayeeType_2'
         - description: The country of the payee - 2 letter ISO 3166-1 country code (upper case)
           in: query
           name: payeeCountry
@@ -3406,7 +3412,8 @@ paths:
   '/v4/payees/{payeeId}/payeeDetailsUpdate':
     post:
       description: |
-        <p>Update payee details for the given Payee Id.<p>
+        <p>Update payee details for the given Payee Id.</p>
+        <p>Payors may only update the payee details if the payee has not yet onboarded</p>
       operationId: payeeDetailsUpdateV4
       parameters:
         - description: The UUID of the payee.
@@ -3608,7 +3615,7 @@ paths:
           name: payeeType
           required: false
           schema:
-            $ref: '#/components/schemas/PayeeType'
+            $ref: '#/components/schemas/PayeeType_2'
         - description: The country of the payee - 2 letter ISO 3166-1 country code (upper case)
           in: query
           name: payeeCountry
@@ -8435,6 +8442,12 @@ components:
         - PENDING
       example: ENABLED
       type: string
+    PayeeType:
+      enum:
+        - COMPANY
+        - INDIVIDUAL
+      example: COMPANY
+      type: string
     PagedUserResponse:
       description: List Users Response Object
       example:
@@ -8451,6 +8464,7 @@ components:
           totalElements: 33
         content:
           - lastName: Doe
+            companyName: Acme Corp
             roles:
               - payor.admin
             lockedOutTimestamp: 2000-01-23T04:56:07.000Z
@@ -8462,10 +8476,12 @@ components:
             mfaType: TOTP
             lockedOut: true
             id: 8bbf301c-948f-4445-b411-357eec53e441
+            userType: PAYOR
             email: foo@example.com
             secondaryContactNumber: '11235555550'
             status: ENABLED
           - lastName: Doe
+            companyName: Acme Corp
             roles:
               - payor.admin
             lockedOutTimestamp: 2000-01-23T04:56:07.000Z
@@ -8477,6 +8493,7 @@ components:
             mfaType: TOTP
             lockedOut: true
             id: 8bbf301c-948f-4445-b411-357eec53e441
+            userType: PAYOR
             email: foo@example.com
             secondaryContactNumber: '11235555550'
             status: ENABLED
@@ -8495,6 +8512,7 @@ components:
     UserResponse:
       example:
         lastName: Doe
+        companyName: Acme Corp
         roles:
           - payor.admin
         lockedOutTimestamp: 2000-01-23T04:56:07.000Z
@@ -8506,6 +8524,7 @@ components:
         mfaType: TOTP
         lockedOut: true
         id: 8bbf301c-948f-4445-b411-357eec53e441
+        userType: PAYOR
         email: foo@example.com
         secondaryContactNumber: '11235555550'
         status: ENABLED
@@ -8564,6 +8583,13 @@ components:
           example: 7fffa261-ac68-49e6-b605-d24a444d9206
           format: uuid
           type: string
+        companyName:
+          description: |
+            The payor or payee company name or null if the user is not a payor or payee user
+          example: Acme Corp
+          maxLength: 128
+          minLength: 1
+          type: string
         roles:
           description: |
             The role(s) for the user
@@ -8573,6 +8599,14 @@ components:
             $ref: '#/components/schemas/Role'
           minItems: 1
           type: array
+        userType:
+          description: 'Indicates the type of user. Could be BACKOFFICE, PAYOR or PAYEE.'
+          enum:
+            - BACKOFFICE
+            - PAYOR
+            - PAYEE
+          example: PAYOR
+          type: string
         mfaType:
           description: The type of the MFA device
           enum:
@@ -8607,9 +8641,10 @@ components:
         primaryContactNumber: '11235555555'
         mfaType: TOTP
         roles:
-          - payor.admin
+          - velo.payor.admin
         smsNumber: '11235555555'
         entityId: 7fffa261-ac68-49e6-b605-d24a444d9206
+        userType: PAYEE
         email: foo@example.com
         secondaryContactNumber: '11235555550'
         verificationCode: '123456'
@@ -8653,9 +8688,9 @@ components:
             The role(s) for the user
             The role must exist
             The role can be a custom role or a system role but the invoker must have the permissions to assign the role
-            System roles are: backoffice.admin, payor.master_admin, payor.admin, payor.support
+            System roles are: velo.backoffice.admin, velo.payor.master_admin, velo.payor.admin, velo.payor.support, velo.payee.admin, velo.payee.support
           example:
-            - payor.admin
+            - velo.payor.admin
           items:
             type: string
           type: array
@@ -8671,10 +8706,18 @@ components:
           type: string
         entityId:
           description: |
-            The payorId or null if the user is not a payor user
+            The payorId or payeeId or null if the user is a backoffice admin
           example: 7fffa261-ac68-49e6-b605-d24a444d9206
           format: uuid
           nullable: true
+          type: string
+        userType:
+          description: Will default to PAYOR if not provided but entityId is provided
+          enum:
+            - BACKOFFICE
+            - PAYOR
+            - PAYEE
+          example: PAYEE
           type: string
         verificationCode:
           description: |
@@ -9127,6 +9170,19 @@ components:
         payeeGracePeriodProcessingEnabled: true
         supportContact: support@example.com
         payorXid: ABC_201234
+        includesReports: true
+        allowsLanguageChoice: true
+        language: EN
+        provider: provider
+        maxMasterPayorAdmins: 6
+        transmissionTypes:
+          ACH: true
+          SAME_DAY_ACH: true
+          WIRE: true
+        manualLockout: true
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        primaryContactEmail: joe.buck@example.com
+        payorName: 'Example, Corp'
         address:
           country: US
           countyOrProvince: FL
@@ -9136,28 +9192,17 @@ components:
           line2: line2
           line1: 500 Duval St
           zipOrPostcode: '33945'
-        includesReports: true
-        allowsLanguageChoice: true
-        language: EN
+        openBankingEnabled: true
         dbaName: Some Biz
         primaryContactPhone: 123-123-1234
         payeeGracePeriodDays: 0
         reminderEmailsOptOut: true
-        maxMasterPayorAdmins: 6
-        transmissionTypes:
-          ACH: true
-          SAME_DAY_ACH: true
-          WIRE: true
-        manualLockout: true
         collectiveAlias: Payee
-        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         kycState: PASSED_KYC
         wuCustomerId: wuCustomerId
         remoteSystemIds:
           - REMOTE_SYSTEM_ID
           - REMOTE_SYSTEM_ID
-        primaryContactEmail: joe.buck@example.com
-        payorName: 'Example, Corp'
       properties:
         payorId:
           format: uuid
@@ -9170,6 +9215,9 @@ components:
         payorXid:
           description: A unique identifier that an external system uses to reference the payor in their system
           example: ABC_201234
+          type: string
+        provider:
+          description: 'The source of the payorXid, default is null which means Velo'
           type: string
         address:
           $ref: '#/components/schemas/PayorAddressV2'
@@ -9190,6 +9238,9 @@ components:
           $ref: '#/components/schemas/KycState'
         manualLockout:
           description: Whether or not the payor has been manually locked by the backoffice.
+          type: boolean
+        openBankingEnabled:
+          description: Is Open Banking supported for this payor
           type: boolean
         payeeGracePeriodProcessingEnabled:
           description: Whether grace period processing is enabled.
@@ -9287,7 +9338,10 @@ components:
           nullable: true
           type: string
         roles:
-          description: A list of roles to assign to the key.
+          description: |
+            <p>A list of roles to assign to the key.</p>
+            <p>Only the first role name will be used</p>
+            <p>A later version will change this from a list to string</p>
           example:
             - payor.admin
           items:
@@ -9536,7 +9590,7 @@ components:
           example: Bob
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -9613,7 +9667,7 @@ components:
         - REGISTERED
         - ONBOARDED
       type: string
-    PayeeType:
+    PayeeType_2:
       description: The type of the payee
       enum:
         - Individual
@@ -9869,7 +9923,7 @@ components:
     CreatePayeesCSVRequest:
       properties:
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         remoteId:
           example: remoteId123
           maxLength: 100
@@ -10837,7 +10891,7 @@ components:
           example: en-US
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         challenge:
           $ref: '#/components/schemas/Challenge'
         email:
@@ -10913,7 +10967,7 @@ components:
         disabledComment: reason for disabled
         challenge:
           description: challenge description
-          value: challenge test
+          value: '11984567'
       properties:
         payeeId:
           example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
@@ -10960,7 +11014,7 @@ components:
           example: Bob
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -11037,13 +11091,19 @@ components:
           example: en-US
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         challenge:
           $ref: '#/components/schemas/Challenge_2'
         email:
           example: bob@example.com
           format: email
           nullable: true
+          type: string
+        contactSmsNumber:
+          description: |
+            The phone number of a device that the payee wishes to receive sms messages on
+          example: '11235555555'
+          pattern: '^\+[1-9]\d{1,14}$'
           type: string
       type: object
     UpdateRemoteIdRequest_2:
@@ -11202,7 +11262,7 @@ components:
     CreatePayeesCSVRequest_2:
       properties:
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         remoteId:
           example: remoteId123
           maxLength: 100
@@ -11919,7 +11979,7 @@ components:
                 dateOfBirth: '1970-05-20T00:00:00.000+0000'
               challenge:
                 description: challenge description
-                value: challenge test
+                value: '11984567'
               language: en-US
               company:
                 taxId: '123123123'
@@ -11978,7 +12038,7 @@ components:
                 dateOfBirth: '1970-05-20T00:00:00.000+0000'
               challenge:
                 description: challenge description
-                value: challenge test
+                value: '11984567'
               language: en-US
               company:
                 taxId: '123123123'
@@ -15885,7 +15945,7 @@ components:
           example: ABC
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -15983,7 +16043,7 @@ components:
           minLength: 1
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         address:
           $ref: '#/components/schemas/CreatePayeeAddress'
         paymentChannel:
@@ -16315,12 +16375,16 @@ components:
         - name
       type: object
     Challenge_2:
+      description: |
+        <p>Used to override the default challenge presented to the payee when they onboard</p>
+        <p>Not used after the payee has onboarded</p>
       example:
         description: challenge description
-        value: challenge test
+        value: '11984567'
       properties:
         value:
-          example: challenge test
+          description: The value that the user will be asked to verify when they onboard
+          example: '11984567'
           maxLength: 20
           minLength: 3
           type: string
@@ -16424,7 +16488,7 @@ components:
           example: ABC
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -16464,7 +16528,7 @@ components:
           minLength: 1
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         address:
           $ref: '#/components/schemas/CreatePayeeAddress_2'
         paymentChannel:
@@ -16530,7 +16594,7 @@ components:
             dateOfBirth: '1970-05-20T00:00:00.000+0000'
           challenge:
             description: challenge description
-            value: challenge test
+            value: '11984567'
           language: en-US
           company:
             taxId: '123123123'
@@ -18590,7 +18654,7 @@ components:
           example: Remote ID
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         address:
           $ref: '#/components/schemas/CreatePayeeAddress'
         paymentChannel:
@@ -19334,7 +19398,7 @@ components:
           dateOfBirth: '1970-05-20T00:00:00.000+0000'
         challenge:
           description: challenge description
-          value: challenge test
+          value: '11984567'
         language: en-US
         company:
           taxId: '123123123'
@@ -19371,7 +19435,7 @@ components:
           example: Remote ID
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         address:
           $ref: '#/components/schemas/CreatePayeeAddress_2'
         paymentChannel:
