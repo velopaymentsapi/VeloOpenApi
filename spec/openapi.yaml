@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.25.138
+  version: 2.29.130
   x-logo:
     url: https://apidocs.velopayments.com/velo-logo-e9573185_new.svg
 servers:
@@ -299,6 +299,12 @@ paths:
         schema:
           format: uuid
           type: string
+      - description: The Type of the Payee entity. Either COMPANY or INDIVIDUAL.
+        in: query
+        name: payeeType
+        required: false
+        schema:
+          $ref: '#/components/schemas/PayeeType'
       - description: Page number. Default is 1.
         in: query
         name: page
@@ -530,7 +536,7 @@ paths:
       x-code-samples:
       - lang: shell
         source: |
-          $ curl 'https://api.sandbox.velopayments.com/v1/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/disable' -i -X POST \
+          $ curl 'https://api.sandbox.velopayments.com/v2/users/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/disable' -i -X POST \
               -H 'Content-Type: application/json' \
               -H 'Authorization: Bearer 93560bbb-5e79-492a-97b5-1ffbdf1cfeb8'
   /v2/users/{userId}/enable:
@@ -1201,7 +1207,7 @@ paths:
       x-code-samples:
       - lang: shell
         source: |
-          $ curl 'https://api.sandbox.velopayments.com/v1/users/self/password' -i -X POST \
+          $ curl 'https://api.sandbox.velopayments.com/v2/users/self/password' -i -X POST \
                 -H 'Content-Type: application/json' \
                 -d '{"oldpassword":"abcd_12345", \
                     "newPassword": "myNewPassword"}'
@@ -2332,7 +2338,7 @@ paths:
         name: payeeType
         required: false
         schema:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
       - description: The country of the payee - 2 letter ISO 3166-1 country code (upper
           case)
         in: query
@@ -3412,7 +3418,8 @@ paths:
   /v4/payees/{payeeId}/payeeDetailsUpdate:
     post:
       description: |
-        <p>Update payee details for the given Payee Id.<p>
+        <p>Update payee details for the given Payee Id.</p>
+        <p>Payors may only update the payee details if the payee has not yet onboarded</p>
       operationId: payeeDetailsUpdateV4
       parameters:
       - description: The UUID of the payee.
@@ -3508,7 +3515,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateRemoteIdRequest'
+              $ref: '#/components/schemas/UpdateRemoteIdRequest_2'
         description: Request to update payee remote id v4
         required: true
       responses:
@@ -3614,7 +3621,7 @@ paths:
         name: payeeType
         required: false
         schema:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
       - description: The country of the payee - 2 letter ISO 3166-1 country code (upper
           case)
         in: query
@@ -5274,6 +5281,14 @@ paths:
         schema:
           format: uuid
           type: string
+      - description: A filter for retrieving both active accounts and user deleted
+          ones
+        in: query
+        name: includeUserDeleted
+        required: false
+        schema:
+          format: boolean
+          type: string
       - description: The type of source account.
         in: query
         name: type
@@ -5353,7 +5368,62 @@ paths:
               -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'
     summary: List Source Accounts
   /v3/sourceAccounts/{sourceAccountId}:
-    description: Get details about given source account.
+    delete:
+      description: Mark a source account as deleted by ID
+      operationId: deleteSourceAccountV3
+      parameters:
+      - description: Source account id
+        in: path
+        name: sourceAccountId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        204:
+          description: No Content - Source account is deleted
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Delete a source account by ID
+      tags:
+      - Funding Manager Private
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X DELETE \
+              -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
     get:
       description: Get details about given source account.
       operationId: getSourceAccountV3
@@ -5407,7 +5477,6 @@ paths:
         source: |
           $ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \
               -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
-    summary: Get Source Account
   /v3/sourceAccounts/{sourceAccountId}/transfers:
     post:
       description: Transfer funds between source accounts for a Payor. The 'from'
@@ -6380,6 +6449,33 @@ paths:
         required: false
         schema:
           type: string
+      - description: Filter payouts scheduled to run on or after the given date. Format
+          is yyyy-MM-dd.
+        in: query
+        name: scheduledForDateFrom
+        required: false
+        schema:
+          format: date
+          type: string
+      - description: Filter payouts scheduled to run on or before the given date.
+          Format is yyyy-MM-dd.
+        in: query
+        name: scheduledForDateTo
+        required: false
+        schema:
+          format: date
+          type: string
+      - description: Payout Schedule Status
+        in: query
+        name: scheduleStatus
+        required: false
+        schema:
+          enum:
+          - ANY
+          - SCHEDULED
+          - EXECUTED
+          - FAILED
+          type: string
       - description: Page number. Default is 1.
         in: query
         name: page
@@ -6401,7 +6497,7 @@ paths:
       - description: |
           List of sort fields (e.g. ?sort=submittedDateTime:asc,instructedDateTime:asc,status:asc)
           Default is submittedDateTime:asc
-          The supported sort fields are: submittedDateTime, instructedDateTime, status, totalPayments, payoutId
+          The supported sort fields are: submittedDateTime, instructedDateTime, status, totalPayments, payoutId, scheduledFor
         in: query
         name: sort
         required: false
@@ -6772,6 +6868,33 @@ paths:
         name: paymentMemo
         required: false
         schema:
+          type: string
+      - description: Filter payouts scheduled to run on or after the given date. Format
+          is yyyy-MM-dd.
+        in: query
+        name: scheduledForDateFrom
+        required: false
+        schema:
+          format: date
+          type: string
+      - description: Filter payouts scheduled to run on or before the given date.
+          Format is yyyy-MM-dd.
+        in: query
+        name: scheduledForDateTo
+        required: false
+        schema:
+          format: date
+          type: string
+      - description: Payout Schedule Status
+        in: query
+        name: scheduleStatus
+        required: false
+        schema:
+          enum:
+          - ANY
+          - SCHEDULED
+          - EXECUTED
+          - FAILED
           type: string
       - description: Page number. Default is 1.
         in: query
@@ -7245,9 +7368,8 @@ paths:
           -d '{"payments":[{"remoteId":"myRemoteId01","currency":"USD","amount":12345,"sourceAccountName":"PAYOR_SRC_ACCT","payorPaymentId":"1111"},{"remoteId":"myRemoteId02","currency":"USD","amount":23456,"sourceAccountName":"PAYOR_SRC_ACCT","payorPaymentId":"2222"},{"remoteId":"myRemoteId01","currency":"USD","amount":1020,"sourceAccountName":"PAYOR_SRC_ACCT","payorPaymentId":"3333"},{"remoteId":"myRemoteId03","currency":"USD","amount":3456,"sourceAccountName":"PAYOR_SRC_ACCT","payorPaymentId":"4444"},{"remoteId":"myRemoteId04","currency":"USD","amount":8765,"sourceAccountName":"PAYOR_SRC_ACCT","payorPaymentId":"5555"}]}'
   /v3/payouts/{payoutId}:
     delete:
-      description: Withdraw Payout will delete payout details from payout service
-        and rails services but will just move the status of the payout to WITHDRAWN
-        in payment audit.
+      description: Withdraw Payout will remove the payout details from the rails but
+        the payout will still be accessible in payout service in WITHDRAWN status.
       operationId: withdrawPayoutV3
       parameters:
       - description: Id of the payout
@@ -7355,6 +7477,13 @@ paths:
         schema:
           format: uuid
           type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstructPayoutRequest'
+        description: Additional instruct payout parameters
+        required: false
       responses:
         202:
           description: HTTP 202 Accepted
@@ -7550,6 +7679,123 @@ paths:
           $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/payments?payoutId=fb2c5dd0-3573-11eb-a2c2-f2189898ab4d' -i -X GET \
               -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f' \
               -H 'Content-Type: application/json'
+  /v3/payouts/{payoutId}/schedule:
+    delete:
+      description: Remove the schedule for a scheduled payout
+      operationId: deschedulePayout
+      parameters:
+      - description: Id of the payout
+        in: path
+        name: payoutId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        204:
+          description: Descheduled payout successfully
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Deschedule a payout
+      tags:
+      - Payout Service
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/schedule' -i -X DELETE \
+              -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f'
+    post:
+      description: |
+        <p>Schedule a payout for auto-instruction in the future
+        or update existing payout schedule if the payout has been scheduled before.</p>
+      operationId: scheduleForPayout
+      parameters:
+      - description: Id of the payout
+        in: path
+        name: payoutId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SchedulePayoutRequest'
+        description: schedule payout parameters
+      responses:
+        204:
+          description: Payout is scheduled successfully
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        409:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Schedule a payout
+      tags:
+      - Payout Service
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v3/payouts/cc2e1a8d-39ae-461c-bde3-ce78525f89ac/schedule' -i -X POST \
+              -H 'Authorization: Bearer f081303c-7fcc-4204-8530-02e8ec2ef73f' \
+              -H 'Content-Type: application/json'
+              -d '{"scheduledFor": "2025-01-01T12:00:00Z", "notificationsEnabled": "true"}'
   /v1/paymentChannelRules:
     get:
       description: List the country specific payment channel rules.
@@ -7701,107 +7947,6 @@ paths:
       - lang: shell
         source: |
           $ curl 'https://api.sandbox.velopayments.com/v2/currencies' -i -X GET
-  /v1/webhooks/{webhookId}:
-    description: Get details about the given webhook.
-    get:
-      description: Get details about the given webhook.
-      operationId: getWebhookV1
-      parameters:
-      - description: Webhook id
-        in: path
-        name: webhookId
-        required: true
-        schema:
-          format: uuid
-          type: string
-      responses:
-        200:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WebhookResponse'
-          description: Webhook response
-        400:
-          description: Bad Request, Invalid path parameter
-        401:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_401'
-          description: Invalid access token. May be expired or invalid
-        403:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_403'
-          description: |
-            The authentication does not have permissions to access the resource
-            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-        404:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_404'
-          description: |
-            The resource was not found or is no longer available
-      summary: Get details about the given webhook.
-      tags:
-      - Webhooks
-      x-code-samples:
-      - lang: shell
-        source: |
-          $ curl 'https://api.sandbox.velopayments.com/v1/webhooks/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \
-              -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
-    post:
-      description: Update Webhook
-      operationId: updateWebhookV1
-      parameters:
-      - description: Webhook id
-        in: path
-        name: webhookId
-        required: true
-        schema:
-          format: uuid
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateWebhookRequest'
-      responses:
-        204:
-          description: Webhook Updated
-        400:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_400'
-          description: Invalid request. See Error message payload for details of failure
-        401:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_401'
-          description: Invalid access token. May be expired or invalid
-        403:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_403'
-          description: |
-            The authentication does not have permissions to access the resource
-            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-        404:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_404'
-          description: |
-            The resource was not found or is no longer available
-      summary: Update Webhook
-      tags:
-      - Webhooks
-    summary: Get Webhook
   /v1/webhooks:
     description: List the details about the webhooks for the given payor.
     get:
@@ -7904,8 +8049,308 @@ paths:
       tags:
       - Webhooks
     summary: List Webhooks
+  /v1/webhooks/{webhookId}:
+    description: Get details about the given webhook.
+    get:
+      description: Get details about the given webhook.
+      operationId: getWebhookV1
+      parameters:
+      - description: Webhook id
+        in: path
+        name: webhookId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponse'
+          description: Webhook response
+        400:
+          description: Bad Request, Invalid path parameter
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Get details about the given webhook.
+      tags:
+      - Webhooks
+      x-code-samples:
+      - lang: shell
+        source: |
+          $ curl 'https://api.sandbox.velopayments.com/v1/webhooks/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \
+              -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
+    post:
+      description: Update Webhook
+      operationId: updateWebhookV1
+      parameters:
+      - description: Webhook id
+        in: path
+        name: webhookId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateWebhookRequest'
+      responses:
+        204:
+          description: Webhook Updated
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Update Webhook
+      tags:
+      - Webhooks
+    summary: Get Webhook
+  /v1/webhooks/{webhookId}/ping:
+    description: Trigger an immediate ping notification to the webhook
+    post:
+      operationId: pingWebhookV1
+      parameters:
+      - description: Webhook id
+        in: path
+        name: webhookId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        202:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PingResponse'
+          description: Send ping
+        400:
+          description: Bad Request, Invalid path parameter
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      tags:
+      - Webhooks
+    summary: Ping Webhook
 components:
   schemas:
+    Notification:
+      properties:
+        apiVersion:
+          description: The API version of the notification schema
+          example: "1"
+          type: string
+        sequenceNumber:
+          description: This is a payor specific sequence number starting at 1 for
+            the first notification sent
+          example: 1234
+          format: int64
+          type: integer
+        category:
+          description: The category that the notification relates to. One of "payment",
+            "payee", "debit" or "system"
+          example: payment
+          type: string
+        eventName:
+          description: The name of event that led to this notification
+          example: payment.accepted
+          type: string
+        source:
+          description: One of the available set of source event payloads
+          discriminator:
+            mapping:
+              ping: '#/components/schemas/Ping'
+              payment_status_changed: '#/components/schemas/PaymentStatusChanged'
+              payment_rejected_or_returned: '#/components/schemas/PaymentRejectedOrReturned'
+              onboarding_status_changed: '#/components/schemas/OnboardingStatusChanged'
+              payable_status_changed: '#/components/schemas/PayableStatusChanged'
+              payee_details_changed: '#/components/schemas/PayeeDetailsChanged'
+              debit_status_changed: '#/components/schemas/DebitStatusChanged'
+            propertyName: sourceType
+          example:
+            type: payment_status_changed
+            eventId: 270ab907-27ec-4b83-8028-0ff432bbdec4
+            createdAt: 2020-06-18T15:09:42Z
+            paymentId: cbd9280f-8fde-4190-b014-979d88f3ec54
+            payoutPayorIds:
+              submittingPayorId: ac207f97-663c-4429-9d57-ba5b35d6672d
+              payoutFromPayorId: ac207f97-663c-4429-9d57-ba5b35d6672d
+              payoutToPayorId: ac207f97-663c-4429-9d57-ba5b35d6672d
+            payorPaymentId: ourpayment-id12345
+            status: ACCEPTED
+          oneOf:
+          - $ref: '#/components/schemas/Ping'
+          - $ref: '#/components/schemas/PaymentStatusChanged'
+          - $ref: '#/components/schemas/PaymentRejectedOrReturned'
+          - $ref: '#/components/schemas/OnboardingStatusChanged'
+          - $ref: '#/components/schemas/PayableStatusChanged'
+          - $ref: '#/components/schemas/PayeeDetailsChanged'
+          - $ref: '#/components/schemas/DebitStatusChanged'
+      required:
+      - apiVersion
+      - category
+      - eventName
+      - sequenceNumber
+      type: object
+    SourceEvent:
+      description: Base type for each source event payload
+      properties:
+        sourceType:
+          description: OA3 Schema type name for the source info which is used as the
+            discriminator value to ensure that data binding works correctly
+          example: payment_status_changed
+          type: string
+        eventId:
+          description: UUID id of the source event in the Velo platform
+          example: 270ab907-27ec-4b83-8028-0ff432bbdec4
+          format: uuid
+          type: string
+        createdAt:
+          description: ISO8601 timestamp indicating when the source event was created
+          example: 2020-06-18T15:09:42Z
+          format: date-time
+          type: string
+      required:
+      - createdAt
+      - eventId
+      - sourceType
+      type: object
+    Ping:
+      allOf:
+      - $ref: '#/components/schemas/SourceEvent'
+      description: Ping event for testing the webhook integration. Can be initiated
+        via the Web UI.
+    PaymentEvent:
+      allOf:
+      - $ref: '#/components/schemas/SourceEvent'
+      - $ref: '#/components/schemas/PaymentEvent_allOf'
+      description: Base type for all Payment Events
+    PaymentStatusChanged:
+      allOf:
+      - $ref: '#/components/schemas/PaymentEvent'
+      - $ref: '#/components/schemas/PaymentStatusChanged_allOf'
+      description: Base type for all payment status changed events
+    PaymentRejectedOrReturned:
+      allOf:
+      - $ref: '#/components/schemas/PaymentStatusChanged'
+      - $ref: '#/components/schemas/PaymentRejectedOrReturned_allOf'
+      description: Base type for all rejection or return payment events
+    PayoutPayorIds:
+      description: Holder for all payor ids associated with a Payout
+      properties:
+        submittingPayorId:
+          description: The ID of the Payor that is submitting the payout
+          example: ac207f97-663c-4429-9d57-ba5b35d6672d
+          format: uuid
+          type: string
+        payoutFromPayorId:
+          description: The ID of the Payor providing the source account for the payout
+          example: 35198f08-1c7b-4a91-8921-cd760ed92bca
+          format: uuid
+          type: string
+        payoutToPayorId:
+          description: The ID of the Payor that owns the Payee (on behalf of)
+          example: 3eb99144-6ebf-4b02-9483-ad86b2ff1bca
+          format: uuid
+          type: string
+      required:
+      - payoutFromPayorId
+      - payoutToPayorId
+      - submittingPayorId
+      type: object
+    PayeeEvent:
+      allOf:
+      - $ref: '#/components/schemas/SourceEvent'
+      - $ref: '#/components/schemas/PayeeEvent_allOf'
+      description: Base type for all Payee Events
+    OnboardingStatusChanged:
+      allOf:
+      - $ref: '#/components/schemas/PayeeEvent'
+      - type: object
+      description: Base type for all onboarding status changed events
+    PayableStatusChanged:
+      allOf:
+      - $ref: '#/components/schemas/PayeeEvent'
+      - type: object
+      description: Base type for all payable status changed events
+    PayeeDetailsChanged:
+      allOf:
+      - $ref: '#/components/schemas/PayeeEvent'
+      - type: object
+      description: Base type for all payee details changed events
+    DebitEvent:
+      allOf:
+      - $ref: '#/components/schemas/SourceEvent'
+      - $ref: '#/components/schemas/DebitEvent_allOf'
+      description: Base type for all Debit Events
+    DebitStatusChanged:
+      allOf:
+      - $ref: '#/components/schemas/DebitEvent'
+      - $ref: '#/components/schemas/DebitStatusChanged_allOf'
+      description: Base type for all debit status changed events
     AuthResponse:
       example:
         access_token: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -8071,6 +8516,12 @@ components:
       - PENDING
       example: ENABLED
       type: string
+    PayeeType:
+      enum:
+      - COMPANY
+      - INDIVIDUAL
+      example: COMPANY
+      type: string
     PagedUserResponse:
       description: List Users Response Object
       example:
@@ -8087,6 +8538,7 @@ components:
           totalElements: 33
         content:
         - lastName: Doe
+          companyName: Acme Corp
           roles:
           - payor.admin
           lockedOutTimestamp: 2000-01-23T04:56:07.000+00:00
@@ -8098,10 +8550,12 @@ components:
           mfaType: TOTP
           lockedOut: true
           id: 8bbf301c-948f-4445-b411-357eec53e441
+          userType: PAYOR
           email: foo@example.com
           secondaryContactNumber: "11235555550"
           status: ENABLED
         - lastName: Doe
+          companyName: Acme Corp
           roles:
           - payor.admin
           lockedOutTimestamp: 2000-01-23T04:56:07.000+00:00
@@ -8113,6 +8567,7 @@ components:
           mfaType: TOTP
           lockedOut: true
           id: 8bbf301c-948f-4445-b411-357eec53e441
+          userType: PAYOR
           email: foo@example.com
           secondaryContactNumber: "11235555550"
           status: ENABLED
@@ -8131,6 +8586,7 @@ components:
     UserResponse:
       example:
         lastName: Doe
+        companyName: Acme Corp
         roles:
         - payor.admin
         lockedOutTimestamp: 2000-01-23T04:56:07.000+00:00
@@ -8142,6 +8598,7 @@ components:
         mfaType: TOTP
         lockedOut: true
         id: 8bbf301c-948f-4445-b411-357eec53e441
+        userType: PAYOR
         email: foo@example.com
         secondaryContactNumber: "11235555550"
         status: ENABLED
@@ -8200,6 +8657,13 @@ components:
           example: 7fffa261-ac68-49e6-b605-d24a444d9206
           format: uuid
           type: string
+        companyName:
+          description: |
+            The payor or payee company name or null if the user is not a payor or payee user
+          example: Acme Corp
+          maxLength: 128
+          minLength: 1
+          type: string
         roles:
           description: |
             The role(s) for the user
@@ -8209,6 +8673,14 @@ components:
             $ref: '#/components/schemas/Role'
           minItems: 1
           type: array
+        userType:
+          description: Indicates the type of user. Could be BACKOFFICE, PAYOR or PAYEE.
+          enum:
+          - BACKOFFICE
+          - PAYOR
+          - PAYEE
+          example: PAYOR
+          type: string
         mfaType:
           description: The type of the MFA device
           enum:
@@ -8244,9 +8716,10 @@ components:
         primaryContactNumber: "11235555555"
         mfaType: TOTP
         roles:
-        - payor.admin
+        - velo.payor.admin
         smsNumber: "11235555555"
         entityId: 7fffa261-ac68-49e6-b605-d24a444d9206
+        userType: PAYEE
         email: foo@example.com
         secondaryContactNumber: "11235555550"
         verificationCode: "123456"
@@ -8290,9 +8763,9 @@ components:
             The role(s) for the user
             The role must exist
             The role can be a custom role or a system role but the invoker must have the permissions to assign the role
-            System roles are: backoffice.admin, payor.master_admin, payor.admin, payor.support
+            System roles are: velo.backoffice.admin, velo.payor.master_admin, velo.payor.admin, velo.payor.support, velo.payee.admin, velo.payee.support
           example:
-          - payor.admin
+          - velo.payor.admin
           items:
             type: string
           type: array
@@ -8308,10 +8781,18 @@ components:
           type: string
         entityId:
           description: |
-            The payorId or null if the user is not a payor user
+            The payorId or payeeId or null if the user is a backoffice admin
           example: 7fffa261-ac68-49e6-b605-d24a444d9206
           format: uuid
           nullable: true
+          type: string
+        userType:
+          description: Will default to PAYOR if not provided but entityId is provided
+          enum:
+          - BACKOFFICE
+          - PAYOR
+          - PAYEE
+          example: PAYEE
           type: string
         verificationCode:
           description: |
@@ -8767,6 +9248,19 @@ components:
         payeeGracePeriodProcessingEnabled: true
         supportContact: support@example.com
         payorXid: ABC_201234
+        includesReports: true
+        allowsLanguageChoice: true
+        language: EN
+        provider: provider
+        maxMasterPayorAdmins: 6
+        transmissionTypes:
+          ACH: true
+          SAME_DAY_ACH: true
+          WIRE: true
+        manualLockout: true
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        primaryContactEmail: joe.buck@example.com
+        payorName: Example, Corp
         address:
           country: US
           countyOrProvince: FL
@@ -8776,28 +9270,17 @@ components:
           line2: line2
           line1: 500 Duval St
           zipOrPostcode: "33945"
-        includesReports: true
-        allowsLanguageChoice: true
-        language: EN
+        openBankingEnabled: true
         dbaName: Some Biz
         primaryContactPhone: 123-123-1234
         payeeGracePeriodDays: 0
         reminderEmailsOptOut: true
-        maxMasterPayorAdmins: 6
-        transmissionTypes:
-          ACH: true
-          SAME_DAY_ACH: true
-          WIRE: true
-        manualLockout: true
         collectiveAlias: Payee
-        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         kycState: PASSED_KYC
         wuCustomerId: wuCustomerId
         remoteSystemIds:
         - REMOTE_SYSTEM_ID
         - REMOTE_SYSTEM_ID
-        primaryContactEmail: joe.buck@example.com
-        payorName: Example, Corp
       properties:
         payorId:
           format: uuid
@@ -8811,6 +9294,9 @@ components:
           description: A unique identifier that an external system uses to reference
             the payor in their system
           example: ABC_201234
+          type: string
+        provider:
+          description: The source of the payorXid, default is null which means Velo
           type: string
         address:
           $ref: '#/components/schemas/PayorAddressV2'
@@ -8831,6 +9317,9 @@ components:
           $ref: '#/components/schemas/KycState'
         manualLockout:
           description: Whether or not the payor has been manually locked by the backoffice.
+          type: boolean
+        openBankingEnabled:
+          description: Is Open Banking supported for this payor
           type: boolean
         payeeGracePeriodProcessingEnabled:
           description: Whether grace period processing is enabled.
@@ -8929,7 +9418,10 @@ components:
           nullable: true
           type: string
         roles:
-          description: A list of roles to assign to the key.
+          description: |
+            <p>A list of roles to assign to the key.</p>
+            <p>Only the first role name will be used</p>
+            <p>A later version will change this from a list to string</p>
           example:
           - payor.admin
           items:
@@ -9164,6 +9656,7 @@ components:
         language:
           description: |
             An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
           example: en-US
           type: string
         created:
@@ -9177,7 +9670,7 @@ components:
           example: Bob
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -9254,7 +9747,8 @@ components:
       - REGISTERED
       - ONBOARDED
       type: string
-    PayeeType:
+    PayeeType_2:
+      description: The type of the payee
       enum:
       - Individual
       - Company
@@ -9511,7 +10005,7 @@ components:
     CreatePayeesCSVRequest:
       properties:
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         remoteId:
           example: remoteId123
           maxLength: 100
@@ -10211,58 +10705,42 @@ components:
                 message: payee-disabled
               remoteId: uniqueIdForRemoteEntity
               paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-            cellphoneNumber: "1234567890"
             address:
-              addressCountry: US
-              addressZipOrPostcode: "33945"
-              addressLine1: 500 Duval St
-              addressLine2: addressLine2
-              addressLine3: addressLine3
-              addressLine4: addressLine4
-              addressCountyOrProvince: FL
-              addressCity: Key West
+              country: US
+              countyOrProvince: FL
+              line4: line4
+              city: Key West
+              line3: line3
+              line2: line2
+              line1: 500 Duval St
+              zipOrPostcode: "33945"
             individual:
-              nationalIdentification: AB123456C
-              dateOfBirth: 1985-01-01T00:00:00.000+0000
-            created: 2019-01-20T09:00:00Z
-            marketingOptInTimestamp: 2019-01-20T09:00:00Z
-            enhancedKycCompleted: true
-            termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00Z
-            pausePayment: true
+              name:
+                firstName: Bob
+                lastName: Smith
+                otherNames: H
+                title: Mr
+              nationalIdentification: SA211123K
+              dateOfBirth: 1970-05-20T00:00:00.000+0000
+            challenge:
+              description: challenge description
+              value: challenge test
             language: en-US
-            gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-            queryByExampleObject: true
-            version: 0
-            marketingOptInDecision: true
-            hiddenMarketingOptIns:
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            paymentChannels:
-            - paymentChannelName: paymentChannelName
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: US
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            - paymentChannelName: paymentChannelName
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: US
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            computedName: Cuthbert, Barney
-            name:
-              firstName: Bob
-              lastName: Smith
-              otherNames: H
-              title: Mr
-            disabled: true
-            id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            company:
+              taxId: "123123123"
+              name: ABC Group Plc
+              operatingName: ABC Co
+            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             email: bob@example.com
+            remoteId: Remote ID
+            paymentChannel:
+              paymentChannelName: My Payment Channel
+              routingNumber: XXXXX6789
+              accountName: My account
+              countryCode: US
+              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+              currency: USD
+              accountNumber: XXXXXX5678
           failureMessage: failure reason
         - failedSubmission:
             payorRefs:
@@ -10286,58 +10764,42 @@ components:
                 message: payee-disabled
               remoteId: uniqueIdForRemoteEntity
               paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-            cellphoneNumber: "1234567890"
             address:
-              addressCountry: US
-              addressZipOrPostcode: "33945"
-              addressLine1: 500 Duval St
-              addressLine2: addressLine2
-              addressLine3: addressLine3
-              addressLine4: addressLine4
-              addressCountyOrProvince: FL
-              addressCity: Key West
+              country: US
+              countyOrProvince: FL
+              line4: line4
+              city: Key West
+              line3: line3
+              line2: line2
+              line1: 500 Duval St
+              zipOrPostcode: "33945"
             individual:
-              nationalIdentification: AB123456C
-              dateOfBirth: 1985-01-01T00:00:00.000+0000
-            created: 2019-01-20T09:00:00Z
-            marketingOptInTimestamp: 2019-01-20T09:00:00Z
-            enhancedKycCompleted: true
-            termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00Z
-            pausePayment: true
+              name:
+                firstName: Bob
+                lastName: Smith
+                otherNames: H
+                title: Mr
+              nationalIdentification: SA211123K
+              dateOfBirth: 1970-05-20T00:00:00.000+0000
+            challenge:
+              description: challenge description
+              value: challenge test
             language: en-US
-            gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-            queryByExampleObject: true
-            version: 0
-            marketingOptInDecision: true
-            hiddenMarketingOptIns:
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            paymentChannels:
-            - paymentChannelName: paymentChannelName
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: US
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            - paymentChannelName: paymentChannelName
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: US
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            computedName: Cuthbert, Barney
-            name:
-              firstName: Bob
-              lastName: Smith
-              otherNames: H
-              title: Mr
-            disabled: true
-            id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            company:
+              taxId: "123123123"
+              name: ABC Group Plc
+              operatingName: ABC Co
+            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             email: bob@example.com
+            remoteId: Remote ID
+            paymentChannel:
+              paymentChannelName: My Payment Channel
+              routingNumber: XXXXX6789
+              accountName: My account
+              countryCode: US
+              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+              currency: USD
+              accountNumber: XXXXXX5678
           failureMessage: failure reason
         pendingCount: 2
         failureCount: 2
@@ -10509,6 +10971,7 @@ components:
         language:
           description: |
             An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
           example: en-US
           type: string
         payeeType:
@@ -10588,7 +11051,7 @@ components:
         disabledComment: reason for disabled
         challenge:
           description: challenge description
-          value: challenge test
+          value: "11984567"
       properties:
         payeeId:
           example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
@@ -10607,7 +11070,7 @@ components:
           nullable: true
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus_2'
+          $ref: '#/components/schemas/OnboardedStatus'
         watchlistStatus:
           $ref: '#/components/schemas/WatchlistStatus_2'
         watchlistOverrideExpiresAtTimestamp:
@@ -10635,7 +11098,7 @@ components:
           example: Bob
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -10720,6 +11183,29 @@ components:
           format: email
           nullable: true
           type: string
+        contactSmsNumber:
+          description: |
+            The phone number of a device that the payee wishes to receive sms messages on
+          example: "11235555555"
+          pattern: ^\+[1-9]\d{1,14}$
+          type: string
+      type: object
+    UpdateRemoteIdRequest_2:
+      properties:
+        payorId:
+          example: 9ac75325-5dcd-42d5-b992-175d7e0a035e
+          format: uuid
+          nullable: false
+          type: string
+        remoteId:
+          example: remoteId123
+          maxLength: 100
+          minLength: 1
+          nullable: false
+          type: string
+      required:
+      - payorId
+      - remoteId
       type: object
     OfacStatus:
       enum:
@@ -10862,7 +11348,7 @@ components:
     CreatePayeesCSVRequest_2:
       properties:
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         remoteId:
           example: remoteId123
           maxLength: 100
@@ -11562,58 +12048,42 @@ components:
                 message: payee-disabled
               remoteId: uniqueIdForRemoteEntity
               paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-            cellphoneNumber: "1234567890"
             address:
-              addressCountry: US
-              addressZipOrPostcode: "33945"
-              addressLine1: 500 Duval St
-              addressLine2: addressLine2
-              addressLine3: addressLine3
-              addressLine4: addressLine4
-              addressCountyOrProvince: FL
-              addressCity: Key West
+              country: US
+              countyOrProvince: FL
+              line4: line4
+              city: Key West
+              line3: line3
+              line2: line2
+              line1: 500 Duval St
+              zipOrPostcode: "33945"
             individual:
-              nationalIdentification: AB123456C
-              dateOfBirth: 1985-01-01T00:00:00.000+0000
-            created: 2019-01-20T09:00:00Z
-            marketingOptInTimestamp: 2019-01-20T09:00:00Z
-            enhancedKycCompleted: true
-            termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00Z
-            pausePayment: true
+              name:
+                firstName: Bob
+                lastName: Smith
+                otherNames: H
+                title: Mr
+              nationalIdentification: SA211123K
+              dateOfBirth: 1970-05-20T00:00:00.000+0000
+            challenge:
+              description: challenge description
+              value: "11984567"
             language: en-US
-            gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-            queryByExampleObject: true
-            version: 0
-            marketingOptInDecision: true
-            hiddenMarketingOptIns:
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            paymentChannels:
-            - paymentChannelName: paymentChannelName
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: US
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            - paymentChannelName: paymentChannelName
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: US
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            computedName: Cuthbert, Barney
-            name:
-              firstName: Bob
-              lastName: Smith
-              otherNames: H
-              title: Mr
-            disabled: true
-            id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            company:
+              taxId: "123123123"
+              name: ABC Group Plc
+              operatingName: ABC Co
+            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             email: bob@example.com
+            remoteId: Remote ID
+            paymentChannel:
+              paymentChannelName: My Payment Channel
+              routingNumber: XXXXX6789
+              accountName: My account
+              countryCode: US
+              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+              currency: USD
+              accountNumber: XXXXXX5678
           failureMessage: failure reason
         - failedSubmission:
             payorRefs:
@@ -11637,58 +12107,42 @@ components:
                 message: payee-disabled
               remoteId: uniqueIdForRemoteEntity
               paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-            cellphoneNumber: "1234567890"
             address:
-              addressCountry: US
-              addressZipOrPostcode: "33945"
-              addressLine1: 500 Duval St
-              addressLine2: addressLine2
-              addressLine3: addressLine3
-              addressLine4: addressLine4
-              addressCountyOrProvince: FL
-              addressCity: Key West
+              country: US
+              countyOrProvince: FL
+              line4: line4
+              city: Key West
+              line3: line3
+              line2: line2
+              line1: 500 Duval St
+              zipOrPostcode: "33945"
             individual:
-              nationalIdentification: AB123456C
-              dateOfBirth: 1985-01-01T00:00:00.000+0000
-            created: 2019-01-20T09:00:00Z
-            marketingOptInTimestamp: 2019-01-20T09:00:00Z
-            enhancedKycCompleted: true
-            termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00Z
-            pausePayment: true
+              name:
+                firstName: Bob
+                lastName: Smith
+                otherNames: H
+                title: Mr
+              nationalIdentification: SA211123K
+              dateOfBirth: 1970-05-20T00:00:00.000+0000
+            challenge:
+              description: challenge description
+              value: "11984567"
             language: en-US
-            gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-            queryByExampleObject: true
-            version: 0
-            marketingOptInDecision: true
-            hiddenMarketingOptIns:
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            - optedIn: true
-              timestamp: 2019-01-20T09:00:00Z
-            paymentChannels:
-            - paymentChannelName: paymentChannelName
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: US
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            - paymentChannelName: paymentChannelName
-              routingNumber: XXXXX6789
-              accountName: My account
-              countryCode: US
-              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-              currency: USD
-              accountNumber: XXXXXX5678
-            computedName: Cuthbert, Barney
-            name:
-              firstName: Bob
-              lastName: Smith
-              otherNames: H
-              title: Mr
-            disabled: true
-            id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            company:
+              taxId: "123123123"
+              name: ABC Group Plc
+              operatingName: ABC Co
+            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             email: bob@example.com
+            remoteId: Remote ID
+            paymentChannel:
+              paymentChannelName: My Payment Channel
+              routingNumber: XXXXX6789
+              accountName: My account
+              countryCode: US
+              iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+              currency: USD
+              accountNumber: XXXXXX5678
           failureMessage: failure reason
         pendingCount: 2
         failureCount: 2
@@ -12442,9 +12896,11 @@ components:
         content:
         - physicalAccountName: VELO_FBO_MYBANKA_USD
           country: US
+          userDeleted: true
           type: FBO
-          archived: true
+          deletedAt: 2021-01-27T10:08:25.701Z
           fundingRef: a1b2c3d4
+          deleted: true
           balance: 1203489
           pooled: true
           name: MyAccountName
@@ -12463,9 +12919,11 @@ components:
             minimumBalance: 120000
         - physicalAccountName: VELO_FBO_MYBANKA_USD
           country: US
+          userDeleted: true
           type: FBO
-          archived: true
+          deletedAt: 2021-01-27T10:08:25.701Z
           fundingRef: a1b2c3d4
+          deleted: true
           balance: 1203489
           pooled: true
           name: MyAccountName
@@ -12498,9 +12956,11 @@ components:
       example:
         physicalAccountName: VELO_FBO_MYBANKA_USD
         country: US
+        userDeleted: true
         type: FBO
-        archived: true
+        deletedAt: 2021-01-27T10:08:25.701Z
         fundingRef: a1b2c3d4
+        deleted: true
         balance: 1203489
         pooled: true
         name: MyAccountName
@@ -12579,10 +13039,20 @@ components:
           maxLength: 2
           minLength: 2
           type: string
-        archived:
-          description: A flag for whether the source account has been archived.  Only
-            present in the response if true.
+        deleted:
+          description: An optional flag for whether the source account has been deleted.
+            Only present in the response if true.
           type: boolean
+        userDeleted:
+          description: An optional flag for whether the source account has been deleted
+            by a user. Only present in the response if true.
+          type: boolean
+        deletedAt:
+          description: An optional timestamp when the source account has been deleted.
+            Only present in the response if deleted.
+          example: 2021-01-27T10:08:25.701Z
+          format: date-time
+          type: string
       required:
       - id
       - railsId
@@ -13478,6 +13948,13 @@ components:
             status: UNQUOTED
           payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalPayments: 0
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           submittedDateTime: submittedDateTime
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalIncompletePayments: 6
@@ -13512,6 +13989,13 @@ components:
             status: UNQUOTED
           payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalPayments: 0
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           submittedDateTime: submittedDateTime
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           totalIncompletePayments: 6
@@ -13567,6 +14051,13 @@ components:
           instructed:
             principal: principal
             principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           incompletePayments: 5
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           quotedDateTime: 2000-01-23T04:56:07.000+00:00
@@ -13614,6 +14105,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          autoWithdrawnReasonCode: autoWithdrawnReasonCode
           isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
@@ -13654,6 +14146,13 @@ components:
           remoteId: aasdf123
           routingNumber: "123123123123"
           returnCost: 1232
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           withdrawnReason: withdrawnReason
           iban: DE89 3704 0044 0532 0130 00
           paymentMetadata: sample metadata
@@ -13690,6 +14189,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          autoWithdrawnReasonCode: autoWithdrawnReasonCode
           isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
@@ -13730,6 +14230,13 @@ components:
           remoteId: aasdf123
           routingNumber: "123123123123"
           returnCost: 1232
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           withdrawnReason: withdrawnReason
           iban: DE89 3704 0044 0532 0130 00
           paymentMetadata: sample metadata
@@ -13795,6 +14302,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          autoWithdrawnReasonCode: autoWithdrawnReasonCode
           isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
@@ -13835,6 +14343,13 @@ components:
           remoteId: aasdf123
           routingNumber: "123123123123"
           returnCost: 1232
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           withdrawnReason: withdrawnReason
           iban: DE89 3704 0044 0532 0130 00
           paymentMetadata: sample metadata
@@ -13871,6 +14386,7 @@ components:
           countryCode: US
           returnReason: Some Reason Value
           withdrawable: true
+          autoWithdrawnReasonCode: autoWithdrawnReasonCode
           isPaymentCcyBaseCcy: true
           submittedDateTime: 2000-01-23T04:56:07.000+00:00
           sourceAmount: 12345
@@ -13911,6 +14427,13 @@ components:
           remoteId: aasdf123
           routingNumber: "123123123123"
           returnCost: 1232
+          schedule:
+            scheduledFor: 2000-01-23T04:56:07.000+00:00
+            scheduleStatus: SCHEDULED
+            notificationsEnabled: true
+            scheduledBy: Aphra Behn
+            scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+            scheduledAt: 2000-01-23T04:56:07.000+00:00
           withdrawnReason: withdrawnReason
           iban: DE89 3704 0044 0532 0130 00
           paymentMetadata: sample metadata
@@ -13961,6 +14484,7 @@ components:
         countryCode: US
         returnReason: Some Reason Value
         withdrawable: true
+        autoWithdrawnReasonCode: autoWithdrawnReasonCode
         isPaymentCcyBaseCcy: true
         submittedDateTime: 2000-01-23T04:56:07.000+00:00
         sourceAmount: 12345
@@ -14001,6 +14525,13 @@ components:
         remoteId: aasdf123
         routingNumber: "123123123123"
         returnCost: 1232
+        schedule:
+          scheduledFor: 2000-01-23T04:56:07.000+00:00
+          scheduleStatus: SCHEDULED
+          notificationsEnabled: true
+          scheduledBy: Aphra Behn
+          scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          scheduledAt: 2000-01-23T04:56:07.000+00:00
         withdrawnReason: withdrawnReason
         iban: DE89 3704 0044 0532 0130 00
         paymentMetadata: sample metadata
@@ -14171,6 +14702,10 @@ components:
           type: string
         withdrawable:
           type: boolean
+        autoWithdrawnReasonCode:
+          description: Populated with rejection reason code if the payment was withdrawn
+            automatically at instruct time
+          type: string
         transmissionType:
           description: The transmission type of the payment, e.g. ACH, SAME_DAY_ACH,
             WIRE
@@ -14181,6 +14716,8 @@ components:
           description: Metadata for the payment
           example: sample metadata
           type: string
+        schedule:
+          $ref: '#/components/schemas/PayoutSchedule'
         payout:
           $ref: '#/components/schemas/PaymentResponseV4_payout'
       required:
@@ -14495,6 +15032,12 @@ components:
             Status
           remoteId: remoteIdVal123
           sourceAccountName: Chase
+        schedule:
+          scheduledFor: 2000-01-23T04:56:07.000+00:00
+          scheduleStatus: SCHEDULED
+          notificationsEnabled: true
+          scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          scheduledAt: 2000-01-23T04:56:07.000+00:00
         paymentsRejected: 0
         paymentsSubmitted: 10
         paymentsWithdrawn: 0
@@ -14585,12 +15128,24 @@ components:
           items:
             $ref: '#/components/schemas/RejectedPaymentV3'
           type: array
+        schedule:
+          $ref: '#/components/schemas/PayoutSchedule_2'
       required:
       - acceptedPayments
       - accounts
       - fxSummaries
       - paymentsWithdrawn
       - rejectedPayments
+      type: object
+    InstructPayoutRequest:
+      example:
+        fxRateDegredationThresholdPercentage: 0.8008282
+      properties:
+        fxRateDegredationThresholdPercentage:
+          description: Halt instruction if the FX rates have become worse since the
+            last quote
+          format: float
+          type: number
       type: object
     QuoteResponseV3:
       example:
@@ -14651,6 +15206,7 @@ components:
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           paymentId: paymentId
           withdrawable: false
+          autoWithdrawnReasonCode: VE0003
           paymentMetadata: invoiceeId_123|abc001:12345|xyz002:4567
           currency: USD
           payorPaymentId: paymenIdVal123123
@@ -14671,6 +15227,7 @@ components:
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           paymentId: paymentId
           withdrawable: false
+          autoWithdrawnReasonCode: VE0003
           paymentMetadata: invoiceeId_123|abc001:12345|xyz002:4567
           currency: USD
           payorPaymentId: paymenIdVal123123
@@ -14689,6 +15246,24 @@ components:
           items:
             $ref: '#/components/schemas/PaymentV3'
           type: array
+      type: object
+    SchedulePayoutRequest:
+      example:
+        scheduledFor: 2025-01-01T10:00:00Z
+        notificationsEnabled: true
+      properties:
+        scheduledFor:
+          description: UTC timestamp for instructing the payout. Format is ISO-8601.
+          example: 2025-01-01T10:00:00Z
+          format: date-time
+          type: string
+        notificationsEnabled:
+          description: Flag to indicate whether to receive notifications when scheduled
+            payout is processed
+          type: boolean
+      required:
+      - notificationsEnabled
+      - scheduledFor
       type: object
     PaymentChannelRulesResponse:
       example:
@@ -14801,65 +15376,6 @@ components:
             $ref: '#/components/schemas/SupportedCurrencyV2'
           type: array
       type: object
-    WebhookResponse:
-      example:
-        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        authorizationHeader: authorizationHeader
-        categories:
-        - null
-        - null
-        webhookUrl: webhookUrl
-        enabled: true
-      properties:
-        id:
-          format: uuid
-          type: string
-        payorId:
-          format: uuid
-          type: string
-        webhookUrl:
-          type: string
-        authorizationHeader:
-          type: string
-        enabled:
-          type: boolean
-        categories:
-          items:
-            $ref: '#/components/schemas/Category'
-          type: array
-      type: object
-    UpdateWebhookRequest:
-      example:
-        authorizationHeader: authorizationHeader
-        categories:
-        - null
-        - null
-        webhookUrl: webhookUrl
-        enabled: true
-      properties:
-        webhookUrl:
-          description: the webhook URL to use.
-          maxLength: 2000
-          minLength: 6
-          type: string
-        authorizationHeader:
-          description: the authorization header to include with the notification.
-          maxLength: 1000
-          minLength: 4
-          nullable: true
-          pattern: .*
-          type: string
-        enabled:
-          description: whether the webhook is enabled.
-          type: boolean
-        categories:
-          description: The notification categories to enable.
-          items:
-            $ref: '#/components/schemas/Category'
-          nullable: true
-          type: array
-      type: object
     WebhooksResponse:
       description: List Webhooks Object
       example:
@@ -14939,6 +15455,77 @@ components:
       - enabled
       - payorId
       - webhookUrl
+      type: object
+    WebhookResponse:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        authorizationHeader: authorizationHeader
+        categories:
+        - null
+        - null
+        webhookUrl: webhookUrl
+        enabled: true
+      properties:
+        id:
+          format: uuid
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        webhookUrl:
+          type: string
+        authorizationHeader:
+          type: string
+        enabled:
+          type: boolean
+        categories:
+          items:
+            $ref: '#/components/schemas/Category'
+          type: array
+      type: object
+    UpdateWebhookRequest:
+      example:
+        authorizationHeader: authorizationHeader
+        categories:
+        - null
+        - null
+        webhookUrl: webhookUrl
+        enabled: true
+      properties:
+        webhookUrl:
+          description: the webhook URL to use.
+          maxLength: 2000
+          minLength: 6
+          type: string
+        authorizationHeader:
+          description: the authorization header to include with the notification.
+          maxLength: 1000
+          minLength: 4
+          nullable: true
+          pattern: .*
+          type: string
+        enabled:
+          description: whether the webhook is enabled.
+          type: boolean
+        categories:
+          description: The notification categories to enable.
+          items:
+            $ref: '#/components/schemas/Category'
+          nullable: true
+          type: array
+      type: object
+    PingResponse:
+      example:
+        webhookId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+      properties:
+        id:
+          format: uuid
+          type: string
+        webhookId:
+          format: uuid
+          type: string
       type: object
     LocalisationDetails:
       properties:
@@ -15246,6 +15833,7 @@ components:
     Language:
       description: |
         An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+        See the /v1/supportedLanguages endpoint to list the available codes for an environment.
       example: en-US
       type: string
     PayeeAddress:
@@ -15463,6 +16051,7 @@ components:
         language:
           description: |
             An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
           example: en-US
           type: string
         created:
@@ -15476,7 +16065,7 @@ components:
           example: ABC
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -15574,7 +16163,7 @@ components:
           minLength: 1
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         address:
           $ref: '#/components/schemas/CreatePayeeAddress'
         paymentChannel:
@@ -15584,6 +16173,7 @@ components:
         language:
           description: |
             An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
           example: en-US
           type: string
         company:
@@ -15626,62 +16216,46 @@ components:
               message: payee-disabled
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-          cellphoneNumber: "1234567890"
           address:
-            addressCountry: US
-            addressZipOrPostcode: "33945"
-            addressLine1: 500 Duval St
-            addressLine2: addressLine2
-            addressLine3: addressLine3
-            addressLine4: addressLine4
-            addressCountyOrProvince: FL
-            addressCity: Key West
+            country: US
+            countyOrProvince: FL
+            line4: line4
+            city: Key West
+            line3: line3
+            line2: line2
+            line1: 500 Duval St
+            zipOrPostcode: "33945"
           individual:
-            nationalIdentification: AB123456C
-            dateOfBirth: 1985-01-01T00:00:00.000+0000
-          created: 2019-01-20T09:00:00Z
-          marketingOptInTimestamp: 2019-01-20T09:00:00Z
-          enhancedKycCompleted: true
-          termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00Z
-          pausePayment: true
+            name:
+              firstName: Bob
+              lastName: Smith
+              otherNames: H
+              title: Mr
+            nationalIdentification: SA211123K
+            dateOfBirth: 1970-05-20T00:00:00.000+0000
+          challenge:
+            description: challenge description
+            value: challenge test
           language: en-US
-          gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-          queryByExampleObject: true
-          version: 0
-          marketingOptInDecision: true
-          hiddenMarketingOptIns:
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00Z
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00Z
-          paymentChannels:
-          - paymentChannelName: paymentChannelName
-            routingNumber: XXXXX6789
-            accountName: My account
-            countryCode: US
-            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-            currency: USD
-            accountNumber: XXXXXX5678
-          - paymentChannelName: paymentChannelName
-            routingNumber: XXXXX6789
-            accountName: My account
-            countryCode: US
-            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-            currency: USD
-            accountNumber: XXXXXX5678
-          computedName: Cuthbert, Barney
-          name:
-            firstName: Bob
-            lastName: Smith
-            otherNames: H
-            title: Mr
-          disabled: true
-          id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+          company:
+            taxId: "123123123"
+            name: ABC Group Plc
+            operatingName: ABC Co
+          payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
           email: bob@example.com
+          remoteId: Remote ID
+          paymentChannel:
+            paymentChannelName: My Payment Channel
+            routingNumber: XXXXX6789
+            accountName: My account
+            countryCode: US
+            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+            currency: USD
+            accountNumber: XXXXXX5678
         failureMessage: failure reason
       properties:
         failedSubmission:
-          $ref: '#/components/schemas/Payee'
+          $ref: '#/components/schemas/FailedPayee'
         failureMessage:
           example: failure reason
           type: string
@@ -15748,11 +16322,6 @@ components:
       - payeeId
       - remoteId
       type: object
-    PayeeType_2:
-      enum:
-      - INDIVIDUAL
-      - COMPANY
-      type: string
     PayeePayorRef:
       example:
         payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
@@ -15774,7 +16343,7 @@ components:
           example: uniqueIdForRemoteEntity
           type: string
         invitationStatus:
-          $ref: '#/components/schemas/InvitationStatus_2'
+          $ref: '#/components/schemas/InvitationStatus'
         invitationStatusTimestamp:
           description: The timestamp when the invitation status is updated
           example: 2019-01-20T09:00:00Z
@@ -15929,12 +16498,16 @@ components:
       - name
       type: object
     Challenge_2:
+      description: |
+        <p>Used to override the default challenge presented to the payee when they onboard</p>
+        <p>Not used after the payee has onboarded</p>
       example:
         description: challenge description
-        value: challenge test
+        value: "11984567"
       properties:
         value:
-          example: challenge test
+          description: The value that the user will be asked to verify when they onboard
+          example: "11984567"
           maxLength: 20
           minLength: 3
           type: string
@@ -16008,7 +16581,7 @@ components:
           nullable: true
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus_2'
+          $ref: '#/components/schemas/OnboardedStatus'
         watchlistStatus:
           $ref: '#/components/schemas/WatchlistStatus_2'
         watchlistStatusUpdatedTimestamp:
@@ -16038,7 +16611,7 @@ components:
           example: ABC
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         disabled:
           type: boolean
         disabledComment:
@@ -16078,7 +16651,7 @@ components:
           minLength: 1
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType'
+          $ref: '#/components/schemas/PayeeType_2'
         address:
           $ref: '#/components/schemas/CreatePayeeAddress_2'
         paymentChannel:
@@ -16125,62 +16698,46 @@ components:
               message: payee-disabled
             remoteId: uniqueIdForRemoteEntity
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-          cellphoneNumber: "1234567890"
           address:
-            addressCountry: US
-            addressZipOrPostcode: "33945"
-            addressLine1: 500 Duval St
-            addressLine2: addressLine2
-            addressLine3: addressLine3
-            addressLine4: addressLine4
-            addressCountyOrProvince: FL
-            addressCity: Key West
+            country: US
+            countyOrProvince: FL
+            line4: line4
+            city: Key West
+            line3: line3
+            line2: line2
+            line1: 500 Duval St
+            zipOrPostcode: "33945"
           individual:
-            nationalIdentification: AB123456C
-            dateOfBirth: 1985-01-01T00:00:00.000+0000
-          created: 2019-01-20T09:00:00Z
-          marketingOptInTimestamp: 2019-01-20T09:00:00Z
-          enhancedKycCompleted: true
-          termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00Z
-          pausePayment: true
+            name:
+              firstName: Bob
+              lastName: Smith
+              otherNames: H
+              title: Mr
+            nationalIdentification: SA211123K
+            dateOfBirth: 1970-05-20T00:00:00.000+0000
+          challenge:
+            description: challenge description
+            value: "11984567"
           language: en-US
-          gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-          queryByExampleObject: true
-          version: 0
-          marketingOptInDecision: true
-          hiddenMarketingOptIns:
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00Z
-          - optedIn: true
-            timestamp: 2019-01-20T09:00:00Z
-          paymentChannels:
-          - paymentChannelName: paymentChannelName
-            routingNumber: XXXXX6789
-            accountName: My account
-            countryCode: US
-            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-            currency: USD
-            accountNumber: XXXXXX5678
-          - paymentChannelName: paymentChannelName
-            routingNumber: XXXXX6789
-            accountName: My account
-            countryCode: US
-            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-            currency: USD
-            accountNumber: XXXXXX5678
-          computedName: Cuthbert, Barney
-          name:
-            firstName: Bob
-            lastName: Smith
-            otherNames: H
-            title: Mr
-          disabled: true
-          id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+          company:
+            taxId: "123123123"
+            name: ABC Group Plc
+            operatingName: ABC Co
+          payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
           email: bob@example.com
+          remoteId: Remote ID
+          paymentChannel:
+            paymentChannelName: My Payment Channel
+            routingNumber: XXXXX6789
+            accountName: My account
+            countryCode: US
+            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+            currency: USD
+            accountNumber: XXXXXX5678
         failureMessage: failure reason
       properties:
         failedSubmission:
-          $ref: '#/components/schemas/Payee_2'
+          $ref: '#/components/schemas/FailedPayee_2'
         failureMessage:
           example: failure reason
           type: string
@@ -16688,6 +17245,13 @@ components:
           status: UNQUOTED
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalPayments: 0
+        schedule:
+          scheduledFor: 2000-01-23T04:56:07.000+00:00
+          scheduleStatus: SCHEDULED
+          notificationsEnabled: true
+          scheduledBy: Aphra Behn
+          scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          scheduledAt: 2000-01-23T04:56:07.000+00:00
         submittedDateTime: submittedDateTime
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalIncompletePayments: 6
@@ -16737,6 +17301,8 @@ components:
           $ref: '#/components/schemas/PayoutType'
         payorName:
           type: string
+        schedule:
+          $ref: '#/components/schemas/PayoutSchedule'
       required:
       - payorName
       - payoutType
@@ -16811,6 +17377,43 @@ components:
       required:
       - principal
       - principalId
+      type: object
+    PayoutSchedule:
+      description: Details relating to a payout that was executed via a schedule or
+        is still waiting to be executed
+      example:
+        scheduledFor: 2000-01-23T04:56:07.000+00:00
+        scheduleStatus: SCHEDULED
+        notificationsEnabled: true
+        scheduledBy: Aphra Behn
+        scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+        scheduledAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        scheduleStatus:
+          $ref: '#/components/schemas/ScheduleStatus'
+        scheduledAt:
+          format: date-time
+          type: string
+        scheduledFor:
+          format: date-time
+          type: string
+        scheduledByPrincipalId:
+          description: ID of the user or application that scheduled the payout
+          example: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          type: string
+        notificationsEnabled:
+          type: boolean
+        scheduledBy:
+          description: Optional display name as a hint for who scheduled the payout.
+            Not populated if payout was scheduled by an application.
+          example: Aphra Behn
+          type: string
+      required:
+      - notificationsEnabled
+      - scheduleStatus
+      - scheduledAt
+      - scheduledByPrincipalId
+      - scheduledFor
       type: object
     PaymentAuditCurrency:
       description: ISO 3 character currency code
@@ -17194,6 +17797,37 @@ components:
       - remoteId
       - sourceAccountName
       type: object
+    PayoutSchedule_2:
+      description: Details relating to a payout that was executed via a schedule or
+        is still waiting to be executed
+      example:
+        scheduledFor: 2000-01-23T04:56:07.000+00:00
+        scheduleStatus: SCHEDULED
+        notificationsEnabled: true
+        scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+        scheduledAt: 2000-01-23T04:56:07.000+00:00
+      properties:
+        scheduleStatus:
+          $ref: '#/components/schemas/ScheduleStatus_2'
+        scheduledAt:
+          format: date-time
+          type: string
+        scheduledFor:
+          format: date-time
+          type: string
+        scheduledByPrincipalId:
+          description: ID of the user or application that scheduled the payout
+          example: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          type: string
+        notificationsEnabled:
+          type: boolean
+      required:
+      - notificationsEnabled
+      - scheduleStatus
+      - scheduledAt
+      - scheduledByPrincipalId
+      - scheduledFor
+      type: object
     PaymentV3:
       example:
         amount: 1234
@@ -17209,6 +17843,7 @@ components:
           payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         paymentId: paymentId
         withdrawable: false
+        autoWithdrawnReasonCode: VE0003
         paymentMetadata: invoiceeId_123|abc001:12345|xyz002:4567
         currency: USD
         payorPaymentId: paymenIdVal123123
@@ -17264,6 +17899,11 @@ components:
           type: string
         paymentMetadata:
           example: invoiceeId_123|abc001:12345|xyz002:4567
+          type: string
+        autoWithdrawnReasonCode:
+          description: Populated only if the payment was automatically withdrawn during
+            instruction for being invalid
+          example: VE0003
           type: string
       required:
       - paymentId
@@ -18089,7 +18729,7 @@ components:
       - dateOfBirth
       - name
       type: object
-    Payee:
+    FailedPayee:
       example:
         payorRefs:
         - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
@@ -18112,134 +18752,79 @@ components:
             message: payee-disabled
           remoteId: uniqueIdForRemoteEntity
           paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-        cellphoneNumber: "1234567890"
         address:
-          addressCountry: US
-          addressZipOrPostcode: "33945"
-          addressLine1: 500 Duval St
-          addressLine2: addressLine2
-          addressLine3: addressLine3
-          addressLine4: addressLine4
-          addressCountyOrProvince: FL
-          addressCity: Key West
+          country: US
+          countyOrProvince: FL
+          line4: line4
+          city: Key West
+          line3: line3
+          line2: line2
+          line1: 500 Duval St
+          zipOrPostcode: "33945"
         individual:
-          nationalIdentification: AB123456C
-          dateOfBirth: 1985-01-01T00:00:00.000+0000
-        created: 2019-01-20T09:00:00Z
-        marketingOptInTimestamp: 2019-01-20T09:00:00Z
-        enhancedKycCompleted: true
-        termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00Z
-        pausePayment: true
+          name:
+            firstName: Bob
+            lastName: Smith
+            otherNames: H
+            title: Mr
+          nationalIdentification: SA211123K
+          dateOfBirth: 1970-05-20T00:00:00.000+0000
+        challenge:
+          description: challenge description
+          value: challenge test
         language: en-US
-        gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-        queryByExampleObject: true
-        version: 0
-        marketingOptInDecision: true
-        hiddenMarketingOptIns:
-        - optedIn: true
-          timestamp: 2019-01-20T09:00:00Z
-        - optedIn: true
-          timestamp: 2019-01-20T09:00:00Z
-        paymentChannels:
-        - paymentChannelName: paymentChannelName
-          routingNumber: XXXXX6789
-          accountName: My account
-          countryCode: US
-          iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-          currency: USD
-          accountNumber: XXXXXX5678
-        - paymentChannelName: paymentChannelName
-          routingNumber: XXXXX6789
-          accountName: My account
-          countryCode: US
-          iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-          currency: USD
-          accountNumber: XXXXXX5678
-        computedName: Cuthbert, Barney
-        name:
-          firstName: Bob
-          lastName: Smith
-          otherNames: H
-          title: Mr
-        disabled: true
-        id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+        company:
+          taxId: "123123123"
+          name: ABC Group Plc
+          operatingName: ABC Co
+        payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
         email: bob@example.com
+        remoteId: Remote ID
+        paymentChannel:
+          paymentChannelName: My Payment Channel
+          routingNumber: XXXXX6789
+          accountName: My account
+          countryCode: US
+          iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+          currency: USD
+          accountNumber: XXXXXX5678
       properties:
-        id:
+        payeeId:
           example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
           format: uuid
           readOnly: true
           type: string
-        email:
-          example: bob@example.com
-          format: email
-          nullable: true
-          type: string
-        onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus_2'
-        address:
-          $ref: '#/components/schemas/PayeeResponseAddress'
-        paymentChannels:
-          items:
-            $ref: '#/components/schemas/PayeePaymentChannel'
-          type: array
-        enhancedKycCompleted:
-          type: boolean
-        pausePayment:
-          type: boolean
-        disabled:
-          type: boolean
-        gracePeriodEndDate:
-          example: 2019-01-20
-          format: date
-          nullable: true
-          readOnly: true
-          type: string
-        queryByExampleObject:
-          type: boolean
-        payeeType:
-          $ref: '#/components/schemas/PayeeType'
-        computedName:
-          example: Cuthbert, Barney
-          type: string
-        language:
-          description: |
-            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
-          example: en-US
-          type: string
         payorRefs:
           items:
             $ref: '#/components/schemas/PayeePayorRefV3'
+          nullable: true
+          readOnly: true
           type: array
-        created:
-          example: 2019-01-20T09:00:00Z
-          format: date-time
+        email:
+          example: bob@example.com
+          format: email
           type: string
-        termsAndConditionsAcceptanceTimestamp:
-          example: 2019-01-20T09:00:00Z
-          format: date-time
+        remoteId:
+          example: Remote ID
           type: string
-        hiddenMarketingOptIns:
-          items:
-            $ref: '#/components/schemas/MarketingOptIn'
-          type: array
-        marketingOptInDecision:
-          type: boolean
-        marketingOptInTimestamp:
-          example: 2019-01-20T09:00:00Z
-          format: date-time
+        type:
+          $ref: '#/components/schemas/PayeeType_2'
+        address:
+          $ref: '#/components/schemas/CreatePayeeAddress'
+        paymentChannel:
+          $ref: '#/components/schemas/CreatePaymentChannel'
+        challenge:
+          $ref: '#/components/schemas/Challenge'
+        language:
+          description: |
+            An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
+            See the /v1/supportedLanguages endpoint to list the available codes for an environment.
+          example: en-US
           type: string
-        watchlistStatus:
-          $ref: '#/components/schemas/WatchlistStatus'
-        version:
-          type: integer
-        name:
-          $ref: '#/components/schemas/Name'
+        company:
+          $ref: '#/components/schemas/Company'
         individual:
-          $ref: '#/components/schemas/IndividualDetail'
-        cellphoneNumber:
-          example: "1234567890"
-          type: string
+          $ref: '#/components/schemas/CreateIndividual'
       type: object
     PayableIssue_2:
       description: payable issues for the payee and payor combination
@@ -18286,6 +18871,15 @@ components:
           type: string
       type: object
     CreatePayeeAddress_2:
+      example:
+        country: US
+        countyOrProvince: FL
+        line4: line4
+        city: Key West
+        line3: line3
+        line2: line2
+        line1: 500 Duval St
+        zipOrPostcode: "33945"
       properties:
         line1:
           example: 500 Duval St
@@ -18589,6 +19183,14 @@ components:
       - line1
       type: object
     CreatePaymentChannel_2:
+      example:
+        paymentChannelName: My Payment Channel
+        routingNumber: XXXXX6789
+        accountName: My account
+        countryCode: US
+        iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+        currency: USD
+        accountNumber: XXXXXX5678
       properties:
         paymentChannelName:
           example: My Payment Channel
@@ -18886,6 +19488,14 @@ components:
       - currency
       type: object
     CreateIndividual_2:
+      example:
+        name:
+          firstName: Bob
+          lastName: Smith
+          otherNames: H
+          title: Mr
+        nationalIdentification: SA211123K
+        dateOfBirth: 1970-05-20T00:00:00.000+0000
       properties:
         name:
           $ref: '#/components/schemas/CreateIndividual_name'
@@ -18903,7 +19513,7 @@ components:
       - dateOfBirth
       - name
       type: object
-    Payee_2:
+    FailedPayee_2:
       example:
         payorRefs:
         - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
@@ -18926,135 +19536,79 @@ components:
             message: payee-disabled
           remoteId: uniqueIdForRemoteEntity
           paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-        cellphoneNumber: "1234567890"
         address:
-          addressCountry: US
-          addressZipOrPostcode: "33945"
-          addressLine1: 500 Duval St
-          addressLine2: addressLine2
-          addressLine3: addressLine3
-          addressLine4: addressLine4
-          addressCountyOrProvince: FL
-          addressCity: Key West
+          country: US
+          countyOrProvince: FL
+          line4: line4
+          city: Key West
+          line3: line3
+          line2: line2
+          line1: 500 Duval St
+          zipOrPostcode: "33945"
         individual:
-          nationalIdentification: AB123456C
-          dateOfBirth: 1985-01-01T00:00:00.000+0000
-        created: 2019-01-20T09:00:00Z
-        marketingOptInTimestamp: 2019-01-20T09:00:00Z
-        enhancedKycCompleted: true
-        termsAndConditionsAcceptanceTimestamp: 2019-01-20T09:00:00Z
-        pausePayment: true
+          name:
+            firstName: Bob
+            lastName: Smith
+            otherNames: H
+            title: Mr
+          nationalIdentification: SA211123K
+          dateOfBirth: 1970-05-20T00:00:00.000+0000
+        challenge:
+          description: challenge description
+          value: "11984567"
         language: en-US
-        gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
-        queryByExampleObject: true
-        version: 0
-        marketingOptInDecision: true
-        hiddenMarketingOptIns:
-        - optedIn: true
-          timestamp: 2019-01-20T09:00:00Z
-        - optedIn: true
-          timestamp: 2019-01-20T09:00:00Z
-        paymentChannels:
-        - paymentChannelName: paymentChannelName
-          routingNumber: XXXXX6789
-          accountName: My account
-          countryCode: US
-          iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-          currency: USD
-          accountNumber: XXXXXX5678
-        - paymentChannelName: paymentChannelName
-          routingNumber: XXXXX6789
-          accountName: My account
-          countryCode: US
-          iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-          currency: USD
-          accountNumber: XXXXXX5678
-        computedName: Cuthbert, Barney
-        name:
-          firstName: Bob
-          lastName: Smith
-          otherNames: H
-          title: Mr
-        disabled: true
-        id: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+        company:
+          taxId: "123123123"
+          name: ABC Group Plc
+          operatingName: ABC Co
+        payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
         email: bob@example.com
+        remoteId: Remote ID
+        paymentChannel:
+          paymentChannelName: My Payment Channel
+          routingNumber: XXXXX6789
+          accountName: My account
+          countryCode: US
+          iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+          currency: USD
+          accountNumber: XXXXXX5678
       properties:
-        id:
+        payeeId:
           example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
           format: uuid
           readOnly: true
           type: string
+        payorRefs:
+          items:
+            $ref: '#/components/schemas/PayeePayorRef'
+          nullable: true
+          readOnly: true
+          type: array
         email:
           example: bob@example.com
           format: email
-          nullable: true
           type: string
-        onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatus_2'
+        remoteId:
+          example: Remote ID
+          type: string
+        type:
+          $ref: '#/components/schemas/PayeeType_2'
         address:
-          $ref: '#/components/schemas/PayeeResponseAddress_2'
-        paymentChannels:
-          items:
-            $ref: '#/components/schemas/PayeePaymentChannel_2'
-          type: array
-        enhancedKycCompleted:
-          type: boolean
-        pausePayment:
-          type: boolean
-        disabled:
-          type: boolean
-        gracePeriodEndDate:
-          example: 2019-01-20
-          format: date
-          nullable: true
-          readOnly: true
-          type: string
-        queryByExampleObject:
-          type: boolean
-        payeeType:
-          $ref: '#/components/schemas/PayeeType'
-        computedName:
-          example: Cuthbert, Barney
-          type: string
+          $ref: '#/components/schemas/CreatePayeeAddress_2'
+        paymentChannel:
+          $ref: '#/components/schemas/CreatePaymentChannel_2'
+        challenge:
+          $ref: '#/components/schemas/Challenge_2'
         language:
           description: |
             An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>
             See the /v1/supportedLanguages endpoint to list the available codes for an environment.
           example: en-US
           type: string
-        payorRefs:
-          items:
-            $ref: '#/components/schemas/PayeePayorRef'
-          type: array
-        created:
-          example: 2019-01-20T09:00:00Z
-          format: date-time
-          type: string
-        termsAndConditionsAcceptanceTimestamp:
-          example: 2019-01-20T09:00:00Z
-          format: date-time
-          type: string
-        hiddenMarketingOptIns:
-          items:
-            $ref: '#/components/schemas/MarketingOptIn_2'
-          type: array
-        marketingOptInDecision:
-          type: boolean
-        marketingOptInTimestamp:
-          example: 2019-01-20T09:00:00Z
-          format: date-time
-          type: string
-        watchlistStatus:
-          $ref: '#/components/schemas/WatchlistStatus_2'
-        version:
-          type: integer
-        name:
-          $ref: '#/components/schemas/Name_2'
+        company:
+          $ref: '#/components/schemas/Company_2'
         individual:
-          $ref: '#/components/schemas/IndividualDetail_2'
-        cellphoneNumber:
-          example: "1234567890"
-          type: string
+          $ref: '#/components/schemas/CreateIndividual_2'
       type: object
     FundingEvent:
       example:
@@ -19236,6 +19790,20 @@ components:
       - totalCost
       - totalPaymentAmount
       type: object
+    ScheduleStatus:
+      enum:
+      - SCHEDULED
+      - EXECUTED
+      - FAILED
+      example: SCHEDULED
+      type: string
+    ScheduleStatus_2:
+      enum:
+      - SCHEDULED
+      - EXECUTED
+      - FAILED
+      example: SCHEDULED
+      type: string
     PayoutPayeeV3:
       description: Payee data associated with a payment. Either individual or company
         must be populated
@@ -19352,386 +19920,6 @@ components:
           minLength: 1
           type: string
       type: object
-    PayeeResponseAddress:
-      example:
-        addressCountry: US
-        addressZipOrPostcode: "33945"
-        addressLine1: 500 Duval St
-        addressLine2: addressLine2
-        addressLine3: addressLine3
-        addressLine4: addressLine4
-        addressCountyOrProvince: FL
-        addressCity: Key West
-      properties:
-        addressLine1:
-          example: 500 Duval St
-          maxLength: 100
-          minLength: 2
-          type: string
-        addressLine2:
-          maxLength: 100
-          minLength: 0
-          type: string
-        addressLine3:
-          maxLength: 100
-          minLength: 0
-          type: string
-        addressLine4:
-          maxLength: 100
-          minLength: 0
-          type: string
-        addressCity:
-          example: Key West
-          maxLength: 50
-          minLength: 2
-          type: string
-        addressCountyOrProvince:
-          example: FL
-          maxLength: 50
-          minLength: 1
-          type: string
-        addressZipOrPostcode:
-          example: "33945"
-          maxLength: 60
-          minLength: 1
-          type: string
-        addressCountry:
-          description: Must be a 2 character country code - per ISO 3166-1
-          enum:
-          - AF
-          - AX
-          - AL
-          - DZ
-          - AS
-          - AD
-          - AO
-          - AI
-          - AQ
-          - AG
-          - AR
-          - AM
-          - AW
-          - AU
-          - AT
-          - AZ
-          - BS
-          - BH
-          - BD
-          - BB
-          - BY
-          - BE
-          - BZ
-          - BJ
-          - BM
-          - BT
-          - BO
-          - BQ
-          - BA
-          - BW
-          - BV
-          - BR
-          - IO
-          - BN
-          - BG
-          - BF
-          - BI
-          - KH
-          - CM
-          - CA
-          - CV
-          - KY
-          - CF
-          - TD
-          - CL
-          - CN
-          - CX
-          - CC
-          - CO
-          - KM
-          - CG
-          - CD
-          - CK
-          - CR
-          - CI
-          - HR
-          - CU
-          - CW
-          - CY
-          - CZ
-          - DK
-          - DJ
-          - DM
-          - DO
-          - EC
-          - EG
-          - SV
-          - GQ
-          - ER
-          - EE
-          - ET
-          - FK
-          - FO
-          - FJ
-          - FI
-          - FR
-          - GF
-          - PF
-          - TF
-          - GA
-          - GM
-          - GE
-          - DE
-          - GH
-          - GI
-          - GR
-          - GL
-          - GD
-          - GP
-          - GU
-          - GT
-          - GG
-          - GN
-          - GW
-          - GY
-          - HT
-          - HM
-          - VA
-          - HN
-          - HK
-          - HU
-          - IS
-          - IN
-          - ID
-          - IR
-          - IQ
-          - IE
-          - IM
-          - IL
-          - IT
-          - JM
-          - JP
-          - JE
-          - JO
-          - KZ
-          - KE
-          - KI
-          - KP
-          - KR
-          - KW
-          - KG
-          - LA
-          - LV
-          - LB
-          - LS
-          - LR
-          - LY
-          - LI
-          - LT
-          - LU
-          - MO
-          - MK
-          - MG
-          - MW
-          - MY
-          - MV
-          - ML
-          - MT
-          - MH
-          - MQ
-          - MR
-          - MU
-          - YT
-          - MX
-          - FM
-          - MD
-          - MC
-          - MN
-          - ME
-          - MS
-          - MA
-          - MZ
-          - MM
-          - NA
-          - NR
-          - NP
-          - NL
-          - NC
-          - NZ
-          - NI
-          - NE
-          - NG
-          - NU
-          - NF
-          - MP
-          - NO
-          - OM
-          - PK
-          - PW
-          - PS
-          - PA
-          - PG
-          - PY
-          - PE
-          - PH
-          - PN
-          - PL
-          - PT
-          - PR
-          - QA
-          - RE
-          - RO
-          - RU
-          - RW
-          - BL
-          - SH
-          - KN
-          - LC
-          - MF
-          - PM
-          - VC
-          - WS
-          - SM
-          - ST
-          - SA
-          - SN
-          - RS
-          - SC
-          - SL
-          - SG
-          - SX
-          - SK
-          - SI
-          - SB
-          - SO
-          - ZA
-          - GS
-          - SS
-          - ES
-          - LK
-          - SD
-          - SR
-          - SJ
-          - SZ
-          - SE
-          - CH
-          - SY
-          - TW
-          - TJ
-          - TZ
-          - TH
-          - TL
-          - TG
-          - TK
-          - TO
-          - TT
-          - TN
-          - TR
-          - TM
-          - TC
-          - TV
-          - UG
-          - UA
-          - AE
-          - GB
-          - US
-          - UM
-          - UY
-          - UZ
-          - VU
-          - VE
-          - VN
-          - VG
-          - VI
-          - WF
-          - EH
-          - YE
-          - ZM
-          - ZW
-          example: US
-          maxLength: 2
-          minLength: 2
-          type: string
-      type: object
-    PayeePaymentChannel:
-      example:
-        paymentChannelName: paymentChannelName
-        routingNumber: XXXXX6789
-        accountName: My account
-        countryCode: US
-        iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-        currency: USD
-        accountNumber: XXXXXX5678
-      properties:
-        paymentChannelName:
-          type: string
-        iban:
-          description: Must match the regular expression ```^[A-Za-z0-9]+$```.
-          example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-          maxLength: 34
-          minLength: 15
-          pattern: ^[A-Za-z0-9]+$
-          type: string
-        accountNumber:
-          example: XXXXXX5678
-          maxLength: 17
-          minLength: 6
-          type: string
-        routingNumber:
-          example: XXXXX6789
-          maxLength: 9
-          minLength: 9
-          type: string
-        countryCode:
-          description: Country Code must be a valid 2 letter ISO 3166-1 country code
-          example: US
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]{2}$
-          type: string
-        currency:
-          enum:
-          - USD
-          - GBP
-          - EUR
-          type: string
-        accountName:
-          example: My account
-          type: string
-      required:
-      - accountName
-      - accountNumber
-      - countryCode
-      - currency
-      - routingNumber
-      type: object
-    MarketingOptIn:
-      example:
-        optedIn: true
-        timestamp: 2019-01-20T09:00:00Z
-      properties:
-        optedIn:
-          type: boolean
-        timestamp:
-          example: 2019-01-20T09:00:00Z
-          format: date-time
-          type: string
-      type: object
-    IndividualDetail:
-      example:
-        nationalIdentification: AB123456C
-        dateOfBirth: 1985-01-01T00:00:00.000+0000
-      properties:
-        nationalIdentification:
-          example: AB123456C
-          maxLength: 30
-          minLength: 6
-          type: string
-        dateOfBirth:
-          description: Must not be date in future. Example - 1970-05-20
-          example: 1985-01-01
-          format: date
-          type: string
-      type: object
     Name_2:
       example:
         firstName: Bob
@@ -19758,386 +19946,6 @@ components:
           example: Smith
           maxLength: 40
           minLength: 1
-          type: string
-      type: object
-    PayeeResponseAddress_2:
-      example:
-        addressCountry: US
-        addressZipOrPostcode: "33945"
-        addressLine1: 500 Duval St
-        addressLine2: addressLine2
-        addressLine3: addressLine3
-        addressLine4: addressLine4
-        addressCountyOrProvince: FL
-        addressCity: Key West
-      properties:
-        addressLine1:
-          example: 500 Duval St
-          maxLength: 100
-          minLength: 2
-          type: string
-        addressLine2:
-          maxLength: 100
-          minLength: 0
-          type: string
-        addressLine3:
-          maxLength: 100
-          minLength: 0
-          type: string
-        addressLine4:
-          maxLength: 100
-          minLength: 0
-          type: string
-        addressCity:
-          example: Key West
-          maxLength: 50
-          minLength: 2
-          type: string
-        addressCountyOrProvince:
-          example: FL
-          maxLength: 50
-          minLength: 1
-          type: string
-        addressZipOrPostcode:
-          example: "33945"
-          maxLength: 60
-          minLength: 1
-          type: string
-        addressCountry:
-          description: Must be a 2 character country code - per ISO 3166-1
-          enum:
-          - AF
-          - AX
-          - AL
-          - DZ
-          - AS
-          - AD
-          - AO
-          - AI
-          - AQ
-          - AG
-          - AR
-          - AM
-          - AW
-          - AU
-          - AT
-          - AZ
-          - BS
-          - BH
-          - BD
-          - BB
-          - BY
-          - BE
-          - BZ
-          - BJ
-          - BM
-          - BT
-          - BO
-          - BQ
-          - BA
-          - BW
-          - BV
-          - BR
-          - IO
-          - BN
-          - BG
-          - BF
-          - BI
-          - KH
-          - CM
-          - CA
-          - CV
-          - KY
-          - CF
-          - TD
-          - CL
-          - CN
-          - CX
-          - CC
-          - CO
-          - KM
-          - CG
-          - CD
-          - CK
-          - CR
-          - CI
-          - HR
-          - CU
-          - CW
-          - CY
-          - CZ
-          - DK
-          - DJ
-          - DM
-          - DO
-          - EC
-          - EG
-          - SV
-          - GQ
-          - ER
-          - EE
-          - ET
-          - FK
-          - FO
-          - FJ
-          - FI
-          - FR
-          - GF
-          - PF
-          - TF
-          - GA
-          - GM
-          - GE
-          - DE
-          - GH
-          - GI
-          - GR
-          - GL
-          - GD
-          - GP
-          - GU
-          - GT
-          - GG
-          - GN
-          - GW
-          - GY
-          - HT
-          - HM
-          - VA
-          - HN
-          - HK
-          - HU
-          - IS
-          - IN
-          - ID
-          - IR
-          - IQ
-          - IE
-          - IM
-          - IL
-          - IT
-          - JM
-          - JP
-          - JE
-          - JO
-          - KZ
-          - KE
-          - KI
-          - KP
-          - KR
-          - KW
-          - KG
-          - LA
-          - LV
-          - LB
-          - LS
-          - LR
-          - LY
-          - LI
-          - LT
-          - LU
-          - MO
-          - MK
-          - MG
-          - MW
-          - MY
-          - MV
-          - ML
-          - MT
-          - MH
-          - MQ
-          - MR
-          - MU
-          - YT
-          - MX
-          - FM
-          - MD
-          - MC
-          - MN
-          - ME
-          - MS
-          - MA
-          - MZ
-          - MM
-          - NA
-          - NR
-          - NP
-          - NL
-          - NC
-          - NZ
-          - NI
-          - NE
-          - NG
-          - NU
-          - NF
-          - MP
-          - NO
-          - OM
-          - PK
-          - PW
-          - PS
-          - PA
-          - PG
-          - PY
-          - PE
-          - PH
-          - PN
-          - PL
-          - PT
-          - PR
-          - QA
-          - RE
-          - RO
-          - RU
-          - RW
-          - BL
-          - SH
-          - KN
-          - LC
-          - MF
-          - PM
-          - VC
-          - WS
-          - SM
-          - ST
-          - SA
-          - SN
-          - RS
-          - SC
-          - SL
-          - SG
-          - SX
-          - SK
-          - SI
-          - SB
-          - SO
-          - ZA
-          - GS
-          - SS
-          - ES
-          - LK
-          - SD
-          - SR
-          - SJ
-          - SZ
-          - SE
-          - CH
-          - SY
-          - TW
-          - TJ
-          - TZ
-          - TH
-          - TL
-          - TG
-          - TK
-          - TO
-          - TT
-          - TN
-          - TR
-          - TM
-          - TC
-          - TV
-          - UG
-          - UA
-          - AE
-          - GB
-          - US
-          - UM
-          - UY
-          - UZ
-          - VU
-          - VE
-          - VN
-          - VG
-          - VI
-          - WF
-          - EH
-          - YE
-          - ZM
-          - ZW
-          example: US
-          maxLength: 2
-          minLength: 2
-          type: string
-      type: object
-    PayeePaymentChannel_2:
-      example:
-        paymentChannelName: paymentChannelName
-        routingNumber: XXXXX6789
-        accountName: My account
-        countryCode: US
-        iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-        currency: USD
-        accountNumber: XXXXXX5678
-      properties:
-        paymentChannelName:
-          type: string
-        iban:
-          description: Must match the regular expression ```^[A-Za-z0-9]+$```.
-          example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
-          maxLength: 34
-          minLength: 15
-          pattern: ^[A-Za-z0-9]+$
-          type: string
-        accountNumber:
-          example: XXXXXX5678
-          maxLength: 17
-          minLength: 6
-          type: string
-        routingNumber:
-          example: XXXXX6789
-          maxLength: 9
-          minLength: 9
-          type: string
-        countryCode:
-          description: Country Code must be a valid 2 letter ISO 3166-1 country code
-          example: US
-          maxLength: 2
-          minLength: 2
-          pattern: ^[A-Z]{2}$
-          type: string
-        currency:
-          enum:
-          - USD
-          - GBP
-          - EUR
-          type: string
-        accountName:
-          example: My account
-          type: string
-      required:
-      - accountName
-      - accountNumber
-      - countryCode
-      - currency
-      - routingNumber
-      type: object
-    MarketingOptIn_2:
-      example:
-        optedIn: true
-        timestamp: 2019-01-20T09:00:00Z
-      properties:
-        optedIn:
-          type: boolean
-        timestamp:
-          example: 2019-01-20T09:00:00Z
-          format: date-time
-          type: string
-      type: object
-    IndividualDetail_2:
-      example:
-        nationalIdentification: AB123456C
-        dateOfBirth: 1985-01-01T00:00:00.000+0000
-      properties:
-        nationalIdentification:
-          example: AB123456C
-          maxLength: 30
-          minLength: 6
-          type: string
-        dateOfBirth:
-          description: Must not be date in future. Example - 1970-05-20
-          example: 1985-01-01
-          format: date
           type: string
       type: object
     FundingEventType:
@@ -20312,6 +20120,87 @@ components:
             response header and is included for extra clarity
           example: 412
           type: integer
+    PaymentEvent_allOf:
+      properties:
+        paymentId:
+          description: ID of this payment within the Velo platform
+          example: cbd9280f-8fde-4190-b014-979d88f3ec54
+          format: uuid
+          type: string
+        payoutPayorIds:
+          $ref: '#/components/schemas/PayoutPayorIds'
+        payorPaymentId:
+          description: ID of this payment in the payors system
+          example: ourpayment-id12345
+          type: string
+      required:
+      - paymentId
+    PaymentStatusChanged_allOf:
+      properties:
+        status:
+          description: The new status of the payment. One of "SUBMITTED" "ACCEPTED"
+            "REJECTED" "ACCEPTED_BY_RAILS" "CONFIRMED" "RETURNED" "WITHDRAWN"
+          example: ACCEPTED
+          type: string
+      required:
+      - status
+    PaymentRejectedOrReturned_allOf:
+      properties:
+        reasonCode:
+          description: The Velo code that indicates why the payment was rejected or
+            returned
+          example: VE0001
+          type: string
+        reasonMessage:
+          description: The description of why the payment was rejected or returned
+          example: VE0001
+          type: string
+      required:
+      - reasonCode
+      - reasonMessage
+    PayeeEvent_allOf_reasons:
+      properties:
+        code:
+          example: "00001"
+          type: string
+        message:
+          example: payment channel disabled
+          type: string
+      required:
+      - code
+      - message
+    PayeeEvent_allOf:
+      properties:
+        payeeId:
+          description: ID of this payee within the Velo platform
+          example: cbd9280f-8fde-4190-b014-979d88f3ec54
+          format: uuid
+          type: string
+        reasons:
+          description: The reasons for the event notification.
+          items:
+            $ref: '#/components/schemas/PayeeEvent_allOf_reasons'
+          type: array
+      required:
+      - payeeId
+    DebitEvent_allOf:
+      properties:
+        debitTransactionId:
+          description: ID of this debit transaction within the Velo platform
+          example: cbd9280f-8fde-4190-b014-979d88f3ec54
+          format: uuid
+          type: string
+      required:
+      - debitTransactionId
+    DebitStatusChanged_allOf:
+      properties:
+        status:
+          description: The new status of the debit. One of "PENDING" "PROCESSING"
+            "REJECTED" "RELEASED"
+          example: PENDING
+          type: string
+      required:
+      - status
     PagedUserResponse_page:
       example:
         numberOfElements: 12
@@ -20770,6 +20659,13 @@ components:
         instructed:
           principal: principal
           principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        schedule:
+          scheduledFor: 2000-01-23T04:56:07.000+00:00
+          scheduleStatus: SCHEDULED
+          notificationsEnabled: true
+          scheduledBy: Aphra Behn
+          scheduledByPrincipalId: 8946953b-1e3b-49cf-9da4-b704cbb78f3e
+          scheduledAt: 2000-01-23T04:56:07.000+00:00
         incompletePayments: 5
         submittedDateTime: 2000-01-23T04:56:07.000+00:00
         quotedDateTime: 2000-01-23T04:56:07.000+00:00
@@ -20830,6 +20726,8 @@ components:
           $ref: '#/components/schemas/PayoutPrincipal'
         withdrawn:
           $ref: '#/components/schemas/PayoutPrincipal'
+        schedule:
+          $ref: '#/components/schemas/PayoutSchedule'
     PaymentResponseV4_payout:
       example:
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -20965,3 +20863,22 @@ x-tagGroups:
 - name: Legal
   tags:
   - Legal
+x-webhooks:
+  veloWebhookNotification:
+    post:
+      summary: Webhook notifications
+      description: The webhook notifications that are sent to the payor's configured
+        webhook endpoint URL
+      tags:
+      - Webhooks
+      operationId: veloWebhook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      responses:
+        200:
+          description: A successful response indicates that the notification has been
+            received by the customers system. Any other http status will result in
+            the notification being retried.
