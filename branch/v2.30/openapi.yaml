@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.30.8
+  version: 2.30.9
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -9182,6 +9182,7 @@ components:
         manualLockout: true
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         primaryContactEmail: joe.buck@example.com
+        usdTxnValueReportingThreshold: 1000000
         payorName: 'Example, Corp'
         address:
           country: US
@@ -9292,6 +9293,10 @@ components:
             example: REMOTE_SYSTEM_ID
             type: string
           type: array
+        usdTxnValueReportingThreshold:
+          description: USD in minor units
+          example: 1000000
+          type: integer
       required:
         - payorId
         - payorName
