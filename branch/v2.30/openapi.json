@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.30.34",
+    "version": "2.30.35",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -12593,6 +12593,7 @@
           "supportContact": "support@example.com",
           "payorXid": "ABC_201234",
           "includesReports": true,
+          "managingPayees": true,
           "allowsLanguageChoice": true,
           "language": "EN",
           "provider": "provider",
@@ -12750,6 +12751,9 @@
             "description": "USD in minor units",
             "example": 1000000,
             "type": "integer"
+          },
+          "managingPayees": {
+            "type": "boolean"
           }
         },
         "required": [
