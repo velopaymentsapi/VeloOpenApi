@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.31.25
+  version: 2.31.26
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -8280,7 +8280,7 @@ components:
       description: Base type for all debit status changed events
     AuthResponse:
       example:
-        access_token: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        access_token: IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk
         refresh_token: IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk
         scope: example_scope
         token_type: bearer
@@ -8290,7 +8290,7 @@ components:
           - entityIds
       properties:
         access_token:
-          format: uuid
+          example: IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk
           type: string
         token_type:
           example: bearer
