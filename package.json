@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "swagger-repo": "^2.0.0-rc.15",
-    "minimist": ">=1.2.2"
+    "minimist": ">=1.2.6"
   },
   "private": true,
   "scripts": {
