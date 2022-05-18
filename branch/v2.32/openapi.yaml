@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.32.11
+  version: 2.32.12
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -7412,7 +7412,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/InstructPayoutRequest'
+              $ref: '#/components/schemas/InstructPayoutRequestV3'
         description: Additional instruct payout parameters
         required: false
       responses:
@@ -7678,7 +7678,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SchedulePayoutRequest'
+              $ref: '#/components/schemas/SchedulePayoutRequestV3'
         description: schedule payout parameters
       responses:
         '204':
@@ -9096,7 +9096,10 @@ components:
           example: Example Corp BOA
           type: string
         kycState:
-          $ref: '#/components/schemas/KycState'
+          description: 'The kyc state of the payor. One of the following values: FAILED_KYC, PASSED_KYC, REQUIRES_KYC'
+          example: PASSED_KYC
+          readOnly: true
+          type: string
         manualLockout:
           description: Whether or not the payor has been manually locked by the backoffice.
           type: boolean
@@ -9129,9 +9132,6 @@ components:
           type: boolean
         language:
           description: 'The payor’s language preference. Must be one of [EN, FR].'
-          enum:
-            - EN
-            - FR
           example: EN
           type: string
         includesReports:
@@ -9179,6 +9179,7 @@ components:
           SAME_DAY_ACH: true
           WIRE: true
         manualLockout: true
+        paymentRails: paymentRails
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         primaryContactEmail: joe.buck@example.com
         usdTxnValueReportingThreshold: 1000000
@@ -9235,7 +9236,10 @@ components:
           format: email
           type: string
         kycState:
-          $ref: '#/components/schemas/KycState'
+          description: 'The kyc state of the payor. One of the following values: FAILED_KYC, PASSED_KYC, REQUIRES_KYC'
+          example: PASSED_KYC
+          readOnly: true
+          type: string
         manualLockout:
           description: Whether or not the payor has been manually locked by the backoffice.
           type: boolean
@@ -9270,10 +9274,7 @@ components:
           readOnly: true
           type: boolean
         language:
-          description: 'The payor’s language preference. Must be one of [EN, FR].'
-          enum:
-            - EN
-            - FR
+          description: 'The payor’s language preference. Must be one of [EN, FR]'
           example: EN
           type: string
         includesReports:
@@ -9283,7 +9284,8 @@ components:
         maxMasterPayorAdmins:
           type: integer
         paymentRails:
-          $ref: '#/components/schemas/PaymentRails'
+          description: The id of the payment rails
+          type: string
         transmissionTypes:
           $ref: '#/components/schemas/TransmissionTypes_2'
         remoteSystemIds:
@@ -9326,7 +9328,7 @@ components:
     PayorCreateApiKeyRequest:
       example:
         roles:
-          - payor.admin
+          - velo.payor.admin
         name: iOS Key
         description: Key for iOS mobile application
       properties:
@@ -9349,12 +9351,12 @@ components:
             <p>Only the first role name will be used</p>
             <p>A later version will change this from a list to string</p>
           example:
-            - payor.admin
+            - velo.payor.admin
           items:
             description: Name of role
             enum:
-              - payor.admin
-              - payor.support
+              - velo.payor.admin
+              - velo.payor.support
             type: string
           maxItems: 10
           minItems: 1
@@ -9435,22 +9437,22 @@ components:
       example:
         payors:
           - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            kycState: FAILED_KYC
+            kycState: kycState
             primaryContactEmail: primaryContactEmail
             payorName: payorName
           - payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            kycState: FAILED_KYC
+            kycState: kycState
             primaryContactEmail: primaryContactEmail
             payorName: payorName
         links:
           - toPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             linkId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             fromPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            linkType: PARENT_OF
+            linkType: linkType
           - toPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             linkId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             fromPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            linkType: PARENT_OF
+            linkType: linkType
       properties:
         links:
           items:
@@ -9488,6 +9490,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -9498,6 +9501,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -9508,7 +9512,9 @@ components:
         watchlistOverrideComment: watchlist override comment
         country: US
         cellphoneNumber: '1234567890'
+        watchlistStatus: watchlistStatus
         displayName: Bob
+        payeeType: payeeType
         kycCompletedTimestamp: 2019-01-20T09:00:00.000Z
         marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
         language: en-US
@@ -9545,6 +9551,7 @@ components:
         pausePayment: true
         gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
         marketingOptInDecision: true
+        onboardedStatus: onboardedStatus
         watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
         disabledComment: reason for disabled
         challenge:
@@ -9568,9 +9575,11 @@ components:
           nullable: true
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatusV3'
+          description: 'Onboarded status. One of the following values: CREATED, INVITED, REGISTERED, ONBOARDED'
+          type: string
         watchlistStatus:
-          $ref: '#/components/schemas/WatchlistStatusV3'
+          description: 'Current watchlist status. One of the following values: NONE, PENDING, REVIEW, PASSED, FAILED'
+          type: string
         watchlistOverrideExpiresAtTimestamp:
           example: 2019-01-20T09:00:00.000Z
           format: date-time
@@ -9601,7 +9610,8 @@ components:
           example: Bob
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType_2'
+          description: 'Type of Payee. One of the following values: Individual, Company'
+          type: string
         disabled:
           type: boolean
         disabledComment:
@@ -9664,25 +9674,13 @@ components:
           $ref: '#/components/schemas/ChallengeV3'
       type: object
     WatchlistStatusV3:
-      enum:
-        - NONE
-        - PENDING
-        - REVIEW
-        - PASSED
-        - FAILED
+      description: 'Current watchlist status. One of the following values: NONE, PENDING, REVIEW, PASSED, FAILED'
       type: string
     OnboardedStatusV4:
-      enum:
-        - CREATED
-        - INVITED
-        - REGISTERED
-        - ONBOARDED
+      description: 'Payee onboarded status. One of the following values: CREATED, INVITED, REGISTERED, ONBOARDED'
       type: string
     PayeeType_2:
-      description: The type of the payee
-      enum:
-        - Individual
-        - Company
+      description: 'Type of Payee. One of the following values: Individual, Company'
       type: string
     PagedPayeeResponseV3:
       description: List Payees Response Object
@@ -9709,6 +9707,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -9719,6 +9718,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -9728,6 +9728,7 @@ components:
                 paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
             watchlistOverrideComment: Example reason for the watchlist status being overridden
             country: US
+            watchlistStatus: watchlistStatus
             disabledUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             individual:
               name:
@@ -9737,7 +9738,9 @@ components:
                 title: Mr
             created: 2019-01-20T09:00:00.000Z
             displayName: ABC
+            payeeType: payeeType
             language: en-US
+            onboardedStatus: onboardedStatus
             watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             disabledComment: reason for disabled
             disabled: true
@@ -9750,6 +9753,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -9760,6 +9764,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -9769,6 +9774,7 @@ components:
                 paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
             watchlistOverrideComment: Example reason for the watchlist status being overridden
             country: US
+            watchlistStatus: watchlistStatus
             disabledUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             individual:
               name:
@@ -9778,7 +9784,9 @@ components:
                 title: Mr
             created: 2019-01-20T09:00:00.000Z
             displayName: ABC
+            payeeType: payeeType
             language: en-US
+            onboardedStatus: onboardedStatus
             watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             disabledComment: reason for disabled
             disabled: true
@@ -9808,6 +9816,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -9818,6 +9827,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -9851,6 +9861,7 @@ components:
               name: ABC Group Plc
               operatingName: ABC Co
             payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            type: type
             email: bob@example.com
             remoteId: Remote ID
             paymentChannel:
@@ -9865,6 +9876,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -9875,6 +9887,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -9908,6 +9921,7 @@ components:
               name: ABC Group Plc
               operatingName: ABC Co
             payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            type: type
             email: bob@example.com
             remoteId: Remote ID
             paymentChannel:
@@ -9934,7 +9948,7 @@ components:
     CreatePayeesCSVRequestV3:
       properties:
         type:
-          $ref: '#/components/schemas/PayeeType_2'
+          $ref: '#/components/schemas/PayeeTypeEnum'
         remoteId:
           example: remoteId123
           maxLength: 100
@@ -10062,10 +10076,9 @@ components:
           title: ISO 3166 2 Character Country Code
           type: string
         paymentChannelCurrency:
-          enum:
-            - USD
-            - GBP
-            - EUR
+          example: USD
+          maxLength: 3
+          minLength: 3
           type: string
         challengeDescription:
           example: challenge description
@@ -10120,6 +10133,7 @@ components:
                 - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                   invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                   payableStatus: true
+                  invitationStatus: invitationStatus
                   payableIssues:
                     - code: '3'
                       message: payee-disabled
@@ -10130,6 +10144,7 @@ components:
                 - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                   invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                   payableStatus: true
+                  invitationStatus: invitationStatus
                   payableIssues:
                     - code: '3'
                       message: payee-disabled
@@ -10163,6 +10178,7 @@ components:
                 name: ABC Group Plc
                 operatingName: ABC Co
               payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+              type: type
               email: bob@example.com
               remoteId: Remote ID
               paymentChannel:
@@ -10179,6 +10195,7 @@ components:
                 - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                   invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                   payableStatus: true
+                  invitationStatus: invitationStatus
                   payableIssues:
                     - code: '3'
                       message: payee-disabled
@@ -10189,6 +10206,7 @@ components:
                 - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                   invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                   payableStatus: true
+                  invitationStatus: invitationStatus
                   payableIssues:
                     - code: '3'
                       message: payee-disabled
@@ -10222,6 +10240,7 @@ components:
                 name: ABC Group Plc
                 operatingName: ABC Co
               payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+              type: type
               email: bob@example.com
               remoteId: Remote ID
               paymentChannel:
@@ -10235,13 +10254,10 @@ components:
             failureMessage: failure reason
         pendingCount: 2
         failureCount: 2
-        status: SUBMITTED
+        status: status
       properties:
         status:
-          description: Batch Status
-          enum:
-            - SUBMITTED
-            - ACCEPTED
+          description: 'Batch Status. One of the following values: SUBMITTED, ACCEPTED'
           type: string
         failureCount:
           example: 2
@@ -10268,10 +10284,6 @@ components:
         - payorId
       type: object
     InvitationStatusV4:
-      enum:
-        - ACCEPTED
-        - PENDING
-        - DECLINED
       type: string
     PagedPayeeInvitationStatusResponseV3:
       description: List Payees Invitation Status Object
@@ -10290,10 +10302,10 @@ components:
         content:
           - payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-            invitationStatus: ACCEPTED
+            invitationStatus: invitationStatus
           - payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-            invitationStatus: ACCEPTED
+            invitationStatus: invitationStatus
       properties:
         page:
           $ref: '#/components/schemas/PagedPayeeInvitationStatusResponseV3_page'
@@ -10323,12 +10335,14 @@ components:
         content:
           - payeeCountry: US
             displayName: Payee1
+            onboardedStatus: onboardedStatus
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             dbaName: Payee DBA Name
             email: payee1@example.com
             remoteId: payee_1
           - payeeCountry: US
             displayName: Payee1
+            onboardedStatus: onboardedStatus
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             dbaName: Payee DBA Name
             email: payee1@example.com
@@ -10407,7 +10421,7 @@ components:
           example: en-US
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType_2'
+          $ref: '#/components/schemas/PayeeTypeEnum'
         challenge:
           $ref: '#/components/schemas/ChallengeV3'
         email:
@@ -10422,6 +10436,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -10432,6 +10447,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -10442,7 +10458,9 @@ components:
         watchlistOverrideComment: watchlist override comment
         country: US
         cellphoneNumber: '1234567890'
+        watchlistStatus: watchlistStatus
         displayName: Bob
+        payeeType: payeeType
         kycCompletedTimestamp: 2019-01-20T09:00:00.000Z
         marketingOptInTimestamp: 2019-01-20T09:00:00.000Z
         language: en-US
@@ -10479,6 +10497,7 @@ components:
         pausePayment: true
         gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
         marketingOptInDecision: true
+        onboardedStatus: onboardedStatus
         watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
         disabledComment: reason for disabled
         challenge:
@@ -10502,9 +10521,11 @@ components:
           nullable: true
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatusV4'
+          description: 'Payee onboarded status. One of the following values: CREATED, INVITED, REGISTERED, ONBOARDED'
+          type: string
         watchlistStatus:
-          $ref: '#/components/schemas/WatchlistStatusV4'
+          description: 'Current watchlist status. One of the following values: NONE, PENDING, REVIEW, PASSED, FAILED'
+          type: string
         watchlistOverrideExpiresAtTimestamp:
           example: 2019-01-20T09:00:00.000Z
           format: date-time
@@ -10530,7 +10551,8 @@ components:
           example: Bob
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType_2'
+          description: 'Type of Payee. One of the following values: Individual, Company'
+          type: string
         disabled:
           type: boolean
         disabledComment:
@@ -10635,7 +10657,7 @@ components:
           example: en-US
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType_2'
+          $ref: '#/components/schemas/PayeeTypeEnum'
         challenge:
           $ref: '#/components/schemas/ChallengeV4'
         email:
@@ -10671,10 +10693,7 @@ components:
         - remoteId
       type: object
     OfacStatusV4:
-      enum:
-        - PENDING
-        - PASSED
-        - FAILED
+      description: 'OFAC status. One of the following values: PENDING, PASSED, FAILED'
       type: string
     PagedPayeeResponseV4:
       description: List Payees Response Object
@@ -10701,6 +10720,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -10711,6 +10731,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -10720,6 +10741,7 @@ components:
                 paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
             watchlistOverrideComment: Example reason for the watchlist status being overridden
             country: US
+            watchlistStatus: watchlistStatus
             disabledUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             individual:
               name:
@@ -10729,7 +10751,9 @@ components:
                 title: Mr
             created: 2019-01-20T09:00:00.000Z
             displayName: ABC
+            payeeType: payeeType
             language: en-US
+            onboardedStatus: onboardedStatus
             watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             disabledComment: reason for disabled
             disabled: true
@@ -10742,6 +10766,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -10752,6 +10777,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -10761,6 +10787,7 @@ components:
                 paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
             watchlistOverrideComment: Example reason for the watchlist status being overridden
             country: US
+            watchlistStatus: watchlistStatus
             disabledUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             individual:
               name:
@@ -10770,7 +10797,9 @@ components:
                 title: Mr
             created: 2019-01-20T09:00:00.000Z
             displayName: ABC
+            payeeType: payeeType
             language: en-US
+            onboardedStatus: onboardedStatus
             watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             disabledComment: reason for disabled
             disabled: true
@@ -10800,6 +10829,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -10810,6 +10840,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -10857,6 +10888,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -10867,6 +10899,7 @@ components:
               - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                 invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                 payableStatus: true
+                invitationStatus: invitationStatus
                 payableIssues:
                   - code: '3'
                     message: payee-disabled
@@ -10926,7 +10959,7 @@ components:
     CreatePayeesCSVRequestV4:
       properties:
         type:
-          $ref: '#/components/schemas/PayeeType_2'
+          $ref: '#/components/schemas/PayeeTypeEnum'
         remoteId:
           example: remoteId123
           maxLength: 100
@@ -11054,10 +11087,9 @@ components:
           title: ISO 3166 2 Character Country Code
           type: string
         paymentChannelCurrency:
-          enum:
-            - USD
-            - GBP
-            - EUR
+          example: USD
+          maxLength: 3
+          minLength: 3
           type: string
         challengeDescription:
           example: challenge description
@@ -11112,6 +11144,7 @@ components:
                 - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                   invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                   payableStatus: true
+                  invitationStatus: invitationStatus
                   payableIssues:
                     - code: '3'
                       message: payee-disabled
@@ -11122,6 +11155,7 @@ components:
                 - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                   invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                   payableStatus: true
+                  invitationStatus: invitationStatus
                   payableIssues:
                     - code: '3'
                       message: payee-disabled
@@ -11155,6 +11189,7 @@ components:
                 name: ABC Group Plc
                 operatingName: ABC Co
               payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+              type: type
               email: bob@example.com
               remoteId: Remote ID
               paymentChannel:
@@ -11171,6 +11206,7 @@ components:
                 - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                   invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                   payableStatus: true
+                  invitationStatus: invitationStatus
                   payableIssues:
                     - code: '3'
                       message: payee-disabled
@@ -11181,6 +11217,7 @@ components:
                 - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
                   invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
                   payableStatus: true
+                  invitationStatus: invitationStatus
                   payableIssues:
                     - code: '3'
                       message: payee-disabled
@@ -11214,6 +11251,7 @@ components:
                 name: ABC Group Plc
                 operatingName: ABC Co
               payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+              type: type
               email: bob@example.com
               remoteId: Remote ID
               paymentChannel:
@@ -11227,13 +11265,10 @@ components:
             failureMessage: failure reason
         pendingCount: 2
         failureCount: 2
-        status: SUBMITTED
+        status: status
       properties:
         status:
-          description: Batch Status
-          enum:
-            - SUBMITTED
-            - ACCEPTED
+          description: 'Batch Status. One of the following values: SUBMITTED, ACCEPTED'
           type: string
         failureCount:
           example: 2
@@ -11276,10 +11311,10 @@ components:
         content:
           - payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-            invitationStatus: ACCEPTED
+            invitationStatus: invitationStatus
           - payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-            invitationStatus: ACCEPTED
+            invitationStatus: invitationStatus
       properties:
         page:
           $ref: '#/components/schemas/PagedPayeeInvitationStatusResponseV3_page'
@@ -11309,12 +11344,14 @@ components:
         content:
           - payeeCountry: US
             displayName: Payee1
+            onboardedStatus: onboardedStatus
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             dbaName: Payee DBA Name
             email: payee1@example.com
             remoteId: payee_1
           - payeeCountry: US
             displayName: Payee1
+            onboardedStatus: onboardedStatus
             payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             dbaName: Payee DBA Name
             email: payee1@example.com
@@ -11590,8 +11627,6 @@ components:
           format: int64
           type: integer
         currency:
-          enum:
-            - USD
           example: USD
           maxLength: 3
           minLength: 3
@@ -11780,10 +11815,7 @@ components:
           type: string
       type: object
     FundingAccountTypeV2:
-      description: Funding account type
-      enum:
-        - FBO
-        - WUBS_DECOUPLED
+      description: 'Funding account type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE'
       example: FBO
       type: string
     ListFundingAccountsResponseV2:
@@ -11847,6 +11879,7 @@ components:
           enum:
             - FBO
             - WUBS_DECOUPLED
+            - PRIVATE
           type: string
         name:
           maxLength: 30
@@ -11932,7 +11965,9 @@ components:
           minLength: 2
           type: string
         type:
-          $ref: '#/components/schemas/FundingAccountTypeV2'
+          description: 'Funding account type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE'
+          example: FBO
+          type: string
         archived:
           description: A flag for whether the funding account has been archived.  Only present in the response if true.
           type: boolean
@@ -11957,10 +11992,7 @@ components:
         - fundingAccountId
       type: object
     SourceAccountTypeV3:
-      enum:
-        - FBO
-        - PRIVATE
-        - WUBS_DECOUPLED
+      description: 'Type of source account. One of the following values: FBO,PRIVATE,WUBS_DECOUPLED'
       type: string
     ListSourceAccountResponseV3:
       description: List Source Accounts Response Object
@@ -12221,32 +12253,36 @@ components:
           - dateTime: 2000-01-23T04:56:07.000Z
             fundingAccountName: fundingAccountName
             amount: 120000
-            fundingType: ACH
+            fundingType: fundingType
             currency: USD
-            topupType: AUTOMATIC
+            topupType: topupType
             events:
               - principal: principal
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
+                fundingEventType: fundingEventType
               - principal: principal
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
-            status: PENDING
+                fundingEventType: fundingEventType
+            status: status
             sourceAccountName: sourceAccountName
           - dateTime: 2000-01-23T04:56:07.000Z
             fundingAccountName: fundingAccountName
             amount: 120000
-            fundingType: ACH
+            fundingType: fundingType
             currency: USD
-            topupType: AUTOMATIC
+            topupType: topupType
             events:
               - principal: principal
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
+                fundingEventType: fundingEventType
               - principal: principal
                 eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
-            status: PENDING
+                fundingEventType: fundingEventType
+            status: status
             sourceAccountName: sourceAccountName
       properties:
         page:
@@ -12333,8 +12369,10 @@ components:
         content:
           - sourceAccountSummary:
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                currency: currency
                 totalCost: 3434
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                currency: currency
                 totalCost: 3434
             submittedDateTime: submittedDateTime
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -12342,30 +12380,37 @@ components:
             fxSummaries:
               - invertedRate: 1.12
                 rate: 1.12
+                sourceCurrency: sourceCurrency
                 totalPaymentAmount: 1234
+                paymentCurrency: paymentCurrency
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 1234
-                fundingStatus: FUNDED
+                fundingStatus: fundingStatus
                 creationDateTime: 2000-01-23T04:56:07.000Z
-                status: UNQUOTED
+                status: status
               - invertedRate: 1.12
                 rate: 1.12
+                sourceCurrency: sourceCurrency
                 totalPaymentAmount: 1234
+                paymentCurrency: paymentCurrency
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 1234
-                fundingStatus: FUNDED
+                fundingStatus: fundingStatus
                 creationDateTime: 2000-01-23T04:56:07.000Z
-                status: UNQUOTED
+                status: status
             payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             withdrawnDateTime: withdrawnDateTime
             totalPayments: 123
             instructedDateTime: instructedDateTime
             totalFailedPayments: 123
+            status: status
             payoutMemo: payoutMemo
           - sourceAccountSummary:
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                currency: currency
                 totalCost: 3434
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                currency: currency
                 totalCost: 3434
             submittedDateTime: submittedDateTime
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -12373,25 +12418,30 @@ components:
             fxSummaries:
               - invertedRate: 1.12
                 rate: 1.12
+                sourceCurrency: sourceCurrency
                 totalPaymentAmount: 1234
+                paymentCurrency: paymentCurrency
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 1234
-                fundingStatus: FUNDED
+                fundingStatus: fundingStatus
                 creationDateTime: 2000-01-23T04:56:07.000Z
-                status: UNQUOTED
+                status: status
               - invertedRate: 1.12
                 rate: 1.12
+                sourceCurrency: sourceCurrency
                 totalPaymentAmount: 1234
+                paymentCurrency: paymentCurrency
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 1234
-                fundingStatus: FUNDED
+                fundingStatus: fundingStatus
                 creationDateTime: 2000-01-23T04:56:07.000Z
-                status: UNQUOTED
+                status: status
             payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             withdrawnDateTime: withdrawnDateTime
             totalPayments: 123
             instructedDateTime: instructedDateTime
             totalFailedPayments: 123
+            status: status
             payoutMemo: payoutMemo
       properties:
         page:
@@ -12413,7 +12463,7 @@ components:
           confirmedPayments: 123
           releasedPayments: 123
           submittedDateTime: 2000-01-23T04:56:07.000Z
-          payoutStatus: ACCEPTED
+          payoutStatus: payoutStatus
           withdrawnDateTime: 2000-01-23T04:56:07.000Z
           totalPayments: 123
           instructedDateTime: 2000-01-23T04:56:07.000Z
@@ -12433,9 +12483,10 @@ components:
         content:
           - traceNumber: abodu123
             accountName: My Account Name
+            sourceCurrency: sourceCurrency
             paymentMemo: Payment memo
             paymentAmount: 0
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             railsBatchId: railsBatchId
             paymentChannelName: My Payment Channel
             filenameReference: file ref
@@ -12455,8 +12506,10 @@ components:
                 routingNumber: '123123123'
                 accountName: My account
                 iban: DE89 3704 0044 0532 0130 00
+                sourceCurrency: sourceCurrency
                 sourceAmount: 1299
-                eventType: PAYOUT_SUBMITTED
+                eventType: eventType
+                paymentCurrency: paymentCurrency
                 accountNumber: '123123123'
                 paymentAmount: 1299
               - principal: Prinicple example
@@ -12465,8 +12518,10 @@ components:
                 routingNumber: '123123123'
                 accountName: My account
                 iban: DE89 3704 0044 0532 0130 00
+                sourceCurrency: sourceCurrency
                 sourceAmount: 1299
-                eventType: PAYOUT_SUBMITTED
+                eventType: eventType
+                paymentCurrency: paymentCurrency
                 accountNumber: '123123123'
                 paymentAmount: 1299
             payorName: payorName
@@ -12483,13 +12538,15 @@ components:
             returnCost: 1232
             iban: DE89 3704 0044 0532 0130 00
             payorPaymentId: 123123asdf
+            paymentCurrency: paymentCurrency
             rejectionReason: rejectionReason
-            status: ACCEPTED
+            status: status
           - traceNumber: abodu123
             accountName: My Account Name
+            sourceCurrency: sourceCurrency
             paymentMemo: Payment memo
             paymentAmount: 0
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             railsBatchId: railsBatchId
             paymentChannelName: My Payment Channel
             filenameReference: file ref
@@ -12509,8 +12566,10 @@ components:
                 routingNumber: '123123123'
                 accountName: My account
                 iban: DE89 3704 0044 0532 0130 00
+                sourceCurrency: sourceCurrency
                 sourceAmount: 1299
-                eventType: PAYOUT_SUBMITTED
+                eventType: eventType
+                paymentCurrency: paymentCurrency
                 accountNumber: '123123123'
                 paymentAmount: 1299
               - principal: Prinicple example
@@ -12519,8 +12578,10 @@ components:
                 routingNumber: '123123123'
                 accountName: My account
                 iban: DE89 3704 0044 0532 0130 00
+                sourceCurrency: sourceCurrency
                 sourceAmount: 1299
-                eventType: PAYOUT_SUBMITTED
+                eventType: eventType
+                paymentCurrency: paymentCurrency
                 accountNumber: '123123123'
                 paymentAmount: 1299
             payorName: payorName
@@ -12537,8 +12598,9 @@ components:
             returnCost: 1232
             iban: DE89 3704 0044 0532 0130 00
             payorPaymentId: 123123asdf
+            paymentCurrency: paymentCurrency
             rejectionReason: rejectionReason
-            status: ACCEPTED
+            status: status
       properties:
         summary:
           $ref: '#/components/schemas/GetPaymentsForPayoutResponseV3_summary'
@@ -12570,9 +12632,10 @@ components:
         content:
           - traceNumber: abodu123
             accountName: My Account Name
+            sourceCurrency: sourceCurrency
             paymentMemo: Payment memo
             paymentAmount: 0
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             railsBatchId: railsBatchId
             paymentChannelName: My Payment Channel
             filenameReference: file ref
@@ -12592,8 +12655,10 @@ components:
                 routingNumber: '123123123'
                 accountName: My account
                 iban: DE89 3704 0044 0532 0130 00
+                sourceCurrency: sourceCurrency
                 sourceAmount: 1299
-                eventType: PAYOUT_SUBMITTED
+                eventType: eventType
+                paymentCurrency: paymentCurrency
                 accountNumber: '123123123'
                 paymentAmount: 1299
               - principal: Prinicple example
@@ -12602,8 +12667,10 @@ components:
                 routingNumber: '123123123'
                 accountName: My account
                 iban: DE89 3704 0044 0532 0130 00
+                sourceCurrency: sourceCurrency
                 sourceAmount: 1299
-                eventType: PAYOUT_SUBMITTED
+                eventType: eventType
+                paymentCurrency: paymentCurrency
                 accountNumber: '123123123'
                 paymentAmount: 1299
             payorName: payorName
@@ -12620,13 +12687,15 @@ components:
             returnCost: 1232
             iban: DE89 3704 0044 0532 0130 00
             payorPaymentId: 123123asdf
+            paymentCurrency: paymentCurrency
             rejectionReason: rejectionReason
-            status: ACCEPTED
+            status: status
           - traceNumber: abodu123
             accountName: My Account Name
+            sourceCurrency: sourceCurrency
             paymentMemo: Payment memo
             paymentAmount: 0
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             railsBatchId: railsBatchId
             paymentChannelName: My Payment Channel
             filenameReference: file ref
@@ -12646,8 +12715,10 @@ components:
                 routingNumber: '123123123'
                 accountName: My account
                 iban: DE89 3704 0044 0532 0130 00
+                sourceCurrency: sourceCurrency
                 sourceAmount: 1299
-                eventType: PAYOUT_SUBMITTED
+                eventType: eventType
+                paymentCurrency: paymentCurrency
                 accountNumber: '123123123'
                 paymentAmount: 1299
               - principal: Prinicple example
@@ -12656,8 +12727,10 @@ components:
                 routingNumber: '123123123'
                 accountName: My account
                 iban: DE89 3704 0044 0532 0130 00
+                sourceCurrency: sourceCurrency
                 sourceAmount: 1299
-                eventType: PAYOUT_SUBMITTED
+                eventType: eventType
+                paymentCurrency: paymentCurrency
                 accountNumber: '123123123'
                 paymentAmount: 1299
             payorName: payorName
@@ -12674,8 +12747,9 @@ components:
             returnCost: 1232
             iban: DE89 3704 0044 0532 0130 00
             payorPaymentId: 123123asdf
+            paymentCurrency: paymentCurrency
             rejectionReason: rejectionReason
-            status: ACCEPTED
+            status: status
       properties:
         page:
           $ref: '#/components/schemas/ListPaymentsResponseV3_page'
@@ -12692,9 +12766,10 @@ components:
       example:
         traceNumber: abodu123
         accountName: My Account Name
+        sourceCurrency: sourceCurrency
         paymentMemo: Payment memo
         paymentAmount: 0
-        fundingStatus: FUNDED
+        fundingStatus: fundingStatus
         railsBatchId: railsBatchId
         paymentChannelName: My Payment Channel
         filenameReference: file ref
@@ -12714,8 +12789,10 @@ components:
             routingNumber: '123123123'
             accountName: My account
             iban: DE89 3704 0044 0532 0130 00
+            sourceCurrency: sourceCurrency
             sourceAmount: 1299
-            eventType: PAYOUT_SUBMITTED
+            eventType: eventType
+            paymentCurrency: paymentCurrency
             accountNumber: '123123123'
             paymentAmount: 1299
           - principal: Prinicple example
@@ -12724,8 +12801,10 @@ components:
             routingNumber: '123123123'
             accountName: My account
             iban: DE89 3704 0044 0532 0130 00
+            sourceCurrency: sourceCurrency
             sourceAmount: 1299
-            eventType: PAYOUT_SUBMITTED
+            eventType: eventType
+            paymentCurrency: paymentCurrency
             accountNumber: '123123123'
             paymentAmount: 1299
         payorName: payorName
@@ -12742,8 +12821,9 @@ components:
         returnCost: 1232
         iban: DE89 3704 0044 0532 0130 00
         payorPaymentId: 123123asdf
+        paymentCurrency: paymentCurrency
         rejectionReason: rejectionReason
-        status: ACCEPTED
+        status: status
       properties:
         paymentId:
           description: The id of the payment
@@ -12781,12 +12861,18 @@ components:
           example: 12345
           type: integer
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         paymentAmount:
           description: The amount which the payee will receive
           type: integer
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         rate:
           description: 'The FX rate for the payment, if FX was involved. **Note** that (depending on the role of the caller) this information may not be displayed'
           format: float
@@ -12799,24 +12885,10 @@ components:
           format: date-time
           type: string
         status:
-          enum:
-            - ACCEPTED
-            - AWAITING_FUNDS
-            - FUNDED
-            - UNFUNDED
-            - BANK_PAYMENT_REQUESTED
-            - REJECTED
-            - ACCEPTED_BY_RAILS
-            - CONFIRMED
-            - FAILED
-            - WITHDRAWN
+          description: 'Current status of the payment. One of the following values: ACCEPTED, AWAITING_FUNDS, FUNDED, UNFUNDED, BANK_PAYMENT_REQUESTED, REJECTED, ACCEPTED_BY_RAILS, CONFIRMED, FAILED, WITHDRAWN'
           type: string
         fundingStatus:
-          description: The funding status of the payment
-          enum:
-            - FUNDED
-            - INSTRUCTED
-            - UNFUNDED
+          description: 'The funding status of the payment. One of the following values: [FUNDED, INSTRUCTED, UNFUNDED'
           type: string
         routingNumber:
           description: The routing number for the payment.
@@ -13004,27 +13076,34 @@ components:
           - dateTime: 2000-01-23T04:56:07.000Z
             sourceAccountSummary:
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                currency: currency
                 totalCost: 3344
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                currency: currency
                 totalCost: 3344
+            payoutType: payoutType
             totalReturnedPayments: 1
             fxSummaries:
               - invertedRate: 123.23
                 rate: 123.23
+                sourceCurrency: sourceCurrency
                 totalPaymentAmount: 34235
+                paymentCurrency: paymentCurrency
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 5
-                fundingStatus: FUNDED
+                fundingStatus: fundingStatus
                 creationDateTime: 2000-01-23T04:56:07.000Z
-                status: UNQUOTED
+                status: status
               - invertedRate: 123.23
                 rate: 123.23
+                sourceCurrency: sourceCurrency
                 totalPaymentAmount: 34235
+                paymentCurrency: paymentCurrency
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 5
-                fundingStatus: FUNDED
+                fundingStatus: fundingStatus
                 creationDateTime: 2000-01-23T04:56:07.000Z
-                status: UNQUOTED
+                status: status
             payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             totalPayments: 0
             schedule:
@@ -13040,32 +13119,40 @@ components:
             withdrawnDateTime: 2000-01-23T04:56:07.000Z
             totalWithdrawnPayments: 5
             instructedDateTime: instructedDateTime
+            status: status
             payoutMemo: payoutMemo
             payorName: payorName
           - dateTime: 2000-01-23T04:56:07.000Z
             sourceAccountSummary:
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                currency: currency
                 totalCost: 3344
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+                currency: currency
                 totalCost: 3344
+            payoutType: payoutType
             totalReturnedPayments: 1
             fxSummaries:
               - invertedRate: 123.23
                 rate: 123.23
+                sourceCurrency: sourceCurrency
                 totalPaymentAmount: 34235
+                paymentCurrency: paymentCurrency
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 5
-                fundingStatus: FUNDED
+                fundingStatus: fundingStatus
                 creationDateTime: 2000-01-23T04:56:07.000Z
-                status: UNQUOTED
+                status: status
               - invertedRate: 123.23
                 rate: 123.23
+                sourceCurrency: sourceCurrency
                 totalPaymentAmount: 34235
+                paymentCurrency: paymentCurrency
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 5
-                fundingStatus: FUNDED
+                fundingStatus: fundingStatus
                 creationDateTime: 2000-01-23T04:56:07.000Z
-                status: UNQUOTED
+                status: status
             payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             totalPayments: 0
             schedule:
@@ -13081,6 +13168,7 @@ components:
             withdrawnDateTime: 2000-01-23T04:56:07.000Z
             totalWithdrawnPayments: 5
             instructedDateTime: instructedDateTime
+            status: status
             payoutMemo: payoutMemo
             payorName: payorName
       properties:
@@ -13106,11 +13194,13 @@ components:
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             dbaName: dbaName
             payorName: payorName
+          payoutType: payoutType
           confirmedPayments: 6
           releasedPayments: 1
           withdrawn:
             principal: principal
             principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          payoutStatus: payoutStatus
           totalPayments: 0
           payoutFrom:
             principal: principal
@@ -13173,9 +13263,10 @@ components:
                 payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 dbaName: dbaName
                 payorName: payorName
+            sourceCurrency: sourceCurrency
             paymentMemo: Payment memo
             paymentAmount: 7
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             railsBatchId: railsBatchId
             paymentChannelName: My Payment Channel
             filenameReference: file ref
@@ -13196,7 +13287,8 @@ components:
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                eventType: PAYOUT_SUBMITTED
+                sourceCurrency: sourceCurrency
+                eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
                 principal: principal
@@ -13205,11 +13297,13 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
+                paymentCurrency: paymentCurrency
                 scheduledAt: 2000-01-23T04:56:07.000Z
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                eventType: PAYOUT_SUBMITTED
+                sourceCurrency: sourceCurrency
+                eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
                 principal: principal
@@ -13218,6 +13312,7 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
+                paymentCurrency: paymentCurrency
                 scheduledAt: 2000-01-23T04:56:07.000Z
             payorName: payorName
             sourceAccountName: My Account
@@ -13244,9 +13339,10 @@ components:
             paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
             remoteSystemId: REMOTE_SYSTEM_ID
+            paymentCurrency: paymentCurrency
             rejectionReason: rejectionReason
             paymentTrackingReference: paymentTrackingReference
-            status: ACCEPTED
+            status: status
           - traceNumber: abodu123
             accountName: My Account Name
             remoteSystemPaymentId: remoteSystemPaymentId
@@ -13264,9 +13360,10 @@ components:
                 payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 dbaName: dbaName
                 payorName: payorName
+            sourceCurrency: sourceCurrency
             paymentMemo: Payment memo
             paymentAmount: 7
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             railsBatchId: railsBatchId
             paymentChannelName: My Payment Channel
             filenameReference: file ref
@@ -13287,7 +13384,8 @@ components:
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                eventType: PAYOUT_SUBMITTED
+                sourceCurrency: sourceCurrency
+                eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
                 principal: principal
@@ -13296,11 +13394,13 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
+                paymentCurrency: paymentCurrency
                 scheduledAt: 2000-01-23T04:56:07.000Z
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                eventType: PAYOUT_SUBMITTED
+                sourceCurrency: sourceCurrency
+                eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
                 principal: principal
@@ -13309,6 +13409,7 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
+                paymentCurrency: paymentCurrency
                 scheduledAt: 2000-01-23T04:56:07.000Z
             payorName: payorName
             sourceAccountName: My Account
@@ -13335,9 +13436,10 @@ components:
             paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
             remoteSystemId: REMOTE_SYSTEM_ID
+            paymentCurrency: paymentCurrency
             rejectionReason: rejectionReason
             paymentTrackingReference: paymentTrackingReference
-            status: ACCEPTED
+            status: status
       properties:
         summary:
           $ref: '#/components/schemas/GetPaymentsForPayoutResponseV4_summary'
@@ -13384,9 +13486,10 @@ components:
                 payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 dbaName: dbaName
                 payorName: payorName
+            sourceCurrency: sourceCurrency
             paymentMemo: Payment memo
             paymentAmount: 7
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             railsBatchId: railsBatchId
             paymentChannelName: My Payment Channel
             filenameReference: file ref
@@ -13407,7 +13510,8 @@ components:
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                eventType: PAYOUT_SUBMITTED
+                sourceCurrency: sourceCurrency
+                eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
                 principal: principal
@@ -13416,11 +13520,13 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
+                paymentCurrency: paymentCurrency
                 scheduledAt: 2000-01-23T04:56:07.000Z
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                eventType: PAYOUT_SUBMITTED
+                sourceCurrency: sourceCurrency
+                eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
                 principal: principal
@@ -13429,6 +13535,7 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
+                paymentCurrency: paymentCurrency
                 scheduledAt: 2000-01-23T04:56:07.000Z
             payorName: payorName
             sourceAccountName: My Account
@@ -13455,9 +13562,10 @@ components:
             paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
             remoteSystemId: REMOTE_SYSTEM_ID
+            paymentCurrency: paymentCurrency
             rejectionReason: rejectionReason
             paymentTrackingReference: paymentTrackingReference
-            status: ACCEPTED
+            status: status
           - traceNumber: abodu123
             accountName: My Account Name
             remoteSystemPaymentId: remoteSystemPaymentId
@@ -13475,9 +13583,10 @@ components:
                 payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 dbaName: dbaName
                 payorName: payorName
+            sourceCurrency: sourceCurrency
             paymentMemo: Payment memo
             paymentAmount: 7
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             railsBatchId: railsBatchId
             paymentChannelName: My Payment Channel
             filenameReference: file ref
@@ -13498,7 +13607,8 @@ components:
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                eventType: PAYOUT_SUBMITTED
+                sourceCurrency: sourceCurrency
+                eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
                 principal: principal
@@ -13507,11 +13617,13 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
+                paymentCurrency: paymentCurrency
                 scheduledAt: 2000-01-23T04:56:07.000Z
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                eventType: PAYOUT_SUBMITTED
+                sourceCurrency: sourceCurrency
+                eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
                 principal: principal
@@ -13520,6 +13632,7 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
+                paymentCurrency: paymentCurrency
                 scheduledAt: 2000-01-23T04:56:07.000Z
             payorName: payorName
             sourceAccountName: My Account
@@ -13546,9 +13659,10 @@ components:
             paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
             remoteSystemId: REMOTE_SYSTEM_ID
+            paymentCurrency: paymentCurrency
             rejectionReason: rejectionReason
             paymentTrackingReference: paymentTrackingReference
-            status: ACCEPTED
+            status: status
       properties:
         page:
           $ref: '#/components/schemas/ListPaymentsResponseV3_page'
@@ -13580,9 +13694,10 @@ components:
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             dbaName: dbaName
             payorName: payorName
+        sourceCurrency: sourceCurrency
         paymentMemo: Payment memo
         paymentAmount: 7
-        fundingStatus: FUNDED
+        fundingStatus: fundingStatus
         railsBatchId: railsBatchId
         paymentChannelName: My Payment Channel
         filenameReference: file ref
@@ -13603,7 +13718,8 @@ components:
           - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000Z
             accountName: accountName
-            eventType: PAYOUT_SUBMITTED
+            sourceCurrency: sourceCurrency
+            eventType: eventType
             accountNumber: accountNumber
             paymentAmount: 1299
             principal: principal
@@ -13612,11 +13728,13 @@ components:
             scheduledFor: 2000-01-23T04:56:07.000Z
             sourceAmount: 1299
             scheduledBy: Aphra Behn
+            paymentCurrency: paymentCurrency
             scheduledAt: 2000-01-23T04:56:07.000Z
           - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000Z
             accountName: accountName
-            eventType: PAYOUT_SUBMITTED
+            sourceCurrency: sourceCurrency
+            eventType: eventType
             accountNumber: accountNumber
             paymentAmount: 1299
             principal: principal
@@ -13625,6 +13743,7 @@ components:
             scheduledFor: 2000-01-23T04:56:07.000Z
             sourceAmount: 1299
             scheduledBy: Aphra Behn
+            paymentCurrency: paymentCurrency
             scheduledAt: 2000-01-23T04:56:07.000Z
         payorName: payorName
         sourceAccountName: My Account
@@ -13651,9 +13770,10 @@ components:
         paymentMetadata: sample metadata
         payorPaymentId: 123123asdf
         remoteSystemId: REMOTE_SYSTEM_ID
+        paymentCurrency: paymentCurrency
         rejectionReason: rejectionReason
         paymentTrackingReference: paymentTrackingReference
-        status: ACCEPTED
+        status: status
       properties:
         paymentId:
           description: The id of the payment
@@ -13698,12 +13818,18 @@ components:
           example: 12345
           type: integer
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         paymentAmount:
           description: The amount which the payee will receive
           type: integer
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         rate:
           description: 'The FX rate for the payment, if FX was involved. **Note** that (depending on the role of the caller) this information may not be displayed'
           format: double
@@ -13718,24 +13844,10 @@ components:
           format: date-time
           type: string
         status:
-          enum:
-            - ACCEPTED
-            - AWAITING_FUNDS
-            - FUNDED
-            - UNFUNDED
-            - BANK_PAYMENT_REQUESTED
-            - REJECTED
-            - ACCEPTED_BY_RAILS
-            - CONFIRMED
-            - RETURNED
-            - WITHDRAWN
+          description: 'Current status of the payment. One of the following values: ACCEPTED, AWAITING_FUNDS, FUNDED, UNFUNDED, BANK_PAYMENT_REQUESTED, REJECTED, ACCEPTED_BY_RAILS, CONFIRMED, RETURNED, WITHDRAWN'
           type: string
         fundingStatus:
-          description: The funding status of the payment
-          enum:
-            - FUNDED
-            - INSTRUCTED
-            - UNFUNDED
+          description: 'Current funding status of the payment. One of the following values: FUNDED, INSTRUCTED, UNFUNDED'
           type: string
         routingNumber:
           description: The routing number for the payment.
@@ -14089,7 +14201,15 @@ components:
           minLength: 0
           type: string
         transmissionType:
-          $ref: '#/components/schemas/TransmissionType'
+          description: Optionally choose a specific transmission method for the payment
+          enum:
+            - SAME_DAY_ACH
+            - WIRE
+            - ACH
+            - LOCAL
+            - SWIFT
+          example: ACH
+          type: string
         remoteSystemId:
           description: |
             <p>The identifier for the remote payments system if not Velo</p>
@@ -14183,6 +14303,7 @@ components:
             amount: 1234
             paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             payorPaymentId: paymenIdVal123123
+            railsId: WU
             paymentMemo: Payment memo
             remoteSystemId: Remote_System_Id_101234
             remoteId: remoteIdVal123
@@ -14191,6 +14312,7 @@ components:
             amount: 1234
             paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             payorPaymentId: paymenIdVal123123
+            railsId: WU
             paymentMemo: Payment memo
             remoteSystemId: Remote_System_Id_101234
             remoteId: remoteIdVal123
@@ -14233,7 +14355,7 @@ components:
             $ref: '#/components/schemas/RejectedPaymentV3'
           type: array
         schedule:
-          $ref: '#/components/schemas/PayoutSchedule_2'
+          $ref: '#/components/schemas/PayoutScheduleV3'
       required:
         - acceptedPayments
         - accounts
@@ -14241,7 +14363,7 @@ components:
         - paymentsWithdrawn
         - rejectedPayments
       type: object
-    InstructPayoutRequest:
+    InstructPayoutRequestV3:
       example:
         fxRateDegredationThresholdPercentage: 0.8008282
       properties:
@@ -14313,10 +14435,11 @@ components:
             paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             currency: USD
             payorPaymentId: paymenIdVal123123
-            transmissionType: ACH
+            transmissionType: transmissionType
+            railsId: WU
             remoteSystemId: Remote_System_Id_101234
             sourceAccountName: Chase
-            status: SUBMITTED
+            status: status
           - amount: 1234
             paymentMemo: Payment memo
             remoteId: remoteIdVal123
@@ -14334,10 +14457,11 @@ components:
             paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
             currency: USD
             payorPaymentId: paymenIdVal123123
-            transmissionType: ACH
+            transmissionType: transmissionType
+            railsId: WU
             remoteSystemId: Remote_System_Id_101234
             sourceAccountName: Chase
-            status: SUBMITTED
+            status: status
       properties:
         page:
           $ref: '#/components/schemas/PagedPayeeInvitationStatusResponseV3_page'
@@ -14350,7 +14474,7 @@ components:
             $ref: '#/components/schemas/PaymentV3'
           type: array
       type: object
-    SchedulePayoutRequest:
+    SchedulePayoutRequestV3:
       example:
         scheduledFor: 2025-01-01T10:00:00.000Z
         notificationsEnabled: true
@@ -14761,11 +14885,7 @@ components:
         - line1
       type: object
     KycState:
-      description: The kyc state of the payor.
-      enum:
-        - FAILED_KYC
-        - PASSED_KYC
-        - REQUIRES_KYC
+      description: 'The kyc state of the payor. One of the following values: FAILED_KYC, PASSED_KYC, REQUIRES_KYC'
       example: PASSED_KYC
       readOnly: true
       type: string
@@ -14854,9 +14974,7 @@ components:
         - line1
       type: object
     PaymentRails:
-      enum:
-        - WU
-        - BOFA
+      description: The id of the payment rails
       type: string
     TransmissionTypes_2:
       example:
@@ -14886,6 +15004,7 @@ components:
         payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
         invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
         payableStatus: true
+        invitationStatus: invitationStatus
         payableIssues:
           - code: '3'
             message: payee-disabled
@@ -14902,7 +15021,7 @@ components:
           example: uniqueIdForRemoteEntity
           type: string
         invitationStatus:
-          $ref: '#/components/schemas/InvitationStatusV3'
+          type: string
         invitationStatusTimestamp:
           description: The timestamp when the invitation status is updated
           example: 2019-01-20T09:00:00.000Z
@@ -14923,11 +15042,7 @@ components:
           type: array
       type: object
     OnboardedStatusV3:
-      enum:
-        - CREATED
-        - INVITED
-        - REGISTERED
-        - ONBOARDED
+      description: 'Onboarded status. One of the following values: CREATED, INVITED, REGISTERED, ONBOARDED'
       type: string
     LanguageV3:
       description: |
@@ -15087,6 +15202,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -15097,6 +15213,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -15106,6 +15223,7 @@ components:
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
         watchlistOverrideComment: Example reason for the watchlist status being overridden
         country: US
+        watchlistStatus: watchlistStatus
         disabledUpdatedTimestamp: 2019-01-20T09:00:00.000Z
         individual:
           name:
@@ -15115,7 +15233,9 @@ components:
             title: Mr
         created: 2019-01-20T09:00:00.000Z
         displayName: ABC
+        payeeType: payeeType
         language: en-US
+        onboardedStatus: onboardedStatus
         watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
         disabledComment: reason for disabled
         disabled: true
@@ -15142,9 +15262,11 @@ components:
           nullable: true
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatusV3'
+          description: 'Onboarded status. One of the following values: CREATED, INVITED, REGISTERED, ONBOARDED'
+          type: string
         watchlistStatus:
-          $ref: '#/components/schemas/WatchlistStatusV3'
+          description: 'Current watchlist status. One of the following values: NONE, PENDING, REVIEW, PASSED, FAILED'
+          type: string
         watchlistStatusUpdatedTimestamp:
           example: 2019-01-20T09:00:00.000Z
           format: date_time
@@ -15177,7 +15299,8 @@ components:
           example: ABC
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType_2'
+          description: 'Type of Payee. One of the following values: Individual, Company'
+          type: string
         disabled:
           type: boolean
         disabledComment:
@@ -15198,6 +15321,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -15208,6 +15332,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -15241,6 +15366,7 @@ components:
           name: ABC Group Plc
           operatingName: ABC Co
         payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+        type: type
         email: bob@example.com
         remoteId: Remote ID
         paymentChannel:
@@ -15275,7 +15401,8 @@ components:
           minLength: 1
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType_2'
+          description: 'Type of Payee. One of the following values: Individual, Company'
+          type: string
         address:
           $ref: '#/components/schemas/CreatePayeeAddressV3'
         paymentChannel:
@@ -15298,6 +15425,12 @@ components:
         - remoteId
         - type
       type: object
+    PayeeTypeEnum:
+      description: The type of the payee
+      enum:
+        - Individual
+        - Company
+      type: string
     Iban:
       description: 'Must match the regular expression ```^[A-Za-z0-9]+$```.'
       example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
@@ -15319,6 +15452,7 @@ components:
             - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
               invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
               payableStatus: true
+              invitationStatus: invitationStatus
               payableIssues:
                 - code: '3'
                   message: payee-disabled
@@ -15329,6 +15463,7 @@ components:
             - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
               invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
               payableStatus: true
+              invitationStatus: invitationStatus
               payableIssues:
                 - code: '3'
                   message: payee-disabled
@@ -15362,6 +15497,7 @@ components:
             name: ABC Group Plc
             operatingName: ABC Co
           payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+          type: type
           email: bob@example.com
           remoteId: Remote ID
           paymentChannel:
@@ -15384,17 +15520,14 @@ components:
       example:
         payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
         gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-        invitationStatus: ACCEPTED
+        invitationStatus: invitationStatus
       properties:
         payeeId:
           example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
           format: uuid
           type: string
         invitationStatus:
-          enum:
-            - ACCEPTED
-            - PENDING
-            - DECLINED
+          description: 'Payee invitation status. One of the following values: ACCEPTED, PENDING, DECLINED'
           type: string
         gracePeriodEndDate:
           example: 2019-01-20T00:00:00.000Z
@@ -15408,6 +15541,7 @@ components:
       example:
         payeeCountry: US
         displayName: Payee1
+        onboardedStatus: onboardedStatus
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         dbaName: Payee DBA Name
         email: payee1@example.com
@@ -15437,7 +15571,8 @@ components:
           example: US
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatusV3_2'
+          description: 'Onboarded status. One of the following values: CREATED, INVITED, REGISTERED, ONBOARDED'
+          type: string
       required:
         - payeeId
         - remoteId
@@ -15447,6 +15582,7 @@ components:
         payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
         invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
         payableStatus: true
+        invitationStatus: invitationStatus
         payableIssues:
           - code: '3'
             message: payee-disabled
@@ -15463,7 +15599,7 @@ components:
           example: uniqueIdForRemoteEntity
           type: string
         invitationStatus:
-          $ref: '#/components/schemas/InvitationStatusV4'
+          type: string
         invitationStatusTimestamp:
           description: The timestamp when the invitation status is updated
           example: 2019-01-20T09:00:00.000Z
@@ -15484,12 +15620,7 @@ components:
           type: array
       type: object
     WatchlistStatusV4:
-      enum:
-        - NONE
-        - PENDING
-        - REVIEW
-        - PASSED
-        - FAILED
+      description: 'Current watchlist status. One of the following values: NONE, PENDING, REVIEW, PASSED, FAILED'
       type: string
     LanguageV4:
       description: |
@@ -15643,6 +15774,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -15653,6 +15785,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -15662,6 +15795,7 @@ components:
             paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
         watchlistOverrideComment: Example reason for the watchlist status being overridden
         country: US
+        watchlistStatus: watchlistStatus
         disabledUpdatedTimestamp: 2019-01-20T09:00:00.000Z
         individual:
           name:
@@ -15671,7 +15805,9 @@ components:
             title: Mr
         created: 2019-01-20T09:00:00.000Z
         displayName: ABC
+        payeeType: payeeType
         language: en-US
+        onboardedStatus: onboardedStatus
         watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
         disabledComment: reason for disabled
         disabled: true
@@ -15698,9 +15834,11 @@ components:
           nullable: true
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatusV4'
+          description: 'Payee onboarded status. One of the following values: CREATED, INVITED, REGISTERED, ONBOARDED'
+          type: string
         watchlistStatus:
-          $ref: '#/components/schemas/WatchlistStatusV4'
+          description: 'Current watchlist status. One of the following values: NONE, PENDING, REVIEW, PASSED, FAILED'
+          type: string
         watchlistStatusUpdatedTimestamp:
           example: 2019-01-20T09:00:00.000Z
           format: date_time
@@ -15733,7 +15871,8 @@ components:
           example: ABC
           type: string
         payeeType:
-          $ref: '#/components/schemas/PayeeType_2'
+          description: 'Type of Payee. One of the following values: Individual, Company'
+          type: string
         disabled:
           type: boolean
         disabledComment:
@@ -15754,6 +15893,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -15764,6 +15904,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -15831,7 +15972,7 @@ components:
           minLength: 1
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType_2'
+          $ref: '#/components/schemas/PayeeTypeEnum'
         address:
           $ref: '#/components/schemas/CreatePayeeAddressV4'
         paymentChannel:
@@ -15861,6 +16002,7 @@ components:
             - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
               invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
               payableStatus: true
+              invitationStatus: invitationStatus
               payableIssues:
                 - code: '3'
                   message: payee-disabled
@@ -15871,6 +16013,7 @@ components:
             - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
               invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
               payableStatus: true
+              invitationStatus: invitationStatus
               payableIssues:
                 - code: '3'
                   message: payee-disabled
@@ -15904,6 +16047,7 @@ components:
             name: ABC Group Plc
             operatingName: ABC Co
           payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+          type: type
           email: bob@example.com
           remoteId: Remote ID
           paymentChannel:
@@ -15926,17 +16070,14 @@ components:
       example:
         payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
         gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
-        invitationStatus: ACCEPTED
+        invitationStatus: invitationStatus
       properties:
         payeeId:
           example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
           format: uuid
           type: string
         invitationStatus:
-          enum:
-            - ACCEPTED
-            - PENDING
-            - DECLINED
+          description: 'Payee invitation status. One of the following values: ACCEPTED, PENDING, DECLINED'
           type: string
         gracePeriodEndDate:
           example: 2019-01-20T00:00:00.000Z
@@ -15950,6 +16091,7 @@ components:
       example:
         payeeCountry: US
         displayName: Payee1
+        onboardedStatus: onboardedStatus
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         dbaName: Payee DBA Name
         email: payee1@example.com
@@ -15984,7 +16126,8 @@ components:
           title: ISO 3166 2 Character Country Code
           type: string
         onboardedStatus:
-          $ref: '#/components/schemas/OnboardedStatusV4_2'
+          description: 'Payee onboarded status. One of the following value: CREATED, INVITED, REGISTERED, ONBOARDED'
+          type: string
       required:
         - payeeId
         - remoteId
@@ -16132,17 +16275,19 @@ components:
         dateTime: 2000-01-23T04:56:07.000Z
         fundingAccountName: fundingAccountName
         amount: 120000
-        fundingType: ACH
+        fundingType: fundingType
         currency: USD
-        topupType: AUTOMATIC
+        topupType: topupType
         events:
           - principal: principal
             eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000Z
+            fundingEventType: fundingEventType
           - principal: principal
             eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000Z
-        status: PENDING
+            fundingEventType: fundingEventType
+        status: status
         sourceAccountName: sourceAccountName
       properties:
         amount:
@@ -16158,30 +16303,21 @@ components:
           format: date-time
           type: string
         status:
-          enum:
-            - PENDING
-            - FAILED
-            - CREDIT
-            - DEBIT
+          description: 'Status of the funding. One of the following values: PENDING, FAILED, CREDIT, DEBIT'
           type: string
         sourceAccountName:
           type: string
         fundingAccountName:
           type: string
         fundingType:
-          enum:
-            - ACH
-            - WIRE
-            - EMBEDDED
+          description: 'Funding type. One of the following values: ACH, WIRE, EMBEDDED'
           type: string
         events:
           items:
             $ref: '#/components/schemas/FundingEvent'
           type: array
         topupType:
-          enum:
-            - AUTOMATIC
-            - MANUAL
+          description: 'Type of top up. One of the following values: AUTOMATIC, MANUAL'
           type: string
       type: object
     PaymentDeltaV1:
@@ -16229,8 +16365,10 @@ components:
       example:
         sourceAccountSummary:
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            currency: currency
             totalCost: 3434
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            currency: currency
             totalCost: 3434
         submittedDateTime: submittedDateTime
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -16238,25 +16376,30 @@ components:
         fxSummaries:
           - invertedRate: 1.12
             rate: 1.12
+            sourceCurrency: sourceCurrency
             totalPaymentAmount: 1234
+            paymentCurrency: paymentCurrency
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             totalCost: 1234
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             creationDateTime: 2000-01-23T04:56:07.000Z
-            status: UNQUOTED
+            status: status
           - invertedRate: 1.12
             rate: 1.12
+            sourceCurrency: sourceCurrency
             totalPaymentAmount: 1234
+            paymentCurrency: paymentCurrency
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             totalCost: 1234
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             creationDateTime: 2000-01-23T04:56:07.000Z
-            status: UNQUOTED
+            status: status
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         withdrawnDateTime: withdrawnDateTime
         totalPayments: 123
         instructedDateTime: instructedDateTime
         totalFailedPayments: 123
+        status: status
         payoutMemo: payoutMemo
       properties:
         payoutId:
@@ -16266,7 +16409,8 @@ components:
           format: uuid
           type: string
         status:
-          $ref: '#/components/schemas/PayoutStatusV3'
+          description: 'Current status of the payout. One of the following values: ACCEPTED, REJECTED, SUBMITTED, QUOTED, INSTRUCTED, COMPLETED, INCOMPLETE, CONFIRMED, WITHDRAWN'
+          type: string
         submittedDateTime:
           type: string
         instructedDateTime:
@@ -16299,10 +16443,6 @@ components:
       type: object
     PaymentAuditCurrencyV3:
       description: ISO 3 character currency code
-      enum:
-        - USD
-        - GBP
-        - EUR
       maxLength: 3
       minLength: 3
       type: string
@@ -16314,8 +16454,10 @@ components:
         routingNumber: '123123123'
         accountName: My account
         iban: DE89 3704 0044 0532 0130 00
+        sourceCurrency: sourceCurrency
         sourceAmount: 1299
-        eventType: PAYOUT_SUBMITTED
+        eventType: eventType
+        paymentCurrency: paymentCurrency
         accountNumber: '123123123'
         paymentAmount: 1299
       properties:
@@ -16328,48 +16470,23 @@ components:
           format: date-time
           type: string
         eventType:
-          description: The type of the event.
-          enum:
-            - PAYOUT_SUBMITTED
-            - PAYOUT_COMPLETED
-            - PAYOUT_INSTRUCTED_V3
-            - BANK_PAYMENT_REQUESTED
-            - SOURCE_AMOUNT_CONFIRMED
-            - PAYMENT_SUBMITTED
-            - PAYMENT_SUBMITTED_ACCEPTED
-            - PAYMENT_SUBMITTED_REJECTED
-            - PAYMENT_CONFIRMED
-            - PAYMENT_AWAITING_FUNDS
-            - PAYMENT_FUNDED
-            - PAYMENT_UNFUNDED
-            - PAYMENT_FAILED
-            - ACH_SUBMITTED_TO_ODFI
-            - PAYMENT_ACCEPTED_BY_RAILS
-            - ACH_RETURN_RECEIVED
-            - RETURN_PAYMENT_FUNDING_REQUESTED
-            - PAYOUT_BATCH_EXECUTED
-            - PAYOUT_BATCH_QUOTE_EXPIRED
-            - PAYOUT_BATCH_FUNDED
-            - PAYOUT_BATCH_FUNDS_RETURN_REQUEST
-            - PAYOUT_BATCH_FUNDS_RETURNED
-            - PAYOUT_FUNDS_REQUEST
-            - PAYOUT_FUNDS_GRANTED
-            - PAYOUT_FUNDS_DENIED
-            - PAYOUT_BATCH_QUOTED
-            - PAYOUT_QUOTED
-            - ACH_PAYMENT_RETURN_CANCELLED
-            - RETURN_PAYMENT_CANCELLATION_REQUESTED
-            - PAYOUT_WITHDRAWN
+          description: 'The type of the event. One of the following values: PAYOUT_SUBMITTED, PAYOUT_COMPLETED, PAYOUT_INSTRUCTED_V3, BANK_PAYMENT_REQUESTED, SOURCE_AMOUNT_CONFIRMED, PAYMENT_SUBMITTED, PAYMENT_SUBMITTED_ACCEPTED, PAYMENT_SUBMITTED_REJECTED, PAYMENT_CONFIRMED, PAYMENT_AWAITING_FUNDS, PAYMENT_FUNDED, PAYMENT_UNFUNDED, PAYMENT_FAILED, ACH_SUBMITTED_TO_ODFI, PAYMENT_ACCEPTED_BY_RAILS, ACH_RETURN_RECEIVED, RETURN_PAYMENT_FUNDING_REQUESTED, PAYOUT_BATCH_EXECUTED, PAYOUT_BATCH_QUOTE_EXPIRED, PAYOUT_BATCH_FUNDED, PAYOUT_BATCH_FUNDS_RETURN_REQUEST, PAYOUT_BATCH_FUNDS_RETURNED, PAYOUT_FUNDS_REQUEST, PAYOUT_FUNDS_GRANTED, PAYOUT_FUNDS_DENIED, PAYOUT_BATCH_QUOTED, PAYOUT_QUOTED, ACH_PAYMENT_RETURN_CANCELLED, RETURN_PAYMENT_CANCELLATION_REQUESTED, PAYOUT_WITHDRAWN'
           type: string
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         sourceAmount:
           description: The source amount exposed by the event.
           example: 1299
           format: int64
           type: integer
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         paymentAmount:
           description: The destination amount exposed by the event.
           example: 1299
@@ -16402,27 +16519,34 @@ components:
         dateTime: 2000-01-23T04:56:07.000Z
         sourceAccountSummary:
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            currency: currency
             totalCost: 3344
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            currency: currency
             totalCost: 3344
+        payoutType: payoutType
         totalReturnedPayments: 1
         fxSummaries:
           - invertedRate: 123.23
             rate: 123.23
+            sourceCurrency: sourceCurrency
             totalPaymentAmount: 34235
+            paymentCurrency: paymentCurrency
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             totalCost: 5
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             creationDateTime: 2000-01-23T04:56:07.000Z
-            status: UNQUOTED
+            status: status
           - invertedRate: 123.23
             rate: 123.23
+            sourceCurrency: sourceCurrency
             totalPaymentAmount: 34235
+            paymentCurrency: paymentCurrency
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             totalCost: 5
-            fundingStatus: FUNDED
+            fundingStatus: fundingStatus
             creationDateTime: 2000-01-23T04:56:07.000Z
-            status: UNQUOTED
+            status: status
         payoutId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalPayments: 0
         schedule:
@@ -16438,6 +16562,7 @@ components:
         withdrawnDateTime: 2000-01-23T04:56:07.000Z
         totalWithdrawnPayments: 5
         instructedDateTime: instructedDateTime
+        status: status
         payoutMemo: payoutMemo
         payorName: payorName
       properties:
@@ -16448,7 +16573,8 @@ components:
           format: uuid
           type: string
         status:
-          $ref: '#/components/schemas/PayoutStatus'
+          description: 'Current status of the Payout. One of the following values: ACCEPTED, REJECTED, SUBMITTED, QUOTED, INSTRUCTED, COMPLETED, INCOMPLETE, CONFIRMED, WITHDRAWN'
+          type: string
         dateTime:
           format: date-time
           type: string
@@ -16478,7 +16604,8 @@ components:
         payoutMemo:
           type: string
         payoutType:
-          $ref: '#/components/schemas/PayoutType'
+          description: 'The type of payout. One of the following values: STANDARD, AS, ON_BEHALF_OF'
+          type: string
         payorName:
           type: string
         schedule:
@@ -16490,23 +16617,10 @@ components:
         - submittedDateTime
       type: object
     PayoutStatus:
-      enum:
-        - ACCEPTED
-        - REJECTED
-        - SUBMITTED
-        - QUOTED
-        - INSTRUCTED
-        - COMPLETED
-        - INCOMPLETE
-        - CONFIRMED
-        - WITHDRAWN
+      description: 'Current status of the Payout. One of the following values: ACCEPTED, REJECTED, SUBMITTED, QUOTED, INSTRUCTED, COMPLETED, INCOMPLETE, CONFIRMED, WITHDRAWN'
       type: string
     PayoutType:
-      description: The type of payout.
-      enum:
-        - STANDARD
-        - AS
-        - ON_BEHALF_OF
+      description: 'The type of payout. One of the following values: STANDARD, AS, ON_BEHALF_OF'
       type: string
     PayoutPayor:
       description: Details of payor and principal participating in a payout.
@@ -16569,7 +16683,9 @@ components:
         scheduledAt: 2000-01-23T04:56:07.000Z
       properties:
         scheduleStatus:
-          $ref: '#/components/schemas/ScheduleStatus'
+          description: 'Current status of the payout schedule. One of the following values: SCHEDULED, EXECUTED, FAILED'
+          example: SCHEDULED
+          type: string
         scheduledAt:
           format: date-time
           type: string
@@ -16595,10 +16711,6 @@ components:
       type: object
     PaymentAuditCurrency:
       description: ISO 3 character currency code
-      enum:
-        - USD
-        - GBP
-        - EUR
       maxLength: 3
       minLength: 3
       type: string
@@ -16607,7 +16719,8 @@ components:
         eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         eventDateTime: 2000-01-23T04:56:07.000Z
         accountName: accountName
-        eventType: PAYOUT_SUBMITTED
+        sourceCurrency: sourceCurrency
+        eventType: eventType
         accountNumber: accountNumber
         paymentAmount: 1299
         principal: principal
@@ -16616,6 +16729,7 @@ components:
         scheduledFor: 2000-01-23T04:56:07.000Z
         sourceAmount: 1299
         scheduledBy: Aphra Behn
+        paymentCurrency: paymentCurrency
         scheduledAt: 2000-01-23T04:56:07.000Z
       properties:
         eventId:
@@ -16627,51 +16741,23 @@ components:
           format: date-time
           type: string
         eventType:
-          description: The type of the event.
-          enum:
-            - PAYOUT_SUBMITTED
-            - PAYOUT_COMPLETED
-            - PAYOUT_INSTRUCTED_V3
-            - BANK_PAYMENT_REQUESTED
-            - SOURCE_AMOUNT_CONFIRMED
-            - PAYMENT_SUBMITTED
-            - PAYMENT_SUBMITTED_ACCEPTED
-            - PAYMENT_SUBMITTED_REJECTED
-            - PAYMENT_CONFIRMED
-            - PAYMENT_AWAITING_FUNDS
-            - PAYMENT_FUNDED
-            - PAYMENT_UNFUNDED
-            - PAYMENT_FAILED
-            - ACH_SUBMITTED_TO_ODFI
-            - PAYMENT_ACCEPTED_BY_RAILS
-            - ACH_RETURN_RECEIVED
-            - RETURN_PAYMENT_FUNDING_REQUESTED
-            - PAYOUT_BATCH_EXECUTED
-            - PAYOUT_BATCH_QUOTE_EXPIRED
-            - PAYOUT_BATCH_FUNDED
-            - PAYOUT_BATCH_FUNDS_RETURN_REQUEST
-            - PAYOUT_BATCH_FUNDS_RETURNED
-            - PAYOUT_FUNDS_REQUEST
-            - PAYOUT_FUNDS_GRANTED
-            - PAYOUT_FUNDS_DENIED
-            - PAYOUT_BATCH_QUOTED
-            - PAYOUT_QUOTED
-            - ACH_PAYMENT_RETURN_CANCELLED
-            - RETURN_PAYMENT_CANCELLATION_REQUESTED
-            - PAYOUT_WITHDRAWN
-            - ORCHESTRATED_PAYMENT_BATCH_REQUESTED
-            - ORCHESTRATED_PAYMENT_BATCH_CONFIRMED
-            - ORCHESTRATED_PAYMENT_REQUESTED
+          description: 'One of the following values: PAYOUT_SUBMITTED, PAYOUT_COMPLETED, PAYOUT_INSTRUCTED_V3, BANK_PAYMENT_REQUESTED, SOURCE_AMOUNT_CONFIRMED, PAYMENT_SUBMITTED, PAYMENT_SUBMITTED_ACCEPTED, PAYMENT_SUBMITTED_REJECTED, PAYMENT_CONFIRMED, PAYMENT_AWAITING_FUNDS, PAYMENT_FUNDED, PAYMENT_UNFUNDED, PAYMENT_FAILED, PAYMENT_TRACKING_DETAILS_UPDATED, ACH_SUBMITTED_TO_ODFI, PAYMENT_ACCEPTED_BY_RAILS, ACH_RETURN_RECEIVED, RETURN_PAYMENT_FUNDING_REQUESTED, PAYOUT_BATCH_EXECUTED, PAYOUT_BATCH_QUOTE_EXPIRED, PAYOUT_BATCH_FUNDED, PAYOUT_BATCH_FUNDS_RETURN_REQUEST, PAYOUT_BATCH_FUNDS_RETURNED, PAYOUT_FUNDS_REQUEST, PAYOUT_FUNDS_GRANTED, PAYOUT_FUNDS_DENIED, PAYOUT_BATCH_QUOTED, PAYOUT_QUOTED, ACH_PAYMENT_RETURN_CANCELLED, RETURN_PAYMENT_CANCELLATION_REQUESTED, PAYOUT_WITHDRAWN, ORCHESTRATED_PAYMENT_BATCH_REQUESTED, ORCHESTRATED_PAYMENT_BATCH_CONFIRMED, ORCHESTRATED_PAYMENT_REQUESTED'
           type: string
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         sourceAmount:
           description: The source amount exposed by the event.
           example: 1299
           format: int64
           type: integer
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         paymentAmount:
           description: The destination amount exposed by the event.
           example: 1299
@@ -16745,16 +16831,6 @@ components:
         - paymentId
         - payoutId
       type: object
-    TransmissionType:
-      description: |
-        <p>The transmission type that will be used to send a payment</p>
-        <p>If omitted, a default will be provided by the payment rails</p>
-      enum:
-        - SAME_DAY_ACH
-        - WIRE
-        - ACH
-      example: ACH
-      type: string
     QuoteFxSummaryV3:
       example:
         invertedRate: 1.12
@@ -16809,19 +16885,11 @@ components:
           title: ISO Currency Code
           type: string
         fundingStatus:
-          enum:
-            - UNFUNDED
-            - INSTRUCTED
-            - FUNDED
+          description: 'Current status of the funding associated with this quote. One of the following values: UNFUNDED, INSTRUCTED, FUNDED'
           example: FUNDED
           type: string
         status:
-          enum:
-            - UNQUOTED
-            - QUOTED
-            - EXPIRED
-            - EXECUTED
-            - REJECTED
+          description: 'Current status of the fx quote. One of the following values: UNQUOTED, QUOTED, EXPIRED, EXECUTED, REJECTED'
           example: QUOTED
           type: string
       required:
@@ -16871,6 +16939,7 @@ components:
         amount: 1234
         paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
         payorPaymentId: paymenIdVal123123
+        railsId: WU
         paymentMemo: Payment memo
         remoteSystemId: Remote_System_Id_101234
         remoteId: remoteIdVal123
@@ -16905,10 +16974,14 @@ components:
         paymentMetadata:
           example: 'invoiceeId_123|abc001:12345|xyz002:4567'
           type: string
+        railsId:
+          example: WU
+          type: string
       required:
         - amount
         - currencyType
         - payorPaymentId
+        - railsId
         - remoteId
         - sourceAccountName
       type: object
@@ -16972,7 +17045,7 @@ components:
         - remoteId
         - sourceAccountName
       type: object
-    PayoutSchedule_2:
+    PayoutScheduleV3:
       description: Details relating to a payout that was executed via a schedule or is still waiting to be executed
       example:
         scheduledFor: 2000-01-23T04:56:07.000Z
@@ -16982,7 +17055,9 @@ components:
         scheduledAt: 2000-01-23T04:56:07.000Z
       properties:
         scheduleStatus:
-          $ref: '#/components/schemas/ScheduleStatus_2'
+          description: 'The current status of the payout schedule. One of the following values: SCHEDULED, EXECUTED, FAILED'
+          example: SCHEDULED
+          type: string
         scheduledAt:
           format: date-time
           type: string
@@ -17021,10 +17096,11 @@ components:
         paymentMetadata: 'invoiceeId_123|abc001:12345|xyz002:4567'
         currency: USD
         payorPaymentId: paymenIdVal123123
-        transmissionType: ACH
+        transmissionType: transmissionType
+        railsId: WU
         remoteSystemId: Remote_System_Id_101234
         sourceAccountName: Chase
-        status: SUBMITTED
+        status: status
       properties:
         paymentId:
           type: string
@@ -17054,20 +17130,11 @@ components:
           example: false
           type: boolean
         status:
-          enum:
-            - SUBMITTED
-            - ACCEPTED
-            - REJECTED
-            - WITHDRAWN
-            - RETURNED
-            - AWAITING_FUNDS
-            - FUNDED
-            - UNFUNDED
-            - CANCELLED
-            - REQUESTED
+          description: 'Current status of payment. One of the following values: SUBMITTED, ACCEPTED, REJECTED, WITHDRAWN, RETURNED, AWAITING_FUNDS, FUNDED, UNFUNDED, CANCELLED, REQUESTED'
           type: string
         transmissionType:
-          $ref: '#/components/schemas/TransmissionType'
+          description: 'The transmission method of the payment. One of the following values: ACH, SAME_DAY_ACH, WIRE, LOCAL, SWIFT'
+          type: string
         remoteSystemId:
           example: Remote_System_Id_101234
           type: string
@@ -17077,6 +17144,10 @@ components:
         autoWithdrawnReasonCode:
           description: Populated only if the payment was automatically withdrawn during instruction for being invalid
           example: VE0003
+          type: string
+        railsId:
+          description: Indicates the 3rd party system involved in making this payment
+          example: WU
           type: string
       required:
         - paymentId
@@ -17207,10 +17278,6 @@ components:
           type: boolean
       type: object
     InvitationStatusV3:
-      enum:
-        - ACCEPTED
-        - PENDING
-        - DECLINED
       type: string
     PayableIssueV3:
       description: payable issues for the payee and payor combination
@@ -17308,256 +17375,6 @@ components:
           type: string
         country:
           description: 2 letter ISO 3166-1 country code
-          enum:
-            - AF
-            - AX
-            - AL
-            - DZ
-            - AS
-            - AD
-            - AO
-            - AI
-            - AQ
-            - AG
-            - AR
-            - AM
-            - AW
-            - AU
-            - AT
-            - AZ
-            - BS
-            - BH
-            - BD
-            - BB
-            - BY
-            - BE
-            - BZ
-            - BJ
-            - BM
-            - BT
-            - BO
-            - BQ
-            - BA
-            - BW
-            - BV
-            - BR
-            - IO
-            - BN
-            - BG
-            - BF
-            - BI
-            - KH
-            - CM
-            - CA
-            - CV
-            - KY
-            - CF
-            - TD
-            - CL
-            - CN
-            - CX
-            - CC
-            - CO
-            - KM
-            - CG
-            - CD
-            - CK
-            - CR
-            - CI
-            - HR
-            - CU
-            - CW
-            - CY
-            - CZ
-            - DK
-            - DJ
-            - DM
-            - DO
-            - EC
-            - EG
-            - SV
-            - GQ
-            - ER
-            - EE
-            - ET
-            - FK
-            - FO
-            - FJ
-            - FI
-            - FR
-            - GF
-            - PF
-            - TF
-            - GA
-            - GM
-            - GE
-            - DE
-            - GH
-            - GI
-            - GR
-            - GL
-            - GD
-            - GP
-            - GU
-            - GT
-            - GG
-            - GN
-            - GW
-            - GY
-            - HT
-            - HM
-            - VA
-            - HN
-            - HK
-            - HU
-            - IS
-            - IN
-            - ID
-            - IR
-            - IQ
-            - IE
-            - IM
-            - IL
-            - IT
-            - JM
-            - JP
-            - JE
-            - JO
-            - KZ
-            - KE
-            - KI
-            - KP
-            - KR
-            - KW
-            - KG
-            - LA
-            - LV
-            - LB
-            - LS
-            - LR
-            - LY
-            - LI
-            - LT
-            - LU
-            - MO
-            - MK
-            - MG
-            - MW
-            - MY
-            - MV
-            - ML
-            - MT
-            - MH
-            - MQ
-            - MR
-            - MU
-            - YT
-            - MX
-            - FM
-            - MD
-            - MC
-            - MN
-            - ME
-            - MS
-            - MA
-            - MZ
-            - MM
-            - NA
-            - NR
-            - NP
-            - NL
-            - NC
-            - NZ
-            - NI
-            - NE
-            - NG
-            - NU
-            - NF
-            - MP
-            - 'NO'
-            - OM
-            - PK
-            - PW
-            - PS
-            - PA
-            - PG
-            - PY
-            - PE
-            - PH
-            - PN
-            - PL
-            - PT
-            - PR
-            - QA
-            - RE
-            - RO
-            - RU
-            - RW
-            - BL
-            - SH
-            - KN
-            - LC
-            - MF
-            - PM
-            - VC
-            - WS
-            - SM
-            - ST
-            - SA
-            - SN
-            - RS
-            - SC
-            - SL
-            - SG
-            - SX
-            - SK
-            - SI
-            - SB
-            - SO
-            - ZA
-            - GS
-            - SS
-            - ES
-            - LK
-            - SD
-            - SR
-            - SJ
-            - SZ
-            - SE
-            - CH
-            - SY
-            - TW
-            - TJ
-            - TZ
-            - TH
-            - TL
-            - TG
-            - TK
-            - TO
-            - TT
-            - TN
-            - TR
-            - TM
-            - TC
-            - TV
-            - UG
-            - UA
-            - AE
-            - GB
-            - US
-            - UM
-            - UY
-            - UZ
-            - VU
-            - VE
-            - VN
-            - VG
-            - VI
-            - WF
-            - EH
-            - YE
-            - ZM
-            - ZW
           example: US
           maxLength: 2
           minLength: 2
@@ -17657,6 +17474,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -17667,6 +17485,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -17700,6 +17519,7 @@ components:
           name: ABC Group Plc
           operatingName: ABC Co
         payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+        type: type
         email: bob@example.com
         remoteId: Remote ID
         paymentChannel:
@@ -17730,7 +17550,8 @@ components:
           example: Remote ID
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType_2'
+          description: 'Type of Payee. One of the following values: Individual, Company'
+          type: string
         address:
           $ref: '#/components/schemas/CreatePayeeAddressV3'
         paymentChannel:
@@ -17749,11 +17570,7 @@ components:
           $ref: '#/components/schemas/CreateIndividualV3'
       type: object
     OnboardedStatusV3_2:
-      enum:
-        - CREATED
-        - INVITED
-        - REGISTERED
-        - ONBOARDED
+      description: 'Onboarded status. One of the following values: CREATED, INVITED, REGISTERED, ONBOARDED'
       type: string
     PayableIssueV4:
       description: payable issues for the payee and payor combination
@@ -17951,6 +17768,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -17961,6 +17779,7 @@ components:
           - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
             invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
             payableStatus: true
+            invitationStatus: invitationStatus
             payableIssues:
               - code: '3'
                 message: payee-disabled
@@ -17994,6 +17813,7 @@ components:
           name: ABC Group Plc
           operatingName: ABC Co
         payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+        type: type
         email: bob@example.com
         remoteId: Remote ID
         paymentChannel:
@@ -18024,7 +17844,8 @@ components:
           example: Remote ID
           type: string
         type:
-          $ref: '#/components/schemas/PayeeType_2'
+          description: 'Type of Payee. One of the following values: Individual, Company'
+          type: string
         address:
           $ref: '#/components/schemas/CreatePayeeAddressV4'
         paymentChannel:
@@ -18043,17 +17864,14 @@ components:
           $ref: '#/components/schemas/CreateIndividualV4'
       type: object
     OnboardedStatusV4_2:
-      enum:
-        - CREATED
-        - INVITED
-        - REGISTERED
-        - ONBOARDED
+      description: 'Payee onboarded status. One of the following value: CREATED, INVITED, REGISTERED, ONBOARDED'
       type: string
     FundingEvent:
       example:
         principal: principal
         eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         eventDateTime: 2000-01-23T04:56:07.000Z
+        fundingEventType: fundingEventType
       properties:
         eventId:
           format: uuid
@@ -18062,25 +17880,18 @@ components:
           format: date-time
           type: string
         fundingEventType:
-          $ref: '#/components/schemas/FundingEventType'
+          description: 'Funding event type. One of the following values: PAYOR_FUNDING_DETECTED, PAYOR_FUNDING_REQUESTED, PAYOR_FUNDING_RETURN_RECEIVED, FUNDING_RETURN_DETECTED, PAYOR_FUNDING_REQUEST_SUBMITTED, PAYOR_FUNDING_ENTRY_DETAIL_RECEIVED, FUNDING_DEALLOCATED'
+          type: string
         principal:
           type: string
       type: object
     PayoutStatusV3:
-      enum:
-        - ACCEPTED
-        - REJECTED
-        - SUBMITTED
-        - QUOTED
-        - INSTRUCTED
-        - COMPLETED
-        - INCOMPLETE
-        - CONFIRMED
-        - WITHDRAWN
+      description: 'Current status of the payout. One of the following values: ACCEPTED, REJECTED, SUBMITTED, QUOTED, INSTRUCTED, COMPLETED, INCOMPLETE, CONFIRMED, WITHDRAWN'
       type: string
     SourceAccountSummaryV3:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        currency: currency
         totalCost: 3434
       properties:
         sourceAccountId:
@@ -18091,7 +17902,10 @@ components:
           format: int64
           type: integer
         currency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
       required:
         - sourceAccountId
         - totalCost
@@ -18100,12 +17914,14 @@ components:
       example:
         invertedRate: 1.12
         rate: 1.12
+        sourceCurrency: sourceCurrency
         totalPaymentAmount: 1234
+        paymentCurrency: paymentCurrency
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalCost: 1234
-        fundingStatus: FUNDED
+        fundingStatus: fundingStatus
         creationDateTime: 2000-01-23T04:56:07.000Z
-        status: UNQUOTED
+        status: status
       properties:
         quoteId:
           format: uuid
@@ -18128,21 +17944,20 @@ components:
           example: 1234
           type: integer
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrencyV3'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         status:
-          enum:
-            - UNQUOTED
-            - QUOTED
-            - EXPIRED
-            - EXECUTED
+          description: 'Current status of the FX Summary. One of the following values: UNQUOTED, QUOTED, EXPIRED, EXECUTED'
           type: string
         fundingStatus:
-          enum:
-            - FUNDED
-            - INSTRUCTED
-            - UNFUNDED
+          description: 'Current status of the funding. One of the following values: FUNDED, INSTRUCTED, UNFUNDED'
           type: string
       required:
         - creationDateTime
@@ -18157,6 +17972,7 @@ components:
     SourceAccountSummary:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        currency: currency
         totalCost: 3344
       properties:
         sourceAccountId:
@@ -18167,7 +17983,10 @@ components:
           format: int64
           type: integer
         currency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
       required:
         - sourceAccountId
         - totalCost
@@ -18176,12 +17995,14 @@ components:
       example:
         invertedRate: 123.23
         rate: 123.23
+        sourceCurrency: sourceCurrency
         totalPaymentAmount: 34235
+        paymentCurrency: paymentCurrency
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalCost: 5
-        fundingStatus: FUNDED
+        fundingStatus: fundingStatus
         creationDateTime: 2000-01-23T04:56:07.000Z
-        status: UNQUOTED
+        status: status
       properties:
         quoteId:
           format: uuid
@@ -18203,21 +18024,20 @@ components:
           example: 34235
           type: integer
         sourceCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         paymentCurrency:
-          $ref: '#/components/schemas/PaymentAuditCurrency'
+          description: ISO 3 character currency code
+          maxLength: 3
+          minLength: 3
+          type: string
         status:
-          enum:
-            - UNQUOTED
-            - QUOTED
-            - EXPIRED
-            - EXECUTED
+          description: 'Current status of the FX Summary. One of the following values: UNQUOTED, QUOTED, EXPIRED, EXECUTED'
           type: string
         fundingStatus:
-          enum:
-            - FUNDED
-            - INSTRUCTED
-            - UNFUNDED
+          description: 'Current status of the funding. One of the following values: FUNDED, INSTRUCTED, UNFUNDED'
           type: string
       required:
         - creationDateTime
@@ -18230,17 +18050,7 @@ components:
         - totalPaymentAmount
       type: object
     ScheduleStatus:
-      enum:
-        - SCHEDULED
-        - EXECUTED
-        - FAILED
-      example: SCHEDULED
-      type: string
-    ScheduleStatus_2:
-      enum:
-        - SCHEDULED
-        - EXECUTED
-        - FAILED
+      description: 'Current status of the payout schedule. One of the following values: SCHEDULED, EXECUTED, FAILED'
       example: SCHEDULED
       type: string
     PayoutPayeeV3:
@@ -18377,14 +18187,7 @@ components:
           type: string
       type: object
     FundingEventType:
-      enum:
-        - PAYOR_FUNDING_DETECTED
-        - PAYOR_FUNDING_REQUESTED
-        - PAYOR_FUNDING_RETURN_RECEIVED
-        - FUNDING_RETURN_DETECTED
-        - PAYOR_FUNDING_REQUEST_SUBMITTED
-        - PAYOR_FUNDING_ENTRY_DETAIL_RECEIVED
-        - FUNDING_DEALLOCATED
+      description: 'Funding event type. One of the following values: PAYOR_FUNDING_DETECTED, PAYOR_FUNDING_REQUESTED, PAYOR_FUNDING_RETURN_RECEIVED, FUNDING_RETURN_DETECTED, PAYOR_FUNDING_REQUEST_SUBMITTED, PAYOR_FUNDING_ENTRY_DETAIL_RECEIVED, FUNDING_DEALLOCATED'
       type: string
     PayoutIndividualV3:
       example:
@@ -18653,7 +18456,7 @@ components:
         toPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         linkId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         fromPayorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        linkType: PARENT_OF
+        linkType: linkType
       properties:
         linkId:
           format: uuid
@@ -18662,8 +18465,7 @@ components:
           format: uuid
           type: string
         linkType:
-          enum:
-            - PARENT_OF
+          description: 'The type of the link. One of the following values: PARENT_OF'
           type: string
         toPayorId:
           format: uuid
@@ -18676,7 +18478,7 @@ components:
     PayorLinksResponse_payors:
       example:
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        kycState: FAILED_KYC
+        kycState: kycState
         primaryContactEmail: primaryContactEmail
         payorName: payorName
       properties:
@@ -18688,10 +18490,7 @@ components:
         primaryContactEmail:
           type: string
         kycState:
-          enum:
-            - FAILED_KYC
-            - PASSED_KYC
-            - REQUIRES_KYC
+          description: 'Current KYC state. One of the following values: FAILED_KYC, PASSED_KYC, REQUIRES_KYC'
           type: string
       required:
         - payorId
@@ -18936,7 +18735,7 @@ components:
         confirmedPayments: 123
         releasedPayments: 123
         submittedDateTime: 2000-01-23T04:56:07.000Z
-        payoutStatus: ACCEPTED
+        payoutStatus: payoutStatus
         withdrawnDateTime: 2000-01-23T04:56:07.000Z
         totalPayments: 123
         instructedDateTime: 2000-01-23T04:56:07.000Z
@@ -18944,17 +18743,7 @@ components:
         failedPayments: 0
       properties:
         payoutStatus:
-          description: The current status of the payout.
-          enum:
-            - ACCEPTED
-            - REJECTED
-            - SUBMITTED
-            - QUOTED
-            - INSTRUCTED
-            - COMPLETED
-            - INCOMPLETE
-            - CONFIRMED
-            - WITHDRAWN
+          description: 'The current status of the payout. One of the following values: ACCEPTED, REJECTED, SUBMITTED, QUOTED, INSTRUCTED, COMPLETED, INCOMPLETE, CONFIRMED, WITHDRAWN'
           type: string
         submittedDateTime:
           description: The date/time at which the payout was submitted.
@@ -19047,11 +18836,13 @@ components:
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           dbaName: dbaName
           payorName: payorName
+        payoutType: payoutType
         confirmedPayments: 6
         releasedPayments: 1
         withdrawn:
           principal: principal
           principalId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        payoutStatus: payoutStatus
         totalPayments: 0
         payoutFrom:
           principal: principal
@@ -19087,7 +18878,8 @@ components:
         payoutMemo: payoutMemo
       properties:
         payoutStatus:
-          $ref: '#/components/schemas/PayoutStatus'
+          description: 'Current status of the Payout. One of the following values: ACCEPTED, REJECTED, SUBMITTED, QUOTED, INSTRUCTED, COMPLETED, INCOMPLETE, CONFIRMED, WITHDRAWN'
+          type: string
         submittedDateTime:
           description: The date/time at which the payout was submitted.
           format: date-time
@@ -19125,7 +18917,8 @@ components:
           description: The count of payments within the payout which have been withdrawn.
           type: integer
         payoutType:
-          $ref: '#/components/schemas/PayoutType'
+          description: 'The type of payout. One of the following values: STANDARD, AS, ON_BEHALF_OF'
+          type: string
         submitting:
           $ref: '#/components/schemas/PayoutPayor'
         payoutFrom:
