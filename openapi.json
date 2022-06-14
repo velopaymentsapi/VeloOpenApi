@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.29.130",
+    "version": "2.30.53",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -64,7 +64,7 @@
   "paths": {
     "/v1/authenticate": {
       "post": {
-        "description": "Use this endpoint to obtain an access token for calling Velo Payments APIs. Use HTTP Basic Auth. String value of\nBasic and a Base64 endcoded string comprising the API key (e.g. 44a9537d-d55d-4b47-8082-14061c2bcdd8) and API\nsecret  (e.g. c396b26b-137a-44fd-87f5-34631f8fd529) with a colon between them. E.g. Basic 44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529\n",
+        "description": "<p>Use this endpoint to obtain an access token for calling Velo Payments APIs. </p>\n<p>You need your API key and API secret issued by Velo</p>\n<p>To login and get an access token the API key and API secret must be Base64 encoded by concatenating them with a colon between them</p>\n<p>e.g. Given an ApiKey: 44a9537d-d55d-4b47-8082-14061c2bcdd8 and ApiSecret: c396b26b-137a-44fd-87f5-34631f8fd529</p>\n<p>Using a Base64 encode function Base64Encoder().encode(\"44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529\")</p>\n<p>Included as a Basic Authorization header: -H \"Authorization: Basic NDRhOTUzN2QtZDU1ZC00YjQ3LTgwODItMTQwNjFjMmJjZGQ4OmMzOTZiMjZiLTEzN2EtNDRmZC04N2Y1LTM0NjMxZjhmZDUyOQ==\" </p>\n",
         "operationId": "veloAuth",
         "parameters": [
           {
@@ -2821,7 +2821,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PayeeDetailResponse"
+                  "$ref": "#/components/schemas/PayeeDetailResponseV3"
                 }
               }
             },
@@ -3076,7 +3076,7 @@
             "name": "watchlistStatus",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/WatchlistStatus"
+              "$ref": "#/components/schemas/WatchlistStatusV3"
             }
           },
           {
@@ -3094,7 +3094,7 @@
             "name": "onboardedStatus",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/OnboardedStatus"
+              "$ref": "#/components/schemas/OnboardedStatusV4"
             }
           },
           {
@@ -3189,7 +3189,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PagedPayeeResponse"
+                  "$ref": "#/components/schemas/PagedPayeeResponseV3"
                 }
               }
             },
@@ -3399,12 +3399,12 @@
       "post": {
         "deprecated": true,
         "description": "<p>Use v4 instead</p>\nInitiate the process of creating 1 to 2000 payees in a batch Use the response location header to query\nfor status (201 - Created, 400 - invalid request body. In addition to standard semantic validations, a\n400 will also result if there is a duplicate remote id within the batch / if there is a duplicate email\nwithin the batch, i.e. if there is a conflict between the data provided for one payee within the batch and\nthat provided for another payee within the same batch). The validation at this stage is intra-batch only.\nValidation against payees who have already been invited occurs subsequently during processing of the batch.\n",
-        "operationId": "v3CreatePayee",
+        "operationId": "createPayeeV3",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePayeesRequest"
+                "$ref": "#/components/schemas/CreatePayeesRequestV3"
               }
             },
             "multipart/form-data": {
@@ -3417,7 +3417,7 @@
                   "file": {
                     "description": "CSV File of payee data",
                     "items": {
-                      "$ref": "#/components/schemas/CreatePayeesCSVRequest"
+                      "$ref": "#/components/schemas/CreatePayeesCSVRequestV3"
                     },
                     "type": "array"
                   }
@@ -3546,7 +3546,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreatePayeesCSVResponse"
+                  "$ref": "#/components/schemas/CreatePayeesCSVResponseV3"
                 }
               }
             },
@@ -3676,7 +3676,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/QueryBatchResponse"
+                  "$ref": "#/components/schemas/QueryBatchResponseV3"
                 }
               }
             },
@@ -3757,7 +3757,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InvitePayeeRequest"
+                "$ref": "#/components/schemas/InvitePayeeRequestV3"
               }
             }
           },
@@ -3865,7 +3865,7 @@
             "name": "invitationStatus",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/InvitationStatus"
+              "$ref": "#/components/schemas/InvitationStatusV4"
             }
           },
           {
@@ -3898,7 +3898,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse"
+                  "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponseV3"
                 }
               }
             },
@@ -4126,7 +4126,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PayeeDeltaResponse"
+                  "$ref": "#/components/schemas/PayeeDeltaResponseV3"
                 }
               }
             },
@@ -4190,7 +4190,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateRemoteIdRequest"
+                "$ref": "#/components/schemas/UpdateRemoteIdRequestV3"
               }
             }
           },
@@ -4280,7 +4280,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdatePayeeDetailsRequest"
+                "$ref": "#/components/schemas/UpdatePayeeDetailsRequestV3"
               }
             }
           },
@@ -4407,7 +4407,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PayeeDetailResponse_2"
+                  "$ref": "#/components/schemas/PayeeDetailResponseV4"
                 }
               }
             },
@@ -4649,7 +4649,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdatePayeeDetailsRequest_2"
+                "$ref": "#/components/schemas/UpdatePayeeDetailsRequestV4"
               }
             }
           },
@@ -4733,7 +4733,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateRemoteIdRequest_2"
+                "$ref": "#/components/schemas/UpdateRemoteIdRequestV4"
               }
             }
           },
@@ -4834,7 +4834,7 @@
             "name": "watchlistStatus",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/WatchlistStatus"
+              "$ref": "#/components/schemas/WatchlistStatusV3"
             }
           },
           {
@@ -4852,7 +4852,7 @@
             "name": "onboardedStatus",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/OnboardedStatus"
+              "$ref": "#/components/schemas/OnboardedStatusV4"
             }
           },
           {
@@ -4911,7 +4911,7 @@
             "name": "ofacStatus",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/OfacStatus"
+              "$ref": "#/components/schemas/OfacStatusV4"
             }
           },
           {
@@ -4956,7 +4956,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PagedPayeeResponse_2"
+                  "$ref": "#/components/schemas/PagedPayeeResponseV4"
                 }
               }
             },
@@ -5170,7 +5170,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePayeesRequest_2"
+                "$ref": "#/components/schemas/CreatePayeesRequestV4"
               }
             },
             "multipart/form-data": {
@@ -5183,7 +5183,7 @@
                   "file": {
                     "description": "CSV File of payee data",
                     "items": {
-                      "$ref": "#/components/schemas/CreatePayeesCSVRequest_2"
+                      "$ref": "#/components/schemas/CreatePayeesCSVRequestV4"
                     },
                     "type": "array"
                   }
@@ -5312,7 +5312,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreatePayeesCSVResponse_2"
+                  "$ref": "#/components/schemas/CreatePayeesCSVResponseV4"
                 }
               }
             },
@@ -5441,7 +5441,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/QueryBatchResponse_2"
+                  "$ref": "#/components/schemas/QueryBatchResponseV4"
                 }
               }
             },
@@ -5521,7 +5521,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/InvitePayeeRequest_2"
+                "$ref": "#/components/schemas/InvitePayeeRequestV4"
               }
             }
           },
@@ -5628,7 +5628,7 @@
             "name": "invitationStatus",
             "required": false,
             "schema": {
-              "$ref": "#/components/schemas/InvitationStatus"
+              "$ref": "#/components/schemas/InvitationStatusV4"
             }
           },
           {
@@ -5661,7 +5661,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_2"
+                  "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponseV4"
                 }
               }
             },
@@ -5888,7 +5888,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PayeeDeltaResponse_2"
+                  "$ref": "#/components/schemas/PayeeDeltaResponseV4"
                 }
               }
             },
@@ -11531,7 +11531,7 @@
       },
       "AuthResponse": {
         "example": {
-          "access_token": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "access_token": "IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk",
           "refresh_token": "IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk",
           "scope": "example_scope",
           "token_type": "bearer",
@@ -11543,7 +11543,7 @@
         },
         "properties": {
           "access_token": {
-            "format": "uuid",
+            "example": "IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk",
             "type": "string"
           },
           "token_type": {
@@ -12593,6 +12593,7 @@
           "supportContact": "support@example.com",
           "payorXid": "ABC_201234",
           "includesReports": true,
+          "managingPayees": true,
           "allowsLanguageChoice": true,
           "language": "EN",
           "provider": "provider",
@@ -12605,6 +12606,7 @@
           "manualLockout": true,
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "primaryContactEmail": "joe.buck@example.com",
+          "usdTxnValueReportingThreshold": 1000000,
           "payorName": "Example, Corp",
           "address": {
             "country": "US",
@@ -12744,6 +12746,14 @@
               "type": "string"
             },
             "type": "array"
+          },
+          "usdTxnValueReportingThreshold": {
+            "description": "USD in minor units",
+            "example": 1000000,
+            "type": "integer"
+          },
+          "managingPayees": {
+            "type": "boolean"
           }
         },
         "required": [
@@ -12993,7 +13003,7 @@
         ],
         "type": "object"
       },
-      "PayeeDetailResponse": {
+      "PayeeDetailResponseV3": {
         "example": {
           "payorRefs": [
             {
@@ -13104,10 +13114,10 @@
             "type": "string"
           },
           "onboardedStatus": {
-            "$ref": "#/components/schemas/OnboardedStatus_2"
+            "$ref": "#/components/schemas/OnboardedStatusV3"
           },
           "watchlistStatus": {
-            "$ref": "#/components/schemas/WatchlistStatus"
+            "$ref": "#/components/schemas/WatchlistStatusV3"
           },
           "watchlistOverrideExpiresAtTimestamp": {
             "example": "2019-01-20T09:00:00.000Z",
@@ -13130,7 +13140,12 @@
             "type": "string"
           },
           "country": {
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
+            "maxLength": 2,
+            "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "displayName": {
@@ -13153,13 +13168,13 @@
             "type": "string"
           },
           "address": {
-            "$ref": "#/components/schemas/PayeeAddress"
+            "$ref": "#/components/schemas/PayeeAddressV3"
           },
           "individual": {
-            "$ref": "#/components/schemas/Individual"
+            "$ref": "#/components/schemas/IndividualV3"
           },
           "company": {
-            "$ref": "#/components/schemas/Company"
+            "$ref": "#/components/schemas/CompanyV3"
           },
           "cellphoneNumber": {
             "example": "1234567890",
@@ -13215,12 +13230,12 @@
             "type": "string"
           },
           "challenge": {
-            "$ref": "#/components/schemas/Challenge"
+            "$ref": "#/components/schemas/ChallengeV3"
           }
         },
         "type": "object"
       },
-      "WatchlistStatus": {
+      "WatchlistStatusV3": {
         "enum": [
           "NONE",
           "PENDING",
@@ -13230,7 +13245,7 @@
         ],
         "type": "string"
       },
-      "OnboardedStatus": {
+      "OnboardedStatusV4": {
         "enum": [
           "CREATED",
           "INVITED",
@@ -13247,7 +13262,7 @@
         ],
         "type": "string"
       },
-      "PagedPayeeResponse": {
+      "PagedPayeeResponseV3": {
         "description": "List Payees Response Object",
         "example": {
           "summary": {
@@ -13401,27 +13416,27 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/PagedPayeeResponse_summary"
+            "$ref": "#/components/schemas/PagedPayeeResponseV3_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/PagedPayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponseV3_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/GetPayeeListResponse"
+              "$ref": "#/components/schemas/GetPayeeListResponseV3"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "CreatePayeesRequest": {
+      "CreatePayeesRequestV3": {
         "example": {
           "payees": [
             {
@@ -13594,7 +13609,7 @@
           },
           "payees": {
             "items": {
-              "$ref": "#/components/schemas/CreatePayee"
+              "$ref": "#/components/schemas/CreatePayeeV3"
             },
             "type": "array"
           }
@@ -13605,7 +13620,7 @@
         ],
         "type": "object"
       },
-      "CreatePayeesCSVRequest": {
+      "CreatePayeesCSVRequestV3": {
         "properties": {
           "type": {
             "$ref": "#/components/schemas/PayeeType_2"
@@ -13663,261 +13678,12 @@
             "type": "string"
           },
           "addressCountry": {
-            "description": "Must be a 2 character country code - per ISO 3166-1",
-            "enum": [
-              "AF",
-              "AX",
-              "AL",
-              "DZ",
-              "AS",
-              "AD",
-              "AO",
-              "AI",
-              "AQ",
-              "AG",
-              "AR",
-              "AM",
-              "AW",
-              "AU",
-              "AT",
-              "AZ",
-              "BS",
-              "BH",
-              "BD",
-              "BB",
-              "BY",
-              "BE",
-              "BZ",
-              "BJ",
-              "BM",
-              "BT",
-              "BO",
-              "BQ",
-              "BA",
-              "BW",
-              "BV",
-              "BR",
-              "IO",
-              "BN",
-              "BG",
-              "BF",
-              "BI",
-              "KH",
-              "CM",
-              "CA",
-              "CV",
-              "KY",
-              "CF",
-              "TD",
-              "CL",
-              "CN",
-              "CX",
-              "CC",
-              "CO",
-              "KM",
-              "CG",
-              "CD",
-              "CK",
-              "CR",
-              "CI",
-              "HR",
-              "CU",
-              "CW",
-              "CY",
-              "CZ",
-              "DK",
-              "DJ",
-              "DM",
-              "DO",
-              "EC",
-              "EG",
-              "SV",
-              "GQ",
-              "ER",
-              "EE",
-              "ET",
-              "FK",
-              "FO",
-              "FJ",
-              "FI",
-              "FR",
-              "GF",
-              "PF",
-              "TF",
-              "GA",
-              "GM",
-              "GE",
-              "DE",
-              "GH",
-              "GI",
-              "GR",
-              "GL",
-              "GD",
-              "GP",
-              "GU",
-              "GT",
-              "GG",
-              "GN",
-              "GW",
-              "GY",
-              "HT",
-              "HM",
-              "VA",
-              "HN",
-              "HK",
-              "HU",
-              "IS",
-              "IN",
-              "ID",
-              "IR",
-              "IQ",
-              "IE",
-              "IM",
-              "IL",
-              "IT",
-              "JM",
-              "JP",
-              "JE",
-              "JO",
-              "KZ",
-              "KE",
-              "KI",
-              "KP",
-              "KR",
-              "KW",
-              "KG",
-              "LA",
-              "LV",
-              "LB",
-              "LS",
-              "LR",
-              "LY",
-              "LI",
-              "LT",
-              "LU",
-              "MO",
-              "MK",
-              "MG",
-              "MW",
-              "MY",
-              "MV",
-              "ML",
-              "MT",
-              "MH",
-              "MQ",
-              "MR",
-              "MU",
-              "YT",
-              "MX",
-              "FM",
-              "MD",
-              "MC",
-              "MN",
-              "ME",
-              "MS",
-              "MA",
-              "MZ",
-              "MM",
-              "NA",
-              "NR",
-              "NP",
-              "NL",
-              "NC",
-              "NZ",
-              "NI",
-              "NE",
-              "NG",
-              "NU",
-              "NF",
-              "MP",
-              "NO",
-              "OM",
-              "PK",
-              "PW",
-              "PS",
-              "PA",
-              "PG",
-              "PY",
-              "PE",
-              "PH",
-              "PN",
-              "PL",
-              "PT",
-              "PR",
-              "QA",
-              "RE",
-              "RO",
-              "RU",
-              "RW",
-              "BL",
-              "SH",
-              "KN",
-              "LC",
-              "MF",
-              "PM",
-              "VC",
-              "WS",
-              "SM",
-              "ST",
-              "SA",
-              "SN",
-              "RS",
-              "SC",
-              "SL",
-              "SG",
-              "SX",
-              "SK",
-              "SI",
-              "SB",
-              "SO",
-              "ZA",
-              "GS",
-              "SS",
-              "ES",
-              "LK",
-              "SD",
-              "SR",
-              "SJ",
-              "SZ",
-              "SE",
-              "CH",
-              "SY",
-              "TW",
-              "TJ",
-              "TZ",
-              "TH",
-              "TL",
-              "TG",
-              "TK",
-              "TO",
-              "TT",
-              "TN",
-              "TR",
-              "TM",
-              "TC",
-              "TV",
-              "UG",
-              "UA",
-              "AE",
-              "GB",
-              "US",
-              "UM",
-              "UY",
-              "UZ",
-              "VU",
-              "VE",
-              "VN",
-              "VG",
-              "VI",
-              "WF",
-              "EH",
-              "YE",
-              "ZM",
-              "ZW"
-            ],
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
             "maxLength": 2,
             "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "individualNationalIdentification": {
@@ -13997,264 +13763,16 @@
             "maxLength": 34,
             "minLength": 15,
             "pattern": "^[A-Za-z0-9]+$",
+            "title": "IBAN - International Bank Account Number",
             "type": "string"
           },
           "paymentChannelCountryCode": {
-            "description": "Must be a 2 character country code - per ISO 3166-1",
-            "enum": [
-              "AF",
-              "AX",
-              "AL",
-              "DZ",
-              "AS",
-              "AD",
-              "AO",
-              "AI",
-              "AQ",
-              "AG",
-              "AR",
-              "AM",
-              "AW",
-              "AU",
-              "AT",
-              "AZ",
-              "BS",
-              "BH",
-              "BD",
-              "BB",
-              "BY",
-              "BE",
-              "BZ",
-              "BJ",
-              "BM",
-              "BT",
-              "BO",
-              "BQ",
-              "BA",
-              "BW",
-              "BV",
-              "BR",
-              "IO",
-              "BN",
-              "BG",
-              "BF",
-              "BI",
-              "KH",
-              "CM",
-              "CA",
-              "CV",
-              "KY",
-              "CF",
-              "TD",
-              "CL",
-              "CN",
-              "CX",
-              "CC",
-              "CO",
-              "KM",
-              "CG",
-              "CD",
-              "CK",
-              "CR",
-              "CI",
-              "HR",
-              "CU",
-              "CW",
-              "CY",
-              "CZ",
-              "DK",
-              "DJ",
-              "DM",
-              "DO",
-              "EC",
-              "EG",
-              "SV",
-              "GQ",
-              "ER",
-              "EE",
-              "ET",
-              "FK",
-              "FO",
-              "FJ",
-              "FI",
-              "FR",
-              "GF",
-              "PF",
-              "TF",
-              "GA",
-              "GM",
-              "GE",
-              "DE",
-              "GH",
-              "GI",
-              "GR",
-              "GL",
-              "GD",
-              "GP",
-              "GU",
-              "GT",
-              "GG",
-              "GN",
-              "GW",
-              "GY",
-              "HT",
-              "HM",
-              "VA",
-              "HN",
-              "HK",
-              "HU",
-              "IS",
-              "IN",
-              "ID",
-              "IR",
-              "IQ",
-              "IE",
-              "IM",
-              "IL",
-              "IT",
-              "JM",
-              "JP",
-              "JE",
-              "JO",
-              "KZ",
-              "KE",
-              "KI",
-              "KP",
-              "KR",
-              "KW",
-              "KG",
-              "LA",
-              "LV",
-              "LB",
-              "LS",
-              "LR",
-              "LY",
-              "LI",
-              "LT",
-              "LU",
-              "MO",
-              "MK",
-              "MG",
-              "MW",
-              "MY",
-              "MV",
-              "ML",
-              "MT",
-              "MH",
-              "MQ",
-              "MR",
-              "MU",
-              "YT",
-              "MX",
-              "FM",
-              "MD",
-              "MC",
-              "MN",
-              "ME",
-              "MS",
-              "MA",
-              "MZ",
-              "MM",
-              "NA",
-              "NR",
-              "NP",
-              "NL",
-              "NC",
-              "NZ",
-              "NI",
-              "NE",
-              "NG",
-              "NU",
-              "NF",
-              "MP",
-              "NO",
-              "OM",
-              "PK",
-              "PW",
-              "PS",
-              "PA",
-              "PG",
-              "PY",
-              "PE",
-              "PH",
-              "PN",
-              "PL",
-              "PT",
-              "PR",
-              "QA",
-              "RE",
-              "RO",
-              "RU",
-              "RW",
-              "BL",
-              "SH",
-              "KN",
-              "LC",
-              "MF",
-              "PM",
-              "VC",
-              "WS",
-              "SM",
-              "ST",
-              "SA",
-              "SN",
-              "RS",
-              "SC",
-              "SL",
-              "SG",
-              "SX",
-              "SK",
-              "SI",
-              "SB",
-              "SO",
-              "ZA",
-              "GS",
-              "SS",
-              "ES",
-              "LK",
-              "SD",
-              "SR",
-              "SJ",
-              "SZ",
-              "SE",
-              "CH",
-              "SY",
-              "TW",
-              "TJ",
-              "TZ",
-              "TH",
-              "TL",
-              "TG",
-              "TK",
-              "TO",
-              "TT",
-              "TN",
-              "TR",
-              "TM",
-              "TC",
-              "TV",
-              "UG",
-              "UA",
-              "AE",
-              "GB",
-              "US",
-              "UM",
-              "UY",
-              "UZ",
-              "VU",
-              "VE",
-              "VN",
-              "VG",
-              "VI",
-              "WF",
-              "EH",
-              "YE",
-              "ZM",
-              "ZW"
-            ],
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
             "maxLength": 2,
             "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "paymentChannelCurrency": {
@@ -14294,7 +13812,7 @@
         ],
         "type": "object"
       },
-      "CreatePayeesCSVResponse": {
+      "CreatePayeesCSVResponseV3": {
         "example": {
           "batchId": "cb6ff8c6-85e9-45a6-b7d9-d05305db67f3",
           "rejectedCsvRows": [
@@ -14318,14 +13836,14 @@
           },
           "rejectedCsvRows": {
             "items": {
-              "$ref": "#/components/schemas/CreatePayeesCSVResponse_rejectedCsvRows"
+              "$ref": "#/components/schemas/CreatePayeesCSVResponseV3_rejectedCsvRows"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "QueryBatchResponse": {
+      "QueryBatchResponseV3": {
         "example": {
           "failures": [
             {
@@ -14520,14 +14038,14 @@
           },
           "failures": {
             "items": {
-              "$ref": "#/components/schemas/FailedSubmission"
+              "$ref": "#/components/schemas/FailedSubmissionV3"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "InvitePayeeRequest": {
+      "InvitePayeeRequestV3": {
         "example": {
           "payorId": "9ac75325-5dcd-42d5-b992-175d7e0a035e"
         },
@@ -14543,7 +14061,7 @@
         ],
         "type": "object"
       },
-      "InvitationStatus": {
+      "InvitationStatusV4": {
         "enum": [
           "ACCEPTED",
           "PENDING",
@@ -14551,7 +14069,7 @@
         ],
         "type": "string"
       },
-      "PagedPayeeInvitationStatusResponse": {
+      "PagedPayeeInvitationStatusResponseV3": {
         "description": "List Payees Invitation Status Object",
         "example": {
           "links": [
@@ -14586,24 +14104,24 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponseV3_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PayeeInvitationStatusResponse"
+              "$ref": "#/components/schemas/PayeeInvitationStatusResponseV3"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "PayeeDeltaResponse": {
+      "PayeeDeltaResponseV3": {
         "description": "List Payee Changes Response Object",
         "example": {
           "links": [
@@ -14644,24 +14162,24 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PayeeDeltaResponse_page"
+            "$ref": "#/components/schemas/PayeeDeltaResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeDeltaResponse_links"
+              "$ref": "#/components/schemas/PayeeDeltaResponseV3_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PayeeDelta"
+              "$ref": "#/components/schemas/PayeeDeltaV3"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "UpdateRemoteIdRequest": {
+      "UpdateRemoteIdRequestV3": {
         "example": {
           "payorId": "9ac75325-5dcd-42d5-b992-175d7e0a035e",
           "remoteId": "remoteId123"
@@ -14687,7 +14205,7 @@
         ],
         "type": "object"
       },
-      "UpdatePayeeDetailsRequest": {
+      "UpdatePayeeDetailsRequestV3": {
         "example": {
           "address": {
             "country": "US",
@@ -14723,13 +14241,13 @@
         },
         "properties": {
           "address": {
-            "$ref": "#/components/schemas/PayeeAddress"
+            "$ref": "#/components/schemas/PayeeAddressV3"
           },
           "individual": {
-            "$ref": "#/components/schemas/Individual"
+            "$ref": "#/components/schemas/IndividualV3"
           },
           "company": {
-            "$ref": "#/components/schemas/Company"
+            "$ref": "#/components/schemas/CompanyV3"
           },
           "language": {
             "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
@@ -14740,7 +14258,7 @@
             "$ref": "#/components/schemas/PayeeType_2"
           },
           "challenge": {
-            "$ref": "#/components/schemas/Challenge"
+            "$ref": "#/components/schemas/ChallengeV3"
           },
           "email": {
             "example": "bob@example.com",
@@ -14751,7 +14269,7 @@
         },
         "type": "object"
       },
-      "PayeeDetailResponse_2": {
+      "PayeeDetailResponseV4": {
         "example": {
           "payorRefs": [
             {
@@ -14849,7 +14367,7 @@
           },
           "payorRefs": {
             "items": {
-              "$ref": "#/components/schemas/PayeePayorRef"
+              "$ref": "#/components/schemas/PayeePayorRefV4"
             },
             "nullable": true,
             "readOnly": true,
@@ -14862,10 +14380,10 @@
             "type": "string"
           },
           "onboardedStatus": {
-            "$ref": "#/components/schemas/OnboardedStatus"
+            "$ref": "#/components/schemas/OnboardedStatusV4"
           },
           "watchlistStatus": {
-            "$ref": "#/components/schemas/WatchlistStatus_2"
+            "$ref": "#/components/schemas/WatchlistStatusV4"
           },
           "watchlistOverrideExpiresAtTimestamp": {
             "example": "2019-01-20T09:00:00.000Z",
@@ -14911,13 +14429,13 @@
             "type": "string"
           },
           "address": {
-            "$ref": "#/components/schemas/PayeeAddress_2"
+            "$ref": "#/components/schemas/PayeeAddressV4"
           },
           "individual": {
-            "$ref": "#/components/schemas/Individual_2"
+            "$ref": "#/components/schemas/IndividualV4"
           },
           "company": {
-            "$ref": "#/components/schemas/Company_2"
+            "$ref": "#/components/schemas/CompanyV4"
           },
           "cellphoneNumber": {
             "example": "1234567890",
@@ -14973,21 +14491,55 @@
             "type": "string"
           },
           "challenge": {
-            "$ref": "#/components/schemas/Challenge_2"
+            "$ref": "#/components/schemas/ChallengeV4"
           }
         },
         "type": "object"
       },
-      "UpdatePayeeDetailsRequest_2": {
-        "properties": {
+      "UpdatePayeeDetailsRequestV4": {
+        "example": {
           "address": {
-            "$ref": "#/components/schemas/PayeeAddress_2"
+            "country": "US",
+            "countyOrProvince": "FL",
+            "line4": "line4",
+            "city": "Key West",
+            "line3": "line3",
+            "line2": "line2",
+            "line1": "500 Duval St",
+            "zipOrPostcode": "33945"
           },
           "individual": {
-            "$ref": "#/components/schemas/Individual_2"
+            "name": {
+              "firstName": "Bob",
+              "lastName": "Smith",
+              "otherNames": "A",
+              "title": "Mr"
+            },
+            "nationalIdentification": "AB123456C",
+            "dateOfBirth": "1985-01-01T00:00:00.000Z"
+          },
+          "challenge": {
+            "description": "challenge description",
+            "value": "11984567"
           },
           "company": {
-            "$ref": "#/components/schemas/Company_2"
+            "taxId": "123123123",
+            "name": "ABC Group Plc",
+            "operatingName": "ABC Co"
+          },
+          "language": "en-US",
+          "contactSmsNumber": "11235555555",
+          "email": "bob@example.com"
+        },
+        "properties": {
+          "address": {
+            "$ref": "#/components/schemas/PayeeAddressV4"
+          },
+          "individual": {
+            "$ref": "#/components/schemas/IndividualV4"
+          },
+          "company": {
+            "$ref": "#/components/schemas/CompanyV4"
           },
           "language": {
             "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
@@ -14998,7 +14550,7 @@
             "$ref": "#/components/schemas/PayeeType_2"
           },
           "challenge": {
-            "$ref": "#/components/schemas/Challenge_2"
+            "$ref": "#/components/schemas/ChallengeV4"
           },
           "email": {
             "example": "bob@example.com",
@@ -15015,7 +14567,11 @@
         },
         "type": "object"
       },
-      "UpdateRemoteIdRequest_2": {
+      "UpdateRemoteIdRequestV4": {
+        "example": {
+          "payorId": "9ac75325-5dcd-42d5-b992-175d7e0a035e",
+          "remoteId": "remoteId123"
+        },
         "properties": {
           "payorId": {
             "example": "9ac75325-5dcd-42d5-b992-175d7e0a035e",
@@ -15037,7 +14593,7 @@
         ],
         "type": "object"
       },
-      "OfacStatus": {
+      "OfacStatusV4": {
         "enum": [
           "PENDING",
           "PASSED",
@@ -15045,7 +14601,7 @@
         ],
         "type": "string"
       },
-      "PagedPayeeResponse_2": {
+      "PagedPayeeResponseV4": {
         "description": "List Payees Response Object",
         "example": {
           "summary": {
@@ -15199,27 +14755,192 @@
         },
         "properties": {
           "summary": {
-            "$ref": "#/components/schemas/PagedPayeeResponse_summary"
+            "$ref": "#/components/schemas/PagedPayeeResponseV3_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/PagedPayeeResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponseV3_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/GetPayeeListResponse_2"
+              "$ref": "#/components/schemas/GetPayeeListResponseV4"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "CreatePayeesRequest_2": {
+      "CreatePayeesRequestV4": {
+        "example": {
+          "payees": [
+            {
+              "payorRefs": [
+                {
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                  "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                  "payableStatus": true,
+                  "payableIssues": [
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    },
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    }
+                  ],
+                  "remoteId": "uniqueIdForRemoteEntity",
+                  "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+                },
+                {
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                  "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                  "payableStatus": true,
+                  "payableIssues": [
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    },
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    }
+                  ],
+                  "remoteId": "uniqueIdForRemoteEntity",
+                  "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+                }
+              ],
+              "address": {
+                "country": "US",
+                "countyOrProvince": "FL",
+                "line4": "line4",
+                "city": "Key West",
+                "line3": "line3",
+                "line2": "line2",
+                "line1": "500 Duval St",
+                "zipOrPostcode": "33945"
+              },
+              "individual": {
+                "name": {
+                  "firstName": "Bob",
+                  "lastName": "Smith",
+                  "otherNames": "H",
+                  "title": "Mr"
+                },
+                "nationalIdentification": "SA211123K",
+                "dateOfBirth": "1970-05-20T00:00:00.000+0000"
+              },
+              "challenge": {
+                "description": "challenge description",
+                "value": "11984567"
+              },
+              "language": "en-US",
+              "company": {
+                "taxId": "123123123",
+                "name": "ABC Group Plc",
+                "operatingName": "ABC Co"
+              },
+              "payeeId": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
+              "email": "bob@example.com",
+              "remoteId": "Remote ID",
+              "paymentChannel": {
+                "paymentChannelName": "My Payment Channel",
+                "routingNumber": "XXXXX6789",
+                "accountName": "My account",
+                "countryCode": "US",
+                "iban": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
+                "currency": "USD",
+                "accountNumber": "XXXXXX5678"
+              }
+            },
+            {
+              "payorRefs": [
+                {
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                  "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                  "payableStatus": true,
+                  "payableIssues": [
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    },
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    }
+                  ],
+                  "remoteId": "uniqueIdForRemoteEntity",
+                  "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+                },
+                {
+                  "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+                  "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+                  "payableStatus": true,
+                  "payableIssues": [
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    },
+                    {
+                      "code": "3",
+                      "message": "payee-disabled"
+                    }
+                  ],
+                  "remoteId": "uniqueIdForRemoteEntity",
+                  "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+                }
+              ],
+              "address": {
+                "country": "US",
+                "countyOrProvince": "FL",
+                "line4": "line4",
+                "city": "Key West",
+                "line3": "line3",
+                "line2": "line2",
+                "line1": "500 Duval St",
+                "zipOrPostcode": "33945"
+              },
+              "individual": {
+                "name": {
+                  "firstName": "Bob",
+                  "lastName": "Smith",
+                  "otherNames": "H",
+                  "title": "Mr"
+                },
+                "nationalIdentification": "SA211123K",
+                "dateOfBirth": "1970-05-20T00:00:00.000+0000"
+              },
+              "challenge": {
+                "description": "challenge description",
+                "value": "11984567"
+              },
+              "language": "en-US",
+              "company": {
+                "taxId": "123123123",
+                "name": "ABC Group Plc",
+                "operatingName": "ABC Co"
+              },
+              "payeeId": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
+              "email": "bob@example.com",
+              "remoteId": "Remote ID",
+              "paymentChannel": {
+                "paymentChannelName": "My Payment Channel",
+                "routingNumber": "XXXXX6789",
+                "accountName": "My account",
+                "countryCode": "US",
+                "iban": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
+                "currency": "USD",
+                "accountNumber": "XXXXXX5678"
+              }
+            }
+          ],
+          "payorId": "9ac75325-5dcd-42d5-b992-175d7e0a035e"
+        },
         "properties": {
           "payorId": {
             "example": "9ac75325-5dcd-42d5-b992-175d7e0a035e",
@@ -15227,7 +14948,7 @@
           },
           "payees": {
             "items": {
-              "$ref": "#/components/schemas/CreatePayee_2"
+              "$ref": "#/components/schemas/CreatePayeeV4"
             },
             "type": "array"
           }
@@ -15238,7 +14959,7 @@
         ],
         "type": "object"
       },
-      "CreatePayeesCSVRequest_2": {
+      "CreatePayeesCSVRequestV4": {
         "properties": {
           "type": {
             "$ref": "#/components/schemas/PayeeType_2"
@@ -15296,261 +15017,12 @@
             "type": "string"
           },
           "addressCountry": {
-            "description": "Must be a 2 character country code - per ISO 3166-1",
-            "enum": [
-              "AF",
-              "AX",
-              "AL",
-              "DZ",
-              "AS",
-              "AD",
-              "AO",
-              "AI",
-              "AQ",
-              "AG",
-              "AR",
-              "AM",
-              "AW",
-              "AU",
-              "AT",
-              "AZ",
-              "BS",
-              "BH",
-              "BD",
-              "BB",
-              "BY",
-              "BE",
-              "BZ",
-              "BJ",
-              "BM",
-              "BT",
-              "BO",
-              "BQ",
-              "BA",
-              "BW",
-              "BV",
-              "BR",
-              "IO",
-              "BN",
-              "BG",
-              "BF",
-              "BI",
-              "KH",
-              "CM",
-              "CA",
-              "CV",
-              "KY",
-              "CF",
-              "TD",
-              "CL",
-              "CN",
-              "CX",
-              "CC",
-              "CO",
-              "KM",
-              "CG",
-              "CD",
-              "CK",
-              "CR",
-              "CI",
-              "HR",
-              "CU",
-              "CW",
-              "CY",
-              "CZ",
-              "DK",
-              "DJ",
-              "DM",
-              "DO",
-              "EC",
-              "EG",
-              "SV",
-              "GQ",
-              "ER",
-              "EE",
-              "ET",
-              "FK",
-              "FO",
-              "FJ",
-              "FI",
-              "FR",
-              "GF",
-              "PF",
-              "TF",
-              "GA",
-              "GM",
-              "GE",
-              "DE",
-              "GH",
-              "GI",
-              "GR",
-              "GL",
-              "GD",
-              "GP",
-              "GU",
-              "GT",
-              "GG",
-              "GN",
-              "GW",
-              "GY",
-              "HT",
-              "HM",
-              "VA",
-              "HN",
-              "HK",
-              "HU",
-              "IS",
-              "IN",
-              "ID",
-              "IR",
-              "IQ",
-              "IE",
-              "IM",
-              "IL",
-              "IT",
-              "JM",
-              "JP",
-              "JE",
-              "JO",
-              "KZ",
-              "KE",
-              "KI",
-              "KP",
-              "KR",
-              "KW",
-              "KG",
-              "LA",
-              "LV",
-              "LB",
-              "LS",
-              "LR",
-              "LY",
-              "LI",
-              "LT",
-              "LU",
-              "MO",
-              "MK",
-              "MG",
-              "MW",
-              "MY",
-              "MV",
-              "ML",
-              "MT",
-              "MH",
-              "MQ",
-              "MR",
-              "MU",
-              "YT",
-              "MX",
-              "FM",
-              "MD",
-              "MC",
-              "MN",
-              "ME",
-              "MS",
-              "MA",
-              "MZ",
-              "MM",
-              "NA",
-              "NR",
-              "NP",
-              "NL",
-              "NC",
-              "NZ",
-              "NI",
-              "NE",
-              "NG",
-              "NU",
-              "NF",
-              "MP",
-              "NO",
-              "OM",
-              "PK",
-              "PW",
-              "PS",
-              "PA",
-              "PG",
-              "PY",
-              "PE",
-              "PH",
-              "PN",
-              "PL",
-              "PT",
-              "PR",
-              "QA",
-              "RE",
-              "RO",
-              "RU",
-              "RW",
-              "BL",
-              "SH",
-              "KN",
-              "LC",
-              "MF",
-              "PM",
-              "VC",
-              "WS",
-              "SM",
-              "ST",
-              "SA",
-              "SN",
-              "RS",
-              "SC",
-              "SL",
-              "SG",
-              "SX",
-              "SK",
-              "SI",
-              "SB",
-              "SO",
-              "ZA",
-              "GS",
-              "SS",
-              "ES",
-              "LK",
-              "SD",
-              "SR",
-              "SJ",
-              "SZ",
-              "SE",
-              "CH",
-              "SY",
-              "TW",
-              "TJ",
-              "TZ",
-              "TH",
-              "TL",
-              "TG",
-              "TK",
-              "TO",
-              "TT",
-              "TN",
-              "TR",
-              "TM",
-              "TC",
-              "TV",
-              "UG",
-              "UA",
-              "AE",
-              "GB",
-              "US",
-              "UM",
-              "UY",
-              "UZ",
-              "VU",
-              "VE",
-              "VN",
-              "VG",
-              "VI",
-              "WF",
-              "EH",
-              "YE",
-              "ZM",
-              "ZW"
-            ],
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
             "maxLength": 2,
             "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "individualNationalIdentification": {
@@ -15630,264 +15102,16 @@
             "maxLength": 34,
             "minLength": 15,
             "pattern": "^[A-Za-z0-9]+$",
+            "title": "IBAN - International Bank Account Number",
             "type": "string"
           },
           "paymentChannelCountryCode": {
-            "description": "Must be a 2 character country code - per ISO 3166-1",
-            "enum": [
-              "AF",
-              "AX",
-              "AL",
-              "DZ",
-              "AS",
-              "AD",
-              "AO",
-              "AI",
-              "AQ",
-              "AG",
-              "AR",
-              "AM",
-              "AW",
-              "AU",
-              "AT",
-              "AZ",
-              "BS",
-              "BH",
-              "BD",
-              "BB",
-              "BY",
-              "BE",
-              "BZ",
-              "BJ",
-              "BM",
-              "BT",
-              "BO",
-              "BQ",
-              "BA",
-              "BW",
-              "BV",
-              "BR",
-              "IO",
-              "BN",
-              "BG",
-              "BF",
-              "BI",
-              "KH",
-              "CM",
-              "CA",
-              "CV",
-              "KY",
-              "CF",
-              "TD",
-              "CL",
-              "CN",
-              "CX",
-              "CC",
-              "CO",
-              "KM",
-              "CG",
-              "CD",
-              "CK",
-              "CR",
-              "CI",
-              "HR",
-              "CU",
-              "CW",
-              "CY",
-              "CZ",
-              "DK",
-              "DJ",
-              "DM",
-              "DO",
-              "EC",
-              "EG",
-              "SV",
-              "GQ",
-              "ER",
-              "EE",
-              "ET",
-              "FK",
-              "FO",
-              "FJ",
-              "FI",
-              "FR",
-              "GF",
-              "PF",
-              "TF",
-              "GA",
-              "GM",
-              "GE",
-              "DE",
-              "GH",
-              "GI",
-              "GR",
-              "GL",
-              "GD",
-              "GP",
-              "GU",
-              "GT",
-              "GG",
-              "GN",
-              "GW",
-              "GY",
-              "HT",
-              "HM",
-              "VA",
-              "HN",
-              "HK",
-              "HU",
-              "IS",
-              "IN",
-              "ID",
-              "IR",
-              "IQ",
-              "IE",
-              "IM",
-              "IL",
-              "IT",
-              "JM",
-              "JP",
-              "JE",
-              "JO",
-              "KZ",
-              "KE",
-              "KI",
-              "KP",
-              "KR",
-              "KW",
-              "KG",
-              "LA",
-              "LV",
-              "LB",
-              "LS",
-              "LR",
-              "LY",
-              "LI",
-              "LT",
-              "LU",
-              "MO",
-              "MK",
-              "MG",
-              "MW",
-              "MY",
-              "MV",
-              "ML",
-              "MT",
-              "MH",
-              "MQ",
-              "MR",
-              "MU",
-              "YT",
-              "MX",
-              "FM",
-              "MD",
-              "MC",
-              "MN",
-              "ME",
-              "MS",
-              "MA",
-              "MZ",
-              "MM",
-              "NA",
-              "NR",
-              "NP",
-              "NL",
-              "NC",
-              "NZ",
-              "NI",
-              "NE",
-              "NG",
-              "NU",
-              "NF",
-              "MP",
-              "NO",
-              "OM",
-              "PK",
-              "PW",
-              "PS",
-              "PA",
-              "PG",
-              "PY",
-              "PE",
-              "PH",
-              "PN",
-              "PL",
-              "PT",
-              "PR",
-              "QA",
-              "RE",
-              "RO",
-              "RU",
-              "RW",
-              "BL",
-              "SH",
-              "KN",
-              "LC",
-              "MF",
-              "PM",
-              "VC",
-              "WS",
-              "SM",
-              "ST",
-              "SA",
-              "SN",
-              "RS",
-              "SC",
-              "SL",
-              "SG",
-              "SX",
-              "SK",
-              "SI",
-              "SB",
-              "SO",
-              "ZA",
-              "GS",
-              "SS",
-              "ES",
-              "LK",
-              "SD",
-              "SR",
-              "SJ",
-              "SZ",
-              "SE",
-              "CH",
-              "SY",
-              "TW",
-              "TJ",
-              "TZ",
-              "TH",
-              "TL",
-              "TG",
-              "TK",
-              "TO",
-              "TT",
-              "TN",
-              "TR",
-              "TM",
-              "TC",
-              "TV",
-              "UG",
-              "UA",
-              "AE",
-              "GB",
-              "US",
-              "UM",
-              "UY",
-              "UZ",
-              "VU",
-              "VE",
-              "VN",
-              "VG",
-              "VI",
-              "WF",
-              "EH",
-              "YE",
-              "ZM",
-              "ZW"
-            ],
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
             "maxLength": 2,
             "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "paymentChannelCurrency": {
@@ -15927,7 +15151,7 @@
         ],
         "type": "object"
       },
-      "CreatePayeesCSVResponse_2": {
+      "CreatePayeesCSVResponseV4": {
         "example": {
           "batchId": "cb6ff8c6-85e9-45a6-b7d9-d05305db67f3",
           "rejectedCsvRows": [
@@ -15951,14 +15175,14 @@
           },
           "rejectedCsvRows": {
             "items": {
-              "$ref": "#/components/schemas/CreatePayeesCSVResponse_rejectedCsvRows"
+              "$ref": "#/components/schemas/CreatePayeesCSVResponseV3_rejectedCsvRows"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "QueryBatchResponse_2": {
+      "QueryBatchResponseV4": {
         "example": {
           "failures": [
             {
@@ -16153,14 +15377,17 @@
           },
           "failures": {
             "items": {
-              "$ref": "#/components/schemas/FailedSubmission_2"
+              "$ref": "#/components/schemas/FailedSubmissionV4"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "InvitePayeeRequest_2": {
+      "InvitePayeeRequestV4": {
+        "example": {
+          "payorId": "9ac75325-5dcd-42d5-b992-175d7e0a035e"
+        },
         "properties": {
           "payorId": {
             "example": "9ac75325-5dcd-42d5-b992-175d7e0a035e",
@@ -16173,7 +15400,7 @@
         ],
         "type": "object"
       },
-      "PagedPayeeInvitationStatusResponse_2": {
+      "PagedPayeeInvitationStatusResponseV4": {
         "description": "List Payees Invitation Status Object",
         "example": {
           "links": [
@@ -16208,24 +15435,24 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponseV3_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PayeeInvitationStatusResponse_2"
+              "$ref": "#/components/schemas/PayeeInvitationStatusResponseV4"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "PayeeDeltaResponse_2": {
+      "PayeeDeltaResponseV4": {
         "description": "List Payee Changes Response Object",
         "example": {
           "links": [
@@ -16266,17 +15493,17 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PayeeDeltaResponse_page"
+            "$ref": "#/components/schemas/PayeeDeltaResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PayeeDeltaResponse_2_links"
+              "$ref": "#/components/schemas/PayeeDeltaResponseV4_links"
             },
             "type": "array"
           },
           "content": {
             "items": {
-              "$ref": "#/components/schemas/PayeeDelta_2"
+              "$ref": "#/components/schemas/PayeeDeltaV4"
             },
             "type": "array"
           }
@@ -17567,11 +16794,11 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponseV3_links"
             },
             "type": "array"
           },
@@ -18562,11 +17789,11 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponseV3_links"
             },
             "type": "array"
           },
@@ -18696,28 +17923,34 @@
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
                 {
-                  "principal": "principal",
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
-                  "routingNumber": "routingNumber",
                   "accountName": "accountName",
-                  "iban": "iban",
-                  "sourceAmount": 1299,
                   "eventType": "PAYOUT_SUBMITTED",
                   "accountNumber": "accountNumber",
-                  "paymentAmount": 1299
+                  "paymentAmount": 1299,
+                  "principal": "principal",
+                  "routingNumber": "routingNumber",
+                  "iban": "iban",
+                  "scheduledFor": "2000-01-23T04:56:07.000Z",
+                  "sourceAmount": 1299,
+                  "scheduledBy": "Aphra Behn",
+                  "scheduledAt": "2000-01-23T04:56:07.000Z"
                 },
                 {
-                  "principal": "principal",
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
-                  "routingNumber": "routingNumber",
                   "accountName": "accountName",
-                  "iban": "iban",
-                  "sourceAmount": 1299,
                   "eventType": "PAYOUT_SUBMITTED",
                   "accountNumber": "accountNumber",
-                  "paymentAmount": 1299
+                  "paymentAmount": 1299,
+                  "principal": "principal",
+                  "routingNumber": "routingNumber",
+                  "iban": "iban",
+                  "scheduledFor": "2000-01-23T04:56:07.000Z",
+                  "sourceAmount": 1299,
+                  "scheduledBy": "Aphra Behn",
+                  "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
               "payorName": "payorName",
@@ -18791,28 +18024,34 @@
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
                 {
-                  "principal": "principal",
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
-                  "routingNumber": "routingNumber",
                   "accountName": "accountName",
-                  "iban": "iban",
-                  "sourceAmount": 1299,
                   "eventType": "PAYOUT_SUBMITTED",
                   "accountNumber": "accountNumber",
-                  "paymentAmount": 1299
+                  "paymentAmount": 1299,
+                  "principal": "principal",
+                  "routingNumber": "routingNumber",
+                  "iban": "iban",
+                  "scheduledFor": "2000-01-23T04:56:07.000Z",
+                  "sourceAmount": 1299,
+                  "scheduledBy": "Aphra Behn",
+                  "scheduledAt": "2000-01-23T04:56:07.000Z"
                 },
                 {
-                  "principal": "principal",
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
-                  "routingNumber": "routingNumber",
                   "accountName": "accountName",
-                  "iban": "iban",
-                  "sourceAmount": 1299,
                   "eventType": "PAYOUT_SUBMITTED",
                   "accountNumber": "accountNumber",
-                  "paymentAmount": 1299
+                  "paymentAmount": 1299,
+                  "principal": "principal",
+                  "routingNumber": "routingNumber",
+                  "iban": "iban",
+                  "scheduledFor": "2000-01-23T04:56:07.000Z",
+                  "sourceAmount": 1299,
+                  "scheduledBy": "Aphra Behn",
+                  "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
               "payorName": "payorName",
@@ -18851,11 +18090,11 @@
             "$ref": "#/components/schemas/GetPaymentsForPayoutResponseV4_summary"
           },
           "page": {
-            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponseV3_links"
             },
             "type": "array"
           },
@@ -18931,28 +18170,34 @@
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
                 {
-                  "principal": "principal",
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
-                  "routingNumber": "routingNumber",
                   "accountName": "accountName",
-                  "iban": "iban",
-                  "sourceAmount": 1299,
                   "eventType": "PAYOUT_SUBMITTED",
                   "accountNumber": "accountNumber",
-                  "paymentAmount": 1299
+                  "paymentAmount": 1299,
+                  "principal": "principal",
+                  "routingNumber": "routingNumber",
+                  "iban": "iban",
+                  "scheduledFor": "2000-01-23T04:56:07.000Z",
+                  "sourceAmount": 1299,
+                  "scheduledBy": "Aphra Behn",
+                  "scheduledAt": "2000-01-23T04:56:07.000Z"
                 },
                 {
-                  "principal": "principal",
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
-                  "routingNumber": "routingNumber",
                   "accountName": "accountName",
-                  "iban": "iban",
-                  "sourceAmount": 1299,
                   "eventType": "PAYOUT_SUBMITTED",
                   "accountNumber": "accountNumber",
-                  "paymentAmount": 1299
+                  "paymentAmount": 1299,
+                  "principal": "principal",
+                  "routingNumber": "routingNumber",
+                  "iban": "iban",
+                  "scheduledFor": "2000-01-23T04:56:07.000Z",
+                  "sourceAmount": 1299,
+                  "scheduledBy": "Aphra Behn",
+                  "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
               "payorName": "payorName",
@@ -19026,28 +18271,34 @@
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
                 {
-                  "principal": "principal",
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
-                  "routingNumber": "routingNumber",
                   "accountName": "accountName",
-                  "iban": "iban",
-                  "sourceAmount": 1299,
                   "eventType": "PAYOUT_SUBMITTED",
                   "accountNumber": "accountNumber",
-                  "paymentAmount": 1299
+                  "paymentAmount": 1299,
+                  "principal": "principal",
+                  "routingNumber": "routingNumber",
+                  "iban": "iban",
+                  "scheduledFor": "2000-01-23T04:56:07.000Z",
+                  "sourceAmount": 1299,
+                  "scheduledBy": "Aphra Behn",
+                  "scheduledAt": "2000-01-23T04:56:07.000Z"
                 },
                 {
-                  "principal": "principal",
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
-                  "routingNumber": "routingNumber",
                   "accountName": "accountName",
-                  "iban": "iban",
-                  "sourceAmount": 1299,
                   "eventType": "PAYOUT_SUBMITTED",
                   "accountNumber": "accountNumber",
-                  "paymentAmount": 1299
+                  "paymentAmount": 1299,
+                  "principal": "principal",
+                  "routingNumber": "routingNumber",
+                  "iban": "iban",
+                  "scheduledFor": "2000-01-23T04:56:07.000Z",
+                  "sourceAmount": 1299,
+                  "scheduledBy": "Aphra Behn",
+                  "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
               "payorName": "payorName",
@@ -19143,28 +18394,34 @@
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "events": [
             {
-              "principal": "principal",
               "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "eventDateTime": "2000-01-23T04:56:07.000Z",
-              "routingNumber": "routingNumber",
               "accountName": "accountName",
-              "iban": "iban",
-              "sourceAmount": 1299,
               "eventType": "PAYOUT_SUBMITTED",
               "accountNumber": "accountNumber",
-              "paymentAmount": 1299
+              "paymentAmount": 1299,
+              "principal": "principal",
+              "routingNumber": "routingNumber",
+              "iban": "iban",
+              "scheduledFor": "2000-01-23T04:56:07.000Z",
+              "sourceAmount": 1299,
+              "scheduledBy": "Aphra Behn",
+              "scheduledAt": "2000-01-23T04:56:07.000Z"
             },
             {
-              "principal": "principal",
               "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "eventDateTime": "2000-01-23T04:56:07.000Z",
-              "routingNumber": "routingNumber",
               "accountName": "accountName",
-              "iban": "iban",
-              "sourceAmount": 1299,
               "eventType": "PAYOUT_SUBMITTED",
               "accountNumber": "accountNumber",
-              "paymentAmount": 1299
+              "paymentAmount": 1299,
+              "principal": "principal",
+              "routingNumber": "routingNumber",
+              "iban": "iban",
+              "scheduledFor": "2000-01-23T04:56:07.000Z",
+              "sourceAmount": 1299,
+              "scheduledBy": "Aphra Behn",
+              "scheduledAt": "2000-01-23T04:56:07.000Z"
             }
           ],
           "payorName": "payorName",
@@ -19476,11 +18733,11 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponseV3_links"
             },
             "type": "array"
           },
@@ -20072,11 +19329,11 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponseV3_links"
             },
             "type": "array"
           },
@@ -20339,11 +19596,11 @@
         },
         "properties": {
           "page": {
-            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponse_page"
+            "$ref": "#/components/schemas/PagedPayeeInvitationStatusResponseV3_page"
           },
           "links": {
             "items": {
-              "$ref": "#/components/schemas/PagedPayeeResponse_links"
+              "$ref": "#/components/schemas/PagedPayeeResponseV3_links"
             },
             "type": "array"
           },
@@ -20845,7 +20102,7 @@
             "type": "string"
           },
           "invitationStatus": {
-            "$ref": "#/components/schemas/InvitationStatus_2"
+            "$ref": "#/components/schemas/InvitationStatusV3"
           },
           "invitationStatusTimestamp": {
             "description": "The timestamp when the invitation status is updated",
@@ -20866,14 +20123,14 @@
           "payableIssues": {
             "description": "Indicates any conditions which prevent the payee from being payable for this payor",
             "items": {
-              "$ref": "#/components/schemas/PayableIssue"
+              "$ref": "#/components/schemas/PayableIssueV3"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "OnboardedStatus_2": {
+      "OnboardedStatusV3": {
         "enum": [
           "CREATED",
           "INVITED",
@@ -20882,12 +20139,21 @@
         ],
         "type": "string"
       },
-      "Language": {
+      "LanguageV3": {
         "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
         "example": "en-US",
         "type": "string"
       },
-      "PayeeAddress": {
+      "IsoCountryCode": {
+        "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
+        "example": "US",
+        "maxLength": 2,
+        "minLength": 2,
+        "pattern": "^[A-Z]{2}$",
+        "title": "ISO 3166 2 Character Country Code",
+        "type": "string"
+      },
+      "PayeeAddressV3": {
         "example": {
           "country": "US",
           "countyOrProvince": "FL",
@@ -20946,10 +20212,12 @@
             "type": "string"
           },
           "country": {
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
-            "maxLength": 50,
+            "maxLength": 2,
             "minLength": 2,
-            "nullable": false,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           }
         },
@@ -20960,7 +20228,7 @@
         ],
         "type": "object"
       },
-      "Individual": {
+      "IndividualV3": {
         "example": {
           "name": {
             "firstName": "Bob",
@@ -20973,7 +20241,7 @@
         },
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/Individual_name"
+            "$ref": "#/components/schemas/IndividualV3_name"
           },
           "nationalIdentification": {
             "description": "If not authorized to view, value will be masked. Example: XXXXX1234",
@@ -20996,7 +20264,7 @@
         ],
         "type": "object"
       },
-      "Company": {
+      "CompanyV3": {
         "example": {
           "taxId": "123123123",
           "name": "ABC Group Plc",
@@ -21031,7 +20299,7 @@
         ],
         "type": "object"
       },
-      "Challenge": {
+      "ChallengeV3": {
         "example": {
           "description": "challenge description",
           "value": "challenge test"
@@ -21056,7 +20324,7 @@
         ],
         "type": "object"
       },
-      "GetPayeeListResponse": {
+      "GetPayeeListResponseV3": {
         "example": {
           "payorRefs": [
             {
@@ -21140,10 +20408,10 @@
             "type": "string"
           },
           "onboardedStatus": {
-            "$ref": "#/components/schemas/OnboardedStatus_2"
+            "$ref": "#/components/schemas/OnboardedStatusV3"
           },
           "watchlistStatus": {
-            "$ref": "#/components/schemas/WatchlistStatus"
+            "$ref": "#/components/schemas/WatchlistStatusV3"
           },
           "watchlistStatusUpdatedTimestamp": {
             "example": "2019-01-20T09:00:00.000Z",
@@ -21168,7 +20436,12 @@
             "type": "string"
           },
           "country": {
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
+            "maxLength": 2,
+            "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "displayName": {
@@ -21191,15 +20464,15 @@
             "type": "string"
           },
           "individual": {
-            "$ref": "#/components/schemas/GetPayeeListResponseIndividual"
+            "$ref": "#/components/schemas/GetPayeeListResponseIndividualV3"
           },
           "company": {
-            "$ref": "#/components/schemas/GetPayeeListResponseCompany"
+            "$ref": "#/components/schemas/GetPayeeListResponseCompanyV3"
           }
         },
         "type": "object"
       },
-      "CreatePayee": {
+      "CreatePayeeV3": {
         "example": {
           "payorRefs": [
             {
@@ -21312,13 +20585,13 @@
             "$ref": "#/components/schemas/PayeeType_2"
           },
           "address": {
-            "$ref": "#/components/schemas/CreatePayeeAddress"
+            "$ref": "#/components/schemas/CreatePayeeAddressV3"
           },
           "paymentChannel": {
-            "$ref": "#/components/schemas/CreatePaymentChannel"
+            "$ref": "#/components/schemas/CreatePaymentChannelV3"
           },
           "challenge": {
-            "$ref": "#/components/schemas/Challenge"
+            "$ref": "#/components/schemas/ChallengeV3"
           },
           "language": {
             "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
@@ -21326,10 +20599,10 @@
             "type": "string"
           },
           "company": {
-            "$ref": "#/components/schemas/Company"
+            "$ref": "#/components/schemas/CompanyV3"
           },
           "individual": {
-            "$ref": "#/components/schemas/CreateIndividual"
+            "$ref": "#/components/schemas/CreateIndividualV3"
           }
         },
         "required": [
@@ -21340,12 +20613,21 @@
         ],
         "type": "object"
       },
+      "Iban": {
+        "description": "Must match the regular expression ```^[A-Za-z0-9]+$```.",
+        "example": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
+        "maxLength": 34,
+        "minLength": 15,
+        "pattern": "^[A-Za-z0-9]+$",
+        "title": "IBAN - International Bank Account Number",
+        "type": "string"
+      },
       "SupportedLanguage": {
         "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
         "example": "en-US",
         "type": "string"
       },
-      "FailedSubmission": {
+      "FailedSubmissionV3": {
         "example": {
           "failedSubmission": {
             "payorRefs": [
@@ -21431,7 +20713,7 @@
         },
         "properties": {
           "failedSubmission": {
-            "$ref": "#/components/schemas/FailedPayee"
+            "$ref": "#/components/schemas/FailedPayeeV3"
           },
           "failureMessage": {
             "example": "failure reason",
@@ -21440,7 +20722,7 @@
         },
         "type": "object"
       },
-      "PayeeInvitationStatusResponse": {
+      "PayeeInvitationStatusResponseV3": {
         "example": {
           "payeeId": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
           "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
@@ -21472,7 +20754,7 @@
         ],
         "type": "object"
       },
-      "PayeeDelta": {
+      "PayeeDeltaV3": {
         "example": {
           "payeeCountry": "US",
           "displayName": "Payee1",
@@ -21512,7 +20794,7 @@
             "type": "string"
           },
           "onboardedStatus": {
-            "$ref": "#/components/schemas/OnboardedStatus_2"
+            "$ref": "#/components/schemas/OnboardedStatusV3_2"
           }
         },
         "required": [
@@ -21521,7 +20803,7 @@
         ],
         "type": "object"
       },
-      "PayeePayorRef": {
+      "PayeePayorRefV4": {
         "example": {
           "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
           "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
@@ -21550,7 +20832,7 @@
             "type": "string"
           },
           "invitationStatus": {
-            "$ref": "#/components/schemas/InvitationStatus"
+            "$ref": "#/components/schemas/InvitationStatusV4"
           },
           "invitationStatusTimestamp": {
             "description": "The timestamp when the invitation status is updated",
@@ -21571,14 +20853,14 @@
           "payableIssues": {
             "description": "Indicates any conditions which prevent the payee from being payable for this payor",
             "items": {
-              "$ref": "#/components/schemas/PayableIssue_2"
+              "$ref": "#/components/schemas/PayableIssueV4"
             },
             "type": "array"
           }
         },
         "type": "object"
       },
-      "WatchlistStatus_2": {
+      "WatchlistStatusV4": {
         "enum": [
           "NONE",
           "PENDING",
@@ -21588,12 +20870,12 @@
         ],
         "type": "string"
       },
-      "Language_2": {
+      "LanguageV4": {
         "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
         "example": "en-US",
         "type": "string"
       },
-      "PayeeAddress_2": {
+      "PayeeAddressV4": {
         "example": {
           "country": "US",
           "countyOrProvince": "FL",
@@ -21666,7 +20948,7 @@
         ],
         "type": "object"
       },
-      "Individual_2": {
+      "IndividualV4": {
         "example": {
           "name": {
             "firstName": "Bob",
@@ -21679,7 +20961,7 @@
         },
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/Individual_name"
+            "$ref": "#/components/schemas/IndividualV3_name"
           },
           "nationalIdentification": {
             "description": "If not authorized to view, value will be masked. Example: XXXXX1234",
@@ -21702,7 +20984,7 @@
         ],
         "type": "object"
       },
-      "Company_2": {
+      "CompanyV4": {
         "example": {
           "taxId": "123123123",
           "name": "ABC Group Plc",
@@ -21737,7 +21019,7 @@
         ],
         "type": "object"
       },
-      "Challenge_2": {
+      "ChallengeV4": {
         "description": "<p>Used to override the default challenge presented to the payee when they onboard</p>\n<p>Not used after the payee has onboarded</p>\n",
         "example": {
           "description": "challenge description",
@@ -21764,7 +21046,7 @@
         ],
         "type": "object"
       },
-      "GetPayeeListResponse_2": {
+      "GetPayeeListResponseV4": {
         "example": {
           "payorRefs": [
             {
@@ -21835,7 +21117,7 @@
           },
           "payorRefs": {
             "items": {
-              "$ref": "#/components/schemas/PayeePayorRef"
+              "$ref": "#/components/schemas/PayeePayorRefV4"
             },
             "nullable": true,
             "readOnly": true,
@@ -21848,10 +21130,10 @@
             "type": "string"
           },
           "onboardedStatus": {
-            "$ref": "#/components/schemas/OnboardedStatus"
+            "$ref": "#/components/schemas/OnboardedStatusV4"
           },
           "watchlistStatus": {
-            "$ref": "#/components/schemas/WatchlistStatus_2"
+            "$ref": "#/components/schemas/WatchlistStatusV4"
           },
           "watchlistStatusUpdatedTimestamp": {
             "example": "2019-01-20T09:00:00.000Z",
@@ -21876,7 +21158,12 @@
             "type": "string"
           },
           "country": {
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
+            "maxLength": 2,
+            "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "displayName": {
@@ -21899,15 +21186,95 @@
             "type": "string"
           },
           "individual": {
-            "$ref": "#/components/schemas/GetPayeeListResponseIndividual_2"
+            "$ref": "#/components/schemas/GetPayeeListResponseIndividualV4"
           },
           "company": {
-            "$ref": "#/components/schemas/GetPayeeListResponseCompany_2"
+            "$ref": "#/components/schemas/GetPayeeListResponseCompanyV4"
           }
         },
         "type": "object"
       },
-      "CreatePayee_2": {
+      "CreatePayeeV4": {
+        "example": {
+          "payorRefs": [
+            {
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+              "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+              "payableStatus": true,
+              "payableIssues": [
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                },
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                }
+              ],
+              "remoteId": "uniqueIdForRemoteEntity",
+              "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+            },
+            {
+              "payorId": "ba08877f-9d96-41e4-9c26-44a872d856ae",
+              "invitationStatusTimestamp": "2019-01-20T09:00:00.000Z",
+              "payableStatus": true,
+              "payableIssues": [
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                },
+                {
+                  "code": "3",
+                  "message": "payee-disabled"
+                }
+              ],
+              "remoteId": "uniqueIdForRemoteEntity",
+              "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3"
+            }
+          ],
+          "address": {
+            "country": "US",
+            "countyOrProvince": "FL",
+            "line4": "line4",
+            "city": "Key West",
+            "line3": "line3",
+            "line2": "line2",
+            "line1": "500 Duval St",
+            "zipOrPostcode": "33945"
+          },
+          "individual": {
+            "name": {
+              "firstName": "Bob",
+              "lastName": "Smith",
+              "otherNames": "H",
+              "title": "Mr"
+            },
+            "nationalIdentification": "SA211123K",
+            "dateOfBirth": "1970-05-20T00:00:00.000+0000"
+          },
+          "challenge": {
+            "description": "challenge description",
+            "value": "11984567"
+          },
+          "language": "en-US",
+          "company": {
+            "taxId": "123123123",
+            "name": "ABC Group Plc",
+            "operatingName": "ABC Co"
+          },
+          "payeeId": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
+          "email": "bob@example.com",
+          "remoteId": "Remote ID",
+          "paymentChannel": {
+            "paymentChannelName": "My Payment Channel",
+            "routingNumber": "XXXXX6789",
+            "accountName": "My account",
+            "countryCode": "US",
+            "iban": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
+            "currency": "USD",
+            "accountNumber": "XXXXXX5678"
+          }
+        },
         "properties": {
           "payeeId": {
             "example": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
@@ -21917,7 +21284,7 @@
           },
           "payorRefs": {
             "items": {
-              "$ref": "#/components/schemas/PayeePayorRef"
+              "$ref": "#/components/schemas/PayeePayorRefV4"
             },
             "nullable": true,
             "readOnly": true,
@@ -21940,13 +21307,13 @@
             "$ref": "#/components/schemas/PayeeType_2"
           },
           "address": {
-            "$ref": "#/components/schemas/CreatePayeeAddress_2"
+            "$ref": "#/components/schemas/CreatePayeeAddressV4"
           },
           "paymentChannel": {
-            "$ref": "#/components/schemas/CreatePaymentChannel_2"
+            "$ref": "#/components/schemas/CreatePaymentChannelV4"
           },
           "challenge": {
-            "$ref": "#/components/schemas/Challenge_2"
+            "$ref": "#/components/schemas/ChallengeV4"
           },
           "language": {
             "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
@@ -21954,10 +21321,10 @@
             "type": "string"
           },
           "company": {
-            "$ref": "#/components/schemas/Company_2"
+            "$ref": "#/components/schemas/CompanyV4"
           },
           "individual": {
-            "$ref": "#/components/schemas/CreateIndividual_2"
+            "$ref": "#/components/schemas/CreateIndividualV4"
           }
         },
         "required": [
@@ -21968,7 +21335,7 @@
         ],
         "type": "object"
       },
-      "FailedSubmission_2": {
+      "FailedSubmissionV4": {
         "example": {
           "failedSubmission": {
             "payorRefs": [
@@ -22054,7 +21421,7 @@
         },
         "properties": {
           "failedSubmission": {
-            "$ref": "#/components/schemas/FailedPayee_2"
+            "$ref": "#/components/schemas/FailedPayeeV4"
           },
           "failureMessage": {
             "example": "failure reason",
@@ -22063,7 +21430,7 @@
         },
         "type": "object"
       },
-      "PayeeInvitationStatusResponse_2": {
+      "PayeeInvitationStatusResponseV4": {
         "example": {
           "payeeId": "2aa5d7e0-2ecb-403f-8494-1865ed0454e9",
           "gracePeriodEndDate": "2019-01-20T00:00:00.000+0000",
@@ -22095,7 +21462,7 @@
         ],
         "type": "object"
       },
-      "PayeeDelta_2": {
+      "PayeeDeltaV4": {
         "example": {
           "payeeCountry": "US",
           "displayName": "Payee1",
@@ -22131,11 +21498,16 @@
             "type": "string"
           },
           "payeeCountry": {
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
+            "maxLength": 2,
+            "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "onboardedStatus": {
-            "$ref": "#/components/schemas/OnboardedStatus_2"
+            "$ref": "#/components/schemas/OnboardedStatusV4_2"
           }
         },
         "required": [
@@ -22939,16 +22311,19 @@
       },
       "PaymentEventResponse": {
         "example": {
-          "principal": "principal",
           "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "eventDateTime": "2000-01-23T04:56:07.000Z",
-          "routingNumber": "routingNumber",
           "accountName": "accountName",
-          "iban": "iban",
-          "sourceAmount": 1299,
           "eventType": "PAYOUT_SUBMITTED",
           "accountNumber": "accountNumber",
-          "paymentAmount": 1299
+          "paymentAmount": 1299,
+          "principal": "principal",
+          "routingNumber": "routingNumber",
+          "iban": "iban",
+          "scheduledFor": "2000-01-23T04:56:07.000Z",
+          "sourceAmount": 1299,
+          "scheduledBy": "Aphra Behn",
+          "scheduledAt": "2000-01-23T04:56:07.000Z"
         },
         "properties": {
           "eventId": {
@@ -23033,6 +22408,19 @@
             "type": "string"
           },
           "principal": {
+            "type": "string"
+          },
+          "scheduledAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "scheduledFor": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "scheduledBy": {
+            "description": "Optional display name as a hint for who scheduled the payout. Not populated if payout was scheduled by an application.",
+            "example": "Aphra Behn",
             "type": "string"
           }
         },
@@ -23697,7 +23085,7 @@
         },
         "type": "object"
       },
-      "InvitationStatus_2": {
+      "InvitationStatusV3": {
         "enum": [
           "ACCEPTED",
           "PENDING",
@@ -23705,7 +23093,7 @@
         ],
         "type": "string"
       },
-      "PayableIssue": {
+      "PayableIssueV3": {
         "description": "payable issues for the payee and payor combination",
         "example": {
           "code": "3",
@@ -23727,7 +23115,7 @@
         ],
         "type": "object"
       },
-      "GetPayeeListResponseIndividual": {
+      "GetPayeeListResponseIndividualV3": {
         "example": {
           "name": {
             "firstName": "Bob",
@@ -23738,12 +23126,12 @@
         },
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/Name"
+            "$ref": "#/components/schemas/NameV3"
           }
         },
         "type": "object"
       },
-      "GetPayeeListResponseCompany": {
+      "GetPayeeListResponseCompanyV3": {
         "example": {
           "name": "ABC Group Plc",
           "operatingName": "ABC Co"
@@ -23765,7 +23153,7 @@
         },
         "type": "object"
       },
-      "CreatePayeeAddress": {
+      "CreatePayeeAddressV3": {
         "example": {
           "country": "US",
           "countyOrProvince": "FL",
@@ -24090,7 +23478,7 @@
         ],
         "type": "object"
       },
-      "CreatePaymentChannel": {
+      "CreatePaymentChannelV3": {
         "example": {
           "paymentChannelName": "My Payment Channel",
           "routingNumber": "XXXXX6789",
@@ -24106,11 +23494,12 @@
             "type": "string"
           },
           "iban": {
-            "description": "Must match the regular expression ```^[A-Za-z0-9]+$```. Either routing number and account number or only iban must be set",
+            "description": "Must match the regular expression ```^[A-Za-z0-9]+$```.",
             "example": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
             "maxLength": 34,
             "minLength": 15,
             "pattern": "^[A-Za-z0-9]+$",
+            "title": "IBAN - International Bank Account Number",
             "type": "string"
           },
           "accountNumber": {
@@ -24128,269 +23517,21 @@
             "type": "string"
           },
           "countryCode": {
-            "description": "Two character country code",
-            "enum": [
-              "AF",
-              "AX",
-              "AL",
-              "DZ",
-              "AS",
-              "AD",
-              "AO",
-              "AI",
-              "AQ",
-              "AG",
-              "AR",
-              "AM",
-              "AW",
-              "AU",
-              "AT",
-              "AZ",
-              "BS",
-              "BH",
-              "BD",
-              "BB",
-              "BY",
-              "BE",
-              "BZ",
-              "BJ",
-              "BM",
-              "BT",
-              "BO",
-              "BQ",
-              "BA",
-              "BW",
-              "BV",
-              "BR",
-              "IO",
-              "BN",
-              "BG",
-              "BF",
-              "BI",
-              "KH",
-              "CM",
-              "CA",
-              "CV",
-              "KY",
-              "CF",
-              "TD",
-              "CL",
-              "CN",
-              "CX",
-              "CC",
-              "CO",
-              "KM",
-              "CG",
-              "CD",
-              "CK",
-              "CR",
-              "CI",
-              "HR",
-              "CU",
-              "CW",
-              "CY",
-              "CZ",
-              "DK",
-              "DJ",
-              "DM",
-              "DO",
-              "EC",
-              "EG",
-              "SV",
-              "GQ",
-              "ER",
-              "EE",
-              "ET",
-              "FK",
-              "FO",
-              "FJ",
-              "FI",
-              "FR",
-              "GF",
-              "PF",
-              "TF",
-              "GA",
-              "GM",
-              "GE",
-              "DE",
-              "GH",
-              "GI",
-              "GR",
-              "GL",
-              "GD",
-              "GP",
-              "GU",
-              "GT",
-              "GG",
-              "GN",
-              "GW",
-              "GY",
-              "HT",
-              "HM",
-              "VA",
-              "HN",
-              "HK",
-              "HU",
-              "IS",
-              "IN",
-              "ID",
-              "IR",
-              "IQ",
-              "IE",
-              "IM",
-              "IL",
-              "IT",
-              "JM",
-              "JP",
-              "JE",
-              "JO",
-              "KZ",
-              "KE",
-              "KI",
-              "KP",
-              "KR",
-              "KW",
-              "KG",
-              "LA",
-              "LV",
-              "LB",
-              "LS",
-              "LR",
-              "LY",
-              "LI",
-              "LT",
-              "LU",
-              "MO",
-              "MK",
-              "MG",
-              "MW",
-              "MY",
-              "MV",
-              "ML",
-              "MT",
-              "MH",
-              "MQ",
-              "MR",
-              "MU",
-              "YT",
-              "MX",
-              "FM",
-              "MD",
-              "MC",
-              "MN",
-              "ME",
-              "MS",
-              "MA",
-              "MZ",
-              "MM",
-              "NA",
-              "NR",
-              "NP",
-              "NL",
-              "NC",
-              "NZ",
-              "NI",
-              "NE",
-              "NG",
-              "NU",
-              "NF",
-              "MP",
-              "NO",
-              "OM",
-              "PK",
-              "PW",
-              "PS",
-              "PA",
-              "PG",
-              "PY",
-              "PE",
-              "PH",
-              "PN",
-              "PL",
-              "PT",
-              "PR",
-              "QA",
-              "RE",
-              "RO",
-              "RU",
-              "RW",
-              "BL",
-              "SH",
-              "KN",
-              "LC",
-              "MF",
-              "PM",
-              "VC",
-              "WS",
-              "SM",
-              "ST",
-              "SA",
-              "SN",
-              "RS",
-              "SC",
-              "SL",
-              "SG",
-              "SX",
-              "SK",
-              "SI",
-              "SB",
-              "SO",
-              "ZA",
-              "GS",
-              "SS",
-              "ES",
-              "LK",
-              "SD",
-              "SR",
-              "SJ",
-              "SZ",
-              "SE",
-              "CH",
-              "SY",
-              "TW",
-              "TJ",
-              "TZ",
-              "TH",
-              "TL",
-              "TG",
-              "TK",
-              "TO",
-              "TT",
-              "TN",
-              "TR",
-              "TM",
-              "TC",
-              "TV",
-              "UG",
-              "UA",
-              "AE",
-              "GB",
-              "US",
-              "UM",
-              "UY",
-              "UZ",
-              "VU",
-              "VE",
-              "VN",
-              "VG",
-              "VI",
-              "WF",
-              "EH",
-              "YE",
-              "ZM",
-              "ZW"
-            ],
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
             "maxLength": 2,
             "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "currency": {
-            "enum": [
-              "USD",
-              "GBP",
-              "EUR"
-            ],
+            "description": "Valid ISO 4217 3 letter currency code. See the <a href=\"https://www.iso.org/iso-4217-currency-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "title": "ISO Currency Code",
             "type": "string"
           },
           "accountName": {
@@ -24405,7 +23546,7 @@
         ],
         "type": "object"
       },
-      "CreateIndividual": {
+      "CreateIndividualV3": {
         "example": {
           "name": {
             "firstName": "Bob",
@@ -24418,7 +23559,7 @@
         },
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/CreateIndividual_name"
+            "$ref": "#/components/schemas/CreateIndividualV3_name"
           },
           "nationalIdentification": {
             "example": "SA211123K",
@@ -24439,7 +23580,7 @@
         ],
         "type": "object"
       },
-      "FailedPayee": {
+      "FailedPayeeV3": {
         "example": {
           "payorRefs": [
             {
@@ -24548,13 +23689,13 @@
             "$ref": "#/components/schemas/PayeeType_2"
           },
           "address": {
-            "$ref": "#/components/schemas/CreatePayeeAddress"
+            "$ref": "#/components/schemas/CreatePayeeAddressV3"
           },
           "paymentChannel": {
-            "$ref": "#/components/schemas/CreatePaymentChannel"
+            "$ref": "#/components/schemas/CreatePaymentChannelV3"
           },
           "challenge": {
-            "$ref": "#/components/schemas/Challenge"
+            "$ref": "#/components/schemas/ChallengeV3"
           },
           "language": {
             "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
@@ -24562,15 +23703,24 @@
             "type": "string"
           },
           "company": {
-            "$ref": "#/components/schemas/Company"
+            "$ref": "#/components/schemas/CompanyV3"
           },
           "individual": {
-            "$ref": "#/components/schemas/CreateIndividual"
+            "$ref": "#/components/schemas/CreateIndividualV3"
           }
         },
         "type": "object"
       },
-      "PayableIssue_2": {
+      "OnboardedStatusV3_2": {
+        "enum": [
+          "CREATED",
+          "INVITED",
+          "REGISTERED",
+          "ONBOARDED"
+        ],
+        "type": "string"
+      },
+      "PayableIssueV4": {
         "description": "payable issues for the payee and payor combination",
         "example": {
           "code": "3",
@@ -24592,7 +23742,7 @@
         ],
         "type": "object"
       },
-      "GetPayeeListResponseIndividual_2": {
+      "GetPayeeListResponseIndividualV4": {
         "example": {
           "name": {
             "firstName": "Bob",
@@ -24603,12 +23753,12 @@
         },
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/Name_2"
+            "$ref": "#/components/schemas/NameV4"
           }
         },
         "type": "object"
       },
-      "GetPayeeListResponseCompany_2": {
+      "GetPayeeListResponseCompanyV4": {
         "example": {
           "name": "ABC Group Plc",
           "operatingName": "ABC Co"
@@ -24630,7 +23780,7 @@
         },
         "type": "object"
       },
-      "CreatePayeeAddress_2": {
+      "CreatePayeeAddressV4": {
         "example": {
           "country": "US",
           "countyOrProvince": "FL",
@@ -24689,262 +23839,12 @@
             "type": "string"
           },
           "country": {
-            "description": "2 letter ISO 3166-1 country code",
-            "enum": [
-              "AF",
-              "AX",
-              "AL",
-              "DZ",
-              "AS",
-              "AD",
-              "AO",
-              "AI",
-              "AQ",
-              "AG",
-              "AR",
-              "AM",
-              "AW",
-              "AU",
-              "AT",
-              "AZ",
-              "BS",
-              "BH",
-              "BD",
-              "BB",
-              "BY",
-              "BE",
-              "BZ",
-              "BJ",
-              "BM",
-              "BT",
-              "BO",
-              "BQ",
-              "BA",
-              "BW",
-              "BV",
-              "BR",
-              "IO",
-              "BN",
-              "BG",
-              "BF",
-              "BI",
-              "KH",
-              "CM",
-              "CA",
-              "CV",
-              "KY",
-              "CF",
-              "TD",
-              "CL",
-              "CN",
-              "CX",
-              "CC",
-              "CO",
-              "KM",
-              "CG",
-              "CD",
-              "CK",
-              "CR",
-              "CI",
-              "HR",
-              "CU",
-              "CW",
-              "CY",
-              "CZ",
-              "DK",
-              "DJ",
-              "DM",
-              "DO",
-              "EC",
-              "EG",
-              "SV",
-              "GQ",
-              "ER",
-              "EE",
-              "ET",
-              "FK",
-              "FO",
-              "FJ",
-              "FI",
-              "FR",
-              "GF",
-              "PF",
-              "TF",
-              "GA",
-              "GM",
-              "GE",
-              "DE",
-              "GH",
-              "GI",
-              "GR",
-              "GL",
-              "GD",
-              "GP",
-              "GU",
-              "GT",
-              "GG",
-              "GN",
-              "GW",
-              "GY",
-              "HT",
-              "HM",
-              "VA",
-              "HN",
-              "HK",
-              "HU",
-              "IS",
-              "IN",
-              "ID",
-              "IR",
-              "IQ",
-              "IE",
-              "IM",
-              "IL",
-              "IT",
-              "JM",
-              "JP",
-              "JE",
-              "JO",
-              "KZ",
-              "KE",
-              "KI",
-              "KP",
-              "KR",
-              "KW",
-              "KG",
-              "LA",
-              "LV",
-              "LB",
-              "LS",
-              "LR",
-              "LY",
-              "LI",
-              "LT",
-              "LU",
-              "MO",
-              "MK",
-              "MG",
-              "MW",
-              "MY",
-              "MV",
-              "ML",
-              "MT",
-              "MH",
-              "MQ",
-              "MR",
-              "MU",
-              "YT",
-              "MX",
-              "FM",
-              "MD",
-              "MC",
-              "MN",
-              "ME",
-              "MS",
-              "MA",
-              "MZ",
-              "MM",
-              "NA",
-              "NR",
-              "NP",
-              "NL",
-              "NC",
-              "NZ",
-              "NI",
-              "NE",
-              "NG",
-              "NU",
-              "NF",
-              "MP",
-              "NO",
-              "OM",
-              "PK",
-              "PW",
-              "PS",
-              "PA",
-              "PG",
-              "PY",
-              "PE",
-              "PH",
-              "PN",
-              "PL",
-              "PT",
-              "PR",
-              "QA",
-              "RE",
-              "RO",
-              "RU",
-              "RW",
-              "BL",
-              "SH",
-              "KN",
-              "LC",
-              "MF",
-              "PM",
-              "VC",
-              "WS",
-              "SM",
-              "ST",
-              "SA",
-              "SN",
-              "RS",
-              "SC",
-              "SL",
-              "SG",
-              "SX",
-              "SK",
-              "SI",
-              "SB",
-              "SO",
-              "ZA",
-              "GS",
-              "SS",
-              "ES",
-              "LK",
-              "SD",
-              "SR",
-              "SJ",
-              "SZ",
-              "SE",
-              "CH",
-              "SY",
-              "TW",
-              "TJ",
-              "TZ",
-              "TH",
-              "TL",
-              "TG",
-              "TK",
-              "TO",
-              "TT",
-              "TN",
-              "TR",
-              "TM",
-              "TC",
-              "TV",
-              "UG",
-              "UA",
-              "AE",
-              "GB",
-              "US",
-              "UM",
-              "UY",
-              "UZ",
-              "VU",
-              "VE",
-              "VN",
-              "VG",
-              "VI",
-              "WF",
-              "EH",
-              "YE",
-              "ZM",
-              "ZW"
-            ],
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
             "maxLength": 2,
             "minLength": 2,
-            "nullable": false,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           }
         },
@@ -24955,7 +23855,7 @@
         ],
         "type": "object"
       },
-      "CreatePaymentChannel_2": {
+      "CreatePaymentChannelV4": {
         "example": {
           "paymentChannelName": "My Payment Channel",
           "routingNumber": "XXXXX6789",
@@ -24971,11 +23871,12 @@
             "type": "string"
           },
           "iban": {
-            "description": "Must match the regular expression ```^[A-Za-z0-9]+$```. Either routing number and account number or only iban must be set",
+            "description": "Must match the regular expression ```^[A-Za-z0-9]+$```.",
             "example": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234",
             "maxLength": 34,
             "minLength": 15,
             "pattern": "^[A-Za-z0-9]+$",
+            "title": "IBAN - International Bank Account Number",
             "type": "string"
           },
           "accountNumber": {
@@ -24993,269 +23894,21 @@
             "type": "string"
           },
           "countryCode": {
-            "description": "Two character country code",
-            "enum": [
-              "AF",
-              "AX",
-              "AL",
-              "DZ",
-              "AS",
-              "AD",
-              "AO",
-              "AI",
-              "AQ",
-              "AG",
-              "AR",
-              "AM",
-              "AW",
-              "AU",
-              "AT",
-              "AZ",
-              "BS",
-              "BH",
-              "BD",
-              "BB",
-              "BY",
-              "BE",
-              "BZ",
-              "BJ",
-              "BM",
-              "BT",
-              "BO",
-              "BQ",
-              "BA",
-              "BW",
-              "BV",
-              "BR",
-              "IO",
-              "BN",
-              "BG",
-              "BF",
-              "BI",
-              "KH",
-              "CM",
-              "CA",
-              "CV",
-              "KY",
-              "CF",
-              "TD",
-              "CL",
-              "CN",
-              "CX",
-              "CC",
-              "CO",
-              "KM",
-              "CG",
-              "CD",
-              "CK",
-              "CR",
-              "CI",
-              "HR",
-              "CU",
-              "CW",
-              "CY",
-              "CZ",
-              "DK",
-              "DJ",
-              "DM",
-              "DO",
-              "EC",
-              "EG",
-              "SV",
-              "GQ",
-              "ER",
-              "EE",
-              "ET",
-              "FK",
-              "FO",
-              "FJ",
-              "FI",
-              "FR",
-              "GF",
-              "PF",
-              "TF",
-              "GA",
-              "GM",
-              "GE",
-              "DE",
-              "GH",
-              "GI",
-              "GR",
-              "GL",
-              "GD",
-              "GP",
-              "GU",
-              "GT",
-              "GG",
-              "GN",
-              "GW",
-              "GY",
-              "HT",
-              "HM",
-              "VA",
-              "HN",
-              "HK",
-              "HU",
-              "IS",
-              "IN",
-              "ID",
-              "IR",
-              "IQ",
-              "IE",
-              "IM",
-              "IL",
-              "IT",
-              "JM",
-              "JP",
-              "JE",
-              "JO",
-              "KZ",
-              "KE",
-              "KI",
-              "KP",
-              "KR",
-              "KW",
-              "KG",
-              "LA",
-              "LV",
-              "LB",
-              "LS",
-              "LR",
-              "LY",
-              "LI",
-              "LT",
-              "LU",
-              "MO",
-              "MK",
-              "MG",
-              "MW",
-              "MY",
-              "MV",
-              "ML",
-              "MT",
-              "MH",
-              "MQ",
-              "MR",
-              "MU",
-              "YT",
-              "MX",
-              "FM",
-              "MD",
-              "MC",
-              "MN",
-              "ME",
-              "MS",
-              "MA",
-              "MZ",
-              "MM",
-              "NA",
-              "NR",
-              "NP",
-              "NL",
-              "NC",
-              "NZ",
-              "NI",
-              "NE",
-              "NG",
-              "NU",
-              "NF",
-              "MP",
-              "NO",
-              "OM",
-              "PK",
-              "PW",
-              "PS",
-              "PA",
-              "PG",
-              "PY",
-              "PE",
-              "PH",
-              "PN",
-              "PL",
-              "PT",
-              "PR",
-              "QA",
-              "RE",
-              "RO",
-              "RU",
-              "RW",
-              "BL",
-              "SH",
-              "KN",
-              "LC",
-              "MF",
-              "PM",
-              "VC",
-              "WS",
-              "SM",
-              "ST",
-              "SA",
-              "SN",
-              "RS",
-              "SC",
-              "SL",
-              "SG",
-              "SX",
-              "SK",
-              "SI",
-              "SB",
-              "SO",
-              "ZA",
-              "GS",
-              "SS",
-              "ES",
-              "LK",
-              "SD",
-              "SR",
-              "SJ",
-              "SZ",
-              "SE",
-              "CH",
-              "SY",
-              "TW",
-              "TJ",
-              "TZ",
-              "TH",
-              "TL",
-              "TG",
-              "TK",
-              "TO",
-              "TT",
-              "TN",
-              "TR",
-              "TM",
-              "TC",
-              "TV",
-              "UG",
-              "UA",
-              "AE",
-              "GB",
-              "US",
-              "UM",
-              "UY",
-              "UZ",
-              "VU",
-              "VE",
-              "VN",
-              "VG",
-              "VI",
-              "WF",
-              "EH",
-              "YE",
-              "ZM",
-              "ZW"
-            ],
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
             "example": "US",
             "maxLength": 2,
             "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
             "type": "string"
           },
           "currency": {
-            "enum": [
-              "USD",
-              "GBP",
-              "EUR"
-            ],
+            "description": "Valid ISO 4217 3 letter currency code. See the <a href=\"https://www.iso.org/iso-4217-currency-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "title": "ISO Currency Code",
             "type": "string"
           },
           "accountName": {
@@ -25270,7 +23923,7 @@
         ],
         "type": "object"
       },
-      "CreateIndividual_2": {
+      "CreateIndividualV4": {
         "example": {
           "name": {
             "firstName": "Bob",
@@ -25283,7 +23936,7 @@
         },
         "properties": {
           "name": {
-            "$ref": "#/components/schemas/CreateIndividual_name"
+            "$ref": "#/components/schemas/CreateIndividualV3_name"
           },
           "nationalIdentification": {
             "example": "SA211123K",
@@ -25304,7 +23957,7 @@
         ],
         "type": "object"
       },
-      "FailedPayee_2": {
+      "FailedPayeeV4": {
         "example": {
           "payorRefs": [
             {
@@ -25394,7 +24047,7 @@
           },
           "payorRefs": {
             "items": {
-              "$ref": "#/components/schemas/PayeePayorRef"
+              "$ref": "#/components/schemas/PayeePayorRefV4"
             },
             "nullable": true,
             "readOnly": true,
@@ -25413,13 +24066,13 @@
             "$ref": "#/components/schemas/PayeeType_2"
           },
           "address": {
-            "$ref": "#/components/schemas/CreatePayeeAddress_2"
+            "$ref": "#/components/schemas/CreatePayeeAddressV4"
           },
           "paymentChannel": {
-            "$ref": "#/components/schemas/CreatePaymentChannel_2"
+            "$ref": "#/components/schemas/CreatePaymentChannelV4"
           },
           "challenge": {
-            "$ref": "#/components/schemas/Challenge_2"
+            "$ref": "#/components/schemas/ChallengeV4"
           },
           "language": {
             "description": "An IETF BCP 47 language code which has been configured for use within this Velo environment.<BR>\nSee the /v1/supportedLanguages endpoint to list the available codes for an environment.\n",
@@ -25427,13 +24080,22 @@
             "type": "string"
           },
           "company": {
-            "$ref": "#/components/schemas/Company_2"
+            "$ref": "#/components/schemas/CompanyV4"
           },
           "individual": {
-            "$ref": "#/components/schemas/CreateIndividual_2"
+            "$ref": "#/components/schemas/CreateIndividualV4"
           }
         },
         "type": "object"
+      },
+      "OnboardedStatusV4_2": {
+        "enum": [
+          "CREATED",
+          "INVITED",
+          "REGISTERED",
+          "ONBOARDED"
+        ],
+        "type": "string"
       },
       "FundingEvent": {
         "example": {
@@ -25772,15 +24434,6 @@
         ],
         "type": "object"
       },
-      "IsoCountryCode": {
-        "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
-        "example": "US",
-        "maxLength": 2,
-        "minLength": 2,
-        "pattern": "^[A-Z]{2}$",
-        "title": "ISO 3166 2 Character Country Code",
-        "type": "string"
-      },
       "RegionV2": {
         "example": {
           "name": "California",
@@ -25798,7 +24451,7 @@
         },
         "type": "object"
       },
-      "Name": {
+      "NameV3": {
         "example": {
           "firstName": "Bob",
           "lastName": "Smith",
@@ -25833,7 +24486,7 @@
         },
         "type": "object"
       },
-      "Name_2": {
+      "NameV4": {
         "example": {
           "firstName": "Bob",
           "lastName": "Smith",
@@ -26308,7 +24961,7 @@
           "payorName"
         ]
       },
-      "PagedPayeeResponse_summary": {
+      "PagedPayeeResponseV3_summary": {
         "example": {
           "totalOnboardedCount": 10,
           "totalRegisteredCount": 10,
@@ -26339,7 +24992,7 @@
           }
         }
       },
-      "PagedPayeeResponse_page": {
+      "PagedPayeeResponseV3_page": {
         "example": {
           "numberOfElements": 10,
           "totalPages": 10,
@@ -26370,7 +25023,7 @@
           }
         }
       },
-      "PagedPayeeResponse_links": {
+      "PagedPayeeResponseV3_links": {
         "example": {
           "rel": "rel",
           "href": "href"
@@ -26384,7 +25037,7 @@
           }
         }
       },
-      "CreatePayeesCSVResponse_rejectedCsvRows": {
+      "CreatePayeesCSVResponseV3_rejectedCsvRows": {
         "example": {
           "rejectedContent": "unable,to,process,csv,line",
           "lineNumber": 3,
@@ -26405,7 +25058,7 @@
           }
         }
       },
-      "PagedPayeeInvitationStatusResponse_page": {
+      "PagedPayeeInvitationStatusResponseV3_page": {
         "example": {
           "numberOfElements": 0,
           "totalPages": 1,
@@ -26431,7 +25084,7 @@
           }
         }
       },
-      "PayeeDeltaResponse_page": {
+      "PayeeDeltaResponseV3_page": {
         "example": {
           "numberOfElements": 2,
           "totalPages": 1,
@@ -26462,7 +25115,7 @@
           }
         }
       },
-      "PayeeDeltaResponse_links": {
+      "PayeeDeltaResponseV3_links": {
         "example": {
           "rel": "first",
           "href": "http://api.sandbox.velopayments.com/v3/payees/deltas?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
@@ -26478,7 +25131,7 @@
           }
         }
       },
-      "PayeeDeltaResponse_2_links": {
+      "PayeeDeltaResponseV4_links": {
         "example": {
           "rel": "first",
           "href": "http://api.sandbox.velopayments.com/v4/payees/deltas?payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00&page=1&pageSize=1000"
@@ -26937,7 +25590,7 @@
           }
         }
       },
-      "Individual_name": {
+      "IndividualV3_name": {
         "example": {
           "firstName": "Bob",
           "lastName": "Smith",
@@ -26975,7 +25628,7 @@
           "lastName"
         ]
       },
-      "CreateIndividual_name": {
+      "CreateIndividualV3_name": {
         "example": {
           "firstName": "Bob",
           "lastName": "Smith",
