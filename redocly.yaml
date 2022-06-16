@@ -5,4 +5,4 @@ codeSamples: false
 swaggerUI: true
 travis: false
 repo: velopaymentsapi/VeloOpenApi
-oasVersion: 3.0.1
+oasVersion: 3.0.2
