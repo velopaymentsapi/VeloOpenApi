@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.30.53
+  version: 2.31.48
   x-logo:
     url: https://apidocs.velopayments.com/velo-logo-e9573185_new.svg
 servers:
@@ -4573,7 +4573,7 @@ paths:
       description: Instruct a funding request to transfer funds from the payor’s funding
         bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid
         request body, 404 - source account not found).
-      operationId: createFundingRequest
+      operationId: createFundingRequestV2
       parameters:
       - description: Source account id
         in: path
@@ -4736,7 +4736,6 @@ paths:
               -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'
     summary: List Source Accounts
   /v2/sourceAccounts/{sourceAccountId}:
-    description: Get details about given source account.
     get:
       deprecated: true
       description: Get details about given source account.
@@ -4783,7 +4782,7 @@ paths:
                 $ref: '#/components/schemas/inline_response_404'
           description: |
             The resource was not found or is no longer available
-      summary: Get details about given source account.
+      summary: Get Source Account
       tags:
       - Funding Manager
       x-code-samples:
@@ -4791,7 +4790,6 @@ paths:
         source: |
           $ curl 'https://api.sandbox.velopayments.com/v2/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \
               -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'
-    summary: Get Source Account
   /v2/sourceAccounts/{sourceAccountId}/transfers:
     post:
       deprecated: true
@@ -4801,7 +4799,7 @@ paths:
         account which will be credited. Both source accounts must belong to the same
         Payor. There must be sufficient balance in the 'from' source account, otherwise
         the transfer attempt will fail.
-      operationId: transferFunds
+      operationId: transferFundsV2
       parameters:
       - description: The 'from' source account id, which will be debited
         in: path
@@ -4814,7 +4812,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransferRequest'
+              $ref: '#/components/schemas/TransferRequestV2'
         description: Body
         required: true
       responses:
@@ -5020,7 +5018,7 @@ paths:
         name: type
         required: false
         schema:
-          $ref: '#/components/schemas/FundingAccountType'
+          $ref: '#/components/schemas/FundingAccountTypeV2'
       - description: Page number. Default is 1.
         in: query
         name: page
@@ -5059,7 +5057,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ListFundingAccountsResponse_2'
+                $ref: '#/components/schemas/ListFundingAccountsResponseV2'
           description: Get Funding Accounts Response
         403:
           content:
@@ -5162,7 +5160,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FundingAccountResponse_2'
+                $ref: '#/components/schemas/FundingAccountResponseV2'
           description: Funding Account Response
         400:
           description: Bad Request
@@ -5297,7 +5295,7 @@ paths:
         name: type
         required: false
         schema:
-          $ref: '#/components/schemas/SourceAccountType'
+          $ref: '#/components/schemas/SourceAccountTypeV3'
       - description: Page number. Default is 1.
         in: query
         name: page
@@ -5501,7 +5499,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TransferRequest_2'
+              $ref: '#/components/schemas/TransferRequestV3'
         description: Body
         required: true
       responses:
@@ -11511,8 +11509,6 @@ components:
           format: int64
           type: integer
         currency:
-          enum:
-          - USD
           example: USD
           maxLength: 3
           minLength: 3
@@ -11723,13 +11719,13 @@ components:
           format: uuid
           type: string
         notifications:
-          $ref: '#/components/schemas/Notifications'
+          $ref: '#/components/schemas/NotificationsV2'
         fundingAccountId:
           format: uuid
           nullable: true
           type: string
         autoTopUpConfig:
-          $ref: '#/components/schemas/AutoTopUpConfig'
+          $ref: '#/components/schemas/AutoTopUpConfigV2'
         accountType:
           example: FBO
           type: string
@@ -11742,7 +11738,7 @@ components:
       - pooled
       - railsId
       type: object
-    TransferRequest:
+    TransferRequestV2:
       example:
         amount: 800828191
         currency: USD
@@ -11879,12 +11875,14 @@ components:
           example: FBO
           type: string
       type: object
-    FundingAccountType:
+    FundingAccountTypeV2:
+      description: Funding account type
       enum:
       - FBO
       - WUBS_DECOUPLED
+      example: FBO
       type: string
-    ListFundingAccountsResponse_2:
+    ListFundingAccountsResponseV2:
       description: List Funding Accounts Response Object
       example:
         links:
@@ -11928,7 +11926,7 @@ components:
           type: array
         content:
           items:
-            $ref: '#/components/schemas/FundingAccountResponse_2'
+            $ref: '#/components/schemas/FundingAccountResponseV2'
           type: array
       type: object
     CreateFundingAccountRequestV2:
@@ -11966,7 +11964,7 @@ components:
         routingNumber:
           description: Required if type is FBO
           maxLength: 9
-          minLength: 9
+          minLength: 7
           type: string
         currency:
           description: ISO 4217 currency code, Required if type is WUBS_DECOUPLED
@@ -11979,7 +11977,7 @@ components:
       - payorId
       - type
       type: object
-    FundingAccountResponse_2:
+    FundingAccountResponseV2:
       example:
         routingNumber: 1.2345678E7
         country: US
@@ -12016,10 +12014,13 @@ components:
           example: My Funding Account
           type: string
         currency:
-          description: ISO 4217 currency code
+          description: Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html"
+            target="_blank" a>ISO specification</a> for details.
           example: USD
           maxLength: 3
           minLength: 3
+          pattern: ^[A-Z]{3}$
+          title: ISO Currency Code
           type: string
         country:
           description: ISO 3166-1 2 letter country code (upper case)
@@ -12028,9 +12029,7 @@ components:
           minLength: 2
           type: string
         type:
-          description: Funding account type
-          example: FBO
-          type: string
+          $ref: '#/components/schemas/FundingAccountTypeV2'
         archived:
           description: A flag for whether the funding account has been archived.  Only
             present in the response if true.
@@ -12055,9 +12054,10 @@ components:
       - amount
       - fundingAccountId
       type: object
-    SourceAccountType:
+    SourceAccountTypeV3:
       enum:
       - FBO
+      - PRIVATE
       - WUBS_DECOUPLED
       type: string
     ListSourceAccountResponseV3:
@@ -12169,15 +12169,13 @@ components:
           format: int64
           type: integer
         currency:
-          enum:
-          - USD
-          - EUR
-          - GBP
-          - CAD
-          - HKD
+          description: Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html"
+            target="_blank" a>ISO specification</a> for details.
           example: USD
           maxLength: 3
           minLength: 3
+          pattern: ^[A-Z]{3}$
+          title: ISO Currency Code
           type: string
         fundingRef:
           description: The funding reference (will not be set for DECOUPLED accounts).
@@ -12208,17 +12206,20 @@ components:
           format: uuid
           type: string
         notifications:
-          $ref: '#/components/schemas/Notifications_2'
+          $ref: '#/components/schemas/NotificationsV3'
         autoTopUpConfig:
-          $ref: '#/components/schemas/AutoTopUpConfig_2'
+          $ref: '#/components/schemas/AutoTopUpConfigV3'
         type:
           example: FBO
           type: string
         country:
-          description: The two character ISO country code for the associated account
+          description: Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html"
+            target="_blank" a>ISO specification</a> for details.
           example: US
           maxLength: 2
           minLength: 2
+          pattern: ^[A-Z]{2}$
+          title: ISO 3166 2 Character Country Code
           type: string
         deleted:
           description: An optional flag for whether the source account has been deleted.
@@ -12239,7 +12240,11 @@ components:
       - railsId
       - type
       type: object
-    TransferRequest_2:
+    TransferRequestV3:
+      example:
+        amount: 800828191
+        currency: USD
+        toSourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
       properties:
         toSourceAccountId:
           description: The 'to' source account id, which will be credited
@@ -12252,9 +12257,13 @@ components:
           minimum: 1
           type: integer
         currency:
+          description: Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html"
+            target="_blank" a>ISO specification</a> for details.
           example: USD
           maxLength: 3
           minLength: 3
+          pattern: ^[A-Z]{3}$
+          title: ISO Currency Code
           type: string
       required:
       - amount
@@ -13329,6 +13338,7 @@ components:
           individualIdentificationNumber: 1231231adf
           railsPaymentId: railsPaymentId
           accountNumber: "123123232323"
+          payeeAddressCountryCode: US
           quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           remoteId: aasdf123
           routingNumber: "123123123123"
@@ -13419,6 +13429,7 @@ components:
           individualIdentificationNumber: 1231231adf
           railsPaymentId: railsPaymentId
           accountNumber: "123123232323"
+          payeeAddressCountryCode: US
           quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           remoteId: aasdf123
           routingNumber: "123123123123"
@@ -13538,6 +13549,7 @@ components:
           individualIdentificationNumber: 1231231adf
           railsPaymentId: railsPaymentId
           accountNumber: "123123232323"
+          payeeAddressCountryCode: US
           quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           remoteId: aasdf123
           routingNumber: "123123123123"
@@ -13628,6 +13640,7 @@ components:
           individualIdentificationNumber: 1231231adf
           railsPaymentId: railsPaymentId
           accountNumber: "123123232323"
+          payeeAddressCountryCode: US
           quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           remoteId: aasdf123
           routingNumber: "123123123123"
@@ -13732,6 +13745,7 @@ components:
         individualIdentificationNumber: 1231231adf
         railsPaymentId: railsPaymentId
         accountNumber: "123123232323"
+        payeeAddressCountryCode: US
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         remoteId: aasdf123
         routingNumber: "123123123123"
@@ -13890,6 +13904,10 @@ components:
           type: string
         countryCode:
           description: The country code of the payment channel.
+          example: US
+          type: string
+        payeeAddressCountryCode:
+          description: The country code of the payee's address.
           example: US
           type: string
         events:
@@ -16111,7 +16129,7 @@ components:
       - payeeId
       - remoteId
       type: object
-    Notifications:
+    NotificationsV2:
       example:
         minimumBalance: 120000
       properties:
@@ -16119,7 +16137,7 @@ components:
           example: 120000
           type: integer
       type: object
-    AutoTopUpConfig:
+    AutoTopUpConfigV2:
       example:
         targetBalance: 300000
         minBalance: 10000
@@ -16149,7 +16167,16 @@ components:
       required:
       - enabled
       type: object
-    Notifications_2:
+    IsoCurrency:
+      description: Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html"
+        target="_blank" a>ISO specification</a> for details.
+      example: USD
+      maxLength: 3
+      minLength: 3
+      pattern: ^[A-Z]{3}$
+      title: ISO Currency Code
+      type: string
+    NotificationsV3:
       example:
         minimumBalance: 120000
       properties:
@@ -16157,7 +16184,7 @@ components:
           example: 120000
           type: integer
       type: object
-    AutoTopUpConfig_2:
+    AutoTopUpConfigV3:
       example:
         targetBalance: 300000
         fundingAccountId: 640ab1bd-8a6a-4603-a83a-1edbc3ed5689
@@ -16875,15 +16902,6 @@ components:
       - paymentId
       - payoutId
       type: object
-    IsoCurrency:
-      description: Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html"
-        target="_blank" a>ISO specification</a> for details.
-      example: USD
-      maxLength: 3
-      minLength: 3
-      pattern: ^[A-Z]{3}$
-      title: ISO Currency Code
-      type: string
     TransmissionType:
       description: |
         <p>The transmission type that will be used to send a payment</p>
