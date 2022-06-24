@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.33.16",
+    "version": "2.33.17",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -9142,7 +9142,8 @@
               "enum": [
                 "ACH",
                 "SAME_DAY_ACH",
-                "WIRE"
+                "WIRE",
+                "LOCAL"
               ],
               "type": "string"
             }
@@ -9337,7 +9338,8 @@
               "enum": [
                 "ACH",
                 "SAME_DAY_ACH",
-                "WIRE"
+                "WIRE",
+                "LOCAL"
               ],
               "type": "string"
             }
@@ -9433,6 +9435,15 @@
             "description": "The payment memo filter. This filters via a case insensitive substring match.",
             "in": "query",
             "name": "paymentMemo",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Payout Rails ID filter - case insensitive sub-string match",
+            "in": "query",
+            "name": "railsId",
             "required": false,
             "schema": {
               "type": "string"
@@ -17021,6 +17032,7 @@
               "fundingStatus": "fundingStatus",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
+              "paymentScheme": "paymentScheme",
               "filenameReference": "file ref",
               "rate": 6.0274563,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -17088,6 +17100,7 @@
               "fundingStatus": "fundingStatus",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
+              "paymentScheme": "paymentScheme",
               "filenameReference": "file ref",
               "rate": 6.0274563,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -17200,6 +17213,7 @@
               "fundingStatus": "fundingStatus",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
+              "paymentScheme": "paymentScheme",
               "filenameReference": "file ref",
               "rate": 6.0274563,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -17267,6 +17281,7 @@
               "fundingStatus": "fundingStatus",
               "railsBatchId": "railsBatchId",
               "paymentChannelName": "My Payment Channel",
+              "paymentScheme": "paymentScheme",
               "filenameReference": "file ref",
               "rate": 6.0274563,
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -17356,6 +17371,7 @@
           "fundingStatus": "fundingStatus",
           "railsBatchId": "railsBatchId",
           "paymentChannelName": "My Payment Channel",
+          "paymentScheme": "paymentScheme",
           "filenameReference": "file ref",
           "rate": 6.0274563,
           "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -17578,6 +17594,9 @@
             "type": "string"
           },
           "railsBatchId": {
+            "type": "string"
+          },
+          "paymentScheme": {
             "type": "string"
           },
           "rejectionReason": {
@@ -17961,8 +17980,6 @@
           "content": [
             {
               "traceNumber": "abodu123",
-              "accountName": "My Account Name",
-              "remoteSystemPaymentId": "remoteSystemPaymentId",
               "payout": {
                 "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "payoutFrom": {
@@ -17980,24 +17997,10 @@
                   "payorName": "payorName"
                 }
               },
-              "sourceCurrency": "sourceCurrency",
-              "paymentMemo": "Payment memo",
-              "paymentAmount": 7,
-              "fundingStatus": "fundingStatus",
-              "railsBatchId": "railsBatchId",
-              "paymentChannelName": "My Payment Channel",
-              "filenameReference": "file ref",
-              "rate": 9.301444243932576,
+              "paymentScheme": "paymentScheme",
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "countryCode": "US",
-              "returnReason": "Some Reason Value",
-              "withdrawable": true,
-              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
-              "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
-              "sourceAmount": 12345,
               "railsId": "asdf123",
-              "transmissionType": "transmissionType",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
@@ -18036,27 +18039,10 @@
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
-              "payorName": "payorName",
-              "sourceAccountName": "My Account",
-              "paymentChannelId": "123asdf",
-              "invertedRate": 3.616076749251911,
-              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
-              "accountNumber": "123123232323",
               "payeeAddressCountryCode": "US",
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "remoteId": "aasdf123",
-              "routingNumber": "123123123123",
               "returnCost": 1232,
-              "schedule": {
-                "scheduledFor": "2000-01-23T04:56:07.000Z",
-                "scheduleStatus": "SCHEDULED",
-                "notificationsEnabled": true,
-                "scheduledBy": "Aphra Behn",
-                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
-                "scheduledAt": "2000-01-23T04:56:07.000Z"
-              },
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "paymentMetadata": "sample metadata",
@@ -18065,12 +18051,44 @@
               "paymentCurrency": "paymentCurrency",
               "rejectionReason": "rejectionReason",
               "paymentTrackingReference": "paymentTrackingReference",
-              "status": "status"
+              "status": "status",
+              "accountName": "My Account Name",
+              "remoteSystemPaymentId": "remoteSystemPaymentId",
+              "sourceCurrency": "sourceCurrency",
+              "paymentMemo": "Payment memo",
+              "paymentAmount": 7,
+              "fundingStatus": "fundingStatus",
+              "railsBatchId": "railsBatchId",
+              "paymentChannelName": "My Payment Channel",
+              "filenameReference": "file ref",
+              "rate": 9.301444243932576,
+              "countryCode": "US",
+              "returnReason": "Some Reason Value",
+              "withdrawable": true,
+              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
+              "isPaymentCcyBaseCcy": true,
+              "sourceAmount": 12345,
+              "transmissionType": "transmissionType",
+              "payorName": "payorName",
+              "sourceAccountName": "My Account",
+              "paymentChannelId": "123asdf",
+              "invertedRate": 3.616076749251911,
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "individualIdentificationNumber": "1231231adf",
+              "accountNumber": "123123232323",
+              "remoteId": "aasdf123",
+              "routingNumber": "123123123123",
+              "schedule": {
+                "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "scheduleStatus": "SCHEDULED",
+                "notificationsEnabled": true,
+                "scheduledBy": "Aphra Behn",
+                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
+                "scheduledAt": "2000-01-23T04:56:07.000Z"
+              }
             },
             {
               "traceNumber": "abodu123",
-              "accountName": "My Account Name",
-              "remoteSystemPaymentId": "remoteSystemPaymentId",
               "payout": {
                 "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "payoutFrom": {
@@ -18088,24 +18106,10 @@
                   "payorName": "payorName"
                 }
               },
-              "sourceCurrency": "sourceCurrency",
-              "paymentMemo": "Payment memo",
-              "paymentAmount": 7,
-              "fundingStatus": "fundingStatus",
-              "railsBatchId": "railsBatchId",
-              "paymentChannelName": "My Payment Channel",
-              "filenameReference": "file ref",
-              "rate": 9.301444243932576,
+              "paymentScheme": "paymentScheme",
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "countryCode": "US",
-              "returnReason": "Some Reason Value",
-              "withdrawable": true,
-              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
-              "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
-              "sourceAmount": 12345,
               "railsId": "asdf123",
-              "transmissionType": "transmissionType",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
@@ -18144,27 +18148,10 @@
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
-              "payorName": "payorName",
-              "sourceAccountName": "My Account",
-              "paymentChannelId": "123asdf",
-              "invertedRate": 3.616076749251911,
-              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
-              "accountNumber": "123123232323",
               "payeeAddressCountryCode": "US",
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "remoteId": "aasdf123",
-              "routingNumber": "123123123123",
               "returnCost": 1232,
-              "schedule": {
-                "scheduledFor": "2000-01-23T04:56:07.000Z",
-                "scheduleStatus": "SCHEDULED",
-                "notificationsEnabled": true,
-                "scheduledBy": "Aphra Behn",
-                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
-                "scheduledAt": "2000-01-23T04:56:07.000Z"
-              },
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "paymentMetadata": "sample metadata",
@@ -18173,7 +18160,41 @@
               "paymentCurrency": "paymentCurrency",
               "rejectionReason": "rejectionReason",
               "paymentTrackingReference": "paymentTrackingReference",
-              "status": "status"
+              "status": "status",
+              "accountName": "My Account Name",
+              "remoteSystemPaymentId": "remoteSystemPaymentId",
+              "sourceCurrency": "sourceCurrency",
+              "paymentMemo": "Payment memo",
+              "paymentAmount": 7,
+              "fundingStatus": "fundingStatus",
+              "railsBatchId": "railsBatchId",
+              "paymentChannelName": "My Payment Channel",
+              "filenameReference": "file ref",
+              "rate": 9.301444243932576,
+              "countryCode": "US",
+              "returnReason": "Some Reason Value",
+              "withdrawable": true,
+              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
+              "isPaymentCcyBaseCcy": true,
+              "sourceAmount": 12345,
+              "transmissionType": "transmissionType",
+              "payorName": "payorName",
+              "sourceAccountName": "My Account",
+              "paymentChannelId": "123asdf",
+              "invertedRate": 3.616076749251911,
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "individualIdentificationNumber": "1231231adf",
+              "accountNumber": "123123232323",
+              "remoteId": "aasdf123",
+              "routingNumber": "123123123123",
+              "schedule": {
+                "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "scheduleStatus": "SCHEDULED",
+                "notificationsEnabled": true,
+                "scheduledBy": "Aphra Behn",
+                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
+                "scheduledAt": "2000-01-23T04:56:07.000Z"
+              }
             }
           ]
         },
@@ -18222,8 +18243,6 @@
           "content": [
             {
               "traceNumber": "abodu123",
-              "accountName": "My Account Name",
-              "remoteSystemPaymentId": "remoteSystemPaymentId",
               "payout": {
                 "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "payoutFrom": {
@@ -18241,24 +18260,10 @@
                   "payorName": "payorName"
                 }
               },
-              "sourceCurrency": "sourceCurrency",
-              "paymentMemo": "Payment memo",
-              "paymentAmount": 7,
-              "fundingStatus": "fundingStatus",
-              "railsBatchId": "railsBatchId",
-              "paymentChannelName": "My Payment Channel",
-              "filenameReference": "file ref",
-              "rate": 9.301444243932576,
+              "paymentScheme": "paymentScheme",
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "countryCode": "US",
-              "returnReason": "Some Reason Value",
-              "withdrawable": true,
-              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
-              "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
-              "sourceAmount": 12345,
               "railsId": "asdf123",
-              "transmissionType": "transmissionType",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
@@ -18297,27 +18302,10 @@
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
-              "payorName": "payorName",
-              "sourceAccountName": "My Account",
-              "paymentChannelId": "123asdf",
-              "invertedRate": 3.616076749251911,
-              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
-              "accountNumber": "123123232323",
               "payeeAddressCountryCode": "US",
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "remoteId": "aasdf123",
-              "routingNumber": "123123123123",
               "returnCost": 1232,
-              "schedule": {
-                "scheduledFor": "2000-01-23T04:56:07.000Z",
-                "scheduleStatus": "SCHEDULED",
-                "notificationsEnabled": true,
-                "scheduledBy": "Aphra Behn",
-                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
-                "scheduledAt": "2000-01-23T04:56:07.000Z"
-              },
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "paymentMetadata": "sample metadata",
@@ -18326,12 +18314,44 @@
               "paymentCurrency": "paymentCurrency",
               "rejectionReason": "rejectionReason",
               "paymentTrackingReference": "paymentTrackingReference",
-              "status": "status"
+              "status": "status",
+              "accountName": "My Account Name",
+              "remoteSystemPaymentId": "remoteSystemPaymentId",
+              "sourceCurrency": "sourceCurrency",
+              "paymentMemo": "Payment memo",
+              "paymentAmount": 7,
+              "fundingStatus": "fundingStatus",
+              "railsBatchId": "railsBatchId",
+              "paymentChannelName": "My Payment Channel",
+              "filenameReference": "file ref",
+              "rate": 9.301444243932576,
+              "countryCode": "US",
+              "returnReason": "Some Reason Value",
+              "withdrawable": true,
+              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
+              "isPaymentCcyBaseCcy": true,
+              "sourceAmount": 12345,
+              "transmissionType": "transmissionType",
+              "payorName": "payorName",
+              "sourceAccountName": "My Account",
+              "paymentChannelId": "123asdf",
+              "invertedRate": 3.616076749251911,
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "individualIdentificationNumber": "1231231adf",
+              "accountNumber": "123123232323",
+              "remoteId": "aasdf123",
+              "routingNumber": "123123123123",
+              "schedule": {
+                "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "scheduleStatus": "SCHEDULED",
+                "notificationsEnabled": true,
+                "scheduledBy": "Aphra Behn",
+                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
+                "scheduledAt": "2000-01-23T04:56:07.000Z"
+              }
             },
             {
               "traceNumber": "abodu123",
-              "accountName": "My Account Name",
-              "remoteSystemPaymentId": "remoteSystemPaymentId",
               "payout": {
                 "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                 "payoutFrom": {
@@ -18349,24 +18369,10 @@
                   "payorName": "payorName"
                 }
               },
-              "sourceCurrency": "sourceCurrency",
-              "paymentMemo": "Payment memo",
-              "paymentAmount": 7,
-              "fundingStatus": "fundingStatus",
-              "railsBatchId": "railsBatchId",
-              "paymentChannelName": "My Payment Channel",
-              "filenameReference": "file ref",
-              "rate": 9.301444243932576,
+              "paymentScheme": "paymentScheme",
               "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "countryCode": "US",
-              "returnReason": "Some Reason Value",
-              "withdrawable": true,
-              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
-              "isPaymentCcyBaseCcy": true,
               "submittedDateTime": "2000-01-23T04:56:07.000Z",
-              "sourceAmount": 12345,
               "railsId": "asdf123",
-              "transmissionType": "transmissionType",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "events": [
@@ -18405,27 +18411,10 @@
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
-              "payorName": "payorName",
-              "sourceAccountName": "My Account",
-              "paymentChannelId": "123asdf",
-              "invertedRate": 3.616076749251911,
-              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "individualIdentificationNumber": "1231231adf",
               "railsPaymentId": "railsPaymentId",
-              "accountNumber": "123123232323",
               "payeeAddressCountryCode": "US",
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "remoteId": "aasdf123",
-              "routingNumber": "123123123123",
               "returnCost": 1232,
-              "schedule": {
-                "scheduledFor": "2000-01-23T04:56:07.000Z",
-                "scheduleStatus": "SCHEDULED",
-                "notificationsEnabled": true,
-                "scheduledBy": "Aphra Behn",
-                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
-                "scheduledAt": "2000-01-23T04:56:07.000Z"
-              },
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
               "paymentMetadata": "sample metadata",
@@ -18434,7 +18423,41 @@
               "paymentCurrency": "paymentCurrency",
               "rejectionReason": "rejectionReason",
               "paymentTrackingReference": "paymentTrackingReference",
-              "status": "status"
+              "status": "status",
+              "accountName": "My Account Name",
+              "remoteSystemPaymentId": "remoteSystemPaymentId",
+              "sourceCurrency": "sourceCurrency",
+              "paymentMemo": "Payment memo",
+              "paymentAmount": 7,
+              "fundingStatus": "fundingStatus",
+              "railsBatchId": "railsBatchId",
+              "paymentChannelName": "My Payment Channel",
+              "filenameReference": "file ref",
+              "rate": 9.301444243932576,
+              "countryCode": "US",
+              "returnReason": "Some Reason Value",
+              "withdrawable": true,
+              "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
+              "isPaymentCcyBaseCcy": true,
+              "sourceAmount": 12345,
+              "transmissionType": "transmissionType",
+              "payorName": "payorName",
+              "sourceAccountName": "My Account",
+              "paymentChannelId": "123asdf",
+              "invertedRate": 3.616076749251911,
+              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "individualIdentificationNumber": "1231231adf",
+              "accountNumber": "123123232323",
+              "remoteId": "aasdf123",
+              "routingNumber": "123123123123",
+              "schedule": {
+                "scheduledFor": "2000-01-23T04:56:07.000Z",
+                "scheduleStatus": "SCHEDULED",
+                "notificationsEnabled": true,
+                "scheduledBy": "Aphra Behn",
+                "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
+                "scheduledAt": "2000-01-23T04:56:07.000Z"
+              }
             }
           ]
         },
@@ -18460,8 +18483,6 @@
       "PaymentResponseV4": {
         "example": {
           "traceNumber": "abodu123",
-          "accountName": "My Account Name",
-          "remoteSystemPaymentId": "remoteSystemPaymentId",
           "payout": {
             "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
             "payoutFrom": {
@@ -18479,24 +18500,10 @@
               "payorName": "payorName"
             }
           },
-          "sourceCurrency": "sourceCurrency",
-          "paymentMemo": "Payment memo",
-          "paymentAmount": 7,
-          "fundingStatus": "fundingStatus",
-          "railsBatchId": "railsBatchId",
-          "paymentChannelName": "My Payment Channel",
-          "filenameReference": "file ref",
-          "rate": 9.301444243932576,
+          "paymentScheme": "paymentScheme",
           "paymentId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "countryCode": "US",
-          "returnReason": "Some Reason Value",
-          "withdrawable": true,
-          "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
-          "isPaymentCcyBaseCcy": true,
           "submittedDateTime": "2000-01-23T04:56:07.000Z",
-          "sourceAmount": 12345,
           "railsId": "asdf123",
-          "transmissionType": "transmissionType",
           "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "events": [
@@ -18535,27 +18542,10 @@
               "scheduledAt": "2000-01-23T04:56:07.000Z"
             }
           ],
-          "payorName": "payorName",
-          "sourceAccountName": "My Account",
-          "paymentChannelId": "123asdf",
-          "invertedRate": 3.616076749251911,
-          "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "individualIdentificationNumber": "1231231adf",
           "railsPaymentId": "railsPaymentId",
-          "accountNumber": "123123232323",
           "payeeAddressCountryCode": "US",
           "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "remoteId": "aasdf123",
-          "routingNumber": "123123123123",
           "returnCost": 1232,
-          "schedule": {
-            "scheduledFor": "2000-01-23T04:56:07.000Z",
-            "scheduleStatus": "SCHEDULED",
-            "notificationsEnabled": true,
-            "scheduledBy": "Aphra Behn",
-            "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
-            "scheduledAt": "2000-01-23T04:56:07.000Z"
-          },
           "withdrawnReason": "withdrawnReason",
           "iban": "DE89 3704 0044 0532 0130 00",
           "paymentMetadata": "sample metadata",
@@ -18564,7 +18554,41 @@
           "paymentCurrency": "paymentCurrency",
           "rejectionReason": "rejectionReason",
           "paymentTrackingReference": "paymentTrackingReference",
-          "status": "status"
+          "status": "status",
+          "accountName": "My Account Name",
+          "remoteSystemPaymentId": "remoteSystemPaymentId",
+          "sourceCurrency": "sourceCurrency",
+          "paymentMemo": "Payment memo",
+          "paymentAmount": 7,
+          "fundingStatus": "fundingStatus",
+          "railsBatchId": "railsBatchId",
+          "paymentChannelName": "My Payment Channel",
+          "filenameReference": "file ref",
+          "rate": 9.301444243932576,
+          "countryCode": "US",
+          "returnReason": "Some Reason Value",
+          "withdrawable": true,
+          "autoWithdrawnReasonCode": "autoWithdrawnReasonCode",
+          "isPaymentCcyBaseCcy": true,
+          "sourceAmount": 12345,
+          "transmissionType": "transmissionType",
+          "payorName": "payorName",
+          "sourceAccountName": "My Account",
+          "paymentChannelId": "123asdf",
+          "invertedRate": 3.616076749251911,
+          "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "individualIdentificationNumber": "1231231adf",
+          "accountNumber": "123123232323",
+          "remoteId": "aasdf123",
+          "routingNumber": "123123123123",
+          "schedule": {
+            "scheduledFor": "2000-01-23T04:56:07.000Z",
+            "scheduleStatus": "SCHEDULED",
+            "notificationsEnabled": true,
+            "scheduledBy": "Aphra Behn",
+            "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
+            "scheduledAt": "2000-01-23T04:56:07.000Z"
+          }
         },
         "properties": {
           "paymentId": {
@@ -18747,6 +18771,9 @@
             "type": "string"
           },
           "railsBatchId": {
+            "type": "string"
+          },
+          "paymentScheme": {
             "type": "string"
           },
           "rejectionReason": {
@@ -21886,7 +21913,7 @@
             "type": "string"
           },
           "fundingType": {
-            "description": "Funding type. One of the following values: ACH, WIRE, EMBEDDED",
+            "description": "Funding type. One of the following values: ACH, WIRE, EMBEDDED, BANK_TRANSFER",
             "type": "string"
           },
           "events": {
