@@ -4,7 +4,6 @@
 ##### `POST` /v1/authenticate
 
 
-
 ##### `GET` /v1/sourceAccounts
 
 
@@ -30,7 +29,6 @@ Changed response : **200 OK**
 ###### Return Type:
 
 Changed response : **200 OK**
-
 > Source account response
 
 * Changed content type : `application/json`
@@ -52,20 +50,16 @@ Changed response : **200 OK**
 Changed: `type` in `query`
 > The type of funding account.
 
-
 ###### Return Type:
 
 Changed response : **200 OK**
-
 > Get Funding Accounts Response
-
 
 * Changed content type : `application/json`
 
     * Changed property `content` (array)
 
         Changed items (object):
-
 
         * Changed property `currency` (string)
             > Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.
@@ -80,11 +74,9 @@ Changed response : **200 OK**
 ##### `GET` /v2/fundingAccounts/{fundingAccountId}
 
 
-
 ###### Return Type:
 
 Changed response : **200 OK**
-
 > Funding Account Response
 
 * Changed content type : `application/json`
@@ -110,9 +102,7 @@ Changed: `type` in `query`
 ###### Return Type:
 
 Changed response : **200 OK**
-
 > List Source Account response
-
 
 * Changed content type : `application/json`
 
@@ -120,14 +110,12 @@ Changed response : **200 OK**
 
         Changed items (object):
 
-
         * Changed property `currency` (string)
             > Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.
 
             Removed enum values:
 
             * `USD`
-
             * `EUR`
             * `GBP`
             * `CAD`
@@ -138,11 +126,9 @@ Changed response : **200 OK**
 ##### `GET` /v3/sourceAccounts/{sourceAccountId}
 
 
-
 ###### Return Type:
 
 Changed response : **200 OK**
-
 > Source account response
 
 * Changed content type : `application/json`
@@ -170,7 +156,6 @@ Changed content type : `application/json`
 * Changed property `currency` (string)
     > Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.
 
-
 ##### `GET` /v4/paymentaudit/payouts/{payoutId}
 
 
@@ -184,10 +169,9 @@ Changed response : **200 OK**
     * Changed property `content` (array)
 
         Changed items (object):
-        
+
         * Added property `payeeAddressCountryCode` (string)
             > The country code of the payee's address.
-
 
 ##### `GET` /v4/paymentaudit/payments
 
@@ -198,13 +182,13 @@ Changed response : **200 OK**
 > Paginated list of payments
 
 * Changed content type : `application/json`
+
     * Changed property `content` (array)
 
         Changed items (object):
 
         * Added property `payeeAddressCountryCode` (string)
             > The country code of the payee's address.
-
 
 ##### `GET` /v4/paymentaudit/payments/{paymentId}
 
@@ -215,7 +199,7 @@ Changed response : **200 OK**
 > 200 response, request completed okay
 
 * Changed content type : `application/json`
+
     * Added property `payeeAddressCountryCode` (string)
         > The country code of the payee's address.
-
 
