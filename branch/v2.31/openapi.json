@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.31.48",
+    "version": "2.31.49",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -64,7 +64,7 @@
   "paths": {
     "/v1/authenticate": {
       "post": {
-        "description": "<p>Use this endpoint to obtain an access token for calling Velo Payments APIs. </p>\n<p>You need your API key and API secret issued by Velo</p>\n<p>To login and get an access token the API key and API secret must be Base64 encoded by concatenating them with a colon between them</p>\n<p>e.g. Given an ApiKey: 44a9537d-d55d-4b47-8082-14061c2bcdd8 and ApiSecret: c396b26b-137a-44fd-87f5-34631f8fd529</p>\n<p>Using a Base64 encode function Base64Encoder().encode(\"44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529\")</p>\n<p>Included as a Basic Authorization header: -H \"Authorization: Basic NDRhOTUzN2QtZDU1ZC00YjQ3LTgwODItMTQwNjFjMmJjZGQ4OmMzOTZiMjZiLTEzN2EtNDRmZC04N2Y1LTM0NjMxZjhmZDUyOQ==\" </p>\n",
+        "description": "Use this endpoint to obtain an access token for calling Velo Payments APIs. Use HTTP Basic Auth. String value of\nBasic and a Base64 endcoded string comprising the API key (e.g. 44a9537d-d55d-4b47-8082-14061c2bcdd8) and API\nsecret  (e.g. c396b26b-137a-44fd-87f5-34631f8fd529) with a colon between them. E.g. Basic 44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529\n",
         "operationId": "veloAuth",
         "parameters": [
           {
