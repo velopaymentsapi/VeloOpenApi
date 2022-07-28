@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.33.45
+  version: 2.33.46
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -119,9 +119,12 @@ paths:
   /v1/authenticate:
     post:
       description: |
-        Use this endpoint to obtain an access token for calling Velo Payments APIs. Use HTTP Basic Auth. String value of
-        Basic and a Base64 endcoded string comprising the API key (e.g. 44a9537d-d55d-4b47-8082-14061c2bcdd8) and API
-        secret  (e.g. c396b26b-137a-44fd-87f5-34631f8fd529) with a colon between them. E.g. Basic 44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529
+        <p>Use this endpoint to obtain an access token for calling Velo Payments APIs. </p>
+        <p>You need your API key and API secret issued by Velo</p>
+        <p>To login and get an access token the API key and API secret must be Base64 encoded by concatenating them with a colon between them</p>
+        <p>e.g. Given an ApiKey: 44a9537d-d55d-4b47-8082-14061c2bcdd8 and ApiSecret: c396b26b-137a-44fd-87f5-34631f8fd529</p>
+        <p>Using a Base64 encode function Base64Encoder().encode("44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529")</p>
+        <p>Included as a Basic Authorization header: -H "Authorization: Basic NDRhOTUzN2QtZDU1ZC00YjQ3LTgwODItMTQwNjFjMmJjZGQ4OmMzOTZiMjZiLTEzN2EtNDRmZC04N2Y1LTM0NjMxZjhmZDUyOQ==" </p>
       operationId: veloAuth
       parameters:
         - description: OAuth grant type. Should use 'client_credentials'
@@ -3786,12 +3789,16 @@ paths:
                 -H 'Content-Type: application/json'
     post:
       description: |
-        Initiate the process of creating 1 to 2000 payees in a batch Use the response location header to query
-        for status (201 - Created, 400 - invalid request body. In addition to standard semantic validations, a
-        400 will also result if there is a duplicate remote id within the batch / if there is a duplicate email
-        within the batch, i.e. if there is a conflict between the data provided for one payee within the batch and
-        that provided for another payee within the same batch). The validation at this stage is intra-batch only.
-        Validation against payees who have already been invited occurs subsequently during processing of the batch.
+        <p>Initiate the process of creating 1 to 2000 payees in a batch</p>
+        <p>Use the batchId in the response to query for status.</p>
+        <p>In addition to standard semantic validations, a 400 will also result if: </p>
+        <ul>
+        <li>there is a duplicate remote id within the batch</li>
+        <li>there is a duplicate email within the batch, i.e. if there is a conflict between the data provided for one payee within the batch and
+        that provided for another payee within the same batch).</li>
+        </ul>
+        <p>The validation at this stage is intra-batch only.</p>
+        <p>Validation against payees who have already been invited occurs subsequently during processing of the batch.</p>
       operationId: v4CreatePayee
       requestBody:
         content:
@@ -3898,6 +3905,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreatePayeesCSVResponseV4'
           description: HTTP Created. Body created only on CSV requests
+          headers:
+            Location:
+              schema:
+                description: A url pointing to the location of the batch. This can be used to get the status of the batch
+                example: 'https://api.sandbox.velopayments.com/v4/payees/batch/dbe7df3a-6b75-4bcb-97c5-45d25f828267'
+                type: string
           x-contracts:
             - contractId: 1
               headers:
@@ -10833,30 +10846,7 @@ components:
     CreatePayeesRequestV4:
       example:
         payees:
-          - payorRefs:
-              - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-                invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-                payableStatus: true
-                invitationStatus: invitationStatus
-                payableIssues:
-                  - code: '3'
-                    message: payee-disabled
-                  - code: '3'
-                    message: payee-disabled
-                remoteId: uniqueIdForRemoteEntity
-                paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-              - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-                invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-                payableStatus: true
-                invitationStatus: invitationStatus
-                payableIssues:
-                  - code: '3'
-                    message: payee-disabled
-                  - code: '3'
-                    message: payee-disabled
-                remoteId: uniqueIdForRemoteEntity
-                paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-            address:
+          - address:
               country: US
               countyOrProvince: FL
               line4: line4
@@ -10881,7 +10871,6 @@ components:
               taxId: '123123123'
               name: ABC Group Plc
               operatingName: ABC Co
-            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             email: bob@example.com
             remoteId: Remote ID
             paymentChannel:
@@ -10892,30 +10881,7 @@ components:
               iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
               currency: USD
               accountNumber: XXXXXX5678
-          - payorRefs:
-              - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-                invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-                payableStatus: true
-                invitationStatus: invitationStatus
-                payableIssues:
-                  - code: '3'
-                    message: payee-disabled
-                  - code: '3'
-                    message: payee-disabled
-                remoteId: uniqueIdForRemoteEntity
-                paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-              - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-                invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-                payableStatus: true
-                invitationStatus: invitationStatus
-                payableIssues:
-                  - code: '3'
-                    message: payee-disabled
-                  - code: '3'
-                    message: payee-disabled
-                remoteId: uniqueIdForRemoteEntity
-                paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-            address:
+          - address:
               country: US
               countyOrProvince: FL
               line4: line4
@@ -10940,7 +10906,6 @@ components:
               taxId: '123123123'
               name: ABC Group Plc
               operatingName: ABC Co
-            payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
             email: bob@example.com
             remoteId: Remote ID
             paymentChannel:
@@ -15911,29 +15876,6 @@ components:
       type: object
     CreatePayeeV4:
       example:
-        payorRefs:
-          - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-            invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-            payableStatus: true
-            invitationStatus: invitationStatus
-            payableIssues:
-              - code: '3'
-                message: payee-disabled
-              - code: '3'
-                message: payee-disabled
-            remoteId: uniqueIdForRemoteEntity
-            paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
-          - payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
-            invitationStatusTimestamp: 2019-01-20T09:00:00.000Z
-            payableStatus: true
-            invitationStatus: invitationStatus
-            payableIssues:
-              - code: '3'
-                message: payee-disabled
-              - code: '3'
-                message: payee-disabled
-            remoteId: uniqueIdForRemoteEntity
-            paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
         address:
           country: US
           countyOrProvince: FL
@@ -15959,7 +15901,6 @@ components:
           taxId: '123123123'
           name: ABC Group Plc
           operatingName: ABC Co
-        payeeId: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
         email: bob@example.com
         remoteId: Remote ID
         paymentChannel:
@@ -15971,17 +15912,6 @@ components:
           currency: USD
           accountNumber: XXXXXX5678
       properties:
-        payeeId:
-          example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
-          format: uuid
-          readOnly: true
-          type: string
-        payorRefs:
-          items:
-            $ref: '#/components/schemas/PayeePayorRefV4'
-          nullable: true
-          readOnly: true
-          type: array
         email:
           example: bob@example.com
           format: email
