@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.33.46
+  version: 2.33.47
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -6602,6 +6602,7 @@ paths:
             * ACH
             * SAME_DAY_ACH
             * WIRE
+            * GACHO
           in: query
           name: transmissionType
           required: false
@@ -6611,6 +6612,7 @@ paths:
               - SAME_DAY_ACH
               - WIRE
               - LOCAL
+              - GACHO
             type: string
         - description: Page number. Default is 1.
           in: query
@@ -6749,6 +6751,7 @@ paths:
             * ACH
             * SAME_DAY_ACH
             * WIRE
+            * GACHO
           in: query
           name: transmissionType
           required: false
@@ -6758,6 +6761,7 @@ paths:
               - SAME_DAY_ACH
               - WIRE
               - LOCAL
+              - GACHO
             type: string
         - description: The source account name filter. This filters via a case insensitive substring match.
           in: query
@@ -6825,7 +6829,10 @@ paths:
           required: false
           schema:
             type: string
-        - description: Payout Rails ID filter - case insensitive sub-string match
+        - description: |
+            Payout Rails ID filter - case insensitive match.
+            Any value is allowed, but you should use one of the supported railsId values.
+            To get this list of values, you should call the 'Get Supported Rails' endpoint.
           in: query
           name: railsId
           required: false
@@ -6996,6 +7003,12 @@ paths:
           required: true
           schema:
             format: uuid
+            type: string
+        - description: The source account name
+          in: query
+          name: sourceAccountName
+          required: false
+          schema:
             type: string
         - description: Page number. Default is 1.
           in: query
@@ -13914,7 +13927,7 @@ components:
           description: Populated with rejection reason code if the payment was withdrawn automatically at instruct time
           type: string
         transmissionType:
-          description: 'The transmission type of the payment, e.g. ACH, SAME_DAY_ACH, WIRE'
+          description: 'The transmission type of the payment, e.g. ACH, SAME_DAY_ACH, WIRE, GACHO'
           type: string
         paymentTrackingReference:
           type: string

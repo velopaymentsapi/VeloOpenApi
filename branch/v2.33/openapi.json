@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.33.46",
+    "version": "2.33.47",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -9143,7 +9143,7 @@
             }
           },
           {
-            "description": "Transmission Type\n* ACH\n* SAME_DAY_ACH\n* WIRE\n",
+            "description": "Transmission Type\n* ACH\n* SAME_DAY_ACH\n* WIRE\n* GACHO\n",
             "in": "query",
             "name": "transmissionType",
             "required": false,
@@ -9152,7 +9152,8 @@
                 "ACH",
                 "SAME_DAY_ACH",
                 "WIRE",
-                "LOCAL"
+                "LOCAL",
+                "GACHO"
               ],
               "type": "string"
             }
@@ -9339,7 +9340,7 @@
             }
           },
           {
-            "description": "Transmission Type\n* ACH\n* SAME_DAY_ACH\n* WIRE\n",
+            "description": "Transmission Type\n* ACH\n* SAME_DAY_ACH\n* WIRE\n* GACHO\n",
             "in": "query",
             "name": "transmissionType",
             "required": false,
@@ -9348,7 +9349,8 @@
                 "ACH",
                 "SAME_DAY_ACH",
                 "WIRE",
-                "LOCAL"
+                "LOCAL",
+                "GACHO"
               ],
               "type": "string"
             }
@@ -9450,7 +9452,7 @@
             }
           },
           {
-            "description": "Payout Rails ID filter - case insensitive sub-string match",
+            "description": "Payout Rails ID filter - case insensitive match.\nAny value is allowed, but you should use one of the supported railsId values.\nTo get this list of values, you should call the 'Get Supported Rails' endpoint.\n",
             "in": "query",
             "name": "railsId",
             "required": false,
@@ -9685,6 +9687,15 @@
             "required": true,
             "schema": {
               "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The source account name",
+            "in": "query",
+            "name": "sourceAccountName",
+            "required": false,
+            "schema": {
               "type": "string"
             }
           },
@@ -18721,7 +18732,7 @@
             "type": "string"
           },
           "transmissionType": {
-            "description": "The transmission type of the payment, e.g. ACH, SAME_DAY_ACH, WIRE",
+            "description": "The transmission type of the payment, e.g. ACH, SAME_DAY_ACH, WIRE, GACHO",
             "type": "string"
           },
           "paymentTrackingReference": {
