@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.34.34
+  version: 2.34.35
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -13069,19 +13069,19 @@ components:
           - dateTime: 2000-01-23T04:56:07.000Z
             sourceAccountSummary:
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                currency: currency
+                currency: EUR
                 totalCost: 3344
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                currency: currency
+                currency: EUR
                 totalCost: 3344
             payoutType: payoutType
             totalReturnedPayments: 1
             fxSummaries:
               - invertedRate: 123.23
                 rate: 123.23
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 totalPaymentAmount: 34235
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 5
                 fundingStatus: fundingStatus
@@ -13089,9 +13089,9 @@ components:
                 status: status
               - invertedRate: 123.23
                 rate: 123.23
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 totalPaymentAmount: 34235
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 5
                 fundingStatus: fundingStatus
@@ -13118,19 +13118,19 @@ components:
           - dateTime: 2000-01-23T04:56:07.000Z
             sourceAccountSummary:
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                currency: currency
+                currency: EUR
                 totalCost: 3344
               - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-                currency: currency
+                currency: EUR
                 totalCost: 3344
             payoutType: payoutType
             totalReturnedPayments: 1
             fxSummaries:
               - invertedRate: 123.23
                 rate: 123.23
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 totalPaymentAmount: 34235
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 5
                 fundingStatus: fundingStatus
@@ -13138,9 +13138,9 @@ components:
                 status: status
               - invertedRate: 123.23
                 rate: 123.23
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 totalPaymentAmount: 34235
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 totalCost: 5
                 fundingStatus: fundingStatus
@@ -13264,7 +13264,7 @@ components:
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
@@ -13274,12 +13274,12 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 scheduledAt: 2000-01-23T04:56:07.000Z
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
@@ -13289,7 +13289,7 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 scheduledAt: 2000-01-23T04:56:07.000Z
             railsPaymentId: railsPaymentId
             payeeAddressCountryCode: US
@@ -13300,13 +13300,18 @@ components:
             paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
             remoteSystemId: REMOTE_SYSTEM_ID
-            paymentCurrency: paymentCurrency
+            paymentCurrency: EUR
             rejectionReason: rejectionReason
             paymentTrackingReference: paymentTrackingReference
             status: status
+            postInstructFxInfo:
+              fxStatus: INITIATED
+              fxStatusUpdatedAt: 2000-01-23T04:56:07.000Z
+              fxTransactionReference: AB123GHI
+              fxMode: MANUAL
             accountName: My Account Name
             remoteSystemPaymentId: remoteSystemPaymentId
-            sourceCurrency: sourceCurrency
+            sourceCurrency: EUR
             paymentMemo: Payment memo
             paymentAmount: 7
             fundingStatus: fundingStatus
@@ -13362,7 +13367,7 @@ components:
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
@@ -13372,12 +13377,12 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 scheduledAt: 2000-01-23T04:56:07.000Z
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
@@ -13387,7 +13392,7 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 scheduledAt: 2000-01-23T04:56:07.000Z
             railsPaymentId: railsPaymentId
             payeeAddressCountryCode: US
@@ -13398,13 +13403,18 @@ components:
             paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
             remoteSystemId: REMOTE_SYSTEM_ID
-            paymentCurrency: paymentCurrency
+            paymentCurrency: EUR
             rejectionReason: rejectionReason
             paymentTrackingReference: paymentTrackingReference
             status: status
+            postInstructFxInfo:
+              fxStatus: INITIATED
+              fxStatusUpdatedAt: 2000-01-23T04:56:07.000Z
+              fxTransactionReference: AB123GHI
+              fxMode: MANUAL
             accountName: My Account Name
             remoteSystemPaymentId: remoteSystemPaymentId
-            sourceCurrency: sourceCurrency
+            sourceCurrency: EUR
             paymentMemo: Payment memo
             paymentAmount: 7
             fundingStatus: fundingStatus
@@ -13489,7 +13499,7 @@ components:
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
@@ -13499,12 +13509,12 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 scheduledAt: 2000-01-23T04:56:07.000Z
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
@@ -13514,7 +13524,7 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 scheduledAt: 2000-01-23T04:56:07.000Z
             railsPaymentId: railsPaymentId
             payeeAddressCountryCode: US
@@ -13525,13 +13535,18 @@ components:
             paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
             remoteSystemId: REMOTE_SYSTEM_ID
-            paymentCurrency: paymentCurrency
+            paymentCurrency: EUR
             rejectionReason: rejectionReason
             paymentTrackingReference: paymentTrackingReference
             status: status
+            postInstructFxInfo:
+              fxStatus: INITIATED
+              fxStatusUpdatedAt: 2000-01-23T04:56:07.000Z
+              fxTransactionReference: AB123GHI
+              fxMode: MANUAL
             accountName: My Account Name
             remoteSystemPaymentId: remoteSystemPaymentId
-            sourceCurrency: sourceCurrency
+            sourceCurrency: EUR
             paymentMemo: Payment memo
             paymentAmount: 7
             fundingStatus: fundingStatus
@@ -13587,7 +13602,7 @@ components:
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
@@ -13597,12 +13612,12 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 scheduledAt: 2000-01-23T04:56:07.000Z
               - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
                 eventDateTime: 2000-01-23T04:56:07.000Z
                 accountName: accountName
-                sourceCurrency: sourceCurrency
+                sourceCurrency: EUR
                 eventType: eventType
                 accountNumber: accountNumber
                 paymentAmount: 1299
@@ -13612,7 +13627,7 @@ components:
                 scheduledFor: 2000-01-23T04:56:07.000Z
                 sourceAmount: 1299
                 scheduledBy: Aphra Behn
-                paymentCurrency: paymentCurrency
+                paymentCurrency: EUR
                 scheduledAt: 2000-01-23T04:56:07.000Z
             railsPaymentId: railsPaymentId
             payeeAddressCountryCode: US
@@ -13623,13 +13638,18 @@ components:
             paymentMetadata: sample metadata
             payorPaymentId: 123123asdf
             remoteSystemId: REMOTE_SYSTEM_ID
-            paymentCurrency: paymentCurrency
+            paymentCurrency: EUR
             rejectionReason: rejectionReason
             paymentTrackingReference: paymentTrackingReference
             status: status
+            postInstructFxInfo:
+              fxStatus: INITIATED
+              fxStatusUpdatedAt: 2000-01-23T04:56:07.000Z
+              fxTransactionReference: AB123GHI
+              fxMode: MANUAL
             accountName: My Account Name
             remoteSystemPaymentId: remoteSystemPaymentId
-            sourceCurrency: sourceCurrency
+            sourceCurrency: EUR
             paymentMemo: Payment memo
             paymentAmount: 7
             fundingStatus: fundingStatus
@@ -13699,7 +13719,7 @@ components:
           - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000Z
             accountName: accountName
-            sourceCurrency: sourceCurrency
+            sourceCurrency: EUR
             eventType: eventType
             accountNumber: accountNumber
             paymentAmount: 1299
@@ -13709,12 +13729,12 @@ components:
             scheduledFor: 2000-01-23T04:56:07.000Z
             sourceAmount: 1299
             scheduledBy: Aphra Behn
-            paymentCurrency: paymentCurrency
+            paymentCurrency: EUR
             scheduledAt: 2000-01-23T04:56:07.000Z
           - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000Z
             accountName: accountName
-            sourceCurrency: sourceCurrency
+            sourceCurrency: EUR
             eventType: eventType
             accountNumber: accountNumber
             paymentAmount: 1299
@@ -13724,7 +13744,7 @@ components:
             scheduledFor: 2000-01-23T04:56:07.000Z
             sourceAmount: 1299
             scheduledBy: Aphra Behn
-            paymentCurrency: paymentCurrency
+            paymentCurrency: EUR
             scheduledAt: 2000-01-23T04:56:07.000Z
         railsPaymentId: railsPaymentId
         payeeAddressCountryCode: US
@@ -13735,13 +13755,18 @@ components:
         paymentMetadata: sample metadata
         payorPaymentId: 123123asdf
         remoteSystemId: REMOTE_SYSTEM_ID
-        paymentCurrency: paymentCurrency
+        paymentCurrency: EUR
         rejectionReason: rejectionReason
         paymentTrackingReference: paymentTrackingReference
         status: status
+        postInstructFxInfo:
+          fxStatus: INITIATED
+          fxStatusUpdatedAt: 2000-01-23T04:56:07.000Z
+          fxTransactionReference: AB123GHI
+          fxMode: MANUAL
         accountName: My Account Name
         remoteSystemPaymentId: remoteSystemPaymentId
-        sourceCurrency: sourceCurrency
+        sourceCurrency: EUR
         paymentMemo: Payment memo
         paymentAmount: 7
         fundingStatus: fundingStatus
@@ -13816,7 +13841,8 @@ components:
           example: 12345
           type: integer
         sourceCurrency:
-          description: ISO 3 character currency code
+          description: ISO-4217 3 character currency code
+          example: EUR
           maxLength: 3
           minLength: 3
           type: string
@@ -13824,7 +13850,8 @@ components:
           description: The amount which the payee will receive
           type: integer
         paymentCurrency:
-          description: ISO 3 character currency code
+          description: ISO-4217 3 character currency code
+          example: EUR
           maxLength: 3
           minLength: 3
           type: string
@@ -13937,6 +13964,8 @@ components:
           type: string
         schedule:
           $ref: '#/components/schemas/PayoutSchedule'
+        postInstructFxInfo:
+          $ref: '#/components/schemas/PostInstructFxInfo'
         payout:
           $ref: '#/components/schemas/PaymentResponseV4_payout'
       required:
@@ -16484,19 +16513,19 @@ components:
         dateTime: 2000-01-23T04:56:07.000Z
         sourceAccountSummary:
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            currency: currency
+            currency: EUR
             totalCost: 3344
           - sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-            currency: currency
+            currency: EUR
             totalCost: 3344
         payoutType: payoutType
         totalReturnedPayments: 1
         fxSummaries:
           - invertedRate: 123.23
             rate: 123.23
-            sourceCurrency: sourceCurrency
+            sourceCurrency: EUR
             totalPaymentAmount: 34235
-            paymentCurrency: paymentCurrency
+            paymentCurrency: EUR
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             totalCost: 5
             fundingStatus: fundingStatus
@@ -16504,9 +16533,9 @@ components:
             status: status
           - invertedRate: 123.23
             rate: 123.23
-            sourceCurrency: sourceCurrency
+            sourceCurrency: EUR
             totalPaymentAmount: 34235
-            paymentCurrency: paymentCurrency
+            paymentCurrency: EUR
             quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             totalCost: 5
             fundingStatus: fundingStatus
@@ -16675,7 +16704,8 @@ components:
         - scheduledFor
       type: object
     PaymentAuditCurrency:
-      description: ISO 3 character currency code
+      description: ISO-4217 3 character currency code
+      example: EUR
       maxLength: 3
       minLength: 3
       type: string
@@ -16684,7 +16714,7 @@ components:
         eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         eventDateTime: 2000-01-23T04:56:07.000Z
         accountName: accountName
-        sourceCurrency: sourceCurrency
+        sourceCurrency: EUR
         eventType: eventType
         accountNumber: accountNumber
         paymentAmount: 1299
@@ -16694,7 +16724,7 @@ components:
         scheduledFor: 2000-01-23T04:56:07.000Z
         sourceAmount: 1299
         scheduledBy: Aphra Behn
-        paymentCurrency: paymentCurrency
+        paymentCurrency: EUR
         scheduledAt: 2000-01-23T04:56:07.000Z
       properties:
         eventId:
@@ -16709,7 +16739,8 @@ components:
           description: 'One of the following values: PAYOUT_SUBMITTED, PAYOUT_COMPLETED, PAYOUT_INSTRUCTED_V3, BANK_PAYMENT_REQUESTED, SOURCE_AMOUNT_CONFIRMED, PAYMENT_SUBMITTED, PAYMENT_SUBMITTED_ACCEPTED, PAYMENT_SUBMITTED_REJECTED, PAYMENT_CONFIRMED, PAYMENT_AWAITING_FUNDS, PAYMENT_FUNDED, PAYMENT_UNFUNDED, PAYMENT_FAILED, PAYMENT_TRACKING_DETAILS_UPDATED, ACH_SUBMITTED_TO_ODFI, PAYMENT_ACCEPTED_BY_RAILS, ACH_RETURN_RECEIVED, RETURN_PAYMENT_FUNDING_REQUESTED, PAYOUT_BATCH_EXECUTED, PAYOUT_BATCH_QUOTE_EXPIRED, PAYOUT_BATCH_FUNDED, PAYOUT_BATCH_FUNDS_RETURN_REQUEST, PAYOUT_BATCH_FUNDS_RETURNED, PAYOUT_FUNDS_REQUEST, PAYOUT_FUNDS_GRANTED, PAYOUT_FUNDS_DENIED, PAYOUT_BATCH_QUOTED, PAYOUT_QUOTED, ACH_PAYMENT_RETURN_CANCELLED, RETURN_PAYMENT_CANCELLATION_REQUESTED, PAYOUT_WITHDRAWN, ORCHESTRATED_PAYMENT_BATCH_REQUESTED, ORCHESTRATED_PAYMENT_BATCH_CONFIRMED, ORCHESTRATED_PAYMENT_REQUESTED'
           type: string
         sourceCurrency:
-          description: ISO 3 character currency code
+          description: ISO-4217 3 character currency code
+          example: EUR
           maxLength: 3
           minLength: 3
           type: string
@@ -16719,7 +16750,8 @@ components:
           format: int64
           type: integer
         paymentCurrency:
-          description: ISO 3 character currency code
+          description: ISO-4217 3 character currency code
+          example: EUR
           maxLength: 3
           minLength: 3
           type: string
@@ -16754,6 +16786,35 @@ components:
         - eventDateTime
         - eventId
         - eventType
+      type: object
+    PostInstructFxInfo:
+      description: FX details relating to a payout that was executed or is still waiting to be executed
+      example:
+        fxStatus: INITIATED
+        fxStatusUpdatedAt: 2000-01-23T04:56:07.000Z
+        fxTransactionReference: AB123GHI
+        fxMode: MANUAL
+      properties:
+        fxMode:
+          description: The mode by which the FX rate is to be determined (MANUAL or AUTO)
+          example: MANUAL
+          type: string
+        fxStatus:
+          description: The state to which the Post-Instruct FX process has reached (INITIATED or COMPLETED)
+          example: INITIATED
+          type: string
+        fxStatusUpdatedAt:
+          description: The date-time at which the most recent fxStatus was determined.
+          format: date-time
+          type: string
+        fxTransactionReference:
+          description: The reference assigned to the FX funding that will fulfil this payment.
+          example: AB123GHI
+          type: string
+      required:
+        - fxMode
+        - fxStatus
+        - fxStatusUpdatedAt
       type: object
     PaymentDelta:
       example:
@@ -17937,7 +17998,7 @@ components:
     SourceAccountSummary:
       example:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        currency: currency
+        currency: EUR
         totalCost: 3344
       properties:
         sourceAccountId:
@@ -17948,7 +18009,8 @@ components:
           format: int64
           type: integer
         currency:
-          description: ISO 3 character currency code
+          description: ISO-4217 3 character currency code
+          example: EUR
           maxLength: 3
           minLength: 3
           type: string
@@ -17960,9 +18022,9 @@ components:
       example:
         invertedRate: 123.23
         rate: 123.23
-        sourceCurrency: sourceCurrency
+        sourceCurrency: EUR
         totalPaymentAmount: 34235
-        paymentCurrency: paymentCurrency
+        paymentCurrency: EUR
         quoteId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         totalCost: 5
         fundingStatus: fundingStatus
@@ -17989,12 +18051,14 @@ components:
           example: 34235
           type: integer
         sourceCurrency:
-          description: ISO 3 character currency code
+          description: ISO-4217 3 character currency code
+          example: EUR
           maxLength: 3
           minLength: 3
           type: string
         paymentCurrency:
-          description: ISO 3 character currency code
+          description: ISO-4217 3 character currency code
+          example: EUR
           maxLength: 3
           minLength: 3
           type: string
@@ -18017,6 +18081,14 @@ components:
     ScheduleStatus:
       description: 'Current status of the payout schedule. One of the following values: SCHEDULED, EXECUTED, FAILED'
       example: SCHEDULED
+      type: string
+    PostInstructFxMode:
+      description: The mode by which the FX rate is to be determined (MANUAL or AUTO)
+      example: MANUAL
+      type: string
+    PostInstructFxStatus:
+      description: The state to which the Post-Instruct FX process has reached (INITIATED or COMPLETED)
+      example: INITIATED
       type: string
     PayoutPayeeV3:
       description: Payee data associated with a payment. Either individual or company must be populated
