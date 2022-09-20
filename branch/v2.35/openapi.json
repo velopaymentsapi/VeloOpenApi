@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.35.7",
+    "version": "2.35.8",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -9491,6 +9491,25 @@
                 "SCHEDULED",
                 "EXECUTED",
                 "FAILED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "The status of the post instruct FX step if one was required for the payment",
+            "in": "query",
+            "name": "postInstructFxStatus",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ANY",
+                "INITIATED",
+                "CANCELLED",
+                "EXECUTED",
+                "COMPLETED",
+                "RETURNED",
+                "RETRIED",
+                "REFUNDED"
               ],
               "type": "string"
             }
