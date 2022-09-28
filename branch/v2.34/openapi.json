@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.34.45",
+    "version": "2.34.46",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -7008,6 +7008,18 @@
                     "name": "My WUBS Account",
                     "payorId": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
                     "currency": "USD"
+                  }
+                },
+                "private": {
+                  "summary": "PRIVATE Example",
+                  "value": {
+                    "type": "PRIVATE",
+                    "name": "My PRIVATE Account",
+                    "payorId": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
+                    "accountName": "My Account Name",
+                    "accountNumber": 1231231234556,
+                    "routingNumber": 123456789,
+                    "currency": "AUD"
                   }
                 }
               },
@@ -16191,25 +16203,25 @@
             "type": "string"
           },
           "accountName": {
-            "description": "Required if type is FBO",
+            "description": "Required if type is either FBO or PRIVATE",
             "maxLength": 22,
             "minLength": 1,
             "type": "string"
           },
           "accountNumber": {
-            "description": "Required if type is FBO",
+            "description": "Required if type is either FBO or PRIVATE",
             "maxLength": 17,
             "minLength": 4,
             "type": "string"
           },
           "routingNumber": {
-            "description": "Required if type is FBO",
+            "description": "Required if type is either FBO or PRIVATE",
             "maxLength": 9,
             "minLength": 6,
             "type": "string"
           },
           "currency": {
-            "description": "ISO 4217 currency code, Required if type is WUBS_DECOUPLED",
+            "description": "ISO 4217 currency code, Required if type is either WUBS_DECOUPLED or PRIVATE",
             "example": "USD",
             "maxLength": 3,
             "minLength": 3,
