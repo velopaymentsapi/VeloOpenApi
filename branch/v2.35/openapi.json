@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.35.21",
+    "version": "2.35.22",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -9045,6 +9045,15 @@
         "operationId": "getPaymentsForPayoutV4",
         "parameters": [
           {
+            "description": "Payout Rails ID filter - case insensitive match.\nAny value is allowed, but you should use one of the supported railsId values.\nTo get this list of values, you should call the 'Get Supported Rails' endpoint.\n",
+            "in": "query",
+            "name": "railsId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "description": "The id (UUID) of the payout.",
             "in": "path",
             "name": "payoutId",
@@ -9520,7 +9529,7 @@
                 "EXECUTED",
                 "COMPLETED",
                 "RETURNED",
-                "RETRIED",
+                "RESUBMITTED",
                 "REFUNDED"
               ],
               "type": "string"
