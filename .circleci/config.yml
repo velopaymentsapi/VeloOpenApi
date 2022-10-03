@@ -7,13 +7,16 @@ jobs:
         working_directory: ~/repo
 
         steps:
+            - add_ssh_keys:
+                fingerprints:
+                    - "1c:14:17:41:28:22:84:e1:c4:c8:b0:2e:14:92:a2:a8"
             - checkout
 
             # Download and cache dependencies
             -   restore_cache:
                     keys:
                         - v1-dependencies-{{ checksum "package.json" }}
-                        # fallback to using the latest cache if no exact match is found
+                        # fallback to using the latest cache if no exact match is found 
                         - v1-dependencies-
 
             - run: npm install

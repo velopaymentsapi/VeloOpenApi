@@ -1,7 +1,7 @@
 #### What's Changed
 ---
 
-##### `POST` /v1/authenticate
+##### `GET` /v1/payors/{payorId}
 
 
 ##### `POST` /v4/payees
@@ -17,6 +17,7 @@ New header : `Location`
 ##### `GET` /v4/paymentaudit/payouts/{payoutId}
 
 
+
 ###### Parameters:
 
 Changed: `transmissionType` in `query`
@@ -25,6 +26,7 @@ Changed: `transmissionType` in `query`
 > * SAME_DAY_ACH
 > * WIRE
 > * GACHO
+
 
 ###### Return Type:
 
@@ -57,6 +59,7 @@ Changed: `railsId` in `query`
 > Any value is allowed, but you should use one of the supported railsId values.
 > To get this list of values, you should call the 'Get Supported Rails' endpoint.
 
+
 ###### Return Type:
 
 Changed response : **200 OK**
@@ -81,6 +84,7 @@ Changed response : **200 OK**
 
 * Changed content type : `application/json`
 
+
     * Changed property `transmissionType` (string)
         > The transmission type of the payment, e.g. ACH, SAME_DAY_ACH, WIRE, GACHO
 
@@ -92,3 +96,7 @@ Changed response : **200 OK**
 Added: `sourceAccountName` in `query`
 > The source account name
 
+
+            * `SAME_DAY_ACH`
+            * `WIRE`
+            * `ACH`
