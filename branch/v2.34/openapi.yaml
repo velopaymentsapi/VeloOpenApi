@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.34.49
+  version: 2.34.50
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -6885,7 +6885,7 @@ paths:
               - EXECUTED
               - COMPLETED
               - RETURNED
-              - RETRIED
+              - RESUBMITTED
               - REFUNDED
             type: string
         - description: Page number. Default is 1.
