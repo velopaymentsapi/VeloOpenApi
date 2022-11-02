@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.35.37",
+    "version": "2.35.39",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -10775,6 +10775,7 @@
     },
     "/v1/paymentChannelRules": {
       "get": {
+        "deprecated": true,
         "description": "List the country specific payment channel rules.",
         "operationId": "listPaymentChannelRulesV1",
         "responses": {
@@ -10927,6 +10928,7 @@
     },
     "/v2/supportedCountries": {
       "get": {
+        "deprecated": true,
         "description": "List the supported countries.",
         "operationId": "listSupportedCountriesV2",
         "responses": {
@@ -10949,7 +10951,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/supportedCountries' -i -X GET\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/supportedCountries' -i -X GET\n"
           }
         ]
       }

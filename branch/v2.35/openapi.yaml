@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.35.37
+  version: 2.35.39
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -7797,6 +7797,7 @@ paths:
                 -d '{"scheduledFor": "2025-01-01T12:00:00Z", "notificationsEnabled": "true"}'
   /v1/paymentChannelRules:
     get:
+      deprecated: true
       description: List the country specific payment channel rules.
       operationId: listPaymentChannelRulesV1
       responses:
@@ -7910,6 +7911,7 @@ paths:
                 -H 'Authorization: Bearer 9a7c9010-547f-410e-ac3c-fd6f6701c745'
   /v2/supportedCountries:
     get:
+      deprecated: true
       description: List the supported countries.
       operationId: listSupportedCountriesV2
       responses:
@@ -7926,7 +7928,7 @@ paths:
       x-code-samples:
         - lang: shell
           source: |
-            $ curl 'https://api.sandbox.velopayments.com/v1/supportedCountries' -i -X GET
+            $ curl 'https://api.sandbox.velopayments.com/v2/supportedCountries' -i -X GET
   /v2/currencies:
     get:
       description: List the supported currencies.
