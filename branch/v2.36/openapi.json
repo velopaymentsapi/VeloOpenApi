@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.36.3",
+    "version": "2.36.4",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -2779,7 +2779,14 @@
             "description": "No content. Payee Id accepted for deletion."
           },
           "400": {
-            "description": "Bad Request. Payee Id failed validation for deletion."
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "404": {
             "description": "Payee Id not found"
@@ -3002,12 +3009,14 @@
             ]
           },
           "404": {
-            "description": "Payee Not found",
-            "x-contracts": [
-              {
-                "contractId": 3
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
               }
-            ]
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payee by Id",
@@ -4134,7 +4143,14 @@
             "x-contracts": null
           },
           "400": {
-            "description": "Bad Request"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           }
         },
         "summary": "List Payee Changes",
@@ -4366,10 +4382,24 @@
             "description": "No content. Payee Id accepted for deletion."
           },
           "400": {
-            "description": "Bad Request. Payee Id failed validation for deletion."
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "404": {
-            "description": "Payee Id not found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Delete Payee by Id",
@@ -4588,12 +4618,14 @@
             ]
           },
           "404": {
-            "description": "Payee Not found",
-            "x-contracts": [
-              {
-                "contractId": 3
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
               }
-            ]
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get Payee by Id",
@@ -5905,7 +5937,14 @@
             "x-contracts": null
           },
           "400": {
-            "description": "Bad Request"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           }
         },
         "summary": "List Payee Changes",
@@ -14314,6 +14353,7 @@
             "operatingName": "ABC Co"
           },
           "language": "en-US",
+          "contactSmsNumber": "11235555555",
           "email": "bob@example.com"
         },
         "properties": {
@@ -14341,6 +14381,12 @@
             "example": "bob@example.com",
             "format": "email",
             "nullable": true,
+            "type": "string"
+          },
+          "contactSmsNumber": {
+            "description": "The phone number of a device that the payee wishes to receive sms messages on\n",
+            "example": "11235555555",
+            "pattern": "^\\+[1-9]\\d{1,14}$",
             "type": "string"
           }
         },
@@ -14395,6 +14441,22 @@
           "kycCompletedTimestamp": "2019-01-20T09:00:00.000Z",
           "marketingOptInTimestamp": "2019-01-20T09:00:00.000Z",
           "language": "en-US",
+          "paymentChannels": [
+            {
+              "countryCode": "US",
+              "name": "Bank of America USD",
+              "currency": "USD",
+              "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3",
+              "last4Digits": "1234"
+            },
+            {
+              "countryCode": "US",
+              "name": "Bank of America USD",
+              "currency": "USD",
+              "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3",
+              "last4Digits": "1234"
+            }
+          ],
           "watchlistOverrideExpiresAtTimestamp": "2019-01-20T09:00:00.000Z",
           "disabled": true,
           "company": {
@@ -14450,6 +14512,15 @@
           "payorRefs": {
             "items": {
               "$ref": "#/components/schemas/PayeePayorRefV4"
+            },
+            "nullable": true,
+            "readOnly": true,
+            "type": "array"
+          },
+          "paymentChannels": {
+            "description": "A list of the Payee's payment channels in their preferred order",
+            "items": {
+              "$ref": "#/components/schemas/PaymentChannelSummaryV4"
             },
             "nullable": true,
             "readOnly": true,
@@ -21035,6 +21106,57 @@
             "type": "array"
           }
         },
+        "type": "object"
+      },
+      "PaymentChannelSummaryV4": {
+        "example": {
+          "countryCode": "US",
+          "name": "Bank of America USD",
+          "currency": "USD",
+          "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3",
+          "last4Digits": "1234"
+        },
+        "properties": {
+          "paymentChannelId": {
+            "example": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3",
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "description": "The payment channel name",
+            "example": "Bank of America USD",
+            "type": "string"
+          },
+          "countryCode": {
+            "description": "Valid ISO 3166 2 character country code. See the <a href=\"https://www.iso.org/iso-3166-country-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
+            "example": "US",
+            "maxLength": 2,
+            "minLength": 2,
+            "pattern": "^[A-Z]{2}$",
+            "title": "ISO 3166 2 Character Country Code",
+            "type": "string"
+          },
+          "currency": {
+            "description": "Valid ISO 4217 3 letter currency code. See the <a href=\"https://www.iso.org/iso-4217-currency-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "title": "ISO Currency Code",
+            "type": "string"
+          },
+          "last4Digits": {
+            "description": "The last 4 digits of the account number or IBAN",
+            "example": "1234",
+            "type": "string"
+          }
+        },
+        "required": [
+          "countryCode",
+          "currency",
+          "name",
+          "paymentChannelId"
+        ],
         "type": "object"
       },
       "WatchlistStatusV4": {
