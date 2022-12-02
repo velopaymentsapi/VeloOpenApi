@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.36.13",
+    "version": "2.36.14",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -8046,7 +8046,14 @@
             "description": "Details of Payment Changes"
           },
           "400": {
-            "description": "Bad Request"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           }
         },
         "summary": "V1 List Payment Changes",
@@ -10017,7 +10024,14 @@
             "description": "Details of Payment Changes"
           },
           "400": {
-            "description": "Bad Request"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           }
         },
         "summary": "List Payment Changes",
@@ -10093,7 +10107,14 @@
             "description": "Export Transactions response"
           },
           "400": {
-            "description": "invalid Request"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "401": {
             "description": "Not Authorized"
@@ -14443,16 +14464,22 @@
           "language": "en-US",
           "paymentChannels": [
             {
+              "disabledReason": "User request",
+              "disabledReasonCode": "VR100",
               "countryCode": "US",
               "name": "Bank of America USD",
               "currency": "USD",
+              "enabled": false,
               "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3",
               "last4Digits": "1234"
             },
             {
+              "disabledReason": "User request",
+              "disabledReasonCode": "VR100",
               "countryCode": "US",
               "name": "Bank of America USD",
               "currency": "USD",
+              "enabled": false,
               "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3",
               "last4Digits": "1234"
             }
@@ -18058,6 +18085,7 @@
               "railsId": "asdf123",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "railsRejectionInformation": "railsRejectionInformation",
               "events": [
                 {
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -18173,6 +18201,7 @@
               "railsId": "asdf123",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "railsRejectionInformation": "railsRejectionInformation",
               "events": [
                 {
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -18333,6 +18362,7 @@
               "railsId": "asdf123",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "railsRejectionInformation": "railsRejectionInformation",
               "events": [
                 {
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -18448,6 +18478,7 @@
               "railsId": "asdf123",
               "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "railsRejectionInformation": "railsRejectionInformation",
               "events": [
                 {
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -18585,6 +18616,7 @@
           "railsId": "asdf123",
           "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "railsRejectionInformation": "railsRejectionInformation",
           "events": [
             {
               "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -18866,6 +18898,10 @@
           "rejectionReason": {
             "type": "string"
           },
+          "railsRejectionInformation": {
+            "description": "The original reason that the payment was rejected. This can be third party rails specific if rejected by the underlying third party rails logic.",
+            "type": "string"
+          },
           "withdrawnReason": {
             "type": "string"
           },
@@ -18976,6 +19012,35 @@
         "type": "object"
       },
       "PayorAmlTransaction": {
+        "example": {
+          "debitCurrency": "debitCurrency",
+          "payeeType": "payeeType",
+          "fxApplied": 5.962133916683182,
+          "transactionTime": "transactionTime",
+          "paymentMemo": "paymentMemo",
+          "paymentAmount": 1,
+          "returnCode": "returnCode",
+          "payeeName": "payeeName",
+          "rejectReason": "rejectReason",
+          "fundingType": "fundingType",
+          "paymentRails": "paymentRails",
+          "debit": 0,
+          "credit": 6,
+          "paymentStatus": "paymentStatus",
+          "payeeEmail": "payeeEmail",
+          "sourceAccount": "sourceAccount",
+          "returnFeeDescription": "returnFeeDescription",
+          "returnDescription": "returnDescription",
+          "transactionDate": "2000-01-23T00:00:00.000Z",
+          "remoteId": "remoteId",
+          "returnFee": "returnFee",
+          "returnFeeCurrency": "returnFeeCurrency",
+          "dateFundingRequested": "dateFundingRequested",
+          "payorPaymentId": "payorPaymentId",
+          "creditCurrency": "creditCurrency",
+          "paymentCurrency": "paymentCurrency",
+          "reportTransactionType": "reportTransactionType"
+        },
         "properties": {
           "transactionDate": {
             "format": "date",
@@ -21110,9 +21175,12 @@
       },
       "PaymentChannelSummaryV4": {
         "example": {
+          "disabledReason": "User request",
+          "disabledReasonCode": "VR100",
           "countryCode": "US",
           "name": "Bank of America USD",
           "currency": "USD",
+          "enabled": false,
           "paymentChannelId": "70faaff7-2c32-4b44-b27f-f0b6c484e6f3",
           "last4Digits": "1234"
         },
@@ -21149,11 +21217,26 @@
             "description": "The last 4 digits of the account number or IBAN",
             "example": "1234",
             "type": "string"
+          },
+          "enabled": {
+            "description": "Usually true. False if an associated payment is returned",
+            "example": false,
+            "type": "boolean"
+          },
+          "disabledReason": {
+            "description": "Indicates why the payment channel was disabled",
+            "example": "User request",
+            "type": "string"
+          },
+          "disabledReasonCode": {
+            "example": "VR100",
+            "type": "string"
           }
         },
         "required": [
           "countryCode",
           "currency",
+          "enabled",
           "name",
           "paymentChannelId"
         ],
