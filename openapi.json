@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.33.47",
+    "version": "2.34.50",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -64,7 +64,7 @@
   "paths": {
     "/v1/authenticate": {
       "post": {
-        "description": "Use this endpoint to obtain an access token for calling Velo Payments APIs. Use HTTP Basic Auth. String value of\nBasic and a Base64 endcoded string comprising the API key (e.g. 44a9537d-d55d-4b47-8082-14061c2bcdd8) and API\nsecret  (e.g. c396b26b-137a-44fd-87f5-34631f8fd529) with a colon between them. E.g. Basic 44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529\n",
+        "description": "<p>Use this endpoint to obtain an access token for calling Velo Payments APIs. </p>\n<p>You need your API key and API secret issued by Velo</p>\n<p>To login and get an access token the API key and API secret must be Base64 encoded by concatenating them with a colon between them</p>\n<p>e.g. Given an ApiKey: 44a9537d-d55d-4b47-8082-14061c2bcdd8 and ApiSecret: c396b26b-137a-44fd-87f5-34631f8fd529</p>\n<p>Using a Base64 encode function Base64Encoder().encode(\"44a9537d-d55d-4b47-8082-14061c2bcdd8:c396b26b-137a-44fd-87f5-34631f8fd529\")</p>\n<p>Included as a Basic Authorization header: -H \"Authorization: Basic NDRhOTUzN2QtZDU1ZC00YjQ3LTgwODItMTQwNjFjMmJjZGQ4OmMzOTZiMjZiLTEzN2EtNDRmZC04N2Y1LTM0NjMxZjhmZDUyOQ==\" </p>\n",
         "operationId": "veloAuth",
         "parameters": [
           {
@@ -7009,6 +7009,18 @@
                     "payorId": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
                     "currency": "USD"
                   }
+                },
+                "private": {
+                  "summary": "PRIVATE Example",
+                  "value": {
+                    "type": "PRIVATE",
+                    "name": "My PRIVATE Account",
+                    "payorId": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
+                    "accountName": "My Account Name",
+                    "accountNumber": 1231231234556,
+                    "routingNumber": 123456789,
+                    "currency": "AUD"
+                  }
                 }
               },
               "schema": {
@@ -9491,6 +9503,25 @@
                 "SCHEDULED",
                 "EXECUTED",
                 "FAILED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "The status of the post instruct FX step if one was required for the payment",
+            "in": "query",
+            "name": "postInstructFxStatus",
+            "required": false,
+            "schema": {
+              "enum": [
+                "ANY",
+                "INITIATED",
+                "CANCELLED",
+                "EXECUTED",
+                "COMPLETED",
+                "RETURNED",
+                "RESUBMITTED",
+                "REFUNDED"
               ],
               "type": "string"
             }
@@ -16172,25 +16203,25 @@
             "type": "string"
           },
           "accountName": {
-            "description": "Required if type is FBO",
+            "description": "Required if type is either FBO or PRIVATE",
             "maxLength": 22,
             "minLength": 1,
             "type": "string"
           },
           "accountNumber": {
-            "description": "Required if type is FBO",
+            "description": "Required if type is either FBO or PRIVATE",
             "maxLength": 17,
             "minLength": 4,
             "type": "string"
           },
           "routingNumber": {
-            "description": "Required if type is FBO",
+            "description": "Required if type is either FBO or PRIVATE",
             "maxLength": 9,
-            "minLength": 7,
+            "minLength": 6,
             "type": "string"
           },
           "currency": {
-            "description": "ISO 4217 currency code, Required if type is WUBS_DECOUPLED",
+            "description": "ISO 4217 currency code, Required if type is either WUBS_DECOUPLED or PRIVATE",
             "example": "USD",
             "maxLength": 3,
             "minLength": 3,
@@ -17703,12 +17734,12 @@
               "sourceAccountSummary": [
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "currency": "currency",
+                  "currency": "EUR",
                   "totalCost": 3344
                 },
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "currency": "currency",
+                  "currency": "EUR",
                   "totalCost": 3344
                 }
               ],
@@ -17718,9 +17749,9 @@
                 {
                   "invertedRate": 123.23,
                   "rate": 123.23,
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "totalPaymentAmount": 34235,
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "totalCost": 5,
                   "fundingStatus": "fundingStatus",
@@ -17730,9 +17761,9 @@
                 {
                   "invertedRate": 123.23,
                   "rate": 123.23,
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "totalPaymentAmount": 34235,
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "totalCost": 5,
                   "fundingStatus": "fundingStatus",
@@ -17765,12 +17796,12 @@
               "sourceAccountSummary": [
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "currency": "currency",
+                  "currency": "EUR",
                   "totalCost": 3344
                 },
                 {
                   "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                  "currency": "currency",
+                  "currency": "EUR",
                   "totalCost": 3344
                 }
               ],
@@ -17780,9 +17811,9 @@
                 {
                   "invertedRate": 123.23,
                   "rate": 123.23,
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "totalPaymentAmount": 34235,
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "totalCost": 5,
                   "fundingStatus": "fundingStatus",
@@ -17792,9 +17823,9 @@
                 {
                   "invertedRate": 123.23,
                   "rate": 123.23,
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "totalPaymentAmount": 34235,
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "totalCost": 5,
                   "fundingStatus": "fundingStatus",
@@ -17950,7 +17981,7 @@
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
                   "accountName": "accountName",
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "eventType": "eventType",
                   "accountNumber": "accountNumber",
                   "paymentAmount": 1299,
@@ -17960,14 +17991,14 @@
                   "scheduledFor": "2000-01-23T04:56:07.000Z",
                   "sourceAmount": 1299,
                   "scheduledBy": "Aphra Behn",
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 },
                 {
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
                   "accountName": "accountName",
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "eventType": "eventType",
                   "accountNumber": "accountNumber",
                   "paymentAmount": 1299,
@@ -17977,7 +18008,7 @@
                   "scheduledFor": "2000-01-23T04:56:07.000Z",
                   "sourceAmount": 1299,
                   "scheduledBy": "Aphra Behn",
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
@@ -17990,13 +18021,19 @@
               "paymentMetadata": "sample metadata",
               "payorPaymentId": "123123asdf",
               "remoteSystemId": "REMOTE_SYSTEM_ID",
-              "paymentCurrency": "paymentCurrency",
+              "paymentCurrency": "EUR",
               "rejectionReason": "rejectionReason",
               "paymentTrackingReference": "paymentTrackingReference",
               "status": "status",
+              "postInstructFxInfo": {
+                "fxStatus": "INITIATED",
+                "fxStatusUpdatedAt": "2000-01-23T04:56:07.000Z",
+                "fxTransactionReference": "AB123GHI",
+                "fxMode": "MANUAL"
+              },
               "accountName": "My Account Name",
               "remoteSystemPaymentId": "remoteSystemPaymentId",
-              "sourceCurrency": "sourceCurrency",
+              "sourceCurrency": "EUR",
               "paymentMemo": "Payment memo",
               "paymentAmount": 7,
               "fundingStatus": "fundingStatus",
@@ -18059,7 +18096,7 @@
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
                   "accountName": "accountName",
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "eventType": "eventType",
                   "accountNumber": "accountNumber",
                   "paymentAmount": 1299,
@@ -18069,14 +18106,14 @@
                   "scheduledFor": "2000-01-23T04:56:07.000Z",
                   "sourceAmount": 1299,
                   "scheduledBy": "Aphra Behn",
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 },
                 {
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
                   "accountName": "accountName",
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "eventType": "eventType",
                   "accountNumber": "accountNumber",
                   "paymentAmount": 1299,
@@ -18086,7 +18123,7 @@
                   "scheduledFor": "2000-01-23T04:56:07.000Z",
                   "sourceAmount": 1299,
                   "scheduledBy": "Aphra Behn",
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
@@ -18099,13 +18136,19 @@
               "paymentMetadata": "sample metadata",
               "payorPaymentId": "123123asdf",
               "remoteSystemId": "REMOTE_SYSTEM_ID",
-              "paymentCurrency": "paymentCurrency",
+              "paymentCurrency": "EUR",
               "rejectionReason": "rejectionReason",
               "paymentTrackingReference": "paymentTrackingReference",
               "status": "status",
+              "postInstructFxInfo": {
+                "fxStatus": "INITIATED",
+                "fxStatusUpdatedAt": "2000-01-23T04:56:07.000Z",
+                "fxTransactionReference": "AB123GHI",
+                "fxMode": "MANUAL"
+              },
               "accountName": "My Account Name",
               "remoteSystemPaymentId": "remoteSystemPaymentId",
-              "sourceCurrency": "sourceCurrency",
+              "sourceCurrency": "EUR",
               "paymentMemo": "Payment memo",
               "paymentAmount": 7,
               "fundingStatus": "fundingStatus",
@@ -18213,7 +18256,7 @@
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
                   "accountName": "accountName",
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "eventType": "eventType",
                   "accountNumber": "accountNumber",
                   "paymentAmount": 1299,
@@ -18223,14 +18266,14 @@
                   "scheduledFor": "2000-01-23T04:56:07.000Z",
                   "sourceAmount": 1299,
                   "scheduledBy": "Aphra Behn",
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 },
                 {
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
                   "accountName": "accountName",
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "eventType": "eventType",
                   "accountNumber": "accountNumber",
                   "paymentAmount": 1299,
@@ -18240,7 +18283,7 @@
                   "scheduledFor": "2000-01-23T04:56:07.000Z",
                   "sourceAmount": 1299,
                   "scheduledBy": "Aphra Behn",
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
@@ -18253,13 +18296,19 @@
               "paymentMetadata": "sample metadata",
               "payorPaymentId": "123123asdf",
               "remoteSystemId": "REMOTE_SYSTEM_ID",
-              "paymentCurrency": "paymentCurrency",
+              "paymentCurrency": "EUR",
               "rejectionReason": "rejectionReason",
               "paymentTrackingReference": "paymentTrackingReference",
               "status": "status",
+              "postInstructFxInfo": {
+                "fxStatus": "INITIATED",
+                "fxStatusUpdatedAt": "2000-01-23T04:56:07.000Z",
+                "fxTransactionReference": "AB123GHI",
+                "fxMode": "MANUAL"
+              },
               "accountName": "My Account Name",
               "remoteSystemPaymentId": "remoteSystemPaymentId",
-              "sourceCurrency": "sourceCurrency",
+              "sourceCurrency": "EUR",
               "paymentMemo": "Payment memo",
               "paymentAmount": 7,
               "fundingStatus": "fundingStatus",
@@ -18322,7 +18371,7 @@
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
                   "accountName": "accountName",
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "eventType": "eventType",
                   "accountNumber": "accountNumber",
                   "paymentAmount": 1299,
@@ -18332,14 +18381,14 @@
                   "scheduledFor": "2000-01-23T04:56:07.000Z",
                   "sourceAmount": 1299,
                   "scheduledBy": "Aphra Behn",
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 },
                 {
                   "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
                   "eventDateTime": "2000-01-23T04:56:07.000Z",
                   "accountName": "accountName",
-                  "sourceCurrency": "sourceCurrency",
+                  "sourceCurrency": "EUR",
                   "eventType": "eventType",
                   "accountNumber": "accountNumber",
                   "paymentAmount": 1299,
@@ -18349,7 +18398,7 @@
                   "scheduledFor": "2000-01-23T04:56:07.000Z",
                   "sourceAmount": 1299,
                   "scheduledBy": "Aphra Behn",
-                  "paymentCurrency": "paymentCurrency",
+                  "paymentCurrency": "EUR",
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
@@ -18362,13 +18411,19 @@
               "paymentMetadata": "sample metadata",
               "payorPaymentId": "123123asdf",
               "remoteSystemId": "REMOTE_SYSTEM_ID",
-              "paymentCurrency": "paymentCurrency",
+              "paymentCurrency": "EUR",
               "rejectionReason": "rejectionReason",
               "paymentTrackingReference": "paymentTrackingReference",
               "status": "status",
+              "postInstructFxInfo": {
+                "fxStatus": "INITIATED",
+                "fxStatusUpdatedAt": "2000-01-23T04:56:07.000Z",
+                "fxTransactionReference": "AB123GHI",
+                "fxMode": "MANUAL"
+              },
               "accountName": "My Account Name",
               "remoteSystemPaymentId": "remoteSystemPaymentId",
-              "sourceCurrency": "sourceCurrency",
+              "sourceCurrency": "EUR",
               "paymentMemo": "Payment memo",
               "paymentAmount": 7,
               "fundingStatus": "fundingStatus",
@@ -18453,7 +18508,7 @@
               "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "eventDateTime": "2000-01-23T04:56:07.000Z",
               "accountName": "accountName",
-              "sourceCurrency": "sourceCurrency",
+              "sourceCurrency": "EUR",
               "eventType": "eventType",
               "accountNumber": "accountNumber",
               "paymentAmount": 1299,
@@ -18463,14 +18518,14 @@
               "scheduledFor": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 1299,
               "scheduledBy": "Aphra Behn",
-              "paymentCurrency": "paymentCurrency",
+              "paymentCurrency": "EUR",
               "scheduledAt": "2000-01-23T04:56:07.000Z"
             },
             {
               "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "eventDateTime": "2000-01-23T04:56:07.000Z",
               "accountName": "accountName",
-              "sourceCurrency": "sourceCurrency",
+              "sourceCurrency": "EUR",
               "eventType": "eventType",
               "accountNumber": "accountNumber",
               "paymentAmount": 1299,
@@ -18480,7 +18535,7 @@
               "scheduledFor": "2000-01-23T04:56:07.000Z",
               "sourceAmount": 1299,
               "scheduledBy": "Aphra Behn",
-              "paymentCurrency": "paymentCurrency",
+              "paymentCurrency": "EUR",
               "scheduledAt": "2000-01-23T04:56:07.000Z"
             }
           ],
@@ -18493,13 +18548,19 @@
           "paymentMetadata": "sample metadata",
           "payorPaymentId": "123123asdf",
           "remoteSystemId": "REMOTE_SYSTEM_ID",
-          "paymentCurrency": "paymentCurrency",
+          "paymentCurrency": "EUR",
           "rejectionReason": "rejectionReason",
           "paymentTrackingReference": "paymentTrackingReference",
           "status": "status",
+          "postInstructFxInfo": {
+            "fxStatus": "INITIATED",
+            "fxStatusUpdatedAt": "2000-01-23T04:56:07.000Z",
+            "fxTransactionReference": "AB123GHI",
+            "fxMode": "MANUAL"
+          },
           "accountName": "My Account Name",
           "remoteSystemPaymentId": "remoteSystemPaymentId",
-          "sourceCurrency": "sourceCurrency",
+          "sourceCurrency": "EUR",
           "paymentMemo": "Payment memo",
           "paymentAmount": 7,
           "fundingStatus": "fundingStatus",
@@ -18587,7 +18648,8 @@
             "type": "integer"
           },
           "sourceCurrency": {
-            "description": "ISO 3 character currency code",
+            "description": "ISO-4217 3 character currency code",
+            "example": "EUR",
             "maxLength": 3,
             "minLength": 3,
             "type": "string"
@@ -18597,7 +18659,8 @@
             "type": "integer"
           },
           "paymentCurrency": {
-            "description": "ISO 3 character currency code",
+            "description": "ISO-4217 3 character currency code",
+            "example": "EUR",
             "maxLength": 3,
             "minLength": 3,
             "type": "string"
@@ -18745,6 +18808,9 @@
           },
           "schedule": {
             "$ref": "#/components/schemas/PayoutSchedule"
+          },
+          "postInstructFxInfo": {
+            "$ref": "#/components/schemas/PostInstructFxInfo"
           },
           "payout": {
             "$ref": "#/components/schemas/PaymentResponseV4_payout"
@@ -22075,12 +22141,12 @@
           "sourceAccountSummary": [
             {
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "currency": "currency",
+              "currency": "EUR",
               "totalCost": 3344
             },
             {
               "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "currency": "currency",
+              "currency": "EUR",
               "totalCost": 3344
             }
           ],
@@ -22090,9 +22156,9 @@
             {
               "invertedRate": 123.23,
               "rate": 123.23,
-              "sourceCurrency": "sourceCurrency",
+              "sourceCurrency": "EUR",
               "totalPaymentAmount": 34235,
-              "paymentCurrency": "paymentCurrency",
+              "paymentCurrency": "EUR",
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalCost": 5,
               "fundingStatus": "fundingStatus",
@@ -22102,9 +22168,9 @@
             {
               "invertedRate": 123.23,
               "rate": 123.23,
-              "sourceCurrency": "sourceCurrency",
+              "sourceCurrency": "EUR",
               "totalPaymentAmount": 34235,
-              "paymentCurrency": "paymentCurrency",
+              "paymentCurrency": "EUR",
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "totalCost": 5,
               "fundingStatus": "fundingStatus",
@@ -22326,7 +22392,8 @@
         "type": "object"
       },
       "PaymentAuditCurrency": {
-        "description": "ISO 3 character currency code",
+        "description": "ISO-4217 3 character currency code",
+        "example": "EUR",
         "maxLength": 3,
         "minLength": 3,
         "type": "string"
@@ -22336,7 +22403,7 @@
           "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "eventDateTime": "2000-01-23T04:56:07.000Z",
           "accountName": "accountName",
-          "sourceCurrency": "sourceCurrency",
+          "sourceCurrency": "EUR",
           "eventType": "eventType",
           "accountNumber": "accountNumber",
           "paymentAmount": 1299,
@@ -22346,7 +22413,7 @@
           "scheduledFor": "2000-01-23T04:56:07.000Z",
           "sourceAmount": 1299,
           "scheduledBy": "Aphra Behn",
-          "paymentCurrency": "paymentCurrency",
+          "paymentCurrency": "EUR",
           "scheduledAt": "2000-01-23T04:56:07.000Z"
         },
         "properties": {
@@ -22365,7 +22432,8 @@
             "type": "string"
           },
           "sourceCurrency": {
-            "description": "ISO 3 character currency code",
+            "description": "ISO-4217 3 character currency code",
+            "example": "EUR",
             "maxLength": 3,
             "minLength": 3,
             "type": "string"
@@ -22377,7 +22445,8 @@
             "type": "integer"
           },
           "paymentCurrency": {
-            "description": "ISO 3 character currency code",
+            "description": "ISO-4217 3 character currency code",
+            "example": "EUR",
             "maxLength": 3,
             "minLength": 3,
             "type": "string"
@@ -22423,6 +22492,43 @@
           "eventDateTime",
           "eventId",
           "eventType"
+        ],
+        "type": "object"
+      },
+      "PostInstructFxInfo": {
+        "description": "FX details relating to a payout that was executed or is still waiting to be executed",
+        "example": {
+          "fxStatus": "INITIATED",
+          "fxStatusUpdatedAt": "2000-01-23T04:56:07.000Z",
+          "fxTransactionReference": "AB123GHI",
+          "fxMode": "MANUAL"
+        },
+        "properties": {
+          "fxMode": {
+            "description": "The mode by which the FX rate is to be determined (MANUAL or AUTO)",
+            "example": "MANUAL",
+            "type": "string"
+          },
+          "fxStatus": {
+            "description": "The state to which the Post-Instruct FX process has reached (INITIATED or COMPLETED)",
+            "example": "INITIATED",
+            "type": "string"
+          },
+          "fxStatusUpdatedAt": {
+            "description": "The date-time at which the most recent fxStatus was determined.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "fxTransactionReference": {
+            "description": "The reference assigned to the FX funding that will fulfil this payment.",
+            "example": "AB123GHI",
+            "type": "string"
+          }
+        },
+        "required": [
+          "fxMode",
+          "fxStatus",
+          "fxStatusUpdatedAt"
         ],
         "type": "object"
       },
@@ -23944,7 +24050,7 @@
       "SourceAccountSummary": {
         "example": {
           "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "currency": "currency",
+          "currency": "EUR",
           "totalCost": 3344
         },
         "properties": {
@@ -23958,7 +24064,8 @@
             "type": "integer"
           },
           "currency": {
-            "description": "ISO 3 character currency code",
+            "description": "ISO-4217 3 character currency code",
+            "example": "EUR",
             "maxLength": 3,
             "minLength": 3,
             "type": "string"
@@ -23974,9 +24081,9 @@
         "example": {
           "invertedRate": 123.23,
           "rate": 123.23,
-          "sourceCurrency": "sourceCurrency",
+          "sourceCurrency": "EUR",
           "totalPaymentAmount": 34235,
-          "paymentCurrency": "paymentCurrency",
+          "paymentCurrency": "EUR",
           "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "totalCost": 5,
           "fundingStatus": "fundingStatus",
@@ -24010,13 +24117,15 @@
             "type": "integer"
           },
           "sourceCurrency": {
-            "description": "ISO 3 character currency code",
+            "description": "ISO-4217 3 character currency code",
+            "example": "EUR",
             "maxLength": 3,
             "minLength": 3,
             "type": "string"
           },
           "paymentCurrency": {
-            "description": "ISO 3 character currency code",
+            "description": "ISO-4217 3 character currency code",
+            "example": "EUR",
             "maxLength": 3,
             "minLength": 3,
             "type": "string"
@@ -24045,6 +24154,16 @@
       "ScheduleStatus": {
         "description": "Current status of the payout schedule. One of the following values: SCHEDULED, EXECUTED, FAILED",
         "example": "SCHEDULED",
+        "type": "string"
+      },
+      "PostInstructFxMode": {
+        "description": "The mode by which the FX rate is to be determined (MANUAL or AUTO)",
+        "example": "MANUAL",
+        "type": "string"
+      },
+      "PostInstructFxStatus": {
+        "description": "The state to which the Post-Instruct FX process has reached (INITIATED or COMPLETED)",
+        "example": "INITIATED",
         "type": "string"
       },
       "PayoutPayeeV3": {
