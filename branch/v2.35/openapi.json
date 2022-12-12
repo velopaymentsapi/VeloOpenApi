@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.35.46",
+    "version": "2.35.47",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -39,6 +39,10 @@
     {
       "description": "A Payor is the entity which is sending money. Here you will find the available APIs for working with Payors.",
       "name": "Payors"
+    },
+    {
+      "description": "<p>Payors that are part of the same organization can be linked together in a hierarchical fashion</p>\n<p>Payors higher up in the tree can read and write data on behalf of payors below them</p>\n<p>For example Payor A can make payouts on behalf of Payor B if Payor B is linked below Payor A</p>\n<p>Payors can not access data of payors above them in the hierarchy</p>\n<p>Contact Velo if you need to link payors in your organization</p>\n",
+      "name": "Payor Hierarchy"
     },
     {
       "description": "Payout Service APIs allow you to create and instruct payouts to payees.",
@@ -1587,8 +1591,8 @@
     "/v1/payors/{payorId}": {
       "get": {
         "deprecated": true,
-        "description": "Get a Single Payor by Id.\n",
-        "operationId": "getPayorById",
+        "description": "<p>Get a Single Payor by Id.</p>\n<p>deprecated since v2.10 - Use /v2/payors\n",
+        "operationId": "getPayorByIdV1",
         "parameters": [
           {
             "description": "The Payor Id",
@@ -1820,8 +1824,8 @@
     },
     "/v1/payors/{payorId}/applications": {
       "post": {
-        "description": "Create an application for the given Payor ID. Applications are programatic users which can be assigned unique keys.",
-        "operationId": "payorCreateApplicationRequest",
+        "description": "<p>Create an application for the given Payor ID.</p>\n<p>Applications provide a means to group your API Keys</p>\n<p>For example you might have an SAP application that you wish to integrate with Velo</p>\n<p>You can create an application and then create one or more API keys for the application</p>\n",
+        "operationId": "payorCreateApplicationV1",
         "parameters": [
           {
             "description": "The Payor Id",
@@ -1884,6 +1888,7 @@
               "Location": {
                 "description": "location",
                 "schema": {
+                  "example": "<p>HTTP/1.1 201 Created</p>\n<p>Location: https://api.sandbox.velopayments.com/v1/payors/2e144160-e87f-4976-b577-6087e683f419/applications/8701c174-b64a-476a-ab1a-4af27f09f0b8</p>\n",
                   "type": "string"
                 }
               }
@@ -1965,8 +1970,8 @@
     },
     "/v1/payors/{payorId}/applications/{applicationId}/keys": {
       "post": {
-        "description": "Create an an API key for the given payor Id and application Id",
-        "operationId": "payorCreateApiKeyRequest",
+        "description": "<p>Create an an API key for the given payor Id and application Id</p>\n<p>You can create multiple API Keys for a given application</p>\n<p>API Keys are programmatic users for integrating your application with the Velo platform</p>\n",
+        "operationId": "payorCreateApiKeyV1",
         "parameters": [
           {
             "description": "The Payor Id",
@@ -2009,7 +2014,7 @@
                 "name": "Key Name",
                 "description": "A key description",
                 "roles": [
-                  "payor.admin"
+                  "velo.payor.admin"
                 ]
               },
               "matchers": {
@@ -2121,7 +2126,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payors/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/applications/ba08877f-9d96-41e4-9c26-44a872d856ae/keys' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 698f1609-c616-48f0-b8d5-03373e9fbd40' \\\n    -d '{\"name\":\"foo\",\"description\":\"a foo key\",\"roles\":[\"foo.role\"]}'\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payors/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/applications/ba08877f-9d96-41e4-9c26-44a872d856ae/keys' -i -X POST \\\n    -H 'Content-Type: application/json' \\\n    -H 'Authorization: Bearer 698f1609-c616-48f0-b8d5-03373e9fbd40' \\\n    -d '{\"name\":\"foo\",\"description\":\"a foo key\",\"roles\":[\"velo.payor.admin\"]}'\n"
           }
         ],
         "x-contracts": [
@@ -2254,8 +2259,8 @@
     },
     "/v1/payors/{payorId}/branding/logos": {
       "post": {
-        "description": "Add Payor Logo. Logo file is used in your branding, and emails sent to payees.",
-        "operationId": "payorAddPayorLogo",
+        "description": "<p>Add Payor Logo</p>\n<p>Logo file is used in your branding and emails sent to payees</p>\n",
+        "operationId": "payorAddPayorLogoV1",
         "parameters": [
           {
             "description": "The Payor Id",
@@ -2471,8 +2476,8 @@
     },
     "/v1/payorLinks": {
       "get": {
-        "description": "This endpoint allows you to list payor links",
-        "operationId": "payorLinks",
+        "description": "<p>If the payor is set up as part of a hierarchy you can use this API to traverse the hierarchy</p>\n",
+        "operationId": "payorLinksV1",
         "parameters": [
           {
             "description": "The Payor ID from which to start the query to show all descendants",
@@ -2485,7 +2490,7 @@
             }
           },
           {
-            "description": "Look for the parent payor details for this payor id",
+            "description": "Query for the parent payor details for this payor id",
             "in": "query",
             "name": "parentOfPayor",
             "required": false,
@@ -2495,7 +2500,7 @@
             }
           },
           {
-            "description": "List of additional Payor fields to include in the response for each Payor.\nThe values of payorId and payorName and always included for each Payor - 'fields' allows you to add to this.\nExample: ```fields=primaryContactEmail,kycState``` - will include payorId+payorName+primaryContactEmail+kycState for each Payor\nDefault if not specified is to include only payorId and payorName.\nThe supported fields are any combination of: primaryContactEmail,kycState\n",
+            "description": "<p>List of additional Payor fields to include in the response for each Payor</p>\n<p>The values of payorId and payorName are always included for each Payor by default</p>\n<p>You can add fields to the response for each payor by including them in the fields parameter separated by commas</p>\n<p>The supported fields are any combination of: primaryContactEmail,kycState</p>\n",
             "in": "query",
             "name": "fields",
             "required": false,
@@ -2644,7 +2649,7 @@
         },
         "summary": "List Payor Links",
         "tags": [
-          "Payors"
+          "Payor Hierarchy"
         ],
         "x-contracts": [
           {
@@ -12885,7 +12890,7 @@
             "type": "string"
           },
           "roles": {
-            "description": "<p>A list of roles to assign to the key.</p>\n<p>Only the first role name will be used</p>\n<p>A later version will change this from a list to string</p>\n",
+            "description": "<p>A role to assign to the key.</p>\n<p>If you want your API key to have write access then assign the role velo.payor.admin</p>\n<p>A later version will change this property from a list to string</p>\n",
             "example": [
               "velo.payor.admin"
             ],
@@ -12897,7 +12902,7 @@
               ],
               "type": "string"
             },
-            "maxItems": 10,
+            "maxItems": 1,
             "minItems": 1,
             "type": "array"
           }
@@ -12955,9 +12960,9 @@
       "PayorBrandingResponse": {
         "example": {
           "supportContact": "support@example.com",
-          "collectiveAlias": "Payee",
+          "collectiveAlias": "Contractors",
           "dbaName": "Key West Imports",
-          "logoUrl": "example.com",
+          "logoUrl": "https://images.example.com/450ecb66-df18-4d0c-b557-f718782775df/logo.png",
           "payorName": "Key West Imports, Inc"
         },
         "properties": {
@@ -12967,14 +12972,14 @@
             "type": "string"
           },
           "logoUrl": {
-            "description": "The URL to use for this payor’s logo",
-            "example": "example.com",
+            "description": "<p>The URL to use for this payor’s logo</p>\n<p>This will be an immutable system-generated URL</p>\n",
+            "example": "https://images.example.com/450ecb66-df18-4d0c-b557-f718782775df/logo.png",
             "format": "uri",
             "type": "string"
           },
           "collectiveAlias": {
             "description": "How the payor has chosen to refer to payees",
-            "example": "Payee",
+            "example": "Contractors",
             "nullable": true,
             "type": "string"
           },
@@ -25509,6 +25514,7 @@
       "name": "Payor Operations",
       "tags": [
         "Payors",
+        "Payor Hierarchy",
         "Funding Manager",
         "Webhooks",
         "Payins"
