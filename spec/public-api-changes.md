@@ -1,6 +1,55 @@
 #### What's Changed
 ---
 
+##### `GET` /v1/payors/{payorId}
+
+
+##### `POST` /v1/payors/{payorId}/applications
+
+
+##### `POST` /v1/payors/{payorId}/applications/{applicationId}/keys
+
+
+###### Request:
+
+Changed content type : `application/json`
+
+* Changed property `roles` (array)
+    > <p>A role to assign to the key.</p>
+    > <p>If you want your API key to have write access then assign the role velo.payor.admin</p>
+    > <p>A later version will change this property from a list to string</p>
+
+##### `POST` /v1/payors/{payorId}/branding/logos
+
+
+##### `GET` /v1/payors/{payorId}/branding
+
+
+###### Return Type:
+
+Changed response : **200 OK**
+> HTTP Ok, key created
+
+* Changed content type : `application/json`
+
+    * Changed property `logoUrl` (string)
+        > <p>The URL to use for this payor’s logo</p>
+        > <p>This will be an immutable system-generated URL</p>
+
+##### `GET` /v1/payorLinks
+
+
+###### Parameters:
+
+Changed: `parentOfPayor` in `query`
+> Query for the parent payor details for this payor id
+
+Changed: `fields` in `query`
+> <p>List of additional Payor fields to include in the response for each Payor</p>
+> <p>The values of payorId and payorName are always included for each Payor by default</p>
+> <p>You can add fields to the response for each payor by including them in the fields parameter separated by commas</p>
+> <p>The supported fields are any combination of: primaryContactEmail,kycState</p>
+
 ##### `POST` /v2/fundingAccounts
 
 
