@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.36.21
+  version: 2.36.22
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -96,6 +96,13 @@ tags:
     name: Payee Invitation
   - description: A Payor is the entity which is sending money. Here you will find the available APIs for working with Payors.
     name: Payors
+  - description: |
+      <p>Payors that are part of the same organization can be linked together in a hierarchical fashion</p>
+      <p>Payors higher up in the tree can read and write data on behalf of payors below them</p>
+      <p>For example Payor A can make payouts on behalf of Payor B if Payor B is linked below Payor A</p>
+      <p>Payors can not access data of payors above them in the hierarchy</p>
+      <p>Contact Velo if you need to link payors in your organization</p>
+    name: Payor Hierarchy
   - description: Payout Service APIs allow you to create and instruct payouts to payees.
     name: Payouts
   - description: 'Payment Audit Service APIs allow you to see the history of fundings, payouts, and payments to payees.'
@@ -19276,6 +19283,7 @@ x-tagGroups:
   - name: Payor Operations
     tags:
       - Payors
+      - Payor Hierarchy
       - Funding Manager
       - Webhooks
       - Payins
