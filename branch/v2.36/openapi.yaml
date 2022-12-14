@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.36.24
+  version: 2.36.25
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -1270,8 +1270,9 @@ paths:
     get:
       deprecated: true
       description: |
-        Get a Single Payor by Id.
-      operationId: getPayorById
+        <p>Get a Single Payor by Id.</p>
+        <p>deprecated since v2.10 - Use /v2/payors
+      operationId: getPayorByIdV1
       parameters:
         - description: The Payor Id
           in: path
@@ -1436,8 +1437,12 @@ paths:
           serviceName: payor-service
   '/v1/payors/{payorId}/applications':
     post:
-      description: Create an application for the given Payor ID. Applications are programatic users which can be assigned unique keys.
-      operationId: payorCreateApplicationRequest
+      description: |
+        <p>Create an application for the given Payor ID.</p>
+        <p>Applications provide a means to group your API Keys</p>
+        <p>For example you might have an SAP application that you wish to integrate with Velo</p>
+        <p>You can create an application and then create one or more API keys for the application</p>
+      operationId: payorCreateApplicationV1
       parameters:
         - description: The Payor Id
           in: path
@@ -1478,6 +1483,9 @@ paths:
             Location:
               description: location
               schema:
+                example: |
+                  <p>HTTP/1.1 201 Created</p>
+                  <p>Location: https://api.sandbox.velopayments.com/v1/payors/2e144160-e87f-4976-b577-6087e683f419/applications/8701c174-b64a-476a-ab1a-4af27f09f0b8</p>
                 type: string
           x-contracts:
             - contractId: 1
@@ -1530,8 +1538,11 @@ paths:
           serviceName: payor-service
   '/v1/payors/{payorId}/applications/{applicationId}/keys':
     post:
-      description: Create an an API key for the given payor Id and application Id
-      operationId: payorCreateApiKeyRequest
+      description: |
+        <p>Create an an API key for the given payor Id and application Id</p>
+        <p>You can create multiple API Keys for a given application</p>
+        <p>API Keys are programmatic users for integrating your application with the Velo platform</p>
+      operationId: payorCreateApiKeyV1
       parameters:
         - description: The Payor Id
           in: path
@@ -1562,7 +1573,7 @@ paths:
               name: Key Name
               description: A key description
               roles:
-                - payor.admin
+                - velo.payor.admin
             matchers:
               headers:
                 - key: Content-Type
@@ -1632,7 +1643,7 @@ paths:
             $ curl 'https://api.sandbox.velopayments.com/v1/payors/79a6fdaa-f4bb-47b7-9c1f-f6fd99c156a0/applications/ba08877f-9d96-41e4-9c26-44a872d856ae/keys' -i -X POST \
                 -H 'Content-Type: application/json' \
                 -H 'Authorization: Bearer 698f1609-c616-48f0-b8d5-03373e9fbd40' \
-                -d '{"name":"foo","description":"a foo key","roles":["foo.role"]}'
+                -d '{"name":"foo","description":"a foo key","roles":["velo.payor.admin"]}'
       x-contracts:
         - contractId: 4
           name: Create an API key for a payor
@@ -1719,8 +1730,10 @@ paths:
           contractPath: /v1/payors/00000000-0000-0000-0000-000000000000/reminderEmailsUpdate
   '/v1/payors/{payorId}/branding/logos':
     post:
-      description: 'Add Payor Logo. Logo file is used in your branding, and emails sent to payees.'
-      operationId: payorAddPayorLogo
+      description: |
+        <p>Add Payor Logo</p>
+        <p>Logo file is used in your branding and emails sent to payees</p>
+      operationId: payorAddPayorLogoV1
       parameters:
         - description: The Payor Id
           in: path
@@ -1865,8 +1878,9 @@ paths:
           serviceName: payor-service
   /v1/payorLinks:
     get:
-      description: This endpoint allows you to list payor links
-      operationId: payorLinks
+      description: |
+        <p>If the payor is set up as part of a hierarchy you can use this API to traverse the hierarchy</p>
+      operationId: payorLinksV1
       parameters:
         - description: The Payor ID from which to start the query to show all descendants
           in: query
@@ -1875,7 +1889,7 @@ paths:
           schema:
             format: uuid
             type: string
-        - description: Look for the parent payor details for this payor id
+        - description: Query for the parent payor details for this payor id
           in: query
           name: parentOfPayor
           required: false
@@ -1883,11 +1897,10 @@ paths:
             format: uuid
             type: string
         - description: |
-            List of additional Payor fields to include in the response for each Payor.
-            The values of payorId and payorName and always included for each Payor - 'fields' allows you to add to this.
-            Example: ```fields=primaryContactEmail,kycState``` - will include payorId+payorName+primaryContactEmail+kycState for each Payor
-            Default if not specified is to include only payorId and payorName.
-            The supported fields are any combination of: primaryContactEmail,kycState
+            <p>List of additional Payor fields to include in the response for each Payor</p>
+            <p>The values of payorId and payorName are always included for each Payor by default</p>
+            <p>You can add fields to the response for each payor by including them in the fields parameter separated by commas</p>
+            <p>The supported fields are any combination of: primaryContactEmail,kycState</p>
           in: query
           name: fields
           required: false
@@ -1978,7 +1991,7 @@ paths:
             The resource was not found or is no longer available
       summary: List Payor Links
       tags:
-        - Payors
+        - Payor Hierarchy
       x-contracts:
         - contractId: 1
           ignored: true
@@ -5225,7 +5238,8 @@ paths:
         - Funding Manager
   '/v3/sourceAccounts/{sourceAccountId}/fundingRequest':
     post:
-      description: 'Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo  (202 - accepted, 400 - invalid request body, 404 - source account not found).'
+      description: |
+        <p>Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo</p>
       operationId: createFundingRequestV3
       parameters:
         - description: Source account id
@@ -5245,6 +5259,12 @@ paths:
       responses:
         '202':
           description: Request Accepted
+          headers:
+            Location:
+              description: Reference to created Funding Request
+              schema:
+                example: 'https://api.sandbox.velopayments.com/v1/fundings/8c1a8e1c-0147-4d8c-9f92-b696e1515750'
+                type: string
         '400':
           content:
             application/json:
@@ -5634,6 +5654,54 @@ paths:
       summary: Get Funding Audit Delta
       tags:
         - Funding Manager
+  '/v1/fundings/{fundingId}':
+    get:
+      description: Get Funding by Id
+      operationId: getFunding
+      parameters:
+        - in: path
+          name: fundingId
+          required: true
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FundingResponse'
+          description: Funding response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Get Funding
+      tags:
+        - Funding Manager Private
   /v1/paymentaudit/fundings:
     get:
       deprecated: true
@@ -9463,9 +9531,9 @@ components:
           type: string
         roles:
           description: |
-            <p>A list of roles to assign to the key.</p>
-            <p>Only the first role name will be used</p>
-            <p>A later version will change this from a list to string</p>
+            <p>A role to assign to the key.</p>
+            <p>If you want your API key to have write access then assign the role velo.payor.admin</p>
+            <p>A later version will change this property from a list to string</p>
           example:
             - velo.payor.admin
           items:
@@ -9474,7 +9542,7 @@ components:
               - velo.payor.admin
               - velo.payor.support
             type: string
-          maxItems: 10
+          maxItems: 1
           minItems: 1
           type: array
       required:
@@ -9515,9 +9583,9 @@ components:
     PayorBrandingResponse:
       example:
         supportContact: support@example.com
-        collectiveAlias: Payee
+        collectiveAlias: Contractors
         dbaName: Key West Imports
-        logoUrl: example.com
+        logoUrl: 'https://images.example.com/450ecb66-df18-4d0c-b557-f718782775df/logo.png'
         payorName: 'Key West Imports, Inc'
       properties:
         payorName:
@@ -9525,13 +9593,15 @@ components:
           example: 'Key West Imports, Inc'
           type: string
         logoUrl:
-          description: The URL to use for this payor’s logo
-          example: example.com
+          description: |
+            <p>The URL to use for this payor’s logo</p>
+            <p>This will be an immutable system-generated URL</p>
+          example: 'https://images.example.com/450ecb66-df18-4d0c-b557-f718782775df/logo.png'
           format: uri
           type: string
         collectiveAlias:
           description: How the payor has chosen to refer to payees
-          example: Payee
+          example: Contractors
           nullable: true
           type: string
         supportContact:
@@ -12333,6 +12403,77 @@ components:
           items:
             $ref: '#/components/schemas/FundingPayorStatusAuditResponse'
           type: array
+      type: object
+    FundingResponse:
+      example:
+        physicalAccountName: physicalAccountName
+        allocationDate: 2000-01-23T04:56:07.000Z
+        reason: reason
+        amount: 0
+        sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        fundingId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        fundingAccountType: FBO
+        detectedFundingRef: detectedFundingRef
+        allocationType: allocationType
+        hiddenDate: 2000-01-23T04:56:07.000Z
+        currency: USD
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        text: text
+        status: ALLOCATED
+      properties:
+        fundingId:
+          format: uuid
+          type: string
+        payorId:
+          format: uuid
+          type: string
+        allocationDate:
+          format: date-time
+          type: string
+        detectedFundingRef:
+          type: string
+        amount:
+          format: int64
+          type: integer
+        currency:
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
+          type: string
+        text:
+          type: string
+        physicalAccountName:
+          type: string
+        sourceAccountId:
+          format: uuid
+          type: string
+        allocationType:
+          description: 'Funding Allocation Type. One of the following values: AUTOMATIC, MANUAL'
+          type: string
+        reason:
+          type: string
+        hiddenDate:
+          format: date-time
+          type: string
+        fundingAccountType:
+          description: 'Funding Account Type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE'
+          example: FBO
+          type: string
+        status:
+          description: 'Current status of the funding. One of the follwing values: PENDING, UNALLOCATED, ALLOCATED, HIDDEN, RETURNED, RETURNING, BULK_RETURN, OTHER'
+          example: ALLOCATED
+          type: string
+      required:
+        - allocationDate
+        - amount
+        - currency
+        - fundingAccountType
+        - fundingId
+        - payorId
+        - status
       type: object
     GetFundingsResponse:
       description: List Users Response Object
@@ -16470,6 +16611,17 @@ components:
         status:
           type: string
       type: object
+    AllocationType:
+      description: 'Funding Allocation Type. One of the following values: AUTOMATIC, MANUAL'
+      type: string
+    FundingAccountType:
+      description: 'Funding Account Type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE'
+      example: FBO
+      type: string
+    FundingStatus:
+      description: 'Current status of the funding. One of the follwing values: PENDING, UNALLOCATED, ALLOCATED, HIDDEN, RETURNED, RETURNING, BULK_RETURN, OTHER'
+      example: ALLOCATED
+      type: string
     FundingAudit:
       example:
         dateTime: 2000-01-23T04:56:07.000Z
