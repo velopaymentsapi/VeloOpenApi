@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.35.48",
+    "version": "2.35.49",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -7767,7 +7767,7 @@
     "/v1/fundings/{fundingId}": {
       "get": {
         "description": "Get Funding by Id",
-        "operationId": "getFunding",
+        "operationId": "getFundingByIdV1",
         "parameters": [
           {
             "in": "path",
@@ -7833,7 +7833,7 @@
         },
         "summary": "Get Funding",
         "tags": [
-          "Funding Manager Private"
+          "Funding Manager"
         ]
       }
     },
