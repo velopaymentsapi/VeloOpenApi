@@ -1,3 +1,10 @@
+#### What's New
+---
+
+##### `GET` /v1/fundings/{fundingId}
+
+> Get Funding
+
 #### What's Changed
 ---
 
@@ -68,6 +75,17 @@ Changed content type : `application/json`
 
 * Changed property `currency` (string)
     > ISO 4217 currency code, Required if type is either WUBS_DECOUPLED or PRIVATE
+
+##### `POST` /v3/sourceAccounts/{sourceAccountId}/fundingRequest
+
+
+###### Return Type:
+
+Changed response : **202 Accepted**
+> Request Accepted
+New header : `Location`
+
+> Reference to created Funding Request
 
 ##### `GET` /v4/paymentaudit/payouts
 
