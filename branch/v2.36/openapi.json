@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.36.30",
+    "version": "2.36.31",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -6058,7 +6058,14 @@
             "description": "List Source Account response"
           },
           "400": {
-            "description": "Invalid Request Parameters"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
           },
           "401": {
             "content": {
@@ -6071,7 +6078,14 @@
             "description": "Invalid access token. May be expired or invalid"
           },
           "404": {
-            "description": "Not Found"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
           }
         },
         "summary": "Get list of source accounts",
@@ -7043,15 +7057,6 @@
                     "accountName": "My Account Name",
                     "accountNumber": 1231231234556,
                     "routingNumber": 123456789
-                  }
-                },
-                "wubs": {
-                  "summary": "WUBS",
-                  "value": {
-                    "type": "WUBS_DECOUPLED",
-                    "name": "My WUBS Account",
-                    "payorId": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
-                    "currency": "USD"
                   }
                 },
                 "private": {
@@ -16300,7 +16305,7 @@
         "type": "object"
       },
       "FundingAccountTypeV2": {
-        "description": "Funding account type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE",
+        "description": "Funding account type. One of the following values: FBO, PRIVATE",
         "example": "FBO",
         "type": "string"
       },
@@ -16384,7 +16389,6 @@
           "type": {
             "enum": [
               "FBO",
-              "WUBS_DECOUPLED",
               "PRIVATE"
             ],
             "type": "string"
@@ -16417,7 +16421,7 @@
             "type": "string"
           },
           "currency": {
-            "description": "ISO 4217 currency code, Required if type is either WUBS_DECOUPLED or PRIVATE",
+            "description": "ISO 4217 currency code, Required if type is PRIVATE",
             "example": "USD",
             "maxLength": 3,
             "minLength": 3,
@@ -16491,7 +16495,7 @@
             "type": "string"
           },
           "type": {
-            "description": "Funding account type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE",
+            "description": "Funding account type. One of the following values: FBO, PRIVATE",
             "example": "FBO",
             "type": "string"
           },
@@ -16528,7 +16532,7 @@
         "type": "object"
       },
       "SourceAccountTypeV3": {
-        "description": "Type of source account. One of the following values: FBO,PRIVATE,WUBS_DECOUPLED",
+        "description": "Type of source account. One of the following values: FBO, PRIVATE",
         "type": "string"
       },
       "ListSourceAccountResponseV3": {
@@ -16914,7 +16918,7 @@
             "type": "string"
           },
           "fundingAccountType": {
-            "description": "Funding Account Type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE",
+            "description": "Funding Account Type. One of the following values: FBO, PRIVATE",
             "example": "FBO",
             "type": "string"
           },
@@ -22213,7 +22217,7 @@
         "type": "string"
       },
       "FundingAccountType": {
-        "description": "Funding Account Type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE",
+        "description": "Funding Account Type. One of the following values: FBO, PRIVATE",
         "example": "FBO",
         "type": "string"
       },

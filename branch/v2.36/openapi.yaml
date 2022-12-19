@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.36.30
+  version: 2.36.31
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -4442,7 +4442,11 @@ paths:
                 $ref: '#/components/schemas/ListSourceAccountResponse'
           description: List Source Account response
         '400':
-          description: Invalid Request Parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         '401':
           content:
             application/json:
@@ -4450,7 +4454,12 @@ paths:
                 $ref: '#/components/schemas/inline_response_401'
           description: Invalid access token. May be expired or invalid
         '404':
-          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get list of source accounts
       tags:
         - Funding Manager
@@ -5131,13 +5140,6 @@ paths:
                   accountName: My Account Name
                   accountNumber: 1231231234556
                   routingNumber: 123456789
-              wubs:
-                summary: WUBS
-                value:
-                  type: WUBS_DECOUPLED
-                  name: My WUBS Account
-                  payorId: ee53e01d-c078-43fd-abd4-47e92f4a06cf
-                  currency: USD
               private:
                 summary: PRIVATE Example
                 value:
@@ -11984,7 +11986,7 @@ components:
           type: string
       type: object
     FundingAccountTypeV2:
-      description: 'Funding account type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE'
+      description: 'Funding account type. One of the following values: FBO, PRIVATE'
       example: FBO
       type: string
     ListFundingAccountsResponseV2:
@@ -12047,7 +12049,6 @@ components:
         type:
           enum:
             - FBO
-            - WUBS_DECOUPLED
             - PRIVATE
           type: string
         name:
@@ -12073,7 +12074,7 @@ components:
           minLength: 6
           type: string
         currency:
-          description: 'ISO 4217 currency code, Required if type is either WUBS_DECOUPLED or PRIVATE'
+          description: 'ISO 4217 currency code, Required if type is PRIVATE'
           example: USD
           maxLength: 3
           minLength: 3
@@ -12134,7 +12135,7 @@ components:
           minLength: 2
           type: string
         type:
-          description: 'Funding account type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE'
+          description: 'Funding account type. One of the following values: FBO, PRIVATE'
           example: FBO
           type: string
         archived:
@@ -12161,7 +12162,7 @@ components:
         - fundingAccountId
       type: object
     SourceAccountTypeV3:
-      description: 'Type of source account. One of the following values: FBO,PRIVATE,WUBS_DECOUPLED'
+      description: 'Type of source account. One of the following values: FBO, PRIVATE'
       type: string
     ListSourceAccountResponseV3:
       description: List Source Accounts Response Object
@@ -12459,7 +12460,7 @@ components:
           format: date-time
           type: string
         fundingAccountType:
-          description: 'Funding Account Type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE'
+          description: 'Funding Account Type. One of the following values: FBO, PRIVATE'
           example: FBO
           type: string
         status:
@@ -16615,7 +16616,7 @@ components:
       description: 'Funding Allocation Type. One of the following values: AUTOMATIC, MANUAL'
       type: string
     FundingAccountType:
-      description: 'Funding Account Type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE'
+      description: 'Funding Account Type. One of the following values: FBO, PRIVATE'
       example: FBO
       type: string
     FundingStatus:
