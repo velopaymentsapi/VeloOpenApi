@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.35.50",
+    "version": "2.35.51",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -47,6 +47,14 @@
     {
       "description": "Payout Service APIs allow you to create and instruct payouts to payees.",
       "name": "Payouts"
+    },
+    {
+      "description": "<p>APIs for initiating funding of source accounts from external sources and viewing balance updates</p>\n",
+      "name": "Funding"
+    },
+    {
+      "description": "<p>Source Accounts are where funds are drawn from for making payouts</p>\n",
+      "name": "Source Accounts"
     },
     {
       "description": "Payment Audit Service APIs allow you to see the history of fundings, payouts, and payments to payees.",
@@ -5945,253 +5953,10 @@
         ]
       }
     },
-    "/v1/sourceAccounts": {
-      "description": "List Source Accounts",
-      "get": {
-        "deprecated": true,
-        "description": "List source accounts.",
-        "operationId": "getSourceAccounts",
-        "parameters": [
-          {
-            "description": "Physical Account Name",
-            "in": "query",
-            "name": "physicalAccountName",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "The account owner Payor ID",
-            "in": "query",
-            "name": "payorId",
-            "required": false,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "description": "Page number. Default is 1.",
-            "in": "query",
-            "name": "page",
-            "required": false,
-            "schema": {
-              "default": 1,
-              "format": "int32",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "The number of results to return in a page",
-            "in": "query",
-            "name": "pageSize",
-            "required": false,
-            "schema": {
-              "default": 25,
-              "format": "int32",
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer"
-            }
-          },
-          {
-            "description": "List of sort fields e.g. ?sort=name:asc\nDefault is name:asc\nThe supported sort fields are - fundingRef\n",
-            "in": "query",
-            "name": "sort",
-            "required": false,
-            "schema": {
-              "default": "fundingRef:asc",
-              "pattern": "[fundingRef]+[:desc|:asc]",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListSourceAccountResponse"
-                }
-              }
-            },
-            "description": "List Source Account response"
-          },
-          "400": {
-            "description": "Invalid Request Parameters"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "summary": "Get list of source accounts",
-        "tags": [
-          "Funding Manager"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
-          }
-        ]
-      },
-      "summary": "List Source Accounts"
-    },
-    "/v1/sourceAccounts/{sourceAccountId}": {
-      "description": "Get details about given source account.",
-      "get": {
-        "deprecated": true,
-        "description": "Get details about given source account.",
-        "operationId": "getSourceAccount",
-        "parameters": [
-          {
-            "description": "Source account id",
-            "in": "path",
-            "name": "sourceAccountId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SourceAccountResponse"
-                }
-              }
-            },
-            "description": "Source account response"
-          },
-          "400": {
-            "description": "Bad Request, Invalid path parameter"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_404"
-                }
-              }
-            },
-            "description": "The resource was not found or is no longer available\n"
-          }
-        },
-        "summary": "Get details about given source account.",
-        "tags": [
-          "Funding Manager"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \\\n    -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'\n"
-          }
-        ]
-      },
-      "summary": "Get Source Account"
-    },
-    "/v1/sourceAccounts/{sourceAccountId}/achFundingRequest": {
-      "post": {
-        "deprecated": true,
-        "description": "Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo.",
-        "operationId": "createAchFundingRequest",
-        "parameters": [
-          {
-            "description": "Source account id",
-            "in": "path",
-            "name": "sourceAccountId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FundingRequestV1"
-              }
-            }
-          },
-          "description": "Body to included amount to be funded",
-          "required": true
-        },
-        "responses": {
-          "202": {
-            "description": "Request Accepted"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_404"
-                }
-              }
-            },
-            "description": "The resource was not found or is no longer available\n"
-          }
-        },
-        "summary": "Create Funding Request",
-        "tags": [
-          "Funding Manager"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/achFundingRequest' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"amount\":999990}'\n"
-          }
-        ]
-      }
-    },
     "/v1/sourceAccounts/{sourceAccountId}/notifications": {
       "post": {
-        "description": "Set notifications for a given source account",
+        "deprecated": true,
+        "description": "<p>Set notifications for a given source account</p>\n<p>deprecated since 2.34 (use v3 version)</p>\n",
         "operationId": "setNotificationsRequest",
         "parameters": [
           {
@@ -6263,7 +6028,7 @@
         },
         "summary": "Set notifications",
         "tags": [
-          "Funding Manager"
+          "Source Accounts"
         ],
         "x-code-samples": [
           {
@@ -6348,7 +6113,7 @@
         },
         "summary": "Create Funding Request",
         "tags": [
-          "Funding Manager"
+          "Funding"
         ],
         "x-code-samples": [
           {
@@ -6494,7 +6259,7 @@
         },
         "summary": "Get list of source accounts",
         "tags": [
-          "Funding Manager"
+          "Source Accounts"
         ],
         "x-code-samples": [
           {
@@ -6576,7 +6341,7 @@
         },
         "summary": "Get Source Account",
         "tags": [
-          "Funding Manager"
+          "Source Accounts"
         ],
         "x-code-samples": [
           {
@@ -6661,7 +6426,7 @@
         },
         "summary": "Transfer Funds between source accounts",
         "tags": [
-          "Funding Manager"
+          "Source Accounts"
         ],
         "x-code-samples": [
           {
@@ -6671,85 +6436,45 @@
         ]
       }
     },
-    "/v1/fundingAccounts": {
-      "get": {
-        "deprecated": true,
-        "description": "Get the funding accounts.",
-        "operationId": "getFundingAccounts",
+    "/v3/sourceAccounts/{sourceAccountId}/fundingRequest": {
+      "post": {
+        "description": "<p>Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo</p>\n",
+        "operationId": "createFundingRequestV3",
         "parameters": [
           {
-            "in": "query",
-            "name": "payorId",
-            "required": false,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
+            "description": "Source account id",
+            "in": "path",
             "name": "sourceAccountId",
-            "required": false,
+            "required": true,
             "schema": {
               "format": "uuid",
               "type": "string"
-            }
-          },
-          {
-            "description": "Page number. Default is 1.",
-            "in": "query",
-            "name": "page",
-            "required": false,
-            "schema": {
-              "default": 1,
-              "format": "int32",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "The number of results to return in a page",
-            "in": "query",
-            "name": "pageSize",
-            "required": false,
-            "schema": {
-              "default": 25,
-              "format": "int32",
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer"
-            }
-          },
-          {
-            "description": "List of sort fields (e.g. ?sort=accountName:asc,name:asc) Default is accountName:asc The supported sort fields are - accountName, name and currency.",
-            "in": "query",
-            "name": "sort",
-            "required": false,
-            "schema": {
-              "default": "accountName:asc",
-              "pattern": "[a-zA-Z]+[:desc|:asc]",
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "sensitive",
-            "required": false,
-            "schema": {
-              "default": false,
-              "type": "boolean"
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FundingRequestV3"
+              }
+            }
+          },
+          "description": "Body to included amount to be funded",
+          "required": true
+        },
         "responses": {
-          "200": {
-            "content": {
-              "application/json": {
+          "202": {
+            "description": "Request Accepted",
+            "headers": {
+              "Location": {
+                "description": "Reference to created Funding Request",
                 "schema": {
-                  "$ref": "#/components/schemas/ListFundingAccountsResponse"
+                  "example": "https://api.sandbox.velopayments.com/v1/fundings/8c1a8e1c-0147-4d8c-9f92-b696e1515750",
+                  "type": "string"
                 }
               }
-            },
-            "description": "Get Funding Accounts Response"
+            }
           },
           "400": {
             "content": {
@@ -6760,62 +6485,6 @@
               }
             },
             "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          }
-        },
-        "summary": "Get Funding Accounts",
-        "tags": [
-          "Funding Manager"
-        ]
-      }
-    },
-    "/v1/fundingAccounts/{fundingAccountId}": {
-      "get": {
-        "deprecated": true,
-        "description": "Get Funding Account by ID",
-        "operationId": "getFundingAccount",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "fundingAccountId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "sensitive",
-            "required": false,
-            "schema": {
-              "default": false,
-              "type": "boolean"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/FundingAccountResponse"
-                }
-              }
-            },
-            "description": "Funding Account Response"
-          },
-          "400": {
-            "description": "Bad Request"
           },
           "401": {
             "content": {
@@ -6848,9 +6517,509 @@
             "description": "The resource was not found or is no longer available\n"
           }
         },
-        "summary": "Get Funding Account",
+        "summary": "Create Funding Request",
         "tags": [
-          "Funding Manager"
+          "Funding"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/fundingRequest' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"amount\":999990}'\n"
+          }
+        ]
+      }
+    },
+    "/v3/sourceAccounts": {
+      "description": "List Source Accounts",
+      "get": {
+        "description": "List source accounts.",
+        "operationId": "getSourceAccountsV3",
+        "parameters": [
+          {
+            "description": "Physical Account Name",
+            "in": "query",
+            "name": "physicalAccountName",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "The physical account ID",
+            "in": "query",
+            "name": "physicalAccountId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The account owner Payor ID",
+            "in": "query",
+            "name": "payorId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The funding account ID",
+            "in": "query",
+            "name": "fundingAccountId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "description": "A filter for retrieving both active accounts and user deleted ones",
+            "in": "query",
+            "name": "includeUserDeleted",
+            "required": false,
+            "schema": {
+              "format": "boolean",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The type of source account.",
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/SourceAccountTypeV3"
+            }
+          },
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The number of results to return in a page",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "List of sort fields e.g. ?sort=name:asc\nDefault is name:asc\nThe supported sort fields are - fundingRef, name, balance\n",
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "fundingRef:asc",
+              "pattern": "[fundingRef|name|balance]+[:desc|:asc]",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListSourceAccountResponseV3"
+                }
+              }
+            },
+            "description": "List Source Account response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Get list of source accounts",
+        "tags": [
+          "Source Accounts"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
+          }
+        ]
+      },
+      "summary": "List Source Accounts"
+    },
+    "/v3/sourceAccounts/{sourceAccountId}": {
+      "delete": {
+        "description": "Mark a source account as deleted by ID",
+        "operationId": "deleteSourceAccountV3",
+        "parameters": [
+          {
+            "description": "Source account id",
+            "in": "path",
+            "name": "sourceAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content - Source account is deleted"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_409"
+                }
+              }
+            },
+            "description": "The request contained data that would result in a duplicate value\n"
+          }
+        },
+        "summary": "Delete a source account by ID",
+        "tags": [
+          "Funding Manager Private"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X DELETE \\\n    -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'\n"
+          }
+        ]
+      },
+      "get": {
+        "description": "Get details about given source account.",
+        "operationId": "getSourceAccountV3",
+        "parameters": [
+          {
+            "description": "Source account id",
+            "in": "path",
+            "name": "sourceAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SourceAccountResponseV3"
+                }
+              }
+            },
+            "description": "Source account response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Get details about given source account.",
+        "tags": [
+          "Source Accounts"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \\\n    -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'\n"
+          }
+        ]
+      }
+    },
+    "/v3/sourceAccounts/{sourceAccountId}/transfers": {
+      "post": {
+        "description": "Transfer funds between source accounts for a Payor. The 'from' source account is identified in the URL, and is the account which will be debited. The 'to' (destination) source account is in the body, and is the account which will be credited. Both source accounts must belong to the same Payor. There must be sufficient balance in the 'from' source account, otherwise the transfer attempt will fail.",
+        "operationId": "transferFundsV3",
+        "parameters": [
+          {
+            "description": "The 'from' source account id, which will be debited",
+            "in": "path",
+            "name": "sourceAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransferRequestV3"
+              }
+            }
+          },
+          "description": "Body",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Request Processed"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Transfer Funds between source accounts",
+        "tags": [
+          "Source Accounts"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/transfers' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{ \"toSourceAccountId\": \"a99f93f9-6845-451d-a1f5-f3c841599dd7\", \"amount\": 10000, \"currency\": \"USD\" }'\n"
+          }
+        ]
+      }
+    },
+    "/v3/sourceAccounts/{sourceAccountId}/notifications": {
+      "post": {
+        "description": "<p>Set notifications for a given source account</p>\n<p>If the balance falls below the amount set in the request an email notification will be sent to the email address registered in the payor profile</p>\n",
+        "operationId": "setNotificationsRequestV3",
+        "parameters": [
+          {
+            "description": "Source account id",
+            "in": "path",
+            "name": "sourceAccountId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetNotificationsRequest_2"
+              }
+            }
+          },
+          "description": "Body to included minimum balance to set",
+          "required": true
+        },
+        "responses": {
+          "204": {
+            "description": "Request Fulfilled"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Set notifications",
+        "tags": [
+          "Source Accounts"
+        ],
+        "x-code-samples": [
+          {
+            "lang": "shell",
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/notifications' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"minimumBalance\":900}'\n"
+          }
         ]
       }
     },
@@ -6985,7 +7154,7 @@
         },
         "summary": "Get Funding Accounts",
         "tags": [
-          "Funding Manager"
+          "Funding"
         ]
       },
       "post": {
@@ -7161,510 +7330,7 @@
         },
         "summary": "Get Funding Account",
         "tags": [
-          "Funding Manager"
-        ]
-      }
-    },
-    "/v3/sourceAccounts/{sourceAccountId}/fundingRequest": {
-      "post": {
-        "description": "<p>Instruct a funding request to transfer funds from the payor’s funding bank to the payor’s balance held within Velo</p>\n",
-        "operationId": "createFundingRequestV3",
-        "parameters": [
-          {
-            "description": "Source account id",
-            "in": "path",
-            "name": "sourceAccountId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FundingRequestV3"
-              }
-            }
-          },
-          "description": "Body to included amount to be funded",
-          "required": true
-        },
-        "responses": {
-          "202": {
-            "description": "Request Accepted",
-            "headers": {
-              "Location": {
-                "description": "Reference to created Funding Request",
-                "schema": {
-                  "example": "https://api.sandbox.velopayments.com/v1/fundings/8c1a8e1c-0147-4d8c-9f92-b696e1515750",
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_404"
-                }
-              }
-            },
-            "description": "The resource was not found or is no longer available\n"
-          }
-        },
-        "summary": "Create Funding Request",
-        "tags": [
-          "Funding Manager"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/fundingRequest' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{\"amount\":999990}'\n"
-          }
-        ]
-      }
-    },
-    "/v3/sourceAccounts": {
-      "description": "List Source Accounts",
-      "get": {
-        "description": "List source accounts.",
-        "operationId": "getSourceAccountsV3",
-        "parameters": [
-          {
-            "description": "Physical Account Name",
-            "in": "query",
-            "name": "physicalAccountName",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "The physical account ID",
-            "in": "query",
-            "name": "physicalAccountId",
-            "required": false,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "description": "The account owner Payor ID",
-            "in": "query",
-            "name": "payorId",
-            "required": false,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "description": "The funding account ID",
-            "in": "query",
-            "name": "fundingAccountId",
-            "required": false,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          },
-          {
-            "description": "A filter for retrieving both active accounts and user deleted ones",
-            "in": "query",
-            "name": "includeUserDeleted",
-            "required": false,
-            "schema": {
-              "format": "boolean",
-              "type": "string"
-            }
-          },
-          {
-            "description": "The type of source account.",
-            "in": "query",
-            "name": "type",
-            "required": false,
-            "schema": {
-              "$ref": "#/components/schemas/SourceAccountTypeV3"
-            }
-          },
-          {
-            "description": "Page number. Default is 1.",
-            "in": "query",
-            "name": "page",
-            "required": false,
-            "schema": {
-              "default": 1,
-              "format": "int32",
-              "type": "integer"
-            }
-          },
-          {
-            "description": "The number of results to return in a page",
-            "in": "query",
-            "name": "pageSize",
-            "required": false,
-            "schema": {
-              "default": 25,
-              "format": "int32",
-              "maximum": 100,
-              "minimum": 1,
-              "type": "integer"
-            }
-          },
-          {
-            "description": "List of sort fields e.g. ?sort=name:asc\nDefault is name:asc\nThe supported sort fields are - fundingRef, name, balance\n",
-            "in": "query",
-            "name": "sort",
-            "required": false,
-            "schema": {
-              "default": "fundingRef:asc",
-              "pattern": "[fundingRef|name|balance]+[:desc|:asc]",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListSourceAccountResponseV3"
-                }
-              }
-            },
-            "description": "List Source Account response"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_404"
-                }
-              }
-            },
-            "description": "The resource was not found or is no longer available\n"
-          }
-        },
-        "summary": "Get list of source accounts",
-        "tags": [
-          "Funding Manager"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6' -i -X GET \\\n    -H 'Authorization: Bearer 757a7dbf-2afb-45ec-877c-2aa3857c8e08'\n"
-          }
-        ]
-      },
-      "summary": "List Source Accounts"
-    },
-    "/v3/sourceAccounts/{sourceAccountId}": {
-      "delete": {
-        "description": "Mark a source account as deleted by ID",
-        "operationId": "deleteSourceAccountV3",
-        "parameters": [
-          {
-            "description": "Source account id",
-            "in": "path",
-            "name": "sourceAccountId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content - Source account is deleted"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_404"
-                }
-              }
-            },
-            "description": "The resource was not found or is no longer available\n"
-          },
-          "409": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_409"
-                }
-              }
-            },
-            "description": "The request contained data that would result in a duplicate value\n"
-          }
-        },
-        "summary": "Delete a source account by ID",
-        "tags": [
-          "Funding Manager Private"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X DELETE \\\n    -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'\n"
-          }
-        ]
-      },
-      "get": {
-        "description": "Get details about given source account.",
-        "operationId": "getSourceAccountV3",
-        "parameters": [
-          {
-            "description": "Source account id",
-            "in": "path",
-            "name": "sourceAccountId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SourceAccountResponseV3"
-                }
-              }
-            },
-            "description": "Source account response"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_404"
-                }
-              }
-            },
-            "description": "The resource was not found or is no longer available\n"
-          }
-        },
-        "summary": "Get details about given source account.",
-        "tags": [
-          "Funding Manager"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/126895a8-ba3d-44e8-9b34-84ee579cee7a' -i -X GET \\\n    -H 'Authorization: Bearer a016f840-dafc-4b10-95f5-70ecc75a02d1'\n"
-          }
-        ]
-      }
-    },
-    "/v3/sourceAccounts/{sourceAccountId}/transfers": {
-      "post": {
-        "description": "Transfer funds between source accounts for a Payor. The 'from' source account is identified in the URL, and is the account which will be debited. The 'to' (destination) source account is in the body, and is the account which will be credited. Both source accounts must belong to the same Payor. There must be sufficient balance in the 'from' source account, otherwise the transfer attempt will fail.",
-        "operationId": "transferFundsV3",
-        "parameters": [
-          {
-            "description": "The 'from' source account id, which will be debited",
-            "in": "path",
-            "name": "sourceAccountId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TransferRequestV3"
-              }
-            }
-          },
-          "description": "Body",
-          "required": true
-        },
-        "responses": {
-          "204": {
-            "description": "Request Processed"
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_400"
-                }
-              }
-            },
-            "description": "Invalid request. See Error message payload for details of failure"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_401"
-                }
-              }
-            },
-            "description": "Invalid access token. May be expired or invalid"
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_404"
-                }
-              }
-            },
-            "description": "The resource was not found or is no longer available\n"
-          }
-        },
-        "summary": "Transfer Funds between source accounts",
-        "tags": [
-          "Funding Manager"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v3/sourceAccounts/533b082b-b3eb-4712-8242-0fd3a307033f/transfers' -i -X POST \\\n    -H 'Authorization: Bearer 67c1b4fc-29ce-425c-863b-950163a5e971' \\\n    -H 'Content-Type: application/json' \\\n    -d '{ \"toSourceAccountId\": \"a99f93f9-6845-451d-a1f5-f3c841599dd7\", \"amount\": 10000, \"currency\": \"USD\" }'\n"
-          }
+          "Funding"
         ]
       }
     },
@@ -7760,7 +7426,7 @@
         },
         "summary": "Get Funding Audit Delta",
         "tags": [
-          "Funding Manager"
+          "Funding"
         ]
       }
     },
@@ -7833,7 +7499,7 @@
         },
         "summary": "Get Funding",
         "tags": [
-          "Funding Manager"
+          "Funding"
         ]
       }
     },
@@ -15616,180 +15282,6 @@
         },
         "type": "object"
       },
-      "ListSourceAccountResponse": {
-        "description": "List Source Accounts Response Object",
-        "example": {
-          "links": [
-            {
-              "rel": "first",
-              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-            },
-            {
-              "rel": "first",
-              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-            }
-          ],
-          "page": {
-            "numberOfElements": 1,
-            "totalPages": 2,
-            "pageSize": 25,
-            "page": 1,
-            "totalElements": 1
-          },
-          "content": [
-            {
-              "physicalAccountName": "VELO_FBO_MYBANKA_USD",
-              "accountType": "FBO",
-              "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "fundingRef": "a1b2c3d4",
-              "balance": 1203489,
-              "pooled": true,
-              "name": "MyAccountName",
-              "customerId": "Joe Customer",
-              "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "currency": "USD",
-              "railsId": "BOA_RAIL",
-              "balanceVisible": true,
-              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-            },
-            {
-              "physicalAccountName": "VELO_FBO_MYBANKA_USD",
-              "accountType": "FBO",
-              "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "fundingRef": "a1b2c3d4",
-              "balance": 1203489,
-              "pooled": true,
-              "name": "MyAccountName",
-              "customerId": "Joe Customer",
-              "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "currency": "USD",
-              "railsId": "BOA_RAIL",
-              "balanceVisible": true,
-              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-            }
-          ]
-        },
-        "properties": {
-          "page": {
-            "$ref": "#/components/schemas/ListSourceAccountResponse_page"
-          },
-          "links": {
-            "items": {
-              "$ref": "#/components/schemas/ListSourceAccountResponse_links"
-            },
-            "type": "array"
-          },
-          "content": {
-            "items": {
-              "$ref": "#/components/schemas/SourceAccountResponse"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "SourceAccountResponse": {
-        "example": {
-          "physicalAccountName": "VELO_FBO_MYBANKA_USD",
-          "accountType": "FBO",
-          "fundingAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "fundingRef": "a1b2c3d4",
-          "balance": 1203489,
-          "pooled": true,
-          "name": "MyAccountName",
-          "customerId": "Joe Customer",
-          "physicalAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "currency": "USD",
-          "railsId": "BOA_RAIL",
-          "balanceVisible": true,
-          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-        },
-        "properties": {
-          "id": {
-            "description": "Source Account Id",
-            "format": "uuid",
-            "type": "string"
-          },
-          "balance": {
-            "description": "Decimal implied",
-            "example": 1203489,
-            "format": "int64",
-            "type": "integer"
-          },
-          "currency": {
-            "example": "USD",
-            "maxLength": 3,
-            "minLength": 3,
-            "type": "string"
-          },
-          "fundingRef": {
-            "example": "a1b2c3d4",
-            "type": "string"
-          },
-          "physicalAccountName": {
-            "example": "VELO_FBO_MYBANKA_USD",
-            "type": "string"
-          },
-          "railsId": {
-            "example": "BOA_RAIL",
-            "type": "string"
-          },
-          "payorId": {
-            "format": "uuid",
-            "type": "string"
-          },
-          "name": {
-            "example": "MyAccountName",
-            "type": "string"
-          },
-          "pooled": {
-            "type": "boolean"
-          },
-          "balanceVisible": {
-            "type": "boolean"
-          },
-          "customerId": {
-            "example": "Joe Customer",
-            "nullable": true,
-            "type": "string"
-          },
-          "physicalAccountId": {
-            "format": "uuid",
-            "type": "string"
-          },
-          "fundingAccountId": {
-            "format": "uuid",
-            "nullable": true,
-            "type": "string"
-          },
-          "accountType": {
-            "example": "FBO",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "FundingRequestV1": {
-        "example": {
-          "amount": 800828191
-        },
-        "properties": {
-          "amount": {
-            "description": "Amount to fund, decimal implied",
-            "format": "int64",
-            "maximum": 9999999999,
-            "minimum": 1,
-            "type": "integer"
-          }
-        },
-        "required": [
-          "amount"
-        ],
-        "type": "object"
-      },
       "SetNotificationsRequest": {
         "example": {
           "minimumBalance": 800828190
@@ -16052,356 +15544,6 @@
           "currency",
           "toSourceAccountId"
         ],
-        "type": "object"
-      },
-      "ListFundingAccountsResponse": {
-        "description": "List Source Accounts Response Object",
-        "example": {
-          "links": [
-            {
-              "rel": "first",
-              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-            },
-            {
-              "rel": "first",
-              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-            }
-          ],
-          "page": {
-            "numberOfElements": 1,
-            "totalPages": 2,
-            "pageSize": 25,
-            "page": 1,
-            "totalElements": 1
-          },
-          "content": [
-            {
-              "routingNumber": 12345678,
-              "country": "US",
-              "accountName": "Payor Corp",
-              "name": "My Funding Account",
-              "sourceAccountIds": [
-                "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-              ],
-              "currency": "USD",
-              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "accountNumber": "7001001234",
-              "type": "FBO"
-            },
-            {
-              "routingNumber": 12345678,
-              "country": "US",
-              "accountName": "Payor Corp",
-              "name": "My Funding Account",
-              "sourceAccountIds": [
-                "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-                "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-              ],
-              "currency": "USD",
-              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "accountNumber": "7001001234",
-              "type": "FBO"
-            }
-          ]
-        },
-        "properties": {
-          "page": {
-            "$ref": "#/components/schemas/ListSourceAccountResponse_page"
-          },
-          "links": {
-            "items": {
-              "$ref": "#/components/schemas/ListSourceAccountResponse_links"
-            },
-            "type": "array"
-          },
-          "content": {
-            "items": {
-              "$ref": "#/components/schemas/FundingAccountResponse"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "FundingAccountResponse": {
-        "example": {
-          "routingNumber": 12345678,
-          "country": "US",
-          "accountName": "Payor Corp",
-          "name": "My Funding Account",
-          "sourceAccountIds": [
-            "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-            "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-          ],
-          "currency": "USD",
-          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "accountNumber": "7001001234",
-          "type": "FBO"
-        },
-        "properties": {
-          "id": {
-            "description": "Funding Account Id",
-            "format": "uuid",
-            "type": "string"
-          },
-          "payorId": {
-            "format": "uuid",
-            "type": "string"
-          },
-          "accountName": {
-            "description": "name on the bank account",
-            "example": "Payor Corp",
-            "type": "string"
-          },
-          "accountNumber": {
-            "description": "bank account number",
-            "example": "7001001234",
-            "type": "string"
-          },
-          "routingNumber": {
-            "description": "bank account routing number",
-            "example": 12345678,
-            "type": "string"
-          },
-          "sourceAccountIds": {
-            "items": {
-              "format": "uuid",
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "name": {
-            "description": "name of funding account",
-            "example": "My Funding Account",
-            "type": "string"
-          },
-          "currency": {
-            "description": "ISO 4217 currency code",
-            "example": "USD",
-            "maxLength": 3,
-            "minLength": 3,
-            "type": "string"
-          },
-          "country": {
-            "description": "ISO 3166-1 2 letter country code (upper case)",
-            "example": "US",
-            "maxLength": 2,
-            "minLength": 2,
-            "type": "string"
-          },
-          "type": {
-            "description": "Funding account type",
-            "example": "FBO",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
-      "FundingAccountTypeV2": {
-        "description": "Funding account type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE",
-        "example": "FBO",
-        "type": "string"
-      },
-      "ListFundingAccountsResponseV2": {
-        "description": "List Funding Accounts Response Object",
-        "example": {
-          "links": [
-            {
-              "rel": "first",
-              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-            },
-            {
-              "rel": "first",
-              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-            }
-          ],
-          "page": {
-            "numberOfElements": 1,
-            "totalPages": 2,
-            "pageSize": 25,
-            "page": 1,
-            "totalElements": 1
-          },
-          "content": [
-            {
-              "routingNumber": 12345678,
-              "country": "US",
-              "archived": true,
-              "accountName": "Payor Corp",
-              "name": "My Funding Account",
-              "currency": "USD",
-              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "accountNumber": "7001001234",
-              "type": "FBO"
-            },
-            {
-              "routingNumber": 12345678,
-              "country": "US",
-              "archived": true,
-              "accountName": "Payor Corp",
-              "name": "My Funding Account",
-              "currency": "USD",
-              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "accountNumber": "7001001234",
-              "type": "FBO"
-            }
-          ]
-        },
-        "properties": {
-          "page": {
-            "$ref": "#/components/schemas/ListSourceAccountResponse_page"
-          },
-          "links": {
-            "items": {
-              "$ref": "#/components/schemas/ListSourceAccountResponse_links"
-            },
-            "type": "array"
-          },
-          "content": {
-            "items": {
-              "$ref": "#/components/schemas/FundingAccountResponseV2"
-            },
-            "type": "array"
-          }
-        },
-        "type": "object"
-      },
-      "CreateFundingAccountRequestV2": {
-        "example": {
-          "routingNumber": "routingNumber",
-          "accountName": "accountName",
-          "name": "name",
-          "currency": "USD",
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "type": "FBO",
-          "accountNumber": "accountNumber"
-        },
-        "properties": {
-          "type": {
-            "enum": [
-              "FBO",
-              "WUBS_DECOUPLED",
-              "PRIVATE"
-            ],
-            "type": "string"
-          },
-          "name": {
-            "maxLength": 30,
-            "minLength": 3,
-            "type": "string"
-          },
-          "payorId": {
-            "format": "uuid",
-            "type": "string"
-          },
-          "accountName": {
-            "description": "Required if type is either FBO or PRIVATE",
-            "maxLength": 22,
-            "minLength": 1,
-            "type": "string"
-          },
-          "accountNumber": {
-            "description": "Required if type is either FBO or PRIVATE",
-            "maxLength": 17,
-            "minLength": 4,
-            "type": "string"
-          },
-          "routingNumber": {
-            "description": "Required if type is either FBO or PRIVATE",
-            "maxLength": 9,
-            "minLength": 6,
-            "type": "string"
-          },
-          "currency": {
-            "description": "ISO 4217 currency code, Required if type is either WUBS_DECOUPLED or PRIVATE",
-            "example": "USD",
-            "maxLength": 3,
-            "minLength": 3,
-            "type": "string"
-          }
-        },
-        "required": [
-          "name",
-          "payorId",
-          "type"
-        ],
-        "type": "object"
-      },
-      "FundingAccountResponseV2": {
-        "example": {
-          "routingNumber": 12345678,
-          "country": "US",
-          "archived": true,
-          "accountName": "Payor Corp",
-          "name": "My Funding Account",
-          "currency": "USD",
-          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "accountNumber": "7001001234",
-          "type": "FBO"
-        },
-        "properties": {
-          "id": {
-            "description": "Funding Account Id",
-            "format": "uuid",
-            "type": "string"
-          },
-          "payorId": {
-            "format": "uuid",
-            "type": "string"
-          },
-          "accountName": {
-            "description": "name on the bank account",
-            "example": "Payor Corp",
-            "type": "string"
-          },
-          "accountNumber": {
-            "description": "bank account number",
-            "example": "7001001234",
-            "type": "string"
-          },
-          "routingNumber": {
-            "description": "bank account routing number",
-            "example": 12345678,
-            "type": "string"
-          },
-          "name": {
-            "description": "name of funding account",
-            "example": "My Funding Account",
-            "type": "string"
-          },
-          "currency": {
-            "description": "Valid ISO 4217 3 letter currency code. See the <a href=\"https://www.iso.org/iso-4217-currency-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
-            "example": "USD",
-            "maxLength": 3,
-            "minLength": 3,
-            "pattern": "^[A-Z]{3}$",
-            "title": "ISO Currency Code",
-            "type": "string"
-          },
-          "country": {
-            "description": "ISO 3166-1 2 letter country code (upper case)",
-            "example": "US",
-            "maxLength": 2,
-            "minLength": 2,
-            "type": "string"
-          },
-          "type": {
-            "description": "Funding account type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE",
-            "example": "FBO",
-            "type": "string"
-          },
-          "archived": {
-            "description": "A flag for whether the funding account has been archived.  Only present in the response if true.",
-            "type": "boolean"
-          }
-        },
         "type": "object"
       },
       "FundingRequestV3": {
@@ -16689,6 +15831,225 @@
           "currency",
           "toSourceAccountId"
         ],
+        "type": "object"
+      },
+      "SetNotificationsRequest_2": {
+        "properties": {
+          "minimumBalance": {
+            "description": "Amount to set as minimum balance for notifications in minor units",
+            "example": 10000000,
+            "format": "int64",
+            "maximum": 9999999999,
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "minimumBalance"
+        ],
+        "type": "object"
+      },
+      "FundingAccountTypeV2": {
+        "description": "Funding account type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE",
+        "example": "FBO",
+        "type": "string"
+      },
+      "ListFundingAccountsResponseV2": {
+        "description": "List Funding Accounts Response Object",
+        "example": {
+          "links": [
+            {
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+            },
+            {
+              "rel": "first",
+              "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+            }
+          ],
+          "page": {
+            "numberOfElements": 1,
+            "totalPages": 2,
+            "pageSize": 25,
+            "page": 1,
+            "totalElements": 1
+          },
+          "content": [
+            {
+              "routingNumber": 12345678,
+              "country": "US",
+              "archived": true,
+              "accountName": "Payor Corp",
+              "name": "My Funding Account",
+              "currency": "USD",
+              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "accountNumber": "7001001234",
+              "type": "FBO"
+            },
+            {
+              "routingNumber": 12345678,
+              "country": "US",
+              "archived": true,
+              "accountName": "Payor Corp",
+              "name": "My Funding Account",
+              "currency": "USD",
+              "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "accountNumber": "7001001234",
+              "type": "FBO"
+            }
+          ]
+        },
+        "properties": {
+          "page": {
+            "$ref": "#/components/schemas/ListFundingAccountsResponseV2_page"
+          },
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/ListFundingAccountsResponseV2_links"
+            },
+            "type": "array"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/FundingAccountResponseV2"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CreateFundingAccountRequestV2": {
+        "example": {
+          "routingNumber": "routingNumber",
+          "accountName": "accountName",
+          "name": "name",
+          "currency": "USD",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "type": "FBO",
+          "accountNumber": "accountNumber"
+        },
+        "properties": {
+          "type": {
+            "enum": [
+              "FBO",
+              "WUBS_DECOUPLED",
+              "PRIVATE"
+            ],
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 30,
+            "minLength": 3,
+            "type": "string"
+          },
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "accountName": {
+            "description": "Required if type is either FBO or PRIVATE",
+            "maxLength": 22,
+            "minLength": 1,
+            "type": "string"
+          },
+          "accountNumber": {
+            "description": "Required if type is either FBO or PRIVATE",
+            "maxLength": 17,
+            "minLength": 4,
+            "type": "string"
+          },
+          "routingNumber": {
+            "description": "Required if type is either FBO or PRIVATE",
+            "maxLength": 9,
+            "minLength": 6,
+            "type": "string"
+          },
+          "currency": {
+            "description": "ISO 4217 currency code, Required if type is either WUBS_DECOUPLED or PRIVATE",
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "payorId",
+          "type"
+        ],
+        "type": "object"
+      },
+      "FundingAccountResponseV2": {
+        "example": {
+          "routingNumber": 12345678,
+          "country": "US",
+          "archived": true,
+          "accountName": "Payor Corp",
+          "name": "My Funding Account",
+          "currency": "USD",
+          "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "accountNumber": "7001001234",
+          "type": "FBO"
+        },
+        "properties": {
+          "id": {
+            "description": "Funding Account Id",
+            "format": "uuid",
+            "type": "string"
+          },
+          "payorId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "accountName": {
+            "description": "name on the bank account",
+            "example": "Payor Corp",
+            "type": "string"
+          },
+          "accountNumber": {
+            "description": "bank account number",
+            "example": "7001001234",
+            "type": "string"
+          },
+          "routingNumber": {
+            "description": "bank account routing number",
+            "example": 12345678,
+            "type": "string"
+          },
+          "name": {
+            "description": "name of funding account",
+            "example": "My Funding Account",
+            "type": "string"
+          },
+          "currency": {
+            "description": "Valid ISO 4217 3 letter currency code. See the <a href=\"https://www.iso.org/iso-4217-currency-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "title": "ISO Currency Code",
+            "type": "string"
+          },
+          "country": {
+            "description": "ISO 3166-1 2 letter country code (upper case)",
+            "example": "US",
+            "maxLength": 2,
+            "minLength": 2,
+            "type": "string"
+          },
+          "type": {
+            "description": "Funding account type. One of the following values: FBO, WUBS_DECOUPLED, PRIVATE",
+            "example": "FBO",
+            "type": "string"
+          },
+          "archived": {
+            "description": "A flag for whether the funding account has been archived.  Only present in the response if true.",
+            "type": "boolean"
+          }
+        },
         "type": "object"
       },
       "PageResourceFundingPayorStatusAuditResponseFundingPayorStatusAuditResponse": {
@@ -25150,7 +24511,39 @@
           }
         }
       },
-      "ListSourceAccountResponse_page": {
+      "ListSourceAccountResponseV2_links": {
+        "example": {
+          "rel": "first",
+          "href": "https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+        },
+        "properties": {
+          "rel": {
+            "example": "first",
+            "type": "string"
+          },
+          "href": {
+            "example": "https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc",
+            "type": "string"
+          }
+        }
+      },
+      "ListSourceAccountResponseV3_links": {
+        "example": {
+          "rel": "first",
+          "href": "https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
+        },
+        "properties": {
+          "rel": {
+            "example": "first",
+            "type": "string"
+          },
+          "href": {
+            "example": "https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc",
+            "type": "string"
+          }
+        }
+      },
+      "ListFundingAccountsResponseV2_page": {
         "example": {
           "numberOfElements": 1,
           "totalPages": 2,
@@ -25181,7 +24574,7 @@
           }
         }
       },
-      "ListSourceAccountResponse_links": {
+      "ListFundingAccountsResponseV2_links": {
         "example": {
           "rel": "first",
           "href": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
@@ -25193,38 +24586,6 @@
           },
           "href": {
             "example": "https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc",
-            "type": "string"
-          }
-        }
-      },
-      "ListSourceAccountResponseV2_links": {
-        "example": {
-          "rel": "first",
-          "href": "https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-        },
-        "properties": {
-          "rel": {
-            "example": "first",
-            "type": "string"
-          },
-          "href": {
-            "example": "https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc",
-            "type": "string"
-          }
-        }
-      },
-      "ListSourceAccountResponseV3_links": {
-        "example": {
-          "rel": "first",
-          "href": "https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc"
-        },
-        "properties": {
-          "rel": {
-            "example": "first",
-            "type": "string"
-          },
-          "href": {
-            "example": "https://api.sandbox.velopayments.com/v3/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc",
             "type": "string"
           }
         }
@@ -25700,7 +25061,8 @@
       "tags": [
         "Payors",
         "Payor Hierarchy",
-        "Funding Manager",
+        "Funding",
+        "Source Accounts",
         "Webhooks",
         "Payins"
       ]
