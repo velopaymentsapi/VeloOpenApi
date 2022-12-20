@@ -1,9 +1,43 @@
 #### What's New
 ---
 
+##### `POST` /v3/sourceAccounts/{sourceAccountId}/notifications
+
+> Set notifications
+
 ##### `GET` /v1/fundings/{fundingId}
 
 > Get Funding
+
+#### What's Deleted
+---
+
+##### `GET` /v1/sourceAccounts
+
+> Get list of source accounts
+
+##### `GET` /v1/sourceAccounts/{sourceAccountId}
+
+> Get details about given source account.
+
+##### `POST` /v1/sourceAccounts/{sourceAccountId}/achFundingRequest
+
+> Create Funding Request
+
+##### `GET` /v1/fundingAccounts
+
+> Get Funding Accounts
+
+##### `GET` /v1/fundingAccounts/{fundingAccountId}
+
+> Get Funding Account
+
+#### What's Deprecated
+---
+
+##### `POST` /v1/sourceAccounts/{sourceAccountId}/notifications
+
+> Set notifications
 
 #### What's Changed
 ---
@@ -56,6 +90,9 @@ Changed: `fields` in `query`
 > <p>The values of payorId and payorName are always included for each Payor by default</p>
 > <p>You can add fields to the response for each payor by including them in the fields parameter separated by commas</p>
 > <p>The supported fields are any combination of: primaryContactEmail,kycState</p>
+
+##### `POST` /v1/sourceAccounts/{sourceAccountId}/notifications
+
 
 ##### `POST` /v2/fundingAccounts
 
