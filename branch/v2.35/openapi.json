@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.35.51",
+    "version": "2.35.52",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -19083,6 +19083,7 @@
                   "displayName": "Account Name",
                   "minLength": 5,
                   "displayOrder": 0,
+                  "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
                   "required": true,
                   "maxLength": 50,
                   "validation": "^[0-9]{6,11}$",
@@ -19092,6 +19093,7 @@
                   "displayName": "Account Name",
                   "minLength": 5,
                   "displayOrder": 0,
+                  "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
                   "required": true,
                   "maxLength": 50,
                   "validation": "^[0-9]{6,11}$",
@@ -19106,6 +19108,7 @@
                   "displayName": "Account Name",
                   "minLength": 5,
                   "displayOrder": 0,
+                  "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
                   "required": true,
                   "maxLength": 50,
                   "validation": "^[0-9]{6,11}$",
@@ -19115,6 +19118,7 @@
                   "displayName": "Account Name",
                   "minLength": 5,
                   "displayOrder": 0,
+                  "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
                   "required": true,
                   "maxLength": 50,
                   "validation": "^[0-9]{6,11}$",
@@ -22520,7 +22524,7 @@
             "type": "boolean"
           },
           "status": {
-            "description": "Current status of payment. One of the following values: SUBMITTED, ACCEPTED, REJECTED, WITHDRAWN, RETURNED, AWAITING_FUNDS, FUNDED, UNFUNDED, CANCELLED, REQUESTED",
+            "description": "Current status of payment. One of the following values: SUBMITTED, ACCEPTED, REJECTED, WITHDRAWN, RETURNED, AWAITING_FUNDS, FUNDED, UNFUNDED, CANCELLED, BANK_PAYMENT_REQUESTED",
             "type": "string"
           },
           "transmissionType": {
@@ -22559,6 +22563,7 @@
               "displayName": "Account Name",
               "minLength": 5,
               "displayOrder": 0,
+              "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
               "required": true,
               "maxLength": 50,
               "validation": "^[0-9]{6,11}$",
@@ -22568,6 +22573,7 @@
               "displayName": "Account Name",
               "minLength": 5,
               "displayOrder": 0,
+              "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
               "required": true,
               "maxLength": 50,
               "validation": "^[0-9]{6,11}$",
@@ -23765,6 +23771,7 @@
           "displayName": "Account Name",
           "minLength": 5,
           "displayOrder": 0,
+          "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
           "required": true,
           "maxLength": 50,
           "validation": "^[0-9]{6,11}$",
@@ -23802,6 +23809,11 @@
           },
           "displayOrder": {
             "type": "integer"
+          },
+          "description": {
+            "description": "An optional description, or hint, as to how the user should enter the field value.",
+            "example": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
+            "type": "string"
           }
         },
         "required": [
