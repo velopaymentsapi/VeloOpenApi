@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.36.35",
+    "version": "2.36.36",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -1592,118 +1592,6 @@
           {
             "lang": "shell",
             "source": "$ curl 'https://api.sandbox.velopayments.com/v2/users/self/password/validate' -i -X POST \\\n      -H 'Content-Type: application/json' \\\n      -d '{\"password\":\"abcd_12345\"}'\n"
-          }
-        ]
-      }
-    },
-    "/v1/payors/{payorId}": {
-      "get": {
-        "deprecated": true,
-        "description": "<p>Get a Single Payor by Id.</p>\n<p>deprecated since v2.10 - Use /v2/payors\n",
-        "operationId": "getPayorByIdV1",
-        "parameters": [
-          {
-            "description": "The Payor Id",
-            "in": "path",
-            "name": "payorId",
-            "required": true,
-            "schema": {
-              "format": "uuid",
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PayorV1"
-                }
-              }
-            },
-            "description": "Get Payor Details",
-            "x-contracts": [
-              {
-                "contractId": 1,
-                "headers": {
-                  "Content-Type": "application/json;charset=UTF-8"
-                },
-                "body": {
-                  "payorId": "0a818933-087d-47f2-ad83-2f986ed087eb",
-                  "payorName": "Joe",
-                  "address": {
-                    "line1": "101 California Street",
-                    "city": "San Francisco",
-                    "zipOrPostcode": "94111",
-                    "country": "US"
-                  },
-                  "primaryContactName": "Joe",
-                  "primaryContactPhone": 1231231234,
-                  "primaryContactEmail": "foo@example.com",
-                  "kycState": "PASSED_KYC",
-                  "manualLockout": false,
-                  "payeeGracePeriodProcessingEnabled": true,
-                  "payeeGracePeriodDays": 90,
-                  "dbaName": "FlyByNight, Inc",
-                  "allowsLanguageChoice": false,
-                  "reminderEmailsOptOut": false,
-                  "language": "EN",
-                  "supportContact": "support@example.com",
-                  "collectiveAlias": "MyAlias",
-                  "maxMasterPayorAdmins": 2
-                }
-              }
-            ]
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/inline_response_403"
-                }
-              }
-            },
-            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            },
-            "description": "Payor Id Not Found",
-            "x-contracts": [
-              {
-                "contractId": 2
-              }
-            ]
-          }
-        },
-        "summary": "Get Payor",
-        "tags": [
-          "Payors"
-        ],
-        "x-code-samples": [
-          {
-            "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/payors/126969bd-6a18-47ec-96e1-57559afecf32' -i -X GET \\\n    -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \\\n    -H 'Content-Type: application/json'\n"
-          }
-        ],
-        "x-contracts": [
-          {
-            "contractId": 1,
-            "name": "Test Get Payor",
-            "contractPath": "/v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb",
-            "serviceName": "payor-service"
-          },
-          {
-            "contractId": 2,
-            "name": "Test Payor Not Found",
-            "contractPath": "/v1/payors/00000000-0000-0000-0000-000000000000",
-            "serviceName": "payor-service"
           }
         ]
       }
@@ -12288,178 +12176,6 @@
         },
         "type": "object"
       },
-      "PayorV1": {
-        "example": {
-          "primaryContactName": "Joe Buck",
-          "payeeGracePeriodProcessingEnabled": true,
-          "supportContact": "support@example.com",
-          "address": {
-            "country": "US",
-            "countyOrProvince": "FL",
-            "line4": "line4",
-            "city": "Key West",
-            "line3": "line3",
-            "line2": "line2",
-            "line1": "500 Duval St",
-            "zipOrPostcode": "33945"
-          },
-          "fundingAccountAccountName": "Example Corp BOA",
-          "includesReports": true,
-          "allowsLanguageChoice": true,
-          "language": "EN",
-          "fundingAccountAccountNumber": "1234567890123",
-          "dbaName": "Some Biz",
-          "primaryContactPhone": "123-123-1234",
-          "payeeGracePeriodDays": 0,
-          "fundingAccountRoutingNumber": "123456789",
-          "reminderEmailsOptOut": true,
-          "maxMasterPayorAdmins": 6,
-          "transmissionTypes": {
-            "ACH": true,
-            "SAME_DAY_ACH": true,
-            "WIRE": true
-          },
-          "manualLockout": true,
-          "collectiveAlias": "Payee",
-          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "kycState": "PASSED_KYC",
-          "primaryContactEmail": "joe.buck@example.com",
-          "payorName": "Example, Corp"
-        },
-        "properties": {
-          "payorId": {
-            "format": "uuid",
-            "readOnly": true,
-            "type": "string"
-          },
-          "payorName": {
-            "description": "The name of the payor.",
-            "example": "Example, Corp",
-            "type": "string"
-          },
-          "address": {
-            "$ref": "#/components/schemas/PayorAddress"
-          },
-          "primaryContactName": {
-            "description": "Name of primary contact for the payor.",
-            "example": "Joe Buck",
-            "type": "string"
-          },
-          "primaryContactPhone": {
-            "description": "Primary contact phone number for the payor.",
-            "example": "123-123-1234",
-            "type": "string"
-          },
-          "primaryContactEmail": {
-            "description": "Primary contact email for the payor.",
-            "example": "joe.buck@example.com",
-            "format": "email",
-            "type": "string"
-          },
-          "fundingAccountRoutingNumber": {
-            "description": "The funding account routing number to be used for the payor.",
-            "example": "123456789",
-            "type": "string"
-          },
-          "fundingAccountAccountNumber": {
-            "description": "The funding account number to be used for the payor.",
-            "example": "1234567890123",
-            "type": "string"
-          },
-          "fundingAccountAccountName": {
-            "description": "The funding account name to be used for the payor.",
-            "example": "Example Corp BOA",
-            "type": "string"
-          },
-          "kycState": {
-            "description": "The kyc state of the payor. One of the following values: FAILED_KYC, PASSED_KYC, REQUIRES_KYC",
-            "example": "PASSED_KYC",
-            "readOnly": true,
-            "type": "string"
-          },
-          "manualLockout": {
-            "description": "Whether or not the payor has been manually locked by the backoffice.",
-            "type": "boolean"
-          },
-          "payeeGracePeriodProcessingEnabled": {
-            "description": "Whether grace period processing is enabled.",
-            "readOnly": true,
-            "type": "boolean"
-          },
-          "payeeGracePeriodDays": {
-            "description": "The grace period for paying payees in days.",
-            "readOnly": true,
-            "type": "integer"
-          },
-          "collectiveAlias": {
-            "description": "How the payor has chosen to refer to payees.",
-            "example": "Payee",
-            "type": "string"
-          },
-          "supportContact": {
-            "description": "The payor’s support contact email address.",
-            "example": "support@example.com",
-            "type": "string"
-          },
-          "dbaName": {
-            "description": "The payor’s 'Doing Business As' name.",
-            "example": "Some Biz",
-            "type": "string"
-          },
-          "allowsLanguageChoice": {
-            "description": "Whether or not the payor allows language choice in the UI.",
-            "type": "boolean"
-          },
-          "reminderEmailsOptOut": {
-            "description": "Whether or not the payor has opted-out of reminder emails being sent.",
-            "readOnly": true,
-            "type": "boolean"
-          },
-          "language": {
-            "description": "The payor’s language preference. Must be one of [EN, FR].",
-            "example": "EN",
-            "type": "string"
-          },
-          "includesReports": {
-            "type": "boolean"
-          },
-          "maxMasterPayorAdmins": {
-            "type": "integer"
-          },
-          "transmissionTypes": {
-            "$ref": "#/components/schemas/TransmissionTypes"
-          }
-        },
-        "required": [
-          "payorName"
-        ],
-        "type": "object"
-      },
-      "ErrorResponse": {
-        "description": "Error response returned by all error conditions in Velo Services",
-        "properties": {
-          "errors": {
-            "description": "one or more errors",
-            "items": {
-              "$ref": "#/components/schemas/Error"
-            },
-            "minItems": 1,
-            "type": "array"
-          },
-          "correlationId": {
-            "description": "a unique identifier to track a request or related sequence of requests",
-            "example": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
-            "format": "uuid",
-            "type": "string"
-          },
-          "httpStatusCode": {
-            "description": "this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity",
-            "example": 400,
-            "type": "integer"
-          }
-        },
-        "type": "object"
-      },
       "PayorV2": {
         "example": {
           "primaryContactName": "Joe Buck",
@@ -12612,7 +12328,7 @@
             "type": "string"
           },
           "transmissionTypes": {
-            "$ref": "#/components/schemas/TransmissionTypes_2"
+            "$ref": "#/components/schemas/TransmissionTypes"
           },
           "remoteSystemIds": {
             "description": "The payor’s supported remote systems by id",
@@ -12635,6 +12351,31 @@
           "payorId",
           "payorName"
         ],
+        "type": "object"
+      },
+      "ErrorResponse": {
+        "description": "Error response returned by all error conditions in Velo Services",
+        "properties": {
+          "errors": {
+            "description": "one or more errors",
+            "items": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "minItems": 1,
+            "type": "array"
+          },
+          "correlationId": {
+            "description": "a unique identifier to track a request or related sequence of requests",
+            "example": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
+            "format": "uuid",
+            "type": "string"
+          },
+          "httpStatusCode": {
+            "description": "this will mirror the Status-Code part of the Status-Line http response header and is included for extra clarity",
+            "example": 400,
+            "type": "integer"
+          }
+        },
         "type": "object"
       },
       "PayorCreateApplicationRequest": {
@@ -19679,7 +19420,7 @@
         "nullable": true,
         "type": "string"
       },
-      "PayorAddress": {
+      "PayorAddressV2": {
         "example": {
           "country": "US",
           "countyOrProvince": "FL",
@@ -19758,114 +19499,11 @@
         "readOnly": true,
         "type": "string"
       },
-      "TransmissionTypes": {
-        "example": {
-          "ACH": true,
-          "SAME_DAY_ACH": true,
-          "WIRE": true
-        },
-        "properties": {
-          "ACH": {
-            "description": "Whether the Payor is allowed to pay via ACH",
-            "example": true,
-            "type": "boolean"
-          },
-          "SAME_DAY_ACH": {
-            "description": "Whether the Payor is allowed to pay via same day ACH",
-            "example": true,
-            "type": "boolean"
-          },
-          "WIRE": {
-            "description": "Whether the Payor is allowed to pay via wire",
-            "example": true,
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "ACH",
-          "SAME_DAY_ACH",
-          "WIRE"
-        ],
-        "type": "object"
-      },
-      "PayorAddressV2": {
-        "example": {
-          "country": "US",
-          "countyOrProvince": "FL",
-          "line4": "line4",
-          "city": "Key West",
-          "line3": "line3",
-          "line2": "line2",
-          "line1": "500 Duval St",
-          "zipOrPostcode": "33945"
-        },
-        "properties": {
-          "line1": {
-            "example": "500 Duval St",
-            "maxLength": 255,
-            "minLength": 2,
-            "nullable": false,
-            "type": "string"
-          },
-          "line2": {
-            "maxLength": 255,
-            "minLength": 0,
-            "nullable": true,
-            "type": "string"
-          },
-          "line3": {
-            "maxLength": 255,
-            "minLength": 0,
-            "nullable": true,
-            "type": "string"
-          },
-          "line4": {
-            "maxLength": 255,
-            "minLength": 0,
-            "nullable": true,
-            "type": "string"
-          },
-          "city": {
-            "example": "Key West",
-            "maxLength": 100,
-            "minLength": 2,
-            "nullable": false,
-            "type": "string"
-          },
-          "countyOrProvince": {
-            "example": "FL",
-            "maxLength": 100,
-            "minLength": 2,
-            "nullable": true,
-            "type": "string"
-          },
-          "zipOrPostcode": {
-            "example": "33945",
-            "maxLength": 30,
-            "minLength": 2,
-            "nullable": true,
-            "type": "string"
-          },
-          "country": {
-            "example": "US",
-            "maxLength": 50,
-            "minLength": 2,
-            "nullable": false,
-            "type": "string"
-          }
-        },
-        "required": [
-          "city",
-          "country",
-          "line1"
-        ],
-        "type": "object"
-      },
       "PaymentRails": {
         "description": "The id of the payment rails",
         "type": "string"
       },
-      "TransmissionTypes_2": {
+      "TransmissionTypes": {
         "example": {
           "ACH": true,
           "SAME_DAY_ACH": true,
