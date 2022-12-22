@@ -291,3 +291,248 @@ Changed response : **200 OK**
         * Changed property `paymentCurrency` (string)
             > ISO-4217 3 character currency code
 
+##### `POST` /v3/payouts
+
+
+###### Request:
+
+Changed content type : `application/json`
+
+* Changed property `payments` (array)
+
+    Changed items (object):
+        > Instruction for creating a payment
+
+    * Changed property `remoteId` (string)
+        > Your identifier for the payee
+
+Changed content type : `multipart/form-data`
+
+* Changed property `file` (array)
+    > Create a new payout from a CSV source file and return a location header with a link to get the payout
+
+    Changed items (object):
+        > Instruction for creating a payment
+
+    * Changed property `remoteId` (string)
+        > Your identifier for the payee
+
+###### Return Type:
+
+Changed response : **202 Accepted**
+> Successful submission of the payout
+##### `GET` /v3/payouts/{payoutId}
+
+
+###### Return Type:
+
+Changed response : **200 OK**
+> Details of Payout
+
+* Changed content type : `application/json`
+
+    * Changed property `payoutId` (string)
+        > The id of the payout
+
+    * Changed property `status` (string)
+        > The status of the payout (one of SUBMITTED, ACCEPTED, REJECTED, QUOTED, INSTRUCTED, COMPLETED, INCOMPLETE, WITHDRAWN)
+
+    * Changed property `paymentsSubmitted` (integer)
+        > The number of payments that were submitted in the payout
+
+    * Changed property `paymentsAccepted` (integer)
+        > The number of payments that were accepted in the payout
+
+    * Changed property `paymentsRejected` (integer)
+        > The number of payments that were rejected in the payout
+
+    * Changed property `paymentsWithdrawn` (integer)
+        > The number of payments that were withdrawn in the payout
+
+    * Changed property `fxSummaries` (array)
+
+        Changed items (object):
+
+        * Changed property `rate` (number)
+            > The conversion rate (from the source currency to the payment currency)
+
+        * Changed property `invertedRate` (number)
+            > The inverse conversion rate (from paymnent currency to source currency)
+
+        * Changed property `creationTime` (string)
+            > Timestamp of when the quote was created
+
+        * Changed property `expiryTime` (string)
+            > The timestamp for when the quote will expire
+
+        * Changed property `quoteId` (string)
+            > The id of the created quote
+
+        * Changed property `totalSourceAmount` (integer)
+            > The amount (in minor units) that will be paid from the source account
+
+        * Changed property `totalPaymentAmount` (integer)
+            > The amount (in minor units) that the payee will receive
+
+    * Changed property `accounts` (array)
+
+        Changed items (object):
+
+        * Changed property `sourceAccountName` (string)
+            > The name of the source account as referencec in the payout
+
+        * Changed property `sourceAccountId` (string)
+            > The id of the payout
+
+        * Changed property `totalPayoutCost` (integer)
+            > The total amount (in mnor units) that will be debited from the source account for the payout
+
+    * Changed property `acceptedPayments` (array)
+
+        Changed items (object):
+
+        * Changed property `remoteId` (string)
+            > Your identifier for the payee
+
+        * Changed property `amount` (integer)
+            > The amount of the payment in minor units
+
+        * Changed property `sourceAccountName` (string)
+            > The identifier of the source account to debit the payment from
+
+        * Changed property `payorPaymentId` (string)
+            > A reference identifier for the payor for the given payee payment
+
+        * Changed property `paymentMemo` (string)
+            > <p>Any value here will override the memo value in the parent payout</p>
+            > <p>This should be the reference field on the statement seen by the payee (but not via ACH)</p>
+
+        * Changed property `remoteSystemId` (string)
+            > <p>The identifier for the remote payments system if not Velo</p>
+
+        * Changed property `paymentMetadata` (string)
+            > <p>Metadata about the payment that may be relevant to the specific rails or remote system making the payout</p>
+            > <p>The structure of the data will be dictated by the requirements of the payment rails</p>
+
+        * Changed property `railsId` (string)
+            > Indicates the 3rd party system involved in making this payment
+
+    * Changed property `rejectedPayments` (array)
+
+        Changed items (object):
+
+        * Changed property `remoteId` (string)
+            > The remoteId supplied by the payor that identifies the payee
+
+        * Changed property `amount` (integer)
+            > The amount of the payment in minor units
+
+        * Changed property `sourceAccountName` (string)
+            > The identifier of the source account to debit the payment from
+
+        * Changed property `payorPaymentId` (string)
+            > A reference identifier for the payor for the given payee payment
+
+        * Changed property `remoteSystemId` (string)
+            > <p>The identifier for the remote payments system if not Velo</p>
+
+        * Changed property `paymentMetadata` (string)
+            > <p>Metadata about the payment that may be relevant to the specific rails or remote system making the payout</p>
+            > <p>The structure of the data will be dictated by the requirements of the payment rails</p>
+
+        * Changed property `reason` (string)
+            > The reason for the payment being rejected
+
+        * Changed property `reasonCode` (string)
+            > The reason code as determined by Velo
+
+        * Changed property `lineNumber` (integer)
+            > If the payment was submitted in a csv payout then this will be the line number of the payment in the file
+
+        * Changed property `message` (string)
+            > A more general rejection message than the reason property
+
+##### `POST` /v3/payouts/{payoutId}/quote
+
+
+###### Return Type:
+
+Changed response : **200 OK**
+> Quote for payout
+
+* Changed content type : `application/json`
+
+    * Changed property `fxSummaries` (array)
+
+        Changed items (object):
+
+        * Changed property `rate` (number)
+            > The conversion rate (from the source currency to the payment currency)
+
+        * Changed property `invertedRate` (number)
+            > The inverse conversion rate (from paymnent currency to source currency)
+
+        * Changed property `creationTime` (string)
+            > Timestamp of when the quote was created
+
+        * Changed property `expiryTime` (string)
+            > The timestamp for when the quote will expire
+
+        * Changed property `quoteId` (string)
+            > The id of the created quote
+
+        * Changed property `totalSourceAmount` (integer)
+            > The amount (in minor units) that will be paid from the source account
+
+        * Changed property `totalPaymentAmount` (integer)
+            > The amount (in minor units) that the payee will receive
+
+##### `GET` /v3/payouts/{payoutId}/payments
+
+
+###### Return Type:
+
+Changed response : **200 OK**
+> Payments for payout
+
+* Changed content type : `application/json`
+
+    * Changed property `content` (array)
+
+        Changed items (object):
+
+        * Changed property `paymentId` (string -> string)
+            > The id of the payment
+
+        * Changed property `remoteId` (string)
+            > The remoteId supplied by the payor that identifies the payee
+
+        * Changed property `currency` (string)
+            > The currency that the payment was made in
+
+        * Changed property `amount` (integer)
+            > The amount of the payment in minor units
+
+        * Changed property `sourceAccountName` (string)
+            > The identifier of the source account to debit the payment from
+
+        * Changed property `payorPaymentId` (string)
+            > A reference identifier for the payor for the given payee payment
+
+        * Changed property `paymentMemo` (string)
+            > <p>Any value here will override the memo value in the parent payout</p>
+            > <p>This should be the reference field on the statement seen by the payee (but not via ACH)</p>
+
+        * Changed property `withdrawable` (boolean)
+            > Can this paynent be withdrawn
+
+        * Changed property `status` (string)
+            > Current status of payment. One of the following values: SUBMITTED, ACCEPTED, REJECTED, WITHDRAWN, RETURNED, AWAITING_FUNDS, FUNDED, UNFUNDED, CANCELLED, BANK_PAYMENT_REQUESTED
+
+        * Changed property `remoteSystemId` (string)
+            > <p>The identifier for the remote payments system if not Velo</p>
+
+        * Changed property `paymentMetadata` (string)
+            > <p>Metadata about the payment that may be relevant to the specific rails or remote system making the payout</p>
+            > <p>The structure of the data will be dictated by the requirements of the payment rails</p>
+
