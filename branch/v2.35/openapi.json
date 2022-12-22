@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.35.52",
+    "version": "2.35.54",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -45,7 +45,7 @@
       "name": "Payor Hierarchy"
     },
     {
-      "description": "Payout Service APIs allow you to create and instruct payouts to payees.",
+      "description": "<p>Payout APIs allow you to create and instruct payouts to payees</p>\n<p>There are three phases to a payout:</p>\n<ul>\n    <li>Submit - the payments are created within the platform</li>\n    <li>Quote - optional step if FX is involved</li>\n    <li>Instruct - the payments are sent to the payment rails for processing</li>\n</ul>\n<p>Between 1 and 2000 payments can be created within the platform as part of a Payout</p>\n",
       "name": "Payouts"
     },
     {
@@ -9830,7 +9830,7 @@
     },
     "/v3/payouts": {
       "post": {
-        "description": "<p>Create a new payout and return a location header with a link to get the payout.</p>\n<p>Basic validation of the payout is performed before returning but more comprehensive validation is done asynchronously.</p>\n<p>The results can be obtained by issuing a HTTP GET to the URL returned in the location header.</p>\n<p>**NOTE:** amount values in payments must be in 'minor units' format. E.g. cents for USD, pence for GBP etc.</p>\n with no decimal places.\n",
+        "description": "<p>Create a new payout and return a location header with a link to the payout</p>\n<p>Basic validation of the payout is performed before returning but more comprehensive validation is done asynchronously</p>\n<p>The results can be obtained by issuing a HTTP GET to the URL returned in the location header</p>\n<p>**NOTE:** amount values in payments must be in 'minor units' format. E.g. cents for USD, pence for GBP etc with no decimal places</p>\n",
         "operationId": "submitPayoutV3",
         "requestBody": {
           "content": {
@@ -9876,10 +9876,11 @@
         },
         "responses": {
           "202": {
-            "description": "Detailed response of payout instructions",
+            "description": "Successful submission of the payout",
             "headers": {
               "Location": {
                 "description": "Reference to created payout",
+                "example": "<p>HTTP/1.1 202 Accepted</p>\n<p>Location: https://api.sandbox.velopayments.com/v3/payouts/04a3299d-afcf-42fb-a8b2-76097daf2b1b</p>\n",
                 "schema": {
                   "format": "uri",
                   "type": "string"
@@ -9920,7 +9921,7 @@
         },
         "summary": "Submit Payout",
         "tags": [
-          "Payout Service"
+          "Payouts"
         ],
         "x-code-samples": [
           {
@@ -9993,7 +9994,7 @@
         },
         "summary": "Withdraw Payout",
         "tags": [
-          "Payout Service"
+          "Payouts"
         ],
         "x-code-samples": [
           {
@@ -10061,7 +10062,7 @@
         },
         "summary": "Get Payout Summary",
         "tags": [
-          "Payout Service"
+          "Payouts"
         ],
         "x-code-samples": [
           {
@@ -10153,7 +10154,7 @@
         },
         "summary": "Instruct Payout",
         "tags": [
-          "Payout Service"
+          "Payouts"
         ],
         "x-code-samples": [
           {
@@ -10213,7 +10214,7 @@
         },
         "summary": "Create a quote for the payout",
         "tags": [
-          "Payout Service"
+          "Payouts"
         ],
         "x-code-samples": [
           {
@@ -10352,7 +10353,7 @@
         },
         "summary": "Retrieve payments for a payout",
         "tags": [
-          "Payout Service"
+          "Payouts"
         ],
         "x-code-samples": [
           {
@@ -10425,7 +10426,7 @@
         },
         "summary": "Deschedule a payout",
         "tags": [
-          "Payout Service"
+          "Payouts"
         ],
         "x-code-samples": [
           {
@@ -10516,7 +10517,7 @@
         },
         "summary": "Schedule a payout",
         "tags": [
-          "Payout Service"
+          "Payouts"
         ],
         "x-code-samples": [
           {
@@ -10639,7 +10640,7 @@
         },
         "summary": "Withdraw a Payment",
         "tags": [
-          "Payout Service"
+          "Payouts"
         ],
         "x-code-samples": [
           {
@@ -18649,7 +18650,7 @@
         },
         "properties": {
           "remoteId": {
-            "description": "Your identifier for payee",
+            "description": "Your identifier for the payee",
             "example": "remoteId1234",
             "maxLength": 100,
             "minLength": 1,
@@ -18732,28 +18733,28 @@
             {
               "currencyType": "USD",
               "reason": "The payee has not been onboarded",
-              "amount": 1234,
+              "amount": 10000,
               "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
-              "payorPaymentId": "paymenIdVal123123",
-              "reasonCode": "PAYMENT_VALUE_TOO_HIGH",
-              "remoteSystemId": "Remote_System_Id_101234",
-              "lineNumber": 10,
+              "payorPaymentId": "123211321ABSD",
+              "reasonCode": "VE1012",
+              "remoteSystemId": "OB012",
+              "lineNumber": 34,
               "message": "Payment cannot be processed because of the Payee's OFAC or Compliance Status",
               "remoteId": "remoteIdVal123",
-              "sourceAccountName": "Chase"
+              "sourceAccountName": "Chase Bank Account"
             },
             {
               "currencyType": "USD",
               "reason": "The payee has not been onboarded",
-              "amount": 1234,
+              "amount": 10000,
               "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
-              "payorPaymentId": "paymenIdVal123123",
-              "reasonCode": "PAYMENT_VALUE_TOO_HIGH",
-              "remoteSystemId": "Remote_System_Id_101234",
-              "lineNumber": 10,
+              "payorPaymentId": "123211321ABSD",
+              "reasonCode": "VE1012",
+              "remoteSystemId": "OB012",
+              "lineNumber": 34,
               "message": "Payment cannot be processed because of the Payee's OFAC or Compliance Status",
               "remoteId": "remoteIdVal123",
-              "sourceAccountName": "Chase"
+              "sourceAccountName": "Chase Bank Account"
             }
           ],
           "schedule": {
@@ -18763,101 +18764,108 @@
             "scheduledByPrincipalId": "8946953b-1e3b-49cf-9da4-b704cbb78f3e",
             "scheduledAt": "2000-01-23T04:56:07.000Z"
           },
-          "paymentsRejected": 0,
+          "paymentsRejected": 1,
           "paymentsSubmitted": 10,
           "paymentsWithdrawn": 0,
           "fxSummaries": [
             {
               "invertedRate": 1.12,
-              "creationTime": "2000-01-23T04:56:07.000Z",
-              "rate": 1.12,
-              "expiryTime": "2000-01-23T04:56:07.000Z",
+              "creationTime": "2022-10-30T09:45:09.000Z",
+              "rate": 0.89,
+              "expiryTime": "2022-10-30T09:50:09.000Z",
               "sourceCurrency": "USD",
-              "totalPaymentAmount": 1234,
+              "totalPaymentAmount": 890000,
               "paymentCurrency": "USD",
-              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalSourceAmount": 1234,
+              "quoteId": "af80d455-29dd-4e72-a000-495a9829a7d0",
+              "totalSourceAmount": 1000000,
               "fundingStatus": "FUNDED",
               "status": "QUOTED"
             },
             {
               "invertedRate": 1.12,
-              "creationTime": "2000-01-23T04:56:07.000Z",
-              "rate": 1.12,
-              "expiryTime": "2000-01-23T04:56:07.000Z",
+              "creationTime": "2022-10-30T09:45:09.000Z",
+              "rate": 0.89,
+              "expiryTime": "2022-10-30T09:50:09.000Z",
               "sourceCurrency": "USD",
-              "totalPaymentAmount": 1234,
+              "totalPaymentAmount": 890000,
               "paymentCurrency": "USD",
-              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalSourceAmount": 1234,
+              "quoteId": "af80d455-29dd-4e72-a000-495a9829a7d0",
+              "totalSourceAmount": 1000000,
               "fundingStatus": "FUNDED",
               "status": "QUOTED"
             }
           ],
           "accounts": [
             {
-              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "sourceAccountId": "cf81e490-4ab8-49c2-bd68-9d1e725480cb",
               "currency": "USD",
-              "totalPayoutCost": 1231200,
+              "totalPayoutCost": 1000000,
               "sourceAccountName": "AccountName"
             },
             {
-              "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "sourceAccountId": "cf81e490-4ab8-49c2-bd68-9d1e725480cb",
               "currency": "USD",
-              "totalPayoutCost": 1231200,
+              "totalPayoutCost": 1000000,
               "sourceAccountName": "AccountName"
             }
           ],
-          "payoutId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "payoutId": "cf81e490-4ab8-49c2-bd68-9d1e725480cb",
           "acceptedPayments": [
             {
               "currencyType": "USD",
-              "amount": 1234,
+              "amount": 10000,
               "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
-              "payorPaymentId": "paymenIdVal123123",
-              "railsId": "WU",
-              "paymentMemo": "Payment memo",
-              "remoteSystemId": "Remote_System_Id_101234",
-              "remoteId": "remoteIdVal123",
-              "sourceAccountName": "Chase"
+              "payorPaymentId": "123211321ABSD",
+              "railsId": "SVB",
+              "paymentMemo": "INV00112",
+              "remoteSystemId": "OB012",
+              "remoteId": "remoteId1234",
+              "sourceAccountName": "Chase Bank Account"
             },
             {
               "currencyType": "USD",
-              "amount": 1234,
+              "amount": 10000,
               "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
-              "payorPaymentId": "paymenIdVal123123",
-              "railsId": "WU",
-              "paymentMemo": "Payment memo",
-              "remoteSystemId": "Remote_System_Id_101234",
-              "remoteId": "remoteIdVal123",
-              "sourceAccountName": "Chase"
+              "payorPaymentId": "123211321ABSD",
+              "railsId": "SVB",
+              "paymentMemo": "INV00112",
+              "remoteSystemId": "OB012",
+              "remoteId": "remoteId1234",
+              "sourceAccountName": "Chase Bank Account"
             }
           ],
           "status": "COMPLETED",
-          "paymentsAccepted": 10
+          "paymentsAccepted": 9
         },
         "properties": {
           "payoutId": {
+            "description": "The id of the payout",
+            "example": "cf81e490-4ab8-49c2-bd68-9d1e725480cb",
             "format": "uuid",
             "type": "string"
           },
           "status": {
+            "description": "The status of the payout (one of SUBMITTED, ACCEPTED, REJECTED, QUOTED, INSTRUCTED, COMPLETED, INCOMPLETE, WITHDRAWN)",
             "example": "COMPLETED",
             "type": "string"
           },
           "paymentsSubmitted": {
+            "description": "The number of payments that were submitted in the payout",
             "example": 10,
             "type": "integer"
           },
           "paymentsAccepted": {
-            "example": 10,
+            "description": "The number of payments that were accepted in the payout",
+            "example": 9,
             "type": "integer"
           },
           "paymentsRejected": {
-            "example": 0,
+            "description": "The number of payments that were rejected in the payout",
+            "example": 1,
             "type": "integer"
           },
           "paymentsWithdrawn": {
+            "description": "The number of payments that were withdrawn in the payout",
             "example": 0,
             "type": "integer"
           },
@@ -18916,27 +18924,27 @@
           "fxSummaries": [
             {
               "invertedRate": 1.12,
-              "creationTime": "2000-01-23T04:56:07.000Z",
-              "rate": 1.12,
-              "expiryTime": "2000-01-23T04:56:07.000Z",
+              "creationTime": "2022-10-30T09:45:09.000Z",
+              "rate": 0.89,
+              "expiryTime": "2022-10-30T09:50:09.000Z",
               "sourceCurrency": "USD",
-              "totalPaymentAmount": 1234,
+              "totalPaymentAmount": 890000,
               "paymentCurrency": "USD",
-              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalSourceAmount": 1234,
+              "quoteId": "af80d455-29dd-4e72-a000-495a9829a7d0",
+              "totalSourceAmount": 1000000,
               "fundingStatus": "FUNDED",
               "status": "QUOTED"
             },
             {
               "invertedRate": 1.12,
-              "creationTime": "2000-01-23T04:56:07.000Z",
-              "rate": 1.12,
-              "expiryTime": "2000-01-23T04:56:07.000Z",
+              "creationTime": "2022-10-30T09:45:09.000Z",
+              "rate": 0.89,
+              "expiryTime": "2022-10-30T09:50:09.000Z",
               "sourceCurrency": "USD",
-              "totalPaymentAmount": 1234,
+              "totalPaymentAmount": 890000,
               "paymentCurrency": "USD",
-              "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-              "totalSourceAmount": 1234,
+              "quoteId": "af80d455-29dd-4e72-a000-495a9829a7d0",
+              "totalSourceAmount": 1000000,
               "fundingStatus": "FUNDED",
               "status": "QUOTED"
             }
@@ -18974,8 +18982,8 @@
           },
           "content": [
             {
-              "amount": 1234,
-              "paymentMemo": "Payment memo",
+              "amount": 10000,
+              "paymentMemo": "INV00112",
               "remoteId": "remoteIdVal123",
               "payee": {
                 "individual": {
@@ -18989,21 +18997,21 @@
                 },
                 "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
               },
-              "paymentId": "paymentId",
+              "paymentId": "859af785-223b-4d5b-a708-5fa57f006dbb",
               "withdrawable": false,
               "autoWithdrawnReasonCode": "VE0003",
               "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "currency": "USD",
-              "payorPaymentId": "paymenIdVal123123",
-              "transmissionType": "transmissionType",
-              "railsId": "WU",
-              "remoteSystemId": "Remote_System_Id_101234",
-              "sourceAccountName": "Chase",
-              "status": "status"
+              "payorPaymentId": "123211321ABSD",
+              "transmissionType": "LOCAL",
+              "railsId": "SVB",
+              "remoteSystemId": "OB012",
+              "sourceAccountName": "Chase Bank Account",
+              "status": "AWAITING_FUNDS"
             },
             {
-              "amount": 1234,
-              "paymentMemo": "Payment memo",
+              "amount": 10000,
+              "paymentMemo": "INV00112",
               "remoteId": "remoteIdVal123",
               "payee": {
                 "individual": {
@@ -19017,17 +19025,17 @@
                 },
                 "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
               },
-              "paymentId": "paymentId",
+              "paymentId": "859af785-223b-4d5b-a708-5fa57f006dbb",
               "withdrawable": false,
               "autoWithdrawnReasonCode": "VE0003",
               "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
               "currency": "USD",
-              "payorPaymentId": "paymenIdVal123123",
-              "transmissionType": "transmissionType",
-              "railsId": "WU",
-              "remoteSystemId": "Remote_System_Id_101234",
-              "sourceAccountName": "Chase",
-              "status": "status"
+              "payorPaymentId": "123211321ABSD",
+              "transmissionType": "LOCAL",
+              "railsId": "SVB",
+              "remoteSystemId": "OB012",
+              "sourceAccountName": "Chase Bank Account",
+              "status": "AWAITING_FUNDS"
             }
           ]
         },
@@ -22154,46 +22162,56 @@
       "QuoteFxSummaryV3": {
         "example": {
           "invertedRate": 1.12,
-          "creationTime": "2000-01-23T04:56:07.000Z",
-          "rate": 1.12,
-          "expiryTime": "2000-01-23T04:56:07.000Z",
+          "creationTime": "2022-10-30T09:45:09.000Z",
+          "rate": 0.89,
+          "expiryTime": "2022-10-30T09:50:09.000Z",
           "sourceCurrency": "USD",
-          "totalPaymentAmount": 1234,
+          "totalPaymentAmount": 890000,
           "paymentCurrency": "USD",
-          "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "totalSourceAmount": 1234,
+          "quoteId": "af80d455-29dd-4e72-a000-495a9829a7d0",
+          "totalSourceAmount": 1000000,
           "fundingStatus": "FUNDED",
           "status": "QUOTED"
         },
         "properties": {
           "rate": {
-            "example": 1.12,
+            "description": "The conversion rate (from the source currency to the payment currency)",
+            "example": 0.89,
             "format": "float",
             "type": "number"
           },
           "invertedRate": {
+            "description": "The inverse conversion rate (from paymnent currency to source currency)",
             "example": 1.12,
             "format": "float",
             "type": "number"
           },
           "creationTime": {
+            "description": "Timestamp of when the quote was created",
+            "example": "2022-10-30T09:45:09.000Z",
             "format": "date-time",
             "type": "string"
           },
           "expiryTime": {
+            "description": "The timestamp for when the quote will expire",
+            "example": "2022-10-30T09:50:09.000Z",
             "format": "date-time",
             "type": "string"
           },
           "quoteId": {
+            "description": "The id of the created quote",
+            "example": "af80d455-29dd-4e72-a000-495a9829a7d0",
             "format": "uuid",
             "type": "string"
           },
           "totalSourceAmount": {
-            "example": 1234,
+            "description": "The amount (in minor units) that will be paid from the source account",
+            "example": 1000000,
             "type": "integer"
           },
           "totalPaymentAmount": {
-            "example": 1234,
+            "description": "The amount (in minor units) that the payee will receive",
+            "example": 890000,
             "type": "integer"
           },
           "sourceCurrency": {
@@ -22240,17 +22258,20 @@
       },
       "SourceAccountV3": {
         "example": {
-          "sourceAccountId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "sourceAccountId": "cf81e490-4ab8-49c2-bd68-9d1e725480cb",
           "currency": "USD",
-          "totalPayoutCost": 1231200,
+          "totalPayoutCost": 1000000,
           "sourceAccountName": "AccountName"
         },
         "properties": {
           "sourceAccountName": {
+            "description": "The name of the source account as referencec in the payout",
             "example": "AccountName",
             "type": "string"
           },
           "sourceAccountId": {
+            "description": "The id of the payout",
+            "example": "cf81e490-4ab8-49c2-bd68-9d1e725480cb",
             "format": "uuid",
             "type": "string"
           },
@@ -22264,7 +22285,8 @@
             "type": "string"
           },
           "totalPayoutCost": {
-            "example": 1231200,
+            "description": "The total amount (in mnor units) that will be debited from the source account for the payout",
+            "example": 1000000,
             "type": "integer"
           }
         },
@@ -22279,18 +22301,21 @@
       "AcceptedPaymentV3": {
         "example": {
           "currencyType": "USD",
-          "amount": 1234,
+          "amount": 10000,
           "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
-          "payorPaymentId": "paymenIdVal123123",
-          "railsId": "WU",
-          "paymentMemo": "Payment memo",
-          "remoteSystemId": "Remote_System_Id_101234",
-          "remoteId": "remoteIdVal123",
-          "sourceAccountName": "Chase"
+          "payorPaymentId": "123211321ABSD",
+          "railsId": "SVB",
+          "paymentMemo": "INV00112",
+          "remoteSystemId": "OB012",
+          "remoteId": "remoteId1234",
+          "sourceAccountName": "Chase Bank Account"
         },
         "properties": {
           "remoteId": {
-            "example": "remoteIdVal123",
+            "description": "Your identifier for the payee",
+            "example": "remoteId1234",
+            "maxLength": 100,
+            "minLength": 1,
             "type": "string"
           },
           "currencyType": {
@@ -22303,31 +22328,46 @@
             "type": "string"
           },
           "amount": {
-            "example": 1234,
+            "description": "The amount of the payment in minor units",
+            "example": 10000,
             "type": "integer"
           },
           "sourceAccountName": {
-            "example": "Chase",
+            "description": "The identifier of the source account to debit the payment from",
+            "example": "Chase Bank Account",
             "type": "string"
           },
           "payorPaymentId": {
-            "example": "paymenIdVal123123",
+            "description": "A reference identifier for the payor for the given payee payment",
+            "example": "123211321ABSD",
+            "maxLength": 40,
+            "minLength": 0,
             "type": "string"
           },
           "paymentMemo": {
-            "example": "Payment memo",
+            "description": "<p>Any value here will override the memo value in the parent payout</p>\n<p>This should be the reference field on the statement seen by the payee (but not via ACH)</p>\n",
+            "example": "INV00112",
+            "maxLength": 40,
+            "minLength": 0,
             "type": "string"
           },
           "remoteSystemId": {
-            "example": "Remote_System_Id_101234",
+            "description": "<p>The identifier for the remote payments system if not Velo</p>\n",
+            "example": "OB012",
+            "maxLength": 100,
+            "minLength": 1,
             "type": "string"
           },
           "paymentMetadata": {
+            "description": "<p>Metadata about the payment that may be relevant to the specific rails or remote system making the payout</p>\n<p>The structure of the data will be dictated by the requirements of the payment rails</p>\n",
             "example": "invoiceeId_123|abc001:12345|xyz002:4567",
+            "maxLength": 512,
+            "minLength": 0,
             "type": "string"
           },
           "railsId": {
-            "example": "WU",
+            "description": "Indicates the 3rd party system involved in making this payment",
+            "example": "SVB",
             "type": "string"
           }
         },
@@ -22345,18 +22385,19 @@
         "example": {
           "currencyType": "USD",
           "reason": "The payee has not been onboarded",
-          "amount": 1234,
+          "amount": 10000,
           "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
-          "payorPaymentId": "paymenIdVal123123",
-          "reasonCode": "PAYMENT_VALUE_TOO_HIGH",
-          "remoteSystemId": "Remote_System_Id_101234",
-          "lineNumber": 10,
+          "payorPaymentId": "123211321ABSD",
+          "reasonCode": "VE1012",
+          "remoteSystemId": "OB012",
+          "lineNumber": 34,
           "message": "Payment cannot be processed because of the Payee's OFAC or Compliance Status",
           "remoteId": "remoteIdVal123",
-          "sourceAccountName": "Chase"
+          "sourceAccountName": "Chase Bank Account"
         },
         "properties": {
           "remoteId": {
+            "description": "The remoteId supplied by the payor that identifies the payee",
             "example": "remoteIdVal123",
             "type": "string"
           },
@@ -22370,38 +22411,53 @@
             "type": "string"
           },
           "amount": {
-            "example": 1234,
+            "description": "The amount of the payment in minor units",
+            "example": 10000,
             "type": "integer"
           },
           "sourceAccountName": {
-            "example": "Chase",
+            "description": "The identifier of the source account to debit the payment from",
+            "example": "Chase Bank Account",
             "type": "string"
           },
           "payorPaymentId": {
-            "example": "paymenIdVal123123",
+            "description": "A reference identifier for the payor for the given payee payment",
+            "example": "123211321ABSD",
+            "maxLength": 40,
+            "minLength": 0,
             "type": "string"
           },
           "remoteSystemId": {
-            "example": "Remote_System_Id_101234",
+            "description": "<p>The identifier for the remote payments system if not Velo</p>\n",
+            "example": "OB012",
+            "maxLength": 100,
+            "minLength": 1,
             "type": "string"
           },
           "paymentMetadata": {
+            "description": "<p>Metadata about the payment that may be relevant to the specific rails or remote system making the payout</p>\n<p>The structure of the data will be dictated by the requirements of the payment rails</p>\n",
             "example": "invoiceeId_123|abc001:12345|xyz002:4567",
+            "maxLength": 512,
+            "minLength": 0,
             "type": "string"
           },
           "reason": {
+            "description": "The reason for the payment being rejected",
             "example": "The payee has not been onboarded",
             "type": "string"
           },
           "reasonCode": {
-            "example": "PAYMENT_VALUE_TOO_HIGH",
+            "description": "The reason code as determined by Velo",
+            "example": "VE1012",
             "type": "string"
           },
           "lineNumber": {
-            "example": 10,
+            "description": "If the payment was submitted in a csv payout then this will be the line number of the payment in the file",
+            "example": 34,
             "type": "integer"
           },
           "message": {
+            "description": "A more general rejection message than the reason property",
             "example": "Payment cannot be processed because of the Payee's OFAC or Compliance Status",
             "type": "string"
           }
@@ -22459,8 +22515,8 @@
       },
       "PaymentV3": {
         "example": {
-          "amount": 1234,
-          "paymentMemo": "Payment memo",
+          "amount": 10000,
+          "paymentMemo": "INV00112",
           "remoteId": "remoteIdVal123",
           "payee": {
             "individual": {
@@ -22474,69 +22530,91 @@
             },
             "payeeId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
           },
-          "paymentId": "paymentId",
+          "paymentId": "859af785-223b-4d5b-a708-5fa57f006dbb",
           "withdrawable": false,
           "autoWithdrawnReasonCode": "VE0003",
           "paymentMetadata": "invoiceeId_123|abc001:12345|xyz002:4567",
           "currency": "USD",
-          "payorPaymentId": "paymenIdVal123123",
-          "transmissionType": "transmissionType",
-          "railsId": "WU",
-          "remoteSystemId": "Remote_System_Id_101234",
-          "sourceAccountName": "Chase",
-          "status": "status"
+          "payorPaymentId": "123211321ABSD",
+          "transmissionType": "LOCAL",
+          "railsId": "SVB",
+          "remoteSystemId": "OB012",
+          "sourceAccountName": "Chase Bank Account",
+          "status": "AWAITING_FUNDS"
         },
         "properties": {
           "paymentId": {
+            "description": "The id of the payment",
+            "example": "859af785-223b-4d5b-a708-5fa57f006dbb",
+            "format": "uuid",
             "type": "string"
           },
           "remoteId": {
+            "description": "The remoteId supplied by the payor that identifies the payee",
             "example": "remoteIdVal123",
             "type": "string"
           },
           "currency": {
+            "description": "The currency that the payment was made in",
             "example": "USD",
             "maxLength": 3,
             "minLength": 3,
             "type": "string"
           },
           "amount": {
-            "example": 1234,
+            "description": "The amount of the payment in minor units",
+            "example": 10000,
             "type": "integer"
           },
           "sourceAccountName": {
-            "example": "Chase",
+            "description": "The identifier of the source account to debit the payment from",
+            "example": "Chase Bank Account",
             "type": "string"
           },
           "payorPaymentId": {
-            "example": "paymenIdVal123123",
+            "description": "A reference identifier for the payor for the given payee payment",
+            "example": "123211321ABSD",
+            "maxLength": 40,
+            "minLength": 0,
             "type": "string"
           },
           "paymentMemo": {
-            "example": "Payment memo",
+            "description": "<p>Any value here will override the memo value in the parent payout</p>\n<p>This should be the reference field on the statement seen by the payee (but not via ACH)</p>\n",
+            "example": "INV00112",
+            "maxLength": 40,
+            "minLength": 0,
             "type": "string"
           },
           "payee": {
             "$ref": "#/components/schemas/PayoutPayeeV3"
           },
           "withdrawable": {
+            "description": "Can this paynent be withdrawn",
             "example": false,
             "type": "boolean"
           },
           "status": {
             "description": "Current status of payment. One of the following values: SUBMITTED, ACCEPTED, REJECTED, WITHDRAWN, RETURNED, AWAITING_FUNDS, FUNDED, UNFUNDED, CANCELLED, BANK_PAYMENT_REQUESTED",
+            "example": "AWAITING_FUNDS",
             "type": "string"
           },
           "transmissionType": {
             "description": "The transmission method of the payment. One of the following values: ACH, SAME_DAY_ACH, WIRE, LOCAL, SWIFT",
+            "example": "LOCAL",
             "type": "string"
           },
           "remoteSystemId": {
-            "example": "Remote_System_Id_101234",
+            "description": "<p>The identifier for the remote payments system if not Velo</p>\n",
+            "example": "OB012",
+            "maxLength": 100,
+            "minLength": 1,
             "type": "string"
           },
           "paymentMetadata": {
+            "description": "<p>Metadata about the payment that may be relevant to the specific rails or remote system making the payout</p>\n<p>The structure of the data will be dictated by the requirements of the payment rails</p>\n",
             "example": "invoiceeId_123|abc001:12345|xyz002:4567",
+            "maxLength": 512,
+            "minLength": 0,
             "type": "string"
           },
           "autoWithdrawnReasonCode": {
@@ -22546,7 +22624,7 @@
           },
           "railsId": {
             "description": "Indicates the 3rd party system involved in making this payment",
-            "example": "WU",
+            "example": "SVB",
             "type": "string"
           }
         },
@@ -25088,9 +25166,9 @@
       ]
     },
     {
-      "name": "Payouts",
+      "name": "Payout APIs",
       "tags": [
-        "Payout Service"
+        "Payouts"
       ]
     },
     {
