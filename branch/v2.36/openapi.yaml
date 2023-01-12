@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.36.55
+  version: 2.36.56
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -11561,9 +11561,9 @@ components:
       example:
         links:
           - rel: first
-            href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+            href: 'https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
           - rel: first
-            href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
+            href: 'https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
         page:
           numberOfElements: 1
           totalPages: 2
@@ -11596,7 +11596,7 @@ components:
           $ref: '#/components/schemas/ListFundingAccountsResponseV2_page'
         links:
           items:
-            $ref: '#/components/schemas/ListFundingAccountsResponseV2_links'
+            $ref: '#/components/schemas/ListSourceAccountResponseV2_links'
           type: array
         content:
           items:
@@ -18427,17 +18427,6 @@ components:
         pageSize:
           example: 25
           type: integer
-    ListFundingAccountsResponseV2_links:
-      example:
-        rel: first
-        href: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
-      properties:
-        rel:
-          example: first
-          type: string
-        href:
-          example: 'https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc'
-          type: string
     GetFundingsResponse_links:
       example:
         rel: first
