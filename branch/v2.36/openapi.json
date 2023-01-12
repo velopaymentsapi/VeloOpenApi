@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.36.56",
+    "version": "2.36.57",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -7418,6 +7418,150 @@
         "summary": "Get Funding",
         "tags": [
           "Funding"
+        ]
+      }
+    },
+    "/v1/transactions": {
+      "post": {
+        "description": "Create a new Transaction that can be funded",
+        "operationId": "createTransactionV1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTransactionResponse"
+                }
+              }
+            },
+            "description": "Transaction Created",
+            "headers": {
+              "Location": {
+                "description": "Reference to created Transaction which can be queried for Balance etc",
+                "schema": {
+                  "example": "https://api.sandbox.velopayments.com/transactions/id/4d88e559-d057-45b1-8d8b-b9ccc06f4503",
+                  "format": "uri",
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "Create a Transaction",
+        "tags": [
+          "Transactions"
+        ]
+      }
+    },
+    "/v1/transactions/{transactionId}": {
+      "get": {
+        "description": "Get Transaction by Id",
+        "operationId": "getTransactionByIdV1",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "transactionId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponse"
+                }
+              }
+            },
+            "description": "Transaction response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_404"
+                }
+              }
+            },
+            "description": "The resource was not found or is no longer available\n"
+          }
+        },
+        "summary": "Get Transaction",
+        "tags": [
+          "Transactions"
         ]
       }
     },
@@ -16025,6 +16169,167 @@
           "fundingId",
           "payorId",
           "status"
+        ],
+        "type": "object"
+      },
+      "CreateTransactionRequest": {
+        "example": {
+          "transactionMetadata": {
+            "key": "any_value"
+          },
+          "transactionReference": "myInvoiceNumber-1234567890",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "sourceAccountName": "Payor_FOO_USD_Account"
+        },
+        "properties": {
+          "payorId": {
+            "description": "Indicates the Payor creating the Transaction and which matches the payorId on the provided source account",
+            "format": "uuid",
+            "type": "string"
+          },
+          "sourceAccountName": {
+            "description": "The name of the source account that the new Transaction will be associated with and any funding containing the transactionShortCode will credit.\n",
+            "example": "Payor_FOO_USD_Account",
+            "maxLength": 100,
+            "minLength": 3,
+            "nullable": false,
+            "type": "string"
+          },
+          "transactionReference": {
+            "description": "The payors own reference for the transaction that can later be used for querying and retrieval.\n",
+            "example": "myInvoiceNumber-1234567890",
+            "maxLength": 100,
+            "minLength": 6,
+            "nullable": false,
+            "type": "string"
+          },
+          "transactionMetadata": {
+            "additionalProperties": {
+              "description": "The value associated the metadata key.",
+              "example": "any_value",
+              "maxLength": 4000,
+              "minLength": 1,
+              "type": "string"
+            },
+            "description": "Optional metadata that will be attached to the created transaction and can that can be retrieved later.|\nThe total length of all the keys and values provided in the metadata must be no more than 4000 chars.\n",
+            "type": "object"
+          }
+        },
+        "required": [
+          "payorId",
+          "sourceAccountName",
+          "transactionReference"
+        ],
+        "type": "object"
+      },
+      "CreateTransactionResponse": {
+        "example": {
+          "transactionId": "4d88e559-d057-45b1-8d8b-b9ccc06f4503",
+          "transactionShortCode": "T1234ABC"
+        },
+        "properties": {
+          "transactionId": {
+            "description": "The Id of the newly created transaction\n",
+            "example": "4d88e559-d057-45b1-8d8b-b9ccc06f4503",
+            "format": "uuid",
+            "type": "string"
+          },
+          "transactionShortCode": {
+            "description": "The short code for the transaction that can be used when sending funds into the platform\n",
+            "example": "T1234ABC",
+            "type": "string"
+          }
+        },
+        "required": [
+          "transactionId",
+          "transactionShortCode"
+        ],
+        "type": "object"
+      },
+      "TransactionResponse": {
+        "example": {
+          "createdAt": "2021-01-27T10:08:25.701Z",
+          "sourceAccountId": "7faf83a7-77e2-40bc-9e78-7d18fa2bb63e",
+          "transactionMetadata": {
+            "key": "any_value"
+          },
+          "balance": 800828190,
+          "transactionReference": "myInvoiceNumber-1234567890",
+          "currency": "USD",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "transactionId": "4d88e559-d057-45b1-8d8b-b9ccc06f4503",
+          "transactionShortCode": "T1234ABC",
+          "sourceAccountName": "Payor_FOO_USD_Account"
+        },
+        "properties": {
+          "transactionId": {
+            "description": "The Id of the transaction\n",
+            "example": "4d88e559-d057-45b1-8d8b-b9ccc06f4503",
+            "format": "uuid",
+            "type": "string"
+          },
+          "transactionShortCode": {
+            "description": "The short code for the transaction that can be used when sending funds into the platform\n",
+            "example": "T1234ABC",
+            "type": "string"
+          },
+          "payorId": {
+            "description": "Indicates the Payor of the Transaction and which matches the payorId on the provided source account",
+            "format": "uuid",
+            "type": "string"
+          },
+          "sourceAccountName": {
+            "description": "The name of the source account associated with the Transaction\n",
+            "example": "Payor_FOO_USD_Account",
+            "type": "string"
+          },
+          "sourceAccountId": {
+            "description": "The Id of the source account associated with the Transaction\n",
+            "example": "7faf83a7-77e2-40bc-9e78-7d18fa2bb63e",
+            "format": "uuid",
+            "type": "string"
+          },
+          "transactionReference": {
+            "description": "The payors own reference for the transaction\n",
+            "example": "myInvoiceNumber-1234567890",
+            "type": "string"
+          },
+          "transactionMetadata": {
+            "additionalProperties": {
+              "description": "The value associated the metadata key.",
+              "example": "any_value",
+              "type": "string"
+            },
+            "description": "Optional metadata attached to the transaction at creation time.\n",
+            "nullable": true,
+            "type": "object"
+          },
+          "balance": {
+            "description": "The total amount of transaction in minor units\n",
+            "format": "int64",
+            "maximum": 9999999999,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "currency": {
+            "description": "Valid ISO 4217 3 letter currency code. See the <a href=\"https://www.iso.org/iso-4217-currency-codes.html\" target=\"_blank\" a>ISO specification</a> for details.",
+            "example": "USD",
+            "maxLength": 3,
+            "minLength": 3,
+            "pattern": "^[A-Z]{3}$",
+            "title": "ISO Currency Code",
+            "type": "string"
+          },
+          "createdAt": {
+            "description": "A timestamp when the transaction has been created.",
+            "example": "2021-01-27T10:08:25.701Z",
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "transactionId",
+          "transactionShortCode"
         ],
         "type": "object"
       },
@@ -24970,6 +25275,7 @@
         "Payor Hierarchy",
         "Funding",
         "Source Accounts",
+        "Transactions",
         "Webhooks",
         "Payins"
       ]
