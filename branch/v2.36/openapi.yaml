@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.36.62
+  version: 2.36.65
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -1289,7 +1289,7 @@ paths:
         Get a Single Payor by Id.
       operationId: getPayorByIdV2
       parameters:
-        - description: The Payor Id
+        - description: The account owner Payor ID
           in: path
           name: payorId
           required: true
@@ -1379,7 +1379,7 @@ paths:
         <p>You can create an application and then create one or more API keys for the application</p>
       operationId: payorCreateApplicationV1
       parameters:
-        - description: The Payor Id
+        - description: The account owner Payor ID
           in: path
           name: payorId
           required: true
@@ -1479,7 +1479,7 @@ paths:
         <p>API Keys are programmatic users for integrating your application with the Velo platform</p>
       operationId: payorCreateApiKeyV1
       parameters:
-        - description: The Payor Id
+        - description: The account owner Payor ID
           in: path
           name: payorId
           required: true
@@ -1592,7 +1592,7 @@ paths:
         such as payees registering and onboarding.
       operationId: payorEmailOptOut
       parameters:
-        - description: The Payor Id
+        - description: The account owner Payor ID
           in: path
           name: payorId
           required: true
@@ -1670,7 +1670,7 @@ paths:
         <p>Logo file is used in your branding and emails sent to payees</p>
       operationId: payorAddPayorLogoV1
       parameters:
-        - description: The Payor Id
+        - description: The account owner Payor ID
           in: path
           name: payorId
           required: true
@@ -1722,7 +1722,7 @@ paths:
       description: Get the payor branding details.
       operationId: payorGetBranding
       parameters:
-        - description: The Payor Id
+        - description: The account owner Payor ID
           in: path
           name: payorId
           required: true
@@ -14517,16 +14517,16 @@ components:
       description: List Webhooks Object
       example:
         links:
-          - rel: rel
-            href: href
-          - rel: rel
-            href: href
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
+          - rel: first
+            href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
         page:
-          numberOfElements: 0
-          totalPages: 1
-          pageSize: 5
-          page: 5
-          totalElements: 6
+          numberOfElements: 10
+          totalPages: 10
+          pageSize: 10
+          page: 10
+          totalElements: 10
         content:
           - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -14546,10 +14546,10 @@ components:
             enabled: true
       properties:
         page:
-          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponseV3_page'
+          $ref: '#/components/schemas/CommonPageObject'
         links:
           items:
-            $ref: '#/components/schemas/PagedPayeeResponseV3_links'
+            $ref: '#/components/schemas/CommonLinkObject'
           type: array
         content:
           items:
@@ -17228,12 +17228,61 @@ components:
           example: 100000
           type: integer
       type: object
+    CommonPageObject:
+      example:
+        numberOfElements: 10
+        totalPages: 10
+        pageSize: 10
+        page: 10
+        totalElements: 10
+      properties:
+        numberOfElements:
+          example: 10
+          format: int64
+          type: integer
+        totalElements:
+          example: 10
+          format: int64
+          type: integer
+        totalPages:
+          example: 10
+          format: int64
+          type: integer
+        page:
+          example: 10
+          format: int64
+          type: integer
+        pageSize:
+          example: 10
+          format: int64
+          type: integer
+      type: object
+    CommonLinkObject:
+      example:
+        rel: first
+        href: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
+      properties:
+        rel:
+          description: 'One of: first, last, or self'
+          example: first
+          type: string
+        href:
+          description: the resource URI
+          example: 'https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc'
+          type: string
+      type: object
     Category:
-      description: 'The notification category.  One of "payment", "payee", "debit".'
+      description: |
+        The category into which the notification fails. One of
+        * "payment" - notifications related to payments (submitted, accepted, rejected, returned)
+        * "payee" - notifications related to payees (payor accepted, payor declined, payee updated)
+        * "debit" - notifications related to debit events
+        * "funding" - notifications related to funding (funding detected)
       enum:
         - payment
         - payee
         - debit
+        - funding
       type: string
     UserType_2:
       enum:
