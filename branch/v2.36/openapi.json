@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.36.65",
+    "version": "2.36.67",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -11227,7 +11227,8 @@
                 "onboarding_status_changed": "#/components/schemas/OnboardingStatusChanged",
                 "payable_status_changed": "#/components/schemas/PayableStatusChanged",
                 "payee_details_changed": "#/components/schemas/PayeeDetailsChanged",
-                "debit_status_changed": "#/components/schemas/DebitStatusChanged"
+                "debit_status_changed": "#/components/schemas/DebitStatusChanged",
+                "payor_funding_detected": "#/components/schemas/PayorFundingDetected"
               },
               "propertyName": "sourceType"
             },
@@ -11265,6 +11266,9 @@
               },
               {
                 "$ref": "#/components/schemas/DebitStatusChanged"
+              },
+              {
+                "$ref": "#/components/schemas/PayorFundingDetected"
               }
             ]
           }
@@ -11440,6 +11444,28 @@
           }
         ],
         "description": "Base type for all debit status changed events"
+      },
+      "FundingEvent": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/SourceEvent"
+          },
+          {
+            "type": "object"
+          }
+        ],
+        "description": "Base type for all Funding Events"
+      },
+      "PayorFundingDetected": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FundingEvent"
+          },
+          {
+            "$ref": "#/components/schemas/PayorFundingDetected_allOf"
+          }
+        ],
+        "description": "Notification of funding received on behalf of payor."
       },
       "AuthResponse": {
         "example": {
@@ -21589,7 +21615,7 @@
           },
           "events": {
             "items": {
-              "$ref": "#/components/schemas/FundingEvent"
+              "$ref": "#/components/schemas/FundingEvent_2"
             },
             "type": "array"
           },
@@ -23760,7 +23786,7 @@
         "description": "Payee onboarded status. One of the following value: CREATED, INVITED, REGISTERED, ONBOARDED",
         "type": "string"
       },
-      "FundingEvent": {
+      "FundingEvent_2": {
         "example": {
           "principal": "principal",
           "eventId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -24505,6 +24531,79 @@
         },
         "required": [
           "status"
+        ]
+      },
+      "PayorFundingDetected_allOf": {
+        "properties": {
+          "railsId": {
+            "description": "the identifier of the payment rail from which funding was received",
+            "example": "WUBS",
+            "type": "string"
+          },
+          "payorId": {
+            "description": "ID of the payor within the Velo platform",
+            "example": "cbd9280f-8fde-4190-b014-979d88f3ec54",
+            "format": "uuid",
+            "type": "string"
+          },
+          "fundingRequestId": {
+            "description": "ID of this funding transaction within the Velo platform",
+            "example": "cbd9280f-8fde-4190-b014-979d88f3ec54",
+            "format": "uuid",
+            "type": "string"
+          },
+          "fundingRef": {
+            "description": "the external identity reference for this funding transaction",
+            "example": "some-ref-text",
+            "type": "string"
+          },
+          "currency": {
+            "description": "the ISO-4217 code for the currency in which the funding was made",
+            "example": "GBP",
+            "type": "string"
+          },
+          "amount": {
+            "description": "the received funding amount in currency minor units",
+            "example": 1234,
+            "format": "int64",
+            "type": "integer"
+          },
+          "physicalAccountName": {
+            "description": "the name of the account as registered with the payment rail",
+            "example": "Acme Company Ltd",
+            "type": "string"
+          },
+          "sourceAccountName": {
+            "description": "the name of the account as registered with the Velo platform",
+            "example": "Acme Co UK",
+            "type": "string"
+          },
+          "sourceAccountId": {
+            "description": "the ID of the account as registered with the Velo platform",
+            "example": "cbd9280f-8fde-4190-b014-979d88f3ec54",
+            "format": "uuid",
+            "type": "string"
+          },
+          "additionalInformation": {
+            "description": "any additional information received from the payment rail",
+            "example": "any additional information",
+            "type": "string"
+          },
+          "transactionId": {
+            "description": "The Id of the related transaction",
+            "example": "4d88e559-d057-45b1-8d8b-b9ccc06f4503",
+            "format": "uuid",
+            "type": "string"
+          },
+          "transactionReference": {
+            "description": "The payors own reference for the related transaction",
+            "example": "myInvoiceNumber-1234567890",
+            "type": "string"
+          }
+        },
+        "required": [
+          "fundingRequestId",
+          "payorId"
         ]
       },
       "PagedUserResponse_page": {
