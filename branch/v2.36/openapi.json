@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.36.85",
+    "version": "2.36.86",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -7103,7 +7103,8 @@
                     "payorId": "ee53e01d-c078-43fd-abd4-47e92f4a06cf",
                     "accountName": "My Account Name",
                     "accountNumber": 1231231234556,
-                    "routingNumber": 123456789
+                    "routingNumber": 123456789,
+                    "countryCode": "US"
                   }
                 },
                 "private": {
@@ -7115,7 +7116,8 @@
                     "accountName": "My Account Name",
                     "accountNumber": 1231231234556,
                     "routingNumber": 123456789,
-                    "currency": "AUD"
+                    "currency": "AUD",
+                    "countryCode": "AU"
                   }
                 }
               },
@@ -7426,6 +7428,107 @@
       }
     },
     "/v1/transactions": {
+      "get": {
+        "description": "<P>Get list of Transactions</P>\n",
+        "operationId": "getTransactions",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "payorId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "transactionReference",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page number. Default is 1.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The number of results to return in a page",
+            "in": "query",
+            "name": "pageSize",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "format": "int32",
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "allocationDate:asc",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResourceTransactions"
+                }
+              }
+            },
+            "description": "default response"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_400"
+                }
+              }
+            },
+            "description": "Invalid request. See Error message payload for details of failure"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_401"
+                }
+              }
+            },
+            "description": "Invalid access token. May be expired or invalid"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_403"
+                }
+              }
+            },
+            "description": "The authentication does not have permissions to access the resource\nThis usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions\n"
+          }
+        },
+        "summary": "Get Transactions",
+        "tags": [
+          "Transactions"
+        ]
+      },
       "post": {
         "description": "Create a new Transaction that can be funded",
         "operationId": "createTransactionV1",
@@ -15929,8 +16032,8 @@
         "example": {
           "routingNumber": "routingNumber",
           "accountName": "accountName",
+          "countryCode": "US",
           "name": "name",
-          "currency": "USD",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "type": "FBO",
           "accountNumber": "accountNumber"
@@ -15970,11 +16073,11 @@
             "minLength": 6,
             "type": "string"
           },
-          "currency": {
-            "description": "ISO 4217 currency code, Required if type is PRIVATE",
-            "example": "USD",
-            "maxLength": 3,
-            "minLength": 3,
+          "countryCode": {
+            "description": "ISO 3166-1 2 letter country code (upper case)",
+            "example": "US",
+            "maxLength": 2,
+            "minLength": 2,
             "type": "string"
           }
         },
@@ -16125,9 +16228,11 @@
           "detectedFundingRef": "detectedFundingRef",
           "allocationType": "allocationType",
           "hiddenDate": "2000-01-23T04:56:07.000Z",
+          "createdAt": "2000-01-23T04:56:07.000Z",
           "currency": "USD",
           "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "text": "text",
+          "allocatedAt": "2000-01-23T04:56:07.000Z",
           "status": "ALLOCATED"
         },
         "properties": {
@@ -16139,7 +16244,8 @@
             "format": "uuid",
             "type": "string"
           },
-          "allocationDate": {
+          "createdAt": {
+            "description": "The date and time the funding was created",
             "format": "date-time",
             "type": "string"
           },
@@ -16173,6 +16279,17 @@
             "description": "Funding Allocation Type. One of the following values: AUTOMATIC, MANUAL",
             "type": "string"
           },
+          "allocatedAt": {
+            "description": "Populated only if the funding has been allocated. The date and time the funding was allocated.",
+            "format": "date-time",
+            "type": "string"
+          },
+          "allocationDate": {
+            "deprecated": true,
+            "description": "Populated with allocatedAt if allocated otherwise createdAt. Deprecated in v2.36 - will be removed in the future.",
+            "format": "date-time",
+            "type": "string"
+          },
           "reason": {
             "type": "string"
           },
@@ -16192,14 +16309,87 @@
           }
         },
         "required": [
-          "allocationDate",
           "amount",
+          "createdAt",
           "currency",
           "fundingAccountType",
           "fundingId",
           "payorId",
           "status"
         ],
+        "type": "object"
+      },
+      "PageResourceTransactions": {
+        "example": {
+          "links": [
+            {
+              "rel": "rel",
+              "href": "href"
+            },
+            {
+              "rel": "rel",
+              "href": "href"
+            }
+          ],
+          "page": {
+            "numberOfElements": 0,
+            "totalPages": 1,
+            "pageSize": 5,
+            "page": 5,
+            "totalElements": 6
+          },
+          "content": [
+            {
+              "createdAt": "2021-01-27T10:08:25.701Z",
+              "sourceAccountId": "7faf83a7-77e2-40bc-9e78-7d18fa2bb63e",
+              "transactionMetadata": {
+                "key": "any_value"
+              },
+              "balance": 800828190,
+              "transactionReference": "myInvoiceNumber-1234567890",
+              "currency": "USD",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "transactionId": "4d88e559-d057-45b1-8d8b-b9ccc06f4503",
+              "transactionShortCode": "T1234ABC",
+              "sourceAccountName": "Payor_FOO_USD_Account"
+            },
+            {
+              "createdAt": "2021-01-27T10:08:25.701Z",
+              "sourceAccountId": "7faf83a7-77e2-40bc-9e78-7d18fa2bb63e",
+              "transactionMetadata": {
+                "key": "any_value"
+              },
+              "balance": 800828190,
+              "transactionReference": "myInvoiceNumber-1234567890",
+              "currency": "USD",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "transactionId": "4d88e559-d057-45b1-8d8b-b9ccc06f4503",
+              "transactionShortCode": "T1234ABC",
+              "sourceAccountName": "Payor_FOO_USD_Account"
+            }
+          ]
+        },
+        "properties": {
+          "links": {
+            "items": {
+              "$ref": "#/components/schemas/LinkForResponse"
+            },
+            "type": "array",
+            "xml": {
+              "name": "link",
+              "namespace": "http://www.w3.org/2005/Atom"
+            }
+          },
+          "page": {
+            "$ref": "#/components/schemas/PageForResponse"
+          },
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/TransactionResponse"
+            },
+            "type": "array"
+          }
+        },
         "type": "object"
       },
       "CreateTransactionRequest": {
