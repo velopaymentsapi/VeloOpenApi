@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.36.86",
+    "version": "2.36.87",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -6980,7 +6980,7 @@
           {
             "description": "The 2 letter ISO 3166-1 country code (upper case)",
             "in": "query",
-            "name": "country",
+            "name": "countryCode",
             "required": false,
             "schema": {
               "example": "US",
@@ -15985,9 +15985,9 @@
           "content": [
             {
               "routingNumber": 12345678,
-              "country": "US",
               "archived": true,
               "accountName": "Payor Corp",
+              "countryCode": "US",
               "name": "My Funding Account",
               "currency": "USD",
               "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -15997,9 +15997,9 @@
             },
             {
               "routingNumber": 12345678,
-              "country": "US",
               "archived": true,
               "accountName": "Payor Corp",
+              "countryCode": "US",
               "name": "My Funding Account",
               "currency": "USD",
               "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -16091,9 +16091,9 @@
       "FundingAccountResponseV2": {
         "example": {
           "routingNumber": 12345678,
-          "country": "US",
           "archived": true,
           "accountName": "Payor Corp",
+          "countryCode": "US",
           "name": "My Funding Account",
           "currency": "USD",
           "id": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
@@ -16140,7 +16140,7 @@
             "title": "ISO Currency Code",
             "type": "string"
           },
-          "country": {
+          "countryCode": {
             "description": "ISO 3166-1 2 letter country code (upper case)",
             "example": "US",
             "maxLength": 2,
