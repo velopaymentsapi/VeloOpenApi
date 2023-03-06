@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.34.63",
+    "version": "2.35.57",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -8798,6 +8798,15 @@
         "operationId": "getPaymentsForPayoutV4",
         "parameters": [
           {
+            "description": "Payout Rails ID filter - case insensitive match.\nAny value is allowed, but you should use one of the supported railsId values.\nTo get this list of values, you should call the 'Get Supported Rails' endpoint.\n",
+            "in": "query",
+            "name": "railsId",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "description": "The id (UUID) of the payout.",
             "in": "path",
             "name": "payoutId",
@@ -10520,6 +10529,7 @@
     },
     "/v1/paymentChannelRules": {
       "get": {
+        "deprecated": true,
         "description": "List the country specific payment channel rules.",
         "operationId": "listPaymentChannelRulesV1",
         "responses": {
@@ -10672,6 +10682,7 @@
     },
     "/v2/supportedCountries": {
       "get": {
+        "deprecated": true,
         "description": "List the supported countries.",
         "operationId": "listSupportedCountriesV2",
         "responses": {
@@ -10694,7 +10705,7 @@
         "x-code-samples": [
           {
             "lang": "shell",
-            "source": "$ curl 'https://api.sandbox.velopayments.com/v1/supportedCountries' -i -X GET\n"
+            "source": "$ curl 'https://api.sandbox.velopayments.com/v2/supportedCountries' -i -X GET\n"
           }
         ]
       }
@@ -19080,6 +19091,7 @@
                   "displayName": "Account Name",
                   "minLength": 5,
                   "displayOrder": 0,
+                  "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
                   "required": true,
                   "maxLength": 50,
                   "validation": "^[0-9]{6,11}$",
@@ -19089,6 +19101,7 @@
                   "displayName": "Account Name",
                   "minLength": 5,
                   "displayOrder": 0,
+                  "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
                   "required": true,
                   "maxLength": 50,
                   "validation": "^[0-9]{6,11}$",
@@ -19103,6 +19116,7 @@
                   "displayName": "Account Name",
                   "minLength": 5,
                   "displayOrder": 0,
+                  "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
                   "required": true,
                   "maxLength": 50,
                   "validation": "^[0-9]{6,11}$",
@@ -19112,6 +19126,7 @@
                   "displayName": "Account Name",
                   "minLength": 5,
                   "displayOrder": 0,
+                  "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
                   "required": true,
                   "maxLength": 50,
                   "validation": "^[0-9]{6,11}$",
@@ -22626,6 +22641,7 @@
               "displayName": "Account Name",
               "minLength": 5,
               "displayOrder": 0,
+              "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
               "required": true,
               "maxLength": 50,
               "validation": "^[0-9]{6,11}$",
@@ -22635,6 +22651,7 @@
               "displayName": "Account Name",
               "minLength": 5,
               "displayOrder": 0,
+              "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
               "required": true,
               "maxLength": 50,
               "validation": "^[0-9]{6,11}$",
@@ -23832,6 +23849,7 @@
           "displayName": "Account Name",
           "minLength": 5,
           "displayOrder": 0,
+          "description": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
           "required": true,
           "maxLength": 50,
           "validation": "^[0-9]{6,11}$",
@@ -23869,6 +23887,11 @@
           },
           "displayOrder": {
             "type": "integer"
+          },
+          "description": {
+            "description": "An optional description, or hint, as to how the user should enter the field value.",
+            "example": "The bank branch, account number prefix and account number suffix; with hyphen separators.",
+            "type": "string"
           }
         },
         "required": [
