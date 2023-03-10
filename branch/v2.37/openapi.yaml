@@ -78,7 +78,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.37.24
+  version: 2.37.25
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -1477,6 +1477,7 @@ paths:
         <p>Create an an API key for the given payor Id and application Id</p>
         <p>You can create multiple API Keys for a given application</p>
         <p>API Keys are programmatic users for integrating your application with the Velo platform</p>
+        <p>The response will return the API Key and the secret. This is the only time you will be able to see the secret</p>
       operationId: payorCreateApiKeyV1
       parameters:
         - description: The account owner Payor ID
@@ -5096,7 +5097,7 @@ paths:
             type: string
         - description: The 2 letter ISO 3166-1 country code (upper case)
           in: query
-          name: country
+          name: countryCode
           required: false
           schema:
             example: US
@@ -5186,6 +5187,7 @@ paths:
                   accountName: My Account Name
                   accountNumber: 1231231234556
                   routingNumber: 123456789
+                  countryCode: US
               private:
                 summary: PRIVATE Example
                 value:
@@ -5196,6 +5198,7 @@ paths:
                   accountNumber: 1231231234556
                   routingNumber: 123456789
                   currency: AUD
+                  countryCode: AU
             schema:
               $ref: '#/components/schemas/CreateFundingAccountRequestV2'
       responses:
@@ -5398,6 +5401,75 @@ paths:
       tags:
         - Funding
   /v1/transactions:
+    get:
+      description: |
+        <P>Get list of Transactions</P>
+      operationId: getTransactions
+      parameters:
+        - in: query
+          name: payorId
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: transactionReference
+          required: false
+          schema:
+            type: string
+        - description: Page number. Default is 1.
+          in: query
+          name: page
+          required: false
+          schema:
+            default: 1
+            format: int32
+            type: integer
+        - description: The number of results to return in a page
+          in: query
+          name: pageSize
+          required: false
+          schema:
+            default: 25
+            format: int32
+            maximum: 100
+            minimum: 1
+            type: integer
+        - in: query
+          name: sort
+          required: false
+          schema:
+            default: 'allocationDate:asc'
+            type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResourceTransactions'
+          description: default response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Get Transactions
+      tags:
+        - Transactions
     post:
       description: Create a new Transaction that can be funded
       operationId: createTransactionV1
@@ -9021,8 +9093,9 @@ components:
         managingPayees: true
         allowsLanguageChoice: true
         language: EN
+        createdAt: 2021-12-08T14:41:02.354Z
         provider: provider
-        maxMasterPayorAdmins: 6
+        maxMasterPayorAdmins: 5
         transmissionTypes:
           ACH: true
           SAME_DAY_ACH: true
@@ -9032,7 +9105,7 @@ components:
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         primaryContactEmail: joe.buck@example.com
         usdTxnValueReportingThreshold: 1000000
-        payorName: 'Example, Corp'
+        payorName: Example Corp
         address:
           country: US
           countyOrProvince: FL
@@ -9047,7 +9120,7 @@ components:
         primaryContactPhone: 123-123-1234
         payeeGracePeriodDays: 0
         reminderEmailsOptOut: true
-        collectiveAlias: Payee
+        collectiveAlias: Vendors
         kycState: PASSED_KYC
         wuCustomerId: wuCustomerId
         remoteSystemIds:
@@ -9055,12 +9128,14 @@ components:
           - REMOTE_SYSTEM_ID
       properties:
         payorId:
+          description: The Payor Id
           format: uuid
-          readOnly: true
+          nullable: false
           type: string
         payorName:
-          description: The name of the payor.
-          example: 'Example, Corp'
+          description: The name of the payor
+          example: Example Corp
+          nullable: false
           type: string
         payorXid:
           description: A unique identifier that an external system uses to reference the payor in their system
@@ -9087,7 +9162,6 @@ components:
         kycState:
           description: 'The kyc state of the payor. One of the following values: FAILED_KYC, PASSED_KYC, REQUIRES_KYC'
           example: PASSED_KYC
-          readOnly: true
           type: string
         manualLockout:
           description: Whether or not the payor has been manually locked by the backoffice.
@@ -9097,15 +9171,13 @@ components:
           type: boolean
         payeeGracePeriodProcessingEnabled:
           description: Whether grace period processing is enabled.
-          readOnly: true
           type: boolean
         payeeGracePeriodDays:
-          description: The grace period for paying payees in days.
-          readOnly: true
+          description: The grace period for paying payees in days before the payee must be onboarded.
           type: integer
         collectiveAlias:
           description: How the payor has chosen to refer to payees.
-          example: Payee
+          example: Vendors
           type: string
         supportContact:
           description: The payor’s support contact email address.
@@ -9120,35 +9192,49 @@ components:
           type: boolean
         reminderEmailsOptOut:
           description: Whether or not the payor has opted-out of reminder emails being sent.
-          readOnly: true
           type: boolean
         language:
           description: 'The payor’s language preference. Must be one of [EN, FR]'
           example: EN
           type: string
         includesReports:
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           type: boolean
         wuCustomerId:
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           type: string
         maxMasterPayorAdmins:
+          description: The maximum number of payor users with the master admin role
+          example: 5
           type: integer
         paymentRails:
-          description: The id of the payment rails
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           type: string
         transmissionTypes:
           $ref: '#/components/schemas/TransmissionTypes'
         remoteSystemIds:
-          description: The payor’s supported remote systems by id
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           items:
             example: REMOTE_SYSTEM_ID
             type: string
           type: array
         usdTxnValueReportingThreshold:
-          description: USD in minor units
+          deprecated: true
+          description: USD in minor units. For internal use only (will be removed in a later version)
           example: 1000000
           type: integer
         managingPayees:
+          description: Does this payor manage their own payees (payees are not invited but managed by the payor)
           type: boolean
+        createdAt:
+          description: The date of creation of the payor
+          example: 2021-12-08T14:41:02.354Z
+          format: date-time
+          type: string
       required:
         - payorId
         - payorName
@@ -9196,19 +9282,19 @@ components:
     PayorCreateApiKeyRequest:
       example:
         roles:
-          - velo.payor.admin
-        name: iOS Key
-        description: Key for iOS mobile application
+          - payor.admin
+        name: SAP Key 01
+        description: An API Key for the SAP Application
       properties:
         name:
           description: A name for the key.
-          example: iOS Key
+          example: SAP Key 01
           maxLength: 100
           minLength: 2
           type: string
         description:
           description: Description of the key.
-          example: Key for iOS mobile application
+          example: An API Key for the SAP Application
           maxLength: 1024
           minLength: 2
           nullable: true
@@ -9219,12 +9305,12 @@ components:
             <p>If you want your API key to have write access then assign the role velo.payor.admin</p>
             <p>A later version will change this property from a list to string</p>
           example:
-            - velo.payor.admin
+            - payor.admin
           items:
             description: Name of role
             enum:
-              - velo.payor.admin
-              - velo.payor.support
+              - payor.admin
+              - payor.support
             type: string
           maxItems: 1
           minItems: 1
@@ -11681,9 +11767,9 @@ components:
           totalElements: 1
         content:
           - routingNumber: 12345678
-            country: US
             archived: true
             accountName: Payor Corp
+            countryCode: US
             name: My Funding Account
             currency: USD
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -11691,9 +11777,9 @@ components:
             accountNumber: '7001001234'
             type: FBO
           - routingNumber: 12345678
-            country: US
             archived: true
             accountName: Payor Corp
+            countryCode: US
             name: My Funding Account
             currency: USD
             id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -11716,8 +11802,8 @@ components:
       example:
         routingNumber: routingNumber
         accountName: accountName
+        countryCode: US
         name: name
-        currency: USD
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         type: FBO
         accountNumber: accountNumber
@@ -11749,13 +11835,14 @@ components:
           maxLength: 9
           minLength: 6
           type: string
-        currency:
-          description: 'ISO 4217 currency code, Required if type is PRIVATE'
-          example: USD
-          maxLength: 3
-          minLength: 3
+        countryCode:
+          description: ISO 3166-1 2 letter country code (upper case)
+          example: US
+          maxLength: 2
+          minLength: 2
           type: string
       required:
+        - countryCode
         - name
         - payorId
         - type
@@ -11763,9 +11850,9 @@ components:
     FundingAccountResponseV2:
       example:
         routingNumber: 12345678
-        country: US
         archived: true
         accountName: Payor Corp
+        countryCode: US
         name: My Funding Account
         currency: USD
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -11804,7 +11891,7 @@ components:
           pattern: '^[A-Z]{3}$'
           title: ISO Currency Code
           type: string
-        country:
+        countryCode:
           description: ISO 3166-1 2 letter country code (upper case)
           example: US
           maxLength: 2
@@ -11867,9 +11954,11 @@ components:
         detectedFundingRef: detectedFundingRef
         allocationType: allocationType
         hiddenDate: 2000-01-23T04:56:07.000Z
+        createdAt: 2000-01-23T04:56:07.000Z
         currency: USD
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         text: text
+        allocatedAt: 2000-01-23T04:56:07.000Z
         status: ALLOCATED
       properties:
         fundingId:
@@ -11878,7 +11967,8 @@ components:
         payorId:
           format: uuid
           type: string
-        allocationDate:
+        createdAt:
+          description: The date and time the funding was created
           format: date-time
           type: string
         detectedFundingRef:
@@ -11904,6 +11994,15 @@ components:
         allocationType:
           description: 'Funding Allocation Type. One of the following values: AUTOMATIC, MANUAL'
           type: string
+        allocatedAt:
+          description: Populated only if the funding has been allocated. The date and time the funding was allocated.
+          format: date-time
+          type: string
+        allocationDate:
+          deprecated: true
+          description: Populated with allocatedAt if allocated otherwise createdAt. Deprecated in v2.36 - will be removed in the future.
+          format: date-time
+          type: string
         reason:
           type: string
         hiddenDate:
@@ -11918,13 +12017,64 @@ components:
           example: ALLOCATED
           type: string
       required:
-        - allocationDate
         - amount
+        - createdAt
         - currency
         - fundingAccountType
         - fundingId
         - payorId
         - status
+      type: object
+    PageResourceTransactions:
+      example:
+        links:
+          - rel: rel
+            href: href
+          - rel: rel
+            href: href
+        page:
+          numberOfElements: 0
+          totalPages: 1
+          pageSize: 5
+          page: 5
+          totalElements: 6
+        content:
+          - createdAt: 2021-01-27T10:08:25.701Z
+            sourceAccountId: 7faf83a7-77e2-40bc-9e78-7d18fa2bb63e
+            transactionMetadata:
+              key: any_value
+            balance: 800828190
+            transactionReference: myInvoiceNumber-1234567890
+            currency: USD
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            transactionId: 4d88e559-d057-45b1-8d8b-b9ccc06f4503
+            transactionShortCode: T1234ABC
+            sourceAccountName: Payor_FOO_USD_Account
+          - createdAt: 2021-01-27T10:08:25.701Z
+            sourceAccountId: 7faf83a7-77e2-40bc-9e78-7d18fa2bb63e
+            transactionMetadata:
+              key: any_value
+            balance: 800828190
+            transactionReference: myInvoiceNumber-1234567890
+            currency: USD
+            payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            transactionId: 4d88e559-d057-45b1-8d8b-b9ccc06f4503
+            transactionShortCode: T1234ABC
+            sourceAccountName: Payor_FOO_USD_Account
+      properties:
+        links:
+          items:
+            $ref: '#/components/schemas/LinkForResponse'
+          type: array
+          xml:
+            name: link
+            namespace: 'http://www.w3.org/2005/Atom'
+        page:
+          $ref: '#/components/schemas/PageForResponse'
+        content:
+          items:
+            $ref: '#/components/schemas/TransactionResponse'
+          type: array
       type: object
     CreateTransactionRequest:
       example:
@@ -14810,10 +14960,10 @@ components:
     KycState:
       description: 'The kyc state of the payor. One of the following values: FAILED_KYC, PASSED_KYC, REQUIRES_KYC'
       example: PASSED_KYC
-      readOnly: true
       type: string
     PaymentRails:
-      description: The id of the payment rails
+      deprecated: true
+      description: For internal use only (will be removed in a later version)
       type: string
     TransmissionTypes:
       example:
