@@ -74,11 +74,29 @@ info:
     ```
 
     If you make other Velo API calls which require authorization but the Authorization header is missing or invalid then you will get a **401** HTTP status response.
+
+
+    ## Http Status Codes
+    Following is a list of Http Status codes that could be returned by the platform
+
+        | Status Code            | Description                                                                          |
+        | -----------------------| -------------------------------------------------------------------------------------|
+        | 200 OK                 | The request was successfully processed and usually returns a json response           |
+        | 201 Created            | A resource was created and a Location header is returned linking to the new resource |
+        | 202 Accepted           | The request has been accepted for processing                                         |
+        | 204 No Content         | The request has been processed and there is no response (usually deletes and updates)|
+        | 400 Bad Request        | The request is invalid and should be fixed before retrying                           |
+        | 401 Unauthorized       | Authentication has failed, usually means the token has expired                       |
+        | 403 Forbidden          | The user does not have permissions for the request                                   |
+        | 404 Not Found          | The resource was not found                                                           |
+        | 409 Conflict           | The resource already exists and there is a conflict                                  |
+        | 429 Too Many Requests  | The user has submitted too many requests in a given amount of time                   |
+        | 5xx Server Error       | Platform internal error (should rarely happen)                                       |
   license:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.37.34
+  version: 2.37.35
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -10476,6 +10494,7 @@ components:
         enhancedKycCompleted: true
         pausePayment: true
         gracePeriodEndDate: '2019-01-20T00:00:00.000+0000'
+        managedByPayorId: a2967711-df07-41e5-b5ea-0f563088911c
         marketingOptInDecision: true
         onboardedStatus: onboardedStatus
         watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
@@ -10557,6 +10576,11 @@ components:
           $ref: '#/components/schemas/CompanyV4'
         cellphoneNumber:
           example: '1234567890'
+          type: string
+        managedByPayorId:
+          description: The id of the payor if the payee is managed
+          example: a2967711-df07-41e5-b5ea-0f563088911c
+          format: uuid
           type: string
         watchlistStatusUpdatedTimestamp:
           example: 2019-01-20T09:00:00.000Z
@@ -10740,6 +10764,7 @@ components:
             displayName: ABC
             payeeType: payeeType
             language: en-US
+            managedByPayorId: a2967711-df07-41e5-b5ea-0f563088911c
             onboardedStatus: onboardedStatus
             watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             disabledComment: reason for disabled
@@ -10786,6 +10811,7 @@ components:
             displayName: ABC
             payeeType: payeeType
             language: en-US
+            managedByPayorId: a2967711-df07-41e5-b5ea-0f563088911c
             onboardedStatus: onboardedStatus
             watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
             disabledComment: reason for disabled
@@ -15853,6 +15879,7 @@ components:
         displayName: ABC
         payeeType: payeeType
         language: en-US
+        managedByPayorId: a2967711-df07-41e5-b5ea-0f563088911c
         onboardedStatus: onboardedStatus
         watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00.000Z
         disabledComment: reason for disabled
@@ -15927,6 +15954,11 @@ components:
         disabledUpdatedTimestamp:
           example: 2019-01-20T09:00:00.000Z
           format: date-time
+          type: string
+        managedByPayorId:
+          description: The id of the payor if the payee is managed
+          example: a2967711-df07-41e5-b5ea-0f563088911c
+          format: uuid
           type: string
         individual:
           $ref: '#/components/schemas/GetPayeeListResponseIndividualV4'
