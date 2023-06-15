@@ -74,11 +74,29 @@ info:
     ```
 
     If you make other Velo API calls which require authorization but the Authorization header is missing or invalid then you will get a **401** HTTP status response.
+
+
+    ## Http Status Codes
+    Following is a list of Http Status codes that could be returned by the platform
+
+        | Status Code            | Description                                                                          |
+        | -----------------------| -------------------------------------------------------------------------------------|
+        | 200 OK                 | The request was successfully processed and usually returns a json response           |
+        | 201 Created            | A resource was created and a Location header is returned linking to the new resource |
+        | 202 Accepted           | The request has been accepted for processing                                         |
+        | 204 No Content         | The request has been processed and there is no response (usually deletes and updates)|
+        | 400 Bad Request        | The request is invalid and should be fixed before retrying                           |
+        | 401 Unauthorized       | Authentication has failed, usually means the token has expired                       |
+        | 403 Forbidden          | The user does not have permissions for the request                                   |
+        | 404 Not Found          | The resource was not found                                                           |
+        | 409 Conflict           | The resource already exists and there is a conflict                                  |
+        | 429 Too Many Requests  | The user has submitted too many requests in a given amount of time                   |
+        | 5xx Server Error       | Platform internal error (should rarely happen)                                       |
   license:
     name: Apache License 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   title: Velo Payments APIs
-  version: 2.35.57
+  version: 2.36.91
   x-logo:
     url: https://apidocs.velopayments.com/velo-logo-e9573185_new.svg
 servers:
@@ -121,6 +139,9 @@ tags:
 - description: |
     <p>Source Accounts are where funds are drawn from for making payouts</p>
   name: Source Accounts
+- description: |
+    <p>Transactions are linked to a specific Source Account and allow a payor to logically separate funds</p>
+  name: Transactions
 - description: Payment Audit Service APIs allow you to see the history of fundings,
     payouts, and payments to payees.
   name: Payment Audit Service
@@ -1283,95 +1304,13 @@ paths:
           $ curl 'https://api.sandbox.velopayments.com/v2/users/self/password/validate' -i -X POST \
                 -H 'Content-Type: application/json' \
                 -d '{"password":"abcd_12345"}'
-  /v1/payors/{payorId}:
-    get:
-      deprecated: true
-      description: |
-        <p>Get a Single Payor by Id.</p>
-        <p>deprecated since v2.10 - Use /v2/payors
-      operationId: getPayorByIdV1
-      parameters:
-      - description: The Payor Id
-        in: path
-        name: payorId
-        required: true
-        schema:
-          format: uuid
-          type: string
-      responses:
-        200:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PayorV1'
-          description: Get Payor Details
-          x-contracts:
-          - contractId: 1
-            headers:
-              Content-Type: application/json;charset=UTF-8
-            body:
-              payorId: 0a818933-087d-47f2-ad83-2f986ed087eb
-              payorName: Joe
-              address:
-                line1: 101 California Street
-                city: San Francisco
-                zipOrPostcode: "94111"
-                country: US
-              primaryContactName: Joe
-              primaryContactPhone: 1231231234
-              primaryContactEmail: foo@example.com
-              kycState: PASSED_KYC
-              manualLockout: false
-              payeeGracePeriodProcessingEnabled: true
-              payeeGracePeriodDays: 90
-              dbaName: FlyByNight, Inc
-              allowsLanguageChoice: false
-              reminderEmailsOptOut: false
-              language: EN
-              supportContact: support@example.com
-              collectiveAlias: MyAlias
-              maxMasterPayorAdmins: 2
-        404:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-          description: Payor Id Not Found
-          x-contracts:
-          - contractId: 2
-        403:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_403'
-          description: |
-            The authentication does not have permissions to access the resource
-            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
-      summary: Get Payor
-      tags:
-      - Payors
-      x-code-samples:
-      - lang: shell
-        source: |
-          $ curl 'https://api.sandbox.velopayments.com/v1/payors/126969bd-6a18-47ec-96e1-57559afecf32' -i -X GET \
-              -H 'Authorization: Bearer 3387c417-464c-41a6-b25e-6630f0a06093' \
-              -H 'Content-Type: application/json'
-      x-contracts:
-      - contractId: 1
-        name: Test Get Payor
-        contractPath: /v1/payors/0a818933-087d-47f2-ad83-2f986ed087eb
-        serviceName: payor-service
-      - contractId: 2
-        name: Test Payor Not Found
-        contractPath: /v1/payors/00000000-0000-0000-0000-000000000000
-        serviceName: payor-service
   /v2/payors/{payorId}:
     get:
       description: |
         Get a Single Payor by Id.
       operationId: getPayorByIdV2
       parameters:
-      - description: The Payor Id
+      - description: The account owner Payor ID
         in: path
         name: payorId
         required: true
@@ -1461,7 +1400,7 @@ paths:
         <p>You can create an application and then create one or more API keys for the application</p>
       operationId: payorCreateApplicationV1
       parameters:
-      - description: The Payor Id
+      - description: The account owner Payor ID
         in: path
         name: payorId
         required: true
@@ -1559,9 +1498,10 @@ paths:
         <p>Create an an API key for the given payor Id and application Id</p>
         <p>You can create multiple API Keys for a given application</p>
         <p>API Keys are programmatic users for integrating your application with the Velo platform</p>
+        <p>The response will return the API Key and the secret. This is the only time you will be able to see the secret</p>
       operationId: payorCreateApiKeyV1
       parameters:
-      - description: The Payor Id
+      - description: The account owner Payor ID
         in: path
         name: payorId
         required: true
@@ -1674,7 +1614,7 @@ paths:
         such as payees registering and onboarding.
       operationId: payorEmailOptOut
       parameters:
-      - description: The Payor Id
+      - description: The account owner Payor ID
         in: path
         name: payorId
         required: true
@@ -1752,7 +1692,7 @@ paths:
         <p>Logo file is used in your branding and emails sent to payees</p>
       operationId: payorAddPayorLogoV1
       parameters:
-      - description: The Payor Id
+      - description: The account owner Payor ID
         in: path
         name: payorId
         required: true
@@ -1804,7 +1744,7 @@ paths:
       description: Get the payor branding details.
       operationId: payorGetBranding
       parameters:
-      - description: The Payor Id
+      - description: The account owner Payor ID
         in: path
         name: payorId
         required: true
@@ -2103,7 +2043,11 @@ paths:
         204:
           description: No content. Payee Id accepted for deletion.
         400:
-          description: Bad Request. Payee Id failed validation for deletion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         404:
           description: Payee Id not found
       summary: Delete Payee by Id
@@ -2284,9 +2228,12 @@ paths:
               marketingOptInTimestamp: 2018-02-03T00:00:00Z
               acceptTermsAndConditionsTimestamp: 2018-01-02T00:00:00Z
         404:
-          description: Payee Not found
-          x-contracts:
-          - contractId: 3
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payee by Id
       tags:
       - Payees
@@ -3060,7 +3007,11 @@ paths:
           description: Details of Payee Changes
           x-contracts: null
         400:
-          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
       summary: List Payee Changes
       tags:
       - Payees
@@ -3249,9 +3200,18 @@ paths:
         204:
           description: No content. Payee Id accepted for deletion.
         400:
-          description: Bad Request. Payee Id failed validation for deletion.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         404:
-          description: Payee Id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Delete Payee by Id
       tags:
       - Payees
@@ -3427,9 +3387,12 @@ paths:
               marketingOptInTimestamp: 2018-02-03T00:00:00Z
               acceptTermsAndConditionsTimestamp: 2018-01-02T00:00:00Z
         404:
-          description: Payee Not found
-          x-contracts:
-          - contractId: 3
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
       summary: Get Payee by Id
       tags:
       - Payees
@@ -4357,7 +4320,11 @@ paths:
           description: Details of Payee Changes
           x-contracts: null
         400:
-          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
       summary: List Payee Changes
       tags:
       - Payees
@@ -5167,7 +5134,7 @@ paths:
           type: string
       - description: The 2 letter ISO 3166-1 country code (upper case)
         in: query
-        name: country
+        name: countryCode
         required: false
         schema:
           example: US
@@ -5258,13 +5225,7 @@ paths:
                   accountName: My Account Name
                   accountNumber: 1231231234556
                   routingNumber: 123456789
-              wubs:
-                summary: WUBS
-                value:
-                  type: WUBS_DECOUPLED
-                  name: My WUBS Account
-                  payorId: ee53e01d-c078-43fd-abd4-47e92f4a06cf
-                  currency: USD
+                  countryCode: US
               private:
                 summary: PRIVATE Example
                 value:
@@ -5275,6 +5236,7 @@ paths:
                   accountNumber: 1231231234556
                   routingNumber: 123456789
                   currency: AUD
+                  countryCode: AU
             schema:
               $ref: '#/components/schemas/CreateFundingAccountRequestV2'
       responses:
@@ -5477,6 +5439,170 @@ paths:
       summary: Get Funding
       tags:
       - Funding
+  /v1/transactions:
+    get:
+      description: |
+        <P>Get list of Transactions</P>
+      operationId: getTransactions
+      parameters:
+      - in: query
+        name: payorId
+        required: false
+        schema:
+          type: string
+      - in: query
+        name: transactionReference
+        required: false
+        schema:
+          type: string
+      - description: Page number. Default is 1.
+        in: query
+        name: page
+        required: false
+        schema:
+          default: 1
+          format: int32
+          type: integer
+      - description: The number of results to return in a page
+        in: query
+        name: pageSize
+        required: false
+        schema:
+          default: 25
+          format: int32
+          maximum: 100
+          minimum: 1
+          type: integer
+      - in: query
+        name: sort
+        required: false
+        schema:
+          default: allocationDate:asc
+          type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResourceTransactions'
+          description: default response
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Get Transactions
+      tags:
+      - Transactions
+    post:
+      description: Create a new Transaction that can be funded
+      operationId: createTransactionV1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTransactionRequest'
+      responses:
+        201:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTransactionResponse'
+          description: Transaction Created
+          headers:
+            Location:
+              description: Reference to created Transaction which can be queried for
+                Balance etc
+              schema:
+                example: https://api.sandbox.velopayments.com/transactions/id/4d88e559-d057-45b1-8d8b-b9ccc06f4503
+                format: uri
+                type: string
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+      summary: Create a Transaction
+      tags:
+      - Transactions
+  /v1/transactions/{transactionId}:
+    get:
+      description: Get Transaction by Id
+      operationId: getTransactionByIdV1
+      parameters:
+      - in: path
+        name: transactionId
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionResponse'
+          description: Transaction response
+        400:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        401:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        403:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        404:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Get Transaction
+      tags:
+      - Transactions
   /v1/paymentaudit/fundings:
     get:
       deprecated: true
@@ -5658,7 +5784,11 @@ paths:
                 $ref: '#/components/schemas/PaymentDeltaResponseV1'
           description: Details of Payment Changes
         400:
-          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
       summary: V1 List Payment Changes
       tags:
       - Payment Audit Service (Deprecated)
@@ -7121,7 +7251,11 @@ paths:
                 $ref: '#/components/schemas/PaymentDeltaResponse'
           description: Details of Payment Changes
         400:
-          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
       summary: List Payment Changes
       tags:
       - Payment Audit Service
@@ -7184,7 +7318,11 @@ paths:
                 $ref: '#/components/schemas/PayorAmlTransaction'
           description: Export Transactions response
         400:
-          description: invalid Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
         401:
           description: Not Authorized
         403:
@@ -8150,6 +8288,7 @@ components:
               payable_status_changed: '#/components/schemas/PayableStatusChanged'
               payee_details_changed: '#/components/schemas/PayeeDetailsChanged'
               debit_status_changed: '#/components/schemas/DebitStatusChanged'
+              payor_funding_detected: '#/components/schemas/PayorFundingDetected'
             propertyName: sourceType
           example:
             type: payment_status_changed
@@ -8170,6 +8309,7 @@ components:
           - $ref: '#/components/schemas/PayableStatusChanged'
           - $ref: '#/components/schemas/PayeeDetailsChanged'
           - $ref: '#/components/schemas/DebitStatusChanged'
+          - $ref: '#/components/schemas/PayorFundingDetected'
       required:
       - apiVersion
       - category
@@ -8272,6 +8412,16 @@ components:
       - $ref: '#/components/schemas/DebitEvent'
       - $ref: '#/components/schemas/DebitStatusChanged_allOf'
       description: Base type for all debit status changed events
+    FundingEvent:
+      allOf:
+      - $ref: '#/components/schemas/SourceEvent'
+      - type: object
+      description: Base type for all Funding Events
+    PayorFundingDetected:
+      allOf:
+      - $ref: '#/components/schemas/FundingEvent'
+      - $ref: '#/components/schemas/PayorFundingDetected_allOf'
+      description: Notification of funding received on behalf of payor.
     AuthResponse:
       example:
         access_token: IwOGYzYTlmM2YxOTQ5MGE3YmNmMDFkNTVk
@@ -9022,148 +9172,6 @@ components:
             type: string
           type: array
       type: object
-    PayorV1:
-      example:
-        primaryContactName: Joe Buck
-        payeeGracePeriodProcessingEnabled: true
-        supportContact: support@example.com
-        address:
-          country: US
-          countyOrProvince: FL
-          line4: line4
-          city: Key West
-          line3: line3
-          line2: line2
-          line1: 500 Duval St
-          zipOrPostcode: "33945"
-        fundingAccountAccountName: Example Corp BOA
-        includesReports: true
-        allowsLanguageChoice: true
-        language: EN
-        fundingAccountAccountNumber: "1234567890123"
-        dbaName: Some Biz
-        primaryContactPhone: 123-123-1234
-        payeeGracePeriodDays: 0
-        fundingAccountRoutingNumber: "123456789"
-        reminderEmailsOptOut: true
-        maxMasterPayorAdmins: 6
-        transmissionTypes:
-          ACH: true
-          SAME_DAY_ACH: true
-          WIRE: true
-        manualLockout: true
-        collectiveAlias: Payee
-        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
-        kycState: PASSED_KYC
-        primaryContactEmail: joe.buck@example.com
-        payorName: Example, Corp
-      properties:
-        payorId:
-          format: uuid
-          readOnly: true
-          type: string
-        payorName:
-          description: The name of the payor.
-          example: Example, Corp
-          type: string
-        address:
-          $ref: '#/components/schemas/PayorAddress'
-        primaryContactName:
-          description: Name of primary contact for the payor.
-          example: Joe Buck
-          type: string
-        primaryContactPhone:
-          description: Primary contact phone number for the payor.
-          example: 123-123-1234
-          type: string
-        primaryContactEmail:
-          description: Primary contact email for the payor.
-          example: joe.buck@example.com
-          format: email
-          type: string
-        fundingAccountRoutingNumber:
-          description: The funding account routing number to be used for the payor.
-          example: "123456789"
-          type: string
-        fundingAccountAccountNumber:
-          description: The funding account number to be used for the payor.
-          example: "1234567890123"
-          type: string
-        fundingAccountAccountName:
-          description: The funding account name to be used for the payor.
-          example: Example Corp BOA
-          type: string
-        kycState:
-          description: 'The kyc state of the payor. One of the following values: FAILED_KYC,
-            PASSED_KYC, REQUIRES_KYC'
-          example: PASSED_KYC
-          readOnly: true
-          type: string
-        manualLockout:
-          description: Whether or not the payor has been manually locked by the backoffice.
-          type: boolean
-        payeeGracePeriodProcessingEnabled:
-          description: Whether grace period processing is enabled.
-          readOnly: true
-          type: boolean
-        payeeGracePeriodDays:
-          description: The grace period for paying payees in days.
-          readOnly: true
-          type: integer
-        collectiveAlias:
-          description: How the payor has chosen to refer to payees.
-          example: Payee
-          type: string
-        supportContact:
-          description: The payor’s support contact email address.
-          example: support@example.com
-          type: string
-        dbaName:
-          description: The payor’s 'Doing Business As' name.
-          example: Some Biz
-          type: string
-        allowsLanguageChoice:
-          description: Whether or not the payor allows language choice in the UI.
-          type: boolean
-        reminderEmailsOptOut:
-          description: Whether or not the payor has opted-out of reminder emails being
-            sent.
-          readOnly: true
-          type: boolean
-        language:
-          description: The payor’s language preference. Must be one of [EN, FR].
-          example: EN
-          type: string
-        includesReports:
-          type: boolean
-        maxMasterPayorAdmins:
-          type: integer
-        transmissionTypes:
-          $ref: '#/components/schemas/TransmissionTypes'
-      required:
-      - payorName
-      type: object
-    ErrorResponse:
-      description: Error response returned by all error conditions in Velo Services
-      properties:
-        errors:
-          description: one or more errors
-          items:
-            $ref: '#/components/schemas/Error'
-          minItems: 1
-          type: array
-        correlationId:
-          description: a unique identifier to track a request or related sequence
-            of requests
-          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
-          format: uuid
-          type: string
-        httpStatusCode:
-          description: this will mirror the Status-Code part of the Status-Line http
-            response header and is included for extra clarity
-          example: 400
-          type: integer
-      type: object
     PayorV2:
       example:
         primaryContactName: Joe Buck
@@ -9175,7 +9183,7 @@ components:
         allowsLanguageChoice: true
         language: EN
         provider: provider
-        maxMasterPayorAdmins: 6
+        maxMasterPayorAdmins: 5
         transmissionTypes:
           ACH: true
           SAME_DAY_ACH: true
@@ -9185,7 +9193,7 @@ components:
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         primaryContactEmail: joe.buck@example.com
         usdTxnValueReportingThreshold: 1000000
-        payorName: Example, Corp
+        payorName: Example Corp
         address:
           country: US
           countyOrProvince: FL
@@ -9200,7 +9208,7 @@ components:
         primaryContactPhone: 123-123-1234
         payeeGracePeriodDays: 0
         reminderEmailsOptOut: true
-        collectiveAlias: Payee
+        collectiveAlias: Vendors
         kycState: PASSED_KYC
         wuCustomerId: wuCustomerId
         remoteSystemIds:
@@ -9208,12 +9216,13 @@ components:
         - REMOTE_SYSTEM_ID
       properties:
         payorId:
+          description: The Payor Id
           format: uuid
           readOnly: true
           type: string
         payorName:
-          description: The name of the payor.
-          example: Example, Corp
+          description: The name of the payor
+          example: Example Corp
           type: string
         payorXid:
           description: A unique identifier that an external system uses to reference
@@ -9255,12 +9264,13 @@ components:
           readOnly: true
           type: boolean
         payeeGracePeriodDays:
-          description: The grace period for paying payees in days.
+          description: The grace period for paying payees in days before the payee
+            must be onboarded.
           readOnly: true
           type: integer
         collectiveAlias:
           description: How the payor has chosen to refer to payees.
-          example: Payee
+          example: Vendors
           type: string
         supportContact:
           description: The payor’s support contact email address.
@@ -9283,31 +9293,64 @@ components:
           example: EN
           type: string
         includesReports:
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           type: boolean
         wuCustomerId:
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           type: string
         maxMasterPayorAdmins:
+          description: The maximum number of payor users with the master admin role
+          example: 5
           type: integer
         paymentRails:
-          description: The id of the payment rails
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           type: string
         transmissionTypes:
-          $ref: '#/components/schemas/TransmissionTypes_2'
+          $ref: '#/components/schemas/TransmissionTypes'
         remoteSystemIds:
-          description: The payor’s supported remote systems by id
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           items:
             example: REMOTE_SYSTEM_ID
             type: string
           type: array
         usdTxnValueReportingThreshold:
-          description: USD in minor units
+          deprecated: true
+          description: USD in minor units. For internal use only (will be removed
+            in a later version)
           example: 1000000
           type: integer
         managingPayees:
+          description: Does this payor manage their own payees (payees are not invited
+            but managed by the payor)
           type: boolean
       required:
       - payorId
       - payorName
+      type: object
+    ErrorResponse:
+      description: Error response returned by all error conditions in Velo Services
+      properties:
+        errors:
+          description: one or more errors
+          items:
+            $ref: '#/components/schemas/Error'
+          minItems: 1
+          type: array
+        correlationId:
+          description: a unique identifier to track a request or related sequence
+            of requests
+          example: ee53e01d-c078-43fd-abd4-47e92f4a06cf
+          format: uuid
+          type: string
+        httpStatusCode:
+          description: this will mirror the Status-Code part of the Status-Line http
+            response header and is included for extra clarity
+          example: 400
+          type: integer
       type: object
     PayorCreateApplicationRequest:
       example:
@@ -9334,18 +9377,18 @@ components:
       example:
         roles:
         - velo.payor.admin
-        name: iOS Key
-        description: Key for iOS mobile application
+        name: SAP Key 01
+        description: An API Key for the SAP Application
       properties:
         name:
           description: A name for the key.
-          example: iOS Key
+          example: SAP Key 01
           maxLength: 100
           minLength: 2
           type: string
         description:
           description: Description of the key.
-          example: Key for iOS mobile application
+          example: An API Key for the SAP Application
           maxLength: 1024
           minLength: 2
           nullable: true
@@ -10424,6 +10467,7 @@ components:
           name: ABC Group Plc
           operatingName: ABC Co
         language: en-US
+        contactSmsNumber: "11235555555"
         email: bob@example.com
       properties:
         address:
@@ -10446,6 +10490,12 @@ components:
           example: bob@example.com
           format: email
           nullable: true
+          type: string
+        contactSmsNumber:
+          description: |
+            The phone number of a device that the payee wishes to receive sms messages on
+          example: "11235555555"
+          pattern: ^\+[1-9]\d{1,14}$
           type: string
       type: object
     PayeeDetailResponseV4:
@@ -10482,6 +10532,23 @@ components:
         kycCompletedTimestamp: 2019-01-20T09:00:00+00:00
         marketingOptInTimestamp: 2019-01-20T09:00:00+00:00
         language: en-US
+        paymentChannels:
+        - disabledReason: User request
+          disabledReasonCode: VR100
+          countryCode: US
+          name: Bank of America USD
+          currency: USD
+          enabled: false
+          paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          last4Digits: "1234"
+        - disabledReason: User request
+          disabledReasonCode: VR100
+          countryCode: US
+          name: Bank of America USD
+          currency: USD
+          enabled: false
+          paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          last4Digits: "1234"
         watchlistOverrideExpiresAtTimestamp: 2019-01-20T09:00:00Z
         disabled: true
         company:
@@ -10514,6 +10581,7 @@ components:
         enhancedKycCompleted: true
         pausePayment: true
         gracePeriodEndDate: 2019-01-20T00:00:00.000+0000
+        managedByPayorId: a2967711-df07-41e5-b5ea-0f563088911c
         marketingOptInDecision: true
         onboardedStatus: onboardedStatus
         watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00+00:00
@@ -10530,6 +10598,13 @@ components:
         payorRefs:
           items:
             $ref: '#/components/schemas/PayeePayorRefV4'
+          nullable: true
+          readOnly: true
+          type: array
+        paymentChannels:
+          description: A list of the Payee's payment channels in their preferred order
+          items:
+            $ref: '#/components/schemas/PaymentChannelSummaryV4'
           nullable: true
           readOnly: true
           type: array
@@ -10590,6 +10665,11 @@ components:
           $ref: '#/components/schemas/CompanyV4'
         cellphoneNumber:
           example: "1234567890"
+          type: string
+        managedByPayorId:
+          description: The id of the payor if the payee is managed
+          example: a2967711-df07-41e5-b5ea-0f563088911c
+          format: uuid
           type: string
         watchlistStatusUpdatedTimestamp:
           example: 2019-01-20T09:00:00+00:00
@@ -10774,6 +10854,7 @@ components:
           displayName: ABC
           payeeType: payeeType
           language: en-US
+          managedByPayorId: a2967711-df07-41e5-b5ea-0f563088911c
           onboardedStatus: onboardedStatus
           watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00+00:00
           disabledComment: reason for disabled
@@ -10821,6 +10902,7 @@ components:
           displayName: ABC
           payeeType: payeeType
           language: en-US
+          managedByPayorId: a2967711-df07-41e5-b5ea-0f563088911c
           onboardedStatus: onboardedStatus
           watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00+00:00
           disabledComment: reason for disabled
@@ -11568,7 +11650,7 @@ components:
       - fundingAccountId
       type: object
     SourceAccountTypeV3:
-      description: 'Type of source account. One of the following values: FBO,PRIVATE,WUBS_DECOUPLED'
+      description: 'Type of source account. One of the following values: FBO, PRIVATE'
       type: string
     ListSourceAccountResponseV3:
       description: List Source Accounts Response Object
@@ -11794,8 +11876,7 @@ components:
       - minimumBalance
       type: object
     FundingAccountTypeV2:
-      description: 'Funding account type. One of the following values: FBO, WUBS_DECOUPLED,
-        PRIVATE'
+      description: 'Funding account type. One of the following values: FBO, PRIVATE'
       example: FBO
       type: string
     ListFundingAccountsResponseV2:
@@ -11803,9 +11884,9 @@ components:
       example:
         links:
         - rel: first
-          href: https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc
+          href: https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc
         - rel: first
-          href: https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc
+          href: https://api.sandbox.velopayments.com/v2/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc
         page:
           numberOfElements: 1
           totalPages: 2
@@ -11814,9 +11895,9 @@ components:
           totalElements: 1
         content:
         - routingNumber: 1.2345678E7
-          country: US
           archived: true
           accountName: Payor Corp
+          countryCode: US
           name: My Funding Account
           currency: USD
           id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -11824,9 +11905,9 @@ components:
           accountNumber: "7001001234"
           type: FBO
         - routingNumber: 1.2345678E7
-          country: US
           archived: true
           accountName: Payor Corp
+          countryCode: US
           name: My Funding Account
           currency: USD
           id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -11838,7 +11919,7 @@ components:
           $ref: '#/components/schemas/ListFundingAccountsResponseV2_page'
         links:
           items:
-            $ref: '#/components/schemas/ListFundingAccountsResponseV2_links'
+            $ref: '#/components/schemas/ListSourceAccountResponseV2_links'
           type: array
         content:
           items:
@@ -11849,8 +11930,8 @@ components:
       example:
         routingNumber: routingNumber
         accountName: accountName
+        countryCode: US
         name: name
-        currency: USD
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         type: FBO
         accountNumber: accountNumber
@@ -11858,7 +11939,6 @@ components:
         type:
           enum:
           - FBO
-          - WUBS_DECOUPLED
           - PRIVATE
           type: string
         name:
@@ -11883,14 +11963,14 @@ components:
           maxLength: 9
           minLength: 6
           type: string
-        currency:
-          description: ISO 4217 currency code, Required if type is either WUBS_DECOUPLED
-            or PRIVATE
-          example: USD
-          maxLength: 3
-          minLength: 3
+        countryCode:
+          description: ISO 3166-1 2 letter country code (upper case)
+          example: US
+          maxLength: 2
+          minLength: 2
           type: string
       required:
+      - countryCode
       - name
       - payorId
       - type
@@ -11898,9 +11978,9 @@ components:
     FundingAccountResponseV2:
       example:
         routingNumber: 1.2345678E7
-        country: US
         archived: true
         accountName: Payor Corp
+        countryCode: US
         name: My Funding Account
         currency: USD
         id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -11940,15 +12020,14 @@ components:
           pattern: ^[A-Z]{3}$
           title: ISO Currency Code
           type: string
-        country:
+        countryCode:
           description: ISO 3166-1 2 letter country code (upper case)
           example: US
           maxLength: 2
           minLength: 2
           type: string
         type:
-          description: 'Funding account type. One of the following values: FBO, WUBS_DECOUPLED,
-            PRIVATE'
+          description: 'Funding account type. One of the following values: FBO, PRIVATE'
           example: FBO
           type: string
         archived:
@@ -12005,9 +12084,11 @@ components:
         detectedFundingRef: detectedFundingRef
         allocationType: allocationType
         hiddenDate: 2000-01-23T04:56:07.000+00:00
+        createdAt: 2000-01-23T04:56:07.000+00:00
         currency: USD
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         text: text
+        allocatedAt: 2000-01-23T04:56:07.000+00:00
         status: ALLOCATED
       properties:
         fundingId:
@@ -12016,7 +12097,8 @@ components:
         payorId:
           format: uuid
           type: string
-        allocationDate:
+        createdAt:
+          description: The date and time the funding was created
           format: date-time
           type: string
         detectedFundingRef:
@@ -12044,14 +12126,24 @@ components:
           description: 'Funding Allocation Type. One of the following values: AUTOMATIC,
             MANUAL'
           type: string
+        allocatedAt:
+          description: Populated only if the funding has been allocated. The date
+            and time the funding was allocated.
+          format: date-time
+          type: string
+        allocationDate:
+          deprecated: true
+          description: Populated with allocatedAt if allocated otherwise createdAt.
+            Deprecated in v2.36 - will be removed in the future.
+          format: date-time
+          type: string
         reason:
           type: string
         hiddenDate:
           format: date-time
           type: string
         fundingAccountType:
-          description: 'Funding Account Type. One of the following values: FBO, WUBS_DECOUPLED,
-            PRIVATE'
+          description: 'Funding Account Type. One of the following values: FBO, PRIVATE'
           example: FBO
           type: string
         status:
@@ -12061,13 +12153,209 @@ components:
           example: ALLOCATED
           type: string
       required:
-      - allocationDate
       - amount
+      - createdAt
       - currency
       - fundingAccountType
       - fundingId
       - payorId
       - status
+      type: object
+    PageResourceTransactions:
+      example:
+        links:
+        - rel: rel
+          href: href
+        - rel: rel
+          href: href
+        page:
+          numberOfElements: 0
+          totalPages: 1
+          pageSize: 5
+          page: 5
+          totalElements: 6
+        content:
+        - createdAt: 2021-01-27T10:08:25.701Z
+          sourceAccountId: 7faf83a7-77e2-40bc-9e78-7d18fa2bb63e
+          transactionMetadata:
+            key: any_value
+          balance: 800828190
+          transactionReference: myInvoiceNumber-1234567890
+          currency: USD
+          payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          transactionId: 4d88e559-d057-45b1-8d8b-b9ccc06f4503
+          transactionShortCode: T1234ABC
+          sourceAccountName: Payor_FOO_USD_Account
+        - createdAt: 2021-01-27T10:08:25.701Z
+          sourceAccountId: 7faf83a7-77e2-40bc-9e78-7d18fa2bb63e
+          transactionMetadata:
+            key: any_value
+          balance: 800828190
+          transactionReference: myInvoiceNumber-1234567890
+          currency: USD
+          payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          transactionId: 4d88e559-d057-45b1-8d8b-b9ccc06f4503
+          transactionShortCode: T1234ABC
+          sourceAccountName: Payor_FOO_USD_Account
+      properties:
+        links:
+          items:
+            $ref: '#/components/schemas/LinkForResponse'
+          type: array
+          xml:
+            name: link
+            namespace: http://www.w3.org/2005/Atom
+        page:
+          $ref: '#/components/schemas/PageForResponse'
+        content:
+          items:
+            $ref: '#/components/schemas/TransactionResponse'
+          type: array
+      type: object
+    CreateTransactionRequest:
+      example:
+        transactionMetadata:
+          key: any_value
+        transactionReference: myInvoiceNumber-1234567890
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        sourceAccountName: Payor_FOO_USD_Account
+      properties:
+        payorId:
+          description: Indicates the Payor creating the Transaction and which matches
+            the payorId on the provided source account
+          format: uuid
+          type: string
+        sourceAccountName:
+          description: |
+            The name of the source account that the new Transaction will be associated with and any funding containing the transactionShortCode will credit.
+          example: Payor_FOO_USD_Account
+          maxLength: 100
+          minLength: 3
+          nullable: false
+          type: string
+        transactionReference:
+          description: |
+            The payors own reference for the transaction that can later be used for querying and retrieval.
+          example: myInvoiceNumber-1234567890
+          maxLength: 100
+          minLength: 6
+          nullable: false
+          type: string
+        transactionMetadata:
+          additionalProperties:
+            description: The value associated the metadata key.
+            example: any_value
+            maxLength: 4000
+            minLength: 1
+            type: string
+          description: |
+            Optional metadata that will be attached to the created transaction and can that can be retrieved later.|
+            The total length of all the keys and values provided in the metadata must be no more than 4000 chars.
+          type: object
+      required:
+      - payorId
+      - sourceAccountName
+      - transactionReference
+      type: object
+    CreateTransactionResponse:
+      example:
+        transactionId: 4d88e559-d057-45b1-8d8b-b9ccc06f4503
+        transactionShortCode: T1234ABC
+      properties:
+        transactionId:
+          description: |
+            The Id of the newly created transaction
+          example: 4d88e559-d057-45b1-8d8b-b9ccc06f4503
+          format: uuid
+          type: string
+        transactionShortCode:
+          description: |
+            The short code for the transaction that can be used when sending funds into the platform
+          example: T1234ABC
+          type: string
+      required:
+      - transactionId
+      - transactionShortCode
+      type: object
+    TransactionResponse:
+      example:
+        createdAt: 2021-01-27T10:08:25.701Z
+        sourceAccountId: 7faf83a7-77e2-40bc-9e78-7d18fa2bb63e
+        transactionMetadata:
+          key: any_value
+        balance: 800828190
+        transactionReference: myInvoiceNumber-1234567890
+        currency: USD
+        payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        transactionId: 4d88e559-d057-45b1-8d8b-b9ccc06f4503
+        transactionShortCode: T1234ABC
+        sourceAccountName: Payor_FOO_USD_Account
+      properties:
+        transactionId:
+          description: |
+            The Id of the transaction
+          example: 4d88e559-d057-45b1-8d8b-b9ccc06f4503
+          format: uuid
+          type: string
+        transactionShortCode:
+          description: |
+            The short code for the transaction that can be used when sending funds into the platform
+          example: T1234ABC
+          type: string
+        payorId:
+          description: Indicates the Payor of the Transaction and which matches the
+            payorId on the provided source account
+          format: uuid
+          type: string
+        sourceAccountName:
+          description: |
+            The name of the source account associated with the Transaction
+          example: Payor_FOO_USD_Account
+          type: string
+        sourceAccountId:
+          description: |
+            The Id of the source account associated with the Transaction
+          example: 7faf83a7-77e2-40bc-9e78-7d18fa2bb63e
+          format: uuid
+          type: string
+        transactionReference:
+          description: |
+            The payors own reference for the transaction
+          example: myInvoiceNumber-1234567890
+          type: string
+        transactionMetadata:
+          additionalProperties:
+            description: The value associated the metadata key.
+            example: any_value
+            type: string
+          description: |
+            Optional metadata attached to the transaction at creation time.
+          nullable: true
+          type: object
+        balance:
+          description: |
+            The total amount of transaction in minor units
+          format: int64
+          maximum: 9999999999
+          minimum: 0
+          type: integer
+        currency:
+          description: Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html"
+            target="_blank" a>ISO specification</a> for details.
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]{3}$
+          title: ISO Currency Code
+          type: string
+        createdAt:
+          description: A timestamp when the transaction has been created.
+          example: 2021-01-27T10:08:25.701Z
+          format: date-time
+          type: string
+      required:
+      - transactionId
+      - transactionShortCode
       type: object
     GetFundingsResponse:
       description: List Users Response Object
@@ -13118,6 +13406,7 @@ components:
           railsId: asdf123
           payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          railsRejectionInformation: railsRejectionInformation
           events:
           - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000+00:00
@@ -13221,6 +13510,7 @@ components:
           railsId: asdf123
           payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          railsRejectionInformation: railsRejectionInformation
           events:
           - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000+00:00
@@ -13353,6 +13643,7 @@ components:
           railsId: asdf123
           payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          railsRejectionInformation: railsRejectionInformation
           events:
           - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000+00:00
@@ -13456,6 +13747,7 @@ components:
           railsId: asdf123
           payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          railsRejectionInformation: railsRejectionInformation
           events:
           - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             eventDateTime: 2000-01-23T04:56:07.000+00:00
@@ -13573,6 +13865,7 @@ components:
         railsId: asdf123
         payeeId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        railsRejectionInformation: railsRejectionInformation
         events:
         - eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           eventDateTime: 2000-01-23T04:56:07.000+00:00
@@ -13816,6 +14109,11 @@ components:
           type: string
         rejectionReason:
           type: string
+        railsRejectionInformation:
+          description: The original reason that the payment was rejected. This can
+            be third party rails specific if rejected by the underlying third party
+            rails logic.
+          type: string
         withdrawnReason:
           type: string
         withdrawable:
@@ -13897,6 +14195,34 @@ components:
           type: array
       type: object
     PayorAmlTransaction:
+      example:
+        debitCurrency: debitCurrency
+        payeeType: payeeType
+        fxApplied: 5.962133916683182
+        transactionTime: transactionTime
+        paymentMemo: paymentMemo
+        paymentAmount: 1
+        returnCode: returnCode
+        payeeName: payeeName
+        rejectReason: rejectReason
+        fundingType: fundingType
+        paymentRails: paymentRails
+        debit: 0
+        credit: 6
+        paymentStatus: paymentStatus
+        payeeEmail: payeeEmail
+        sourceAccount: sourceAccount
+        returnFeeDescription: returnFeeDescription
+        returnDescription: returnDescription
+        transactionDate: 2000-01-23
+        remoteId: remoteId
+        returnFee: returnFee
+        returnFeeCurrency: returnFeeCurrency
+        dateFundingRequested: dateFundingRequested
+        payorPaymentId: payorPaymentId
+        creditCurrency: creditCurrency
+        paymentCurrency: paymentCurrency
+        reportTransactionType: reportTransactionType
       properties:
         transactionDate:
           format: date
@@ -14528,16 +14854,16 @@ components:
       description: List Webhooks Object
       example:
         links:
-        - rel: rel
-          href: href
-        - rel: rel
-          href: href
+        - rel: first
+          href: https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc
+        - rel: first
+          href: https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc
         page:
-          numberOfElements: 0
-          totalPages: 1
-          pageSize: 5
-          page: 5
-          totalElements: 6
+          numberOfElements: 10
+          totalPages: 10
+          pageSize: 10
+          page: 10
+          totalElements: 10
         content:
         - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
           payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -14557,10 +14883,10 @@ components:
           enabled: true
       properties:
         page:
-          $ref: '#/components/schemas/PagedPayeeInvitationStatusResponseV3_page'
+          $ref: '#/components/schemas/CommonPageObject'
         links:
           items:
-            $ref: '#/components/schemas/PagedPayeeResponseV3_links'
+            $ref: '#/components/schemas/CommonLinkObject'
           type: array
         content:
           items:
@@ -14747,7 +15073,7 @@ components:
       example: TOTP
       nullable: true
       type: string
-    PayorAddress:
+    PayorAddressV2:
       example:
         country: US
         countyOrProvince: FL
@@ -14814,94 +15140,11 @@ components:
       example: PASSED_KYC
       readOnly: true
       type: string
-    TransmissionTypes:
-      example:
-        ACH: true
-        SAME_DAY_ACH: true
-        WIRE: true
-      properties:
-        ACH:
-          description: Whether the Payor is allowed to pay via ACH
-          example: true
-          type: boolean
-        SAME_DAY_ACH:
-          description: Whether the Payor is allowed to pay via same day ACH
-          example: true
-          type: boolean
-        WIRE:
-          description: Whether the Payor is allowed to pay via wire
-          example: true
-          type: boolean
-      required:
-      - ACH
-      - SAME_DAY_ACH
-      - WIRE
-      type: object
-    PayorAddressV2:
-      example:
-        country: US
-        countyOrProvince: FL
-        line4: line4
-        city: Key West
-        line3: line3
-        line2: line2
-        line1: 500 Duval St
-        zipOrPostcode: "33945"
-      properties:
-        line1:
-          example: 500 Duval St
-          maxLength: 255
-          minLength: 2
-          nullable: false
-          type: string
-        line2:
-          maxLength: 255
-          minLength: 0
-          nullable: true
-          type: string
-        line3:
-          maxLength: 255
-          minLength: 0
-          nullable: true
-          type: string
-        line4:
-          maxLength: 255
-          minLength: 0
-          nullable: true
-          type: string
-        city:
-          example: Key West
-          maxLength: 100
-          minLength: 2
-          nullable: false
-          type: string
-        countyOrProvince:
-          example: FL
-          maxLength: 100
-          minLength: 2
-          nullable: true
-          type: string
-        zipOrPostcode:
-          example: "33945"
-          maxLength: 30
-          minLength: 2
-          nullable: true
-          type: string
-        country:
-          example: US
-          maxLength: 50
-          minLength: 2
-          nullable: false
-          type: string
-      required:
-      - city
-      - country
-      - line1
-      type: object
     PaymentRails:
-      description: The id of the payment rails
+      deprecated: true
+      description: For internal use only (will be removed in a later version)
       type: string
-    TransmissionTypes_2:
+    TransmissionTypes:
       example:
         ACH: true
         SAME_DAY_ACH: true
@@ -15556,6 +15799,65 @@ components:
             $ref: '#/components/schemas/PayableIssueV4'
           type: array
       type: object
+    PaymentChannelSummaryV4:
+      example:
+        disabledReason: User request
+        disabledReasonCode: VR100
+        countryCode: US
+        name: Bank of America USD
+        currency: USD
+        enabled: false
+        paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+        last4Digits: "1234"
+      properties:
+        paymentChannelId:
+          example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          format: uuid
+          type: string
+        name:
+          description: The payment channel name
+          example: Bank of America USD
+          type: string
+        countryCode:
+          description: Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html"
+            target="_blank" a>ISO specification</a> for details.
+          example: US
+          maxLength: 2
+          minLength: 2
+          pattern: ^[A-Z]{2}$
+          title: ISO 3166 2 Character Country Code
+          type: string
+        currency:
+          description: Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html"
+            target="_blank" a>ISO specification</a> for details.
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: ^[A-Z]{3}$
+          title: ISO Currency Code
+          type: string
+        last4Digits:
+          description: The last 4 digits of the account number or IBAN
+          example: "1234"
+          type: string
+        enabled:
+          description: Usually true. False if an associated payment is returned
+          example: false
+          type: boolean
+        disabledReason:
+          description: Indicates why the payment channel was disabled
+          example: User request
+          type: string
+        disabledReasonCode:
+          example: VR100
+          type: string
+      required:
+      - countryCode
+      - currency
+      - enabled
+      - name
+      - paymentChannelId
+      type: object
     WatchlistStatusV4:
       description: 'Current watchlist status. One of the following values: NONE, PENDING,
         REVIEW, PASSED, FAILED'
@@ -15747,6 +16049,7 @@ components:
         displayName: ABC
         payeeType: payeeType
         language: en-US
+        managedByPayorId: a2967711-df07-41e5-b5ea-0f563088911c
         onboardedStatus: onboardedStatus
         watchlistStatusUpdatedTimestamp: 2019-01-20T09:00:00+00:00
         disabledComment: reason for disabled
@@ -15824,6 +16127,11 @@ components:
         disabledUpdatedTimestamp:
           example: 2019-01-20T09:00:00Z
           format: date-time
+          type: string
+        managedByPayorId:
+          description: The id of the payor if the payee is managed
+          example: a2967711-df07-41e5-b5ea-0f563088911c
+          format: uuid
           type: string
         individual:
           $ref: '#/components/schemas/GetPayeeListResponseIndividualV4'
@@ -16200,8 +16508,7 @@ components:
         MANUAL'
       type: string
     FundingAccountType:
-      description: 'Funding Account Type. One of the following values: FBO, WUBS_DECOUPLED,
-        PRIVATE'
+      description: 'Funding Account Type. One of the following values: FBO, PRIVATE'
       example: FBO
       type: string
     FundingStatus:
@@ -16255,7 +16562,7 @@ components:
           type: string
         events:
           items:
-            $ref: '#/components/schemas/FundingEvent'
+            $ref: '#/components/schemas/FundingEvent_2'
           type: array
         topupType:
           description: 'Type of top up. One of the following values: AUTOMATIC, MANUAL'
@@ -17370,12 +17677,61 @@ components:
           example: 100000
           type: integer
       type: object
+    CommonPageObject:
+      example:
+        numberOfElements: 10
+        totalPages: 10
+        pageSize: 10
+        page: 10
+        totalElements: 10
+      properties:
+        numberOfElements:
+          example: 10
+          format: int64
+          type: integer
+        totalElements:
+          example: 10
+          format: int64
+          type: integer
+        totalPages:
+          example: 10
+          format: int64
+          type: integer
+        page:
+          example: 10
+          format: int64
+          type: integer
+        pageSize:
+          example: 10
+          format: int64
+          type: integer
+      type: object
+    CommonLinkObject:
+      example:
+        rel: first
+        href: https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc
+      properties:
+        rel:
+          description: 'One of: first, last, or self'
+          example: first
+          type: string
+        href:
+          description: the resource URI
+          example: https://api.sandbox.velopayments.com/v1/resources?page=1&pageSize=3&sort=lastLoadedAt:asc
+          type: string
+      type: object
     Category:
-      description: The notification category.  One of "payment", "payee", "debit".
+      description: |
+        The category into which the notification fails. One of
+        * "payment" - notifications related to payments (submitted, accepted, rejected, returned)
+        * "payee" - notifications related to payees (payor accepted, payor declined, payee updated)
+        * "debit" - notifications related to debit events
+        * "funding" - notifications related to funding (funding detected)
       enum:
       - payment
       - payee
       - debit
+      - funding
       type: string
     UserType_2:
       enum:
@@ -17996,7 +18352,7 @@ components:
       description: 'Payee onboarded status. One of the following value: CREATED, INVITED,
         REGISTERED, ONBOARDED'
       type: string
-    FundingEvent:
+    FundingEvent_2:
       example:
         principal: principal
         eventId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -18596,6 +18952,65 @@ components:
           type: string
       required:
       - status
+    PayorFundingDetected_allOf:
+      properties:
+        railsId:
+          description: the identifier of the payment rail from which funding was received
+          example: WUBS
+          type: string
+        payorId:
+          description: ID of the payor within the Velo platform
+          example: cbd9280f-8fde-4190-b014-979d88f3ec54
+          format: uuid
+          type: string
+        fundingRequestId:
+          description: ID of this funding transaction within the Velo platform
+          example: cbd9280f-8fde-4190-b014-979d88f3ec54
+          format: uuid
+          type: string
+        fundingRef:
+          description: the external identity reference for this funding transaction
+          example: some-ref-text
+          type: string
+        currency:
+          description: the ISO-4217 code for the currency in which the funding was
+            made
+          example: GBP
+          type: string
+        amount:
+          description: the received funding amount in currency minor units
+          example: 1234
+          format: int64
+          type: integer
+        physicalAccountName:
+          description: the name of the account as registered with the payment rail
+          example: Acme Company Ltd
+          type: string
+        sourceAccountName:
+          description: the name of the account as registered with the Velo platform
+          example: Acme Co UK
+          type: string
+        sourceAccountId:
+          description: the ID of the account as registered with the Velo platform
+          example: cbd9280f-8fde-4190-b014-979d88f3ec54
+          format: uuid
+          type: string
+        additionalInformation:
+          description: any additional information received from the payment rail
+          example: any additional information
+          type: string
+        transactionId:
+          description: The Id of the related transaction
+          example: 4d88e559-d057-45b1-8d8b-b9ccc06f4503
+          format: uuid
+          type: string
+        transactionReference:
+          description: The payors own reference for the related transaction
+          example: myInvoiceNumber-1234567890
+          type: string
+      required:
+      - fundingRequestId
+      - payorId
     PagedUserResponse_page:
       example:
         numberOfElements: 12
@@ -18853,17 +19268,6 @@ components:
         pageSize:
           example: 25
           type: integer
-    ListFundingAccountsResponseV2_links:
-      example:
-        rel: first
-        href: https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc
-      properties:
-        rel:
-          example: first
-          type: string
-        href:
-          example: https://api.sandbox.velopayments.com/v1/sourceAccounts?payorId=a2967711-df07-41e5-b5ea-f563088911c6&page=1&pageSize=0&sort=fundingRef:asc
-          type: string
     GetFundingsResponse_links:
       example:
         rel: first
@@ -19231,6 +19635,7 @@ x-tagGroups:
   - Payor Hierarchy
   - Funding
   - Source Accounts
+  - Transactions
   - Webhooks
   - Payins
 - name: Payee Operations
