@@ -96,7 +96,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.37.102
+  version: 2.37.103
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -14942,17 +14942,14 @@ components:
         line2:
           maxLength: 255
           minLength: 0
-          nullable: true
           type: string
         line3:
           maxLength: 255
           minLength: 0
-          nullable: true
           type: string
         line4:
           maxLength: 255
           minLength: 0
-          nullable: true
           type: string
         city:
           example: Key West
@@ -14964,13 +14961,11 @@ components:
           example: FL
           maxLength: 100
           minLength: 2
-          nullable: true
           type: string
         zipOrPostcode:
           example: '33945'
           maxLength: 30
           minLength: 2
-          nullable: true
           type: string
         country:
           example: US
