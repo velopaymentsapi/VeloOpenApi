@@ -96,7 +96,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.36.90
+  version: 2.36.91
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -1495,6 +1495,7 @@ paths:
         <p>Create an an API key for the given payor Id and application Id</p>
         <p>You can create multiple API Keys for a given application</p>
         <p>API Keys are programmatic users for integrating your application with the Velo platform</p>
+        <p>The response will return the API Key and the secret. This is the only time you will be able to see the secret</p>
       operationId: payorCreateApiKeyV1
       parameters:
         - description: The account owner Payor ID
@@ -9111,7 +9112,7 @@ components:
         allowsLanguageChoice: true
         language: EN
         provider: provider
-        maxMasterPayorAdmins: 6
+        maxMasterPayorAdmins: 5
         transmissionTypes:
           ACH: true
           SAME_DAY_ACH: true
@@ -9121,7 +9122,7 @@ components:
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         primaryContactEmail: joe.buck@example.com
         usdTxnValueReportingThreshold: 1000000
-        payorName: 'Example, Corp'
+        payorName: Example Corp
         address:
           country: US
           countyOrProvince: FL
@@ -9136,7 +9137,7 @@ components:
         primaryContactPhone: 123-123-1234
         payeeGracePeriodDays: 0
         reminderEmailsOptOut: true
-        collectiveAlias: Payee
+        collectiveAlias: Vendors
         kycState: PASSED_KYC
         wuCustomerId: wuCustomerId
         remoteSystemIds:
@@ -9144,12 +9145,13 @@ components:
           - REMOTE_SYSTEM_ID
       properties:
         payorId:
+          description: The Payor Id
           format: uuid
           readOnly: true
           type: string
         payorName:
-          description: The name of the payor.
-          example: 'Example, Corp'
+          description: The name of the payor
+          example: Example Corp
           type: string
         payorXid:
           description: A unique identifier that an external system uses to reference the payor in their system
@@ -9189,12 +9191,12 @@ components:
           readOnly: true
           type: boolean
         payeeGracePeriodDays:
-          description: The grace period for paying payees in days.
+          description: The grace period for paying payees in days before the payee must be onboarded.
           readOnly: true
           type: integer
         collectiveAlias:
           description: How the payor has chosen to refer to payees.
-          example: Payee
+          example: Vendors
           type: string
         supportContact:
           description: The payor’s support contact email address.
@@ -9216,27 +9218,37 @@ components:
           example: EN
           type: string
         includesReports:
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           type: boolean
         wuCustomerId:
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           type: string
         maxMasterPayorAdmins:
+          description: The maximum number of payor users with the master admin role
+          example: 5
           type: integer
         paymentRails:
-          description: The id of the payment rails
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           type: string
         transmissionTypes:
           $ref: '#/components/schemas/TransmissionTypes'
         remoteSystemIds:
-          description: The payor’s supported remote systems by id
+          deprecated: true
+          description: For internal use only (will be removed in a later version)
           items:
             example: REMOTE_SYSTEM_ID
             type: string
           type: array
         usdTxnValueReportingThreshold:
-          description: USD in minor units
+          deprecated: true
+          description: USD in minor units. For internal use only (will be removed in a later version)
           example: 1000000
           type: integer
         managingPayees:
+          description: Does this payor manage their own payees (payees are not invited but managed by the payor)
           type: boolean
       required:
         - payorId
@@ -9286,18 +9298,18 @@ components:
       example:
         roles:
           - velo.payor.admin
-        name: iOS Key
-        description: Key for iOS mobile application
+        name: SAP Key 01
+        description: An API Key for the SAP Application
       properties:
         name:
           description: A name for the key.
-          example: iOS Key
+          example: SAP Key 01
           maxLength: 100
           minLength: 2
           type: string
         description:
           description: Description of the key.
-          example: Key for iOS mobile application
+          example: An API Key for the SAP Application
           maxLength: 1024
           minLength: 2
           nullable: true
@@ -14974,7 +14986,8 @@ components:
       readOnly: true
       type: string
     PaymentRails:
-      description: The id of the payment rails
+      deprecated: true
+      description: For internal use only (will be removed in a later version)
       type: string
     TransmissionTypes:
       example:
