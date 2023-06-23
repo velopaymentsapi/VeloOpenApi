@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.37.109",
+    "version": "2.37.110",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -7477,7 +7477,7 @@
             "name": "sort",
             "required": false,
             "schema": {
-              "default": "allocationDate:asc",
+              "default": "createdAt:asc",
               "type": "string"
             }
           }
@@ -9461,6 +9461,25 @@
                 "RESUBMITTED",
                 "REFUNDED"
               ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Query for all payments associated with a specific transaction reference",
+            "in": "query",
+            "name": "transactionReference",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Query for all payments associated with a specific transaction id",
+            "in": "query",
+            "name": "transactionId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
               "type": "string"
             }
           },
@@ -16604,7 +16623,9 @@
               "fundingAccountName": "fundingAccountName",
               "amount": 120000,
               "fundingType": "fundingType",
+              "transactionReference": "transactionReference",
               "currency": "USD",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "topupType": "topupType",
               "events": [
                 {
@@ -16620,6 +16641,7 @@
                   "fundingEventType": "fundingEventType"
                 }
               ],
+              "transactionId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "status": "status",
               "sourceAccountName": "sourceAccountName"
             },
@@ -16628,7 +16650,9 @@
               "fundingAccountName": "fundingAccountName",
               "amount": 120000,
               "fundingType": "fundingType",
+              "transactionReference": "transactionReference",
               "currency": "USD",
+              "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "topupType": "topupType",
               "events": [
                 {
@@ -16644,6 +16668,7 @@
                   "fundingEventType": "fundingEventType"
                 }
               ],
+              "transactionId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "status": "status",
               "sourceAccountName": "sourceAccountName"
             }
@@ -17941,9 +17966,11 @@
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
+              "transactionReference": "transactionReference",
               "railsPaymentId": "railsPaymentId",
               "payeeAddressCountryCode": "US",
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "transactionId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "returnCost": 1232,
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
@@ -17964,6 +17991,7 @@
               "remoteSystemPaymentId": "remoteSystemPaymentId",
               "sourceCurrency": "EUR",
               "paymentMemo": "Payment memo",
+              "railsAccountId": "railsAccountId",
               "paymentAmount": 7,
               "fundingStatus": "fundingStatus",
               "railsBatchId": "railsBatchId",
@@ -18057,9 +18085,11 @@
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
+              "transactionReference": "transactionReference",
               "railsPaymentId": "railsPaymentId",
               "payeeAddressCountryCode": "US",
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "transactionId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "returnCost": 1232,
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
@@ -18080,6 +18110,7 @@
               "remoteSystemPaymentId": "remoteSystemPaymentId",
               "sourceCurrency": "EUR",
               "paymentMemo": "Payment memo",
+              "railsAccountId": "railsAccountId",
               "paymentAmount": 7,
               "fundingStatus": "fundingStatus",
               "railsBatchId": "railsBatchId",
@@ -18218,9 +18249,11 @@
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
+              "transactionReference": "transactionReference",
               "railsPaymentId": "railsPaymentId",
               "payeeAddressCountryCode": "US",
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "transactionId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "returnCost": 1232,
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
@@ -18241,6 +18274,7 @@
               "remoteSystemPaymentId": "remoteSystemPaymentId",
               "sourceCurrency": "EUR",
               "paymentMemo": "Payment memo",
+              "railsAccountId": "railsAccountId",
               "paymentAmount": 7,
               "fundingStatus": "fundingStatus",
               "railsBatchId": "railsBatchId",
@@ -18334,9 +18368,11 @@
                   "scheduledAt": "2000-01-23T04:56:07.000Z"
                 }
               ],
+              "transactionReference": "transactionReference",
               "railsPaymentId": "railsPaymentId",
               "payeeAddressCountryCode": "US",
               "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+              "transactionId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
               "returnCost": 1232,
               "withdrawnReason": "withdrawnReason",
               "iban": "DE89 3704 0044 0532 0130 00",
@@ -18357,6 +18393,7 @@
               "remoteSystemPaymentId": "remoteSystemPaymentId",
               "sourceCurrency": "EUR",
               "paymentMemo": "Payment memo",
+              "railsAccountId": "railsAccountId",
               "paymentAmount": 7,
               "fundingStatus": "fundingStatus",
               "railsBatchId": "railsBatchId",
@@ -18472,9 +18509,11 @@
               "scheduledAt": "2000-01-23T04:56:07.000Z"
             }
           ],
+          "transactionReference": "transactionReference",
           "railsPaymentId": "railsPaymentId",
           "payeeAddressCountryCode": "US",
           "quoteId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "transactionId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "returnCost": 1232,
           "withdrawnReason": "withdrawnReason",
           "iban": "DE89 3704 0044 0532 0130 00",
@@ -18495,6 +18534,7 @@
           "remoteSystemPaymentId": "remoteSystemPaymentId",
           "sourceCurrency": "EUR",
           "paymentMemo": "Payment memo",
+          "railsAccountId": "railsAccountId",
           "paymentAmount": 7,
           "fundingStatus": "fundingStatus",
           "railsBatchId": "railsBatchId",
@@ -18711,6 +18751,9 @@
           "railsBatchId": {
             "type": "string"
           },
+          "railsAccountId": {
+            "type": "string"
+          },
           "paymentScheme": {
             "type": "string"
           },
@@ -18741,6 +18784,13 @@
           "paymentMetadata": {
             "description": "Metadata for the payment",
             "example": "sample metadata",
+            "type": "string"
+          },
+          "transactionId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "transactionReference": {
             "type": "string"
           },
           "schedule": {
@@ -21781,7 +21831,9 @@
           "fundingAccountName": "fundingAccountName",
           "amount": 120000,
           "fundingType": "fundingType",
+          "transactionReference": "transactionReference",
           "currency": "USD",
+          "payorId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "topupType": "topupType",
           "events": [
             {
@@ -21797,10 +21849,16 @@
               "fundingEventType": "fundingEventType"
             }
           ],
+          "transactionId": "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "status": "status",
           "sourceAccountName": "sourceAccountName"
         },
         "properties": {
+          "payorId": {
+            "description": "The id of the payor associated with the funding.",
+            "format": "uuid",
+            "type": "string"
+          },
           "amount": {
             "description": "The amount funded",
             "example": 120000,
@@ -21838,6 +21896,15 @@
           },
           "topupType": {
             "description": "Type of top up. One of the following values: AUTOMATIC, MANUAL",
+            "type": "string"
+          },
+          "transactionId": {
+            "description": "The id of the transaction associated with the funding if there was one",
+            "format": "uuid",
+            "type": "string"
+          },
+          "transactionReference": {
+            "description": "The payors reference for the transaction associated with the funding if there was one",
             "type": "string"
           }
         },
