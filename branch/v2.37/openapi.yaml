@@ -96,7 +96,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.37.123
+  version: 2.37.124
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -4339,6 +4339,473 @@ paths:
             $ curl 'https://api.sandbox.velopayments.com/v4/payees/deltas?pageSize=2&page=8&payorId=0a818933-087d-47f2-ad83-2f986ed087eb&updatedSince=2019-01-20T09:00:00+00:00' -i -X GET \
                 -H 'Authorization: Bearer 6dd5e976-e329-462f-bd6b-25d463cf02fd' \
                 -H 'Content-Type: application/json'
+  '/v4/payees/{payeeId}/paymentChannels/':
+    get:
+      description: |
+        <p>Get all payment channels details for a payee</p>
+      operationId: getPaymentChannelsV4
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+        - description: |
+            <p>(UUID) the id of the Payor.</p>
+            <p>If specified the payment channels are filtered to those mapped to this payor.</p>
+          in: query
+          name: payorId
+          required: false
+          schema:
+            format: uuid
+            type: string
+        - description: payable if true only return the payment channel if the payee is payable
+          in: query
+          name: payable
+          required: false
+          schema:
+            type: boolean
+        - description: |
+            <p>Optional. If omitted or set to false, any Personal Identifiable Information (PII) values are returned masked.</p>
+            <p>If set to true, and you have permission, the PII values will be returned as their original unmasked values.</p>
+          in: query
+          name: sensitive
+          required: false
+          schema:
+            type: boolean
+        - description: payable if true only return the payment channel if the payee is payable
+          in: query
+          name: ignorePayorInviteStatus
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentChannelsResponseV4'
+          description: 'Success response, request completed okay'
+        '204':
+          description: payee not payable but the request is valid
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Get All Payment Channels Details
+      tags:
+        - Payee Payment Channels
+    post:
+      description: |
+        <p>Create a payment channel</p>
+      operationId: createPaymentChannelV4
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentChannelRequestV4'
+        description: Post payment channel to update
+        required: true
+      responses:
+        '201':
+          description: Payment channel is created.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Create Payment Channel
+      tags:
+        - Payee Payment Channels
+  '/v4/payees/{payeeId}/paymentChannels/{paymentChannelId}':
+    delete:
+      description: |
+        <p>Delete a payees payment channel</p>
+      operationId: deletePaymentChannelV4
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+        - description: The UUID of the payment channel.
+          in: path
+          name: paymentChannelId
+          required: true
+          schema:
+            example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Deleted. No content.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Delete Payment Channel
+      tags:
+        - Payee Payment Channels
+    get:
+      description: |
+        <p>Get the payment channel details for the payee</p>
+      operationId: getPaymentChannelV4
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+        - description: The UUID of the payment channel.
+          in: path
+          name: paymentChannelId
+          required: true
+          schema:
+            example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            format: uuid
+            type: string
+        - description: payable if true only return the payment channel if the payee is payable
+          in: query
+          name: payable
+          required: false
+          schema:
+            type: boolean
+        - description: |
+            <p>Optional. If omitted or set to false, any Personal Identifiable Information (PII) values are returned masked.</p>
+            <p>If set to true, and you have permission, the PII values will be returned as their original unmasked values.</p>
+          in: query
+          name: sensitive
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentChannelResponseV4'
+          description: 'Success response, request completed okay'
+        '204':
+          description: payee not payable but the request is valid
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Get Payment Channel Details
+      tags:
+        - Payee Payment Channels
+    post:
+      description: |
+        <p>Update the details of the payment channel. Note payment channels are immutable. The current payment channel will be logically
+        deleted as part of this call and replaced with new one with the correct details; this endpoint will return a Location header with a link to the
+        new payment channel upon success. Updating a currently disabled payment channel will result in a new, fully enabled, payment channel.</p>
+      operationId: updatePaymentChannelV4
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+        - description: The UUID of the payment channel.
+          in: path
+          name: paymentChannelId
+          required: true
+          schema:
+            example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentChannelRequestV4'
+        description: Post payment channel to update
+        required: true
+      responses:
+        '204':
+          description: Request accepted. No content.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Update Payment Channel
+      tags:
+        - Payee Payment Channels
+  '/v4/payees/{payeeId}/paymentChannels/{paymentChannelId}/enable':
+    post:
+      description: |
+        <p>Enable a payment channel for a payee</p>
+      operationId: enablePaymentChannelV4
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+        - description: The UUID of the payment channel.
+          in: path
+          name: paymentChannelId
+          required: true
+          schema:
+            example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Enabled. No content.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+      summary: Enable Payment Channel
+      tags:
+        - Payee Payment Channels
+  '/v4/payees/{payeeId}/paymentChannels/order':
+    put:
+      description: |
+        <p>Update the Payee's preferred order of payment channels by passing in just the payment channel ids.
+        When payments are made to the payee then in the absence of any other rules (e.g. matching on currency)
+        the first payment channel in this list will be chosen.
+        </p>
+      operationId: updatePaymentChannelOrderV4
+      parameters:
+        - description: The UUID of the payee.
+          in: path
+          name: payeeId
+          required: true
+          schema:
+            example: 2aa5d7e0-2ecb-403f-8494-1865ed0454e9
+            format: uuid
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentChannelOrderRequestV4'
+        description: Put the payment channel ids in the preferred order
+        required: true
+      responses:
+        '204':
+          description: Request accepted. No content.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+          description: Invalid request. See Error message payload for details of failure
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+          description: Invalid access token. May be expired or invalid
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_403'
+          description: |
+            The authentication does not have permissions to access the resource
+            This usually occurs when there is a valid authentication instance (client or user) but they do not have the required permissions
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+          description: |
+            The resource was not found or is no longer available
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_409'
+          description: |
+            The request contained data that would result in a duplicate value
+      summary: Update Payees preferred Payment Channel order
+      tags:
+        - Payee Payment Channels
   '/v1/sourceAccounts/{sourceAccountId}/notifications':
     post:
       deprecated: true
@@ -11346,6 +11813,329 @@ components:
             $ref: '#/components/schemas/PayeeDeltaV4'
           type: array
       type: object
+    PaymentChannelsResponseV4:
+      example:
+        paymentChannels:
+          - disabledReason: disabled reason
+            disabledReasonCode: disabled reason code
+            accountName: My Account
+            payorIds:
+              - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+              - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            channelType: CHANNEL_BANK
+            bankName: HSBC Bank plc
+            accountNumber: XXXXXX5678
+            bankAddress:
+              country: US
+              countyOrProvince: FL
+              line4: line4
+              city: Key West
+              line3: line3
+              line2: line2
+              line1: 500 Duval St
+              zipOrPostcode: '33945'
+            enabled: true
+            paymentChannelName: My Payment Channel
+            routingNumber: XXXXX6789
+            payeeName: John Stuart
+            deleted: true
+            payable: true
+            countryCode: US
+            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+            currency: USD
+            id: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            payeeId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            bankSwiftBic: MIDLGB22
+          - disabledReason: disabled reason
+            disabledReasonCode: disabled reason code
+            accountName: My Account
+            payorIds:
+              - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+              - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+            channelType: CHANNEL_BANK
+            bankName: HSBC Bank plc
+            accountNumber: XXXXXX5678
+            bankAddress:
+              country: US
+              countyOrProvince: FL
+              line4: line4
+              city: Key West
+              line3: line3
+              line2: line2
+              line1: 500 Duval St
+              zipOrPostcode: '33945'
+            enabled: true
+            paymentChannelName: My Payment Channel
+            routingNumber: XXXXX6789
+            payeeName: John Stuart
+            deleted: true
+            payable: true
+            countryCode: US
+            iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+            currency: USD
+            id: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            payeeId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            bankSwiftBic: MIDLGB22
+        payorToPaymentChannelMappings:
+          - payorId: 9ac75325-5dcd-42d5-b992-175d7e0a035e
+            paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          - payorId: 9ac75325-5dcd-42d5-b992-175d7e0a035e
+            paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+      properties:
+        paymentChannels:
+          items:
+            $ref: '#/components/schemas/PaymentChannelResponseV4'
+          type: array
+        payorToPaymentChannelMappings:
+          items:
+            $ref: '#/components/schemas/PayorToPaymentChannelMappingV4'
+          type: array
+      type: object
+    CreatePaymentChannelRequestV4:
+      example:
+        paymentChannelName: My Payment Channel
+        routingNumber: XXXXX6789
+        accountName: My Account
+        countryCode: US
+        iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+        currency: USD
+        accountNumber: XXXXXX5678
+      properties:
+        paymentChannelName:
+          example: My Payment Channel
+          maxLength: 30
+          minLength: 1
+          type: string
+        iban:
+          description: 'Must match the regular expression ```^[A-Za-z0-9]+$```.'
+          example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+          maxLength: 34
+          minLength: 15
+          pattern: '^[A-Za-z0-9]+$'
+          title: IBAN - International Bank Account Number
+          type: string
+        accountNumber:
+          example: XXXXXX5678
+          maxLength: 17
+          minLength: 6
+          type: string
+        routingNumber:
+          example: XXXXX6789
+          maxLength: 9
+          minLength: 9
+          type: string
+        countryCode:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
+          type: string
+        currency:
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
+          type: string
+        accountName:
+          example: My Account
+          type: string
+      type: object
+    PaymentChannelResponseV4:
+      example:
+        disabledReason: disabled reason
+        disabledReasonCode: disabled reason code
+        accountName: My Account
+        payorIds:
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          - 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        channelType: CHANNEL_BANK
+        bankName: HSBC Bank plc
+        accountNumber: XXXXXX5678
+        bankAddress:
+          country: US
+          countyOrProvince: FL
+          line4: line4
+          city: Key West
+          line3: line3
+          line2: line2
+          line1: 500 Duval St
+          zipOrPostcode: '33945'
+        enabled: true
+        paymentChannelName: My Payment Channel
+        routingNumber: XXXXX6789
+        payeeName: John Stuart
+        deleted: true
+        payable: true
+        countryCode: US
+        iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+        currency: USD
+        id: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+        payeeId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+        bankSwiftBic: MIDLGB22
+      properties:
+        id:
+          example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          format: uuid
+          type: string
+        payeeId:
+          example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          format: uuid
+          type: string
+        paymentChannelName:
+          example: My Payment Channel
+          type: string
+        accountName:
+          example: My Account
+          type: string
+        channelType:
+          description: 'Payment channel type. One of the following values: CHANNEL_BANK'
+          example: CHANNEL_BANK
+          type: string
+        countryCode:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
+          type: string
+        routingNumber:
+          example: XXXXX6789
+          maxLength: 9
+          minLength: 9
+          type: string
+        accountNumber:
+          example: XXXXXX5678
+          maxLength: 17
+          minLength: 6
+          type: string
+        iban:
+          description: 'Must match the regular expression ```^[A-Za-z0-9]+$```.'
+          example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+          maxLength: 34
+          minLength: 15
+          pattern: '^[A-Za-z0-9]+$'
+          title: IBAN - International Bank Account Number
+          type: string
+        currency:
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
+          type: string
+        payorIds:
+          deprecated: true
+          items:
+            format: uuid
+            type: string
+          type: array
+        payeeName:
+          example: John Stuart
+          type: string
+        bankName:
+          example: HSBC Bank plc
+          type: string
+        bankSwiftBic:
+          example: MIDLGB22
+          type: string
+        bankAddress:
+          $ref: '#/components/schemas/AddressV4'
+        deleted:
+          type: boolean
+        enabled:
+          type: boolean
+        disabledReasonCode:
+          example: disabled reason code
+          type: string
+        disabledReason:
+          example: disabled reason
+          type: string
+        payable:
+          description: Whether this payment channel is payable
+          type: boolean
+      required:
+        - accountName
+        - channelType
+        - countryCode
+        - currency
+        - id
+        - paymentChannelName
+      type: object
+    UpdatePaymentChannelRequestV4:
+      example:
+        paymentChannelName: My Payment Channel
+        routingNumber: XXXXX6789
+        accountName: My Account
+        countryCode: US
+        iban: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+        currency: USD
+        accountNumber: XXXXXX5678
+      properties:
+        routingNumber:
+          example: XXXXX6789
+          maxLength: 9
+          minLength: 9
+          type: string
+        accountNumber:
+          example: XXXXXX5678
+          maxLength: 17
+          minLength: 6
+          type: string
+        iban:
+          description: 'Must match the regular expression ```^[A-Za-z0-9]+$```.'
+          example: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1234
+          maxLength: 34
+          minLength: 15
+          pattern: '^[A-Za-z0-9]+$'
+          title: IBAN - International Bank Account Number
+          type: string
+        paymentChannelName:
+          example: My Payment Channel
+          maxLength: 30
+          minLength: 1
+          type: string
+        countryCode:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
+          type: string
+        accountName:
+          example: My Account
+          type: string
+        currency:
+          description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: USD
+          maxLength: 3
+          minLength: 3
+          pattern: '^[A-Z]{3}$'
+          title: ISO Currency Code
+          type: string
+      type: object
+    PaymentChannelOrderRequestV4:
+      description: Request to set the preferred order of a payees payment channels
+      example:
+        paymentChannelIds:
+          - 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          - 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+      properties:
+        paymentChannelIds:
+          items:
+            example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+            format: uuid
+            type: string
+          type: array
+      required:
+        - paymentChannelIds
+      type: object
     SetNotificationsRequest:
       example:
         minimumBalance: 800828190
@@ -16211,6 +17001,91 @@ components:
         - payeeId
         - remoteId
       type: object
+    PayorToPaymentChannelMappingV4:
+      example:
+        payorId: 9ac75325-5dcd-42d5-b992-175d7e0a035e
+        paymentChannelId: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+      properties:
+        payorId:
+          example: 9ac75325-5dcd-42d5-b992-175d7e0a035e
+          format: uuid
+          type: string
+        paymentChannelId:
+          example: 70faaff7-2c32-4b44-b27f-f0b6c484e6f3
+          format: uuid
+          type: string
+      type: object
+    IsoCurrency:
+      description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
+      example: USD
+      maxLength: 3
+      minLength: 3
+      pattern: '^[A-Z]{3}$'
+      title: ISO Currency Code
+      type: string
+    AddressV4:
+      example:
+        country: US
+        countyOrProvince: FL
+        line4: line4
+        city: Key West
+        line3: line3
+        line2: line2
+        line1: 500 Duval St
+        zipOrPostcode: '33945'
+      properties:
+        line1:
+          example: 500 Duval St
+          maxLength: 100
+          minLength: 1
+          nullable: false
+          type: string
+        line2:
+          maxLength: 100
+          minLength: 1
+          nullable: true
+          type: string
+        line3:
+          maxLength: 100
+          minLength: 1
+          nullable: true
+          type: string
+        line4:
+          maxLength: 100
+          minLength: 1
+          nullable: true
+          type: string
+        city:
+          example: Key West
+          maxLength: 50
+          minLength: 1
+          nullable: false
+          type: string
+        countyOrProvince:
+          example: FL
+          maxLength: 50
+          minLength: 1
+          nullable: true
+          type: string
+        zipOrPostcode:
+          example: '33945'
+          maxLength: 15
+          minLength: 3
+          nullable: true
+          type: string
+        country:
+          description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
+          example: US
+          maxLength: 2
+          minLength: 2
+          pattern: '^[A-Z]{2}$'
+          title: ISO 3166 2 Character Country Code
+          type: string
+      required:
+        - city
+        - country
+        - line1
+      type: object
     NotificationsV2:
       example:
         minimumBalance: 120000
@@ -16244,14 +17119,6 @@ components:
       required:
         - enabled
       type: object
-    IsoCurrency:
-      description: 'Valid ISO 4217 3 letter currency code. See the <a href="https://www.iso.org/iso-4217-currency-codes.html" target="_blank" a>ISO specification</a> for details.'
-      example: USD
-      maxLength: 3
-      minLength: 3
-      pattern: '^[A-Z]{3}$'
-      title: ISO Currency Code
-      type: string
     NotificationsV3:
       example:
         minimumBalance: 120000
@@ -19384,6 +20251,7 @@ x-tagGroups:
       - Payees
       - Payee Invitation
       - Invites
+      - Payee Payment Channels
   - name: Payout APIs
     tags:
       - Payouts
