@@ -96,7 +96,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.37.138
+  version: 2.37.145
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -7300,6 +7300,12 @@ paths:
           required: false
           schema:
             type: string
+        - description: Payor's Id of the Payment
+          in: query
+          name: payorPaymentId
+          required: false
+          schema:
+            type: string
         - description: |
             Payout Rails ID filter - case insensitive match.
             Any value is allowed, but you should use one of the supported railsId values.
@@ -8101,10 +8107,7 @@ paths:
           name: transmissionType
           required: false
           schema:
-            enum:
-              - ACH
-              - SAME_DAY_ACH
-              - WIRE
+            description: Valid values for transmissionType can be found attached to the Source Account
             type: string
         - description: Payment Memo of the Payment
           in: query
@@ -9175,6 +9178,7 @@ components:
           enum:
             - REGISTERED
             - UNREGISTERED
+            - VERIFIED
           example: REGISTERED
           type: string
         lockedOut:
@@ -9522,14 +9526,14 @@ components:
         oldPassword:
           description: The user's current password
           example: My_current_password
-          maxLength: 128
-          minLength: 8
+          maxLength: 64
+          minLength: 10
           type: string
         newPassword:
           description: The new password
           example: My_new_password
-          maxLength: 128
-          minLength: 8
+          maxLength: 64
+          minLength: 10
           type: string
       required:
         - newPassword
@@ -9542,8 +9546,8 @@ components:
         password:
           description: a password that passes validation
           example: My_strong_password
-          maxLength: 128
-          minLength: 8
+          maxLength: 64
+          minLength: 10
           type: string
       required:
         - password
@@ -9594,10 +9598,6 @@ components:
         createdAt: 2021-12-08T14:41:02.354Z
         provider: provider
         maxMasterPayorAdmins: 5
-        transmissionTypes:
-          ACH: true
-          SAME_DAY_ACH: true
-          WIRE: true
         manualLockout: true
         paymentRails: paymentRails
         payorId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -9711,8 +9711,6 @@ components:
           deprecated: true
           description: For internal use only (will be removed in a later version)
           type: string
-        transmissionTypes:
-          $ref: '#/components/schemas/TransmissionTypes'
         remoteSystemIds:
           deprecated: true
           description: For internal use only (will be removed in a later version)
@@ -9870,17 +9868,14 @@ components:
         collectiveAlias:
           description: How the payor has chosen to refer to payees
           example: Contractors
-          nullable: true
           type: string
         supportContact:
           description: The payor’s support contact address
           example: support@example.com
-          nullable: true
           type: string
         dbaName:
           description: The payor’s 'Doing Business As' name
           example: Key West Imports
-          nullable: true
           type: string
       required:
         - logoUrl
@@ -12384,6 +12379,9 @@ components:
             deleted: true
             balance: 1203489
             pooled: true
+            transmissionTypes:
+              - ACH
+              - SAME_DAY_ACH
             name: MyAccountName
             customerId: Joe Customer
             physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -12407,6 +12405,9 @@ components:
             deleted: true
             balance: 1203489
             pooled: true
+            transmissionTypes:
+              - ACH
+              - SAME_DAY_ACH
             name: MyAccountName
             customerId: Joe Customer
             physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -12444,6 +12445,9 @@ components:
         deleted: true
         balance: 1203489
         pooled: true
+        transmissionTypes:
+          - ACH
+          - SAME_DAY_ACH
         name: MyAccountName
         customerId: Joe Customer
         physicalAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
@@ -12530,6 +12534,16 @@ components:
           example: 2021-01-27T10:08:25.701Z
           format: date-time
           type: string
+        transmissionTypes:
+          description: List of supported transmission types.
+          example:
+            - ACH
+            - SAME_DAY_ACH
+          items:
+            example: ACH
+            title: Transmission Type Name
+            type: string
+          type: array
       required:
         - id
         - railsId
@@ -14169,6 +14183,7 @@ components:
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: 1231231adf
             accountNumber: '123123232323'
+            transmissionTypeRequested: transmissionTypeRequested
             remoteId: aasdf123
             routingNumber: '123123123123'
             schedule:
@@ -14276,6 +14291,7 @@ components:
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: 1231231adf
             accountNumber: '123123232323'
+            transmissionTypeRequested: transmissionTypeRequested
             remoteId: aasdf123
             routingNumber: '123123123123'
             schedule:
@@ -14412,6 +14428,7 @@ components:
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: 1231231adf
             accountNumber: '123123232323'
+            transmissionTypeRequested: transmissionTypeRequested
             remoteId: aasdf123
             routingNumber: '123123123123'
             schedule:
@@ -14519,6 +14536,7 @@ components:
             sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
             individualIdentificationNumber: 1231231adf
             accountNumber: '123123232323'
+            transmissionTypeRequested: transmissionTypeRequested
             remoteId: aasdf123
             routingNumber: '123123123123'
             schedule:
@@ -14640,6 +14658,7 @@ components:
         sourceAccountId: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         individualIdentificationNumber: 1231231adf
         accountNumber: '123123232323'
+        transmissionTypeRequested: transmissionTypeRequested
         remoteId: aasdf123
         routingNumber: '123123123123'
         schedule:
@@ -14812,6 +14831,9 @@ components:
           type: string
         transmissionType:
           description: 'The transmission type of the payment, e.g. ACH, SAME_DAY_ACH, WIRE, GACHO'
+          type: string
+        transmissionTypeRequested:
+          description: The transmission type of the payment requested by the payor
           type: string
         paymentTrackingReference:
           type: string
@@ -14994,6 +15016,7 @@ components:
             transmissionType: ACH
             paymentMemo: my memo
             remoteSystemId: remoteSystemId
+            transactionId: 859af785-223b-4d5b-a708-5fa57f006dbb
             remoteId: remoteId1234
             sourceAccountName: MyAccountName
           - amount: 1299
@@ -15003,6 +15026,7 @@ components:
             transmissionType: ACH
             paymentMemo: my memo
             remoteSystemId: remoteSystemId
+            transactionId: 859af785-223b-4d5b-a708-5fa57f006dbb
             remoteId: remoteId1234
             sourceAccountName: MyAccountName
           - amount: 1299
@@ -15012,6 +15036,7 @@ components:
             transmissionType: ACH
             paymentMemo: my memo
             remoteSystemId: remoteSystemId
+            transactionId: 859af785-223b-4d5b-a708-5fa57f006dbb
             remoteId: remoteId1234
             sourceAccountName: MyAccountName
           - amount: 1299
@@ -15021,6 +15046,7 @@ components:
             transmissionType: ACH
             paymentMemo: my memo
             remoteSystemId: remoteSystemId
+            transactionId: 859af785-223b-4d5b-a708-5fa57f006dbb
             remoteId: remoteId1234
             sourceAccountName: MyAccountName
           - amount: 1299
@@ -15030,6 +15056,7 @@ components:
             transmissionType: ACH
             paymentMemo: my memo
             remoteSystemId: remoteSystemId
+            transactionId: 859af785-223b-4d5b-a708-5fa57f006dbb
             remoteId: remoteId1234
             sourceAccountName: MyAccountName
         payoutMemo: Monthly Payment
@@ -15074,6 +15101,7 @@ components:
         transmissionType: ACH
         paymentMemo: my memo
         remoteSystemId: remoteSystemId
+        transactionId: 859af785-223b-4d5b-a708-5fa57f006dbb
         remoteId: remoteId1234
         sourceAccountName: MyAccountName
       properties:
@@ -15108,10 +15136,15 @@ components:
           minLength: 0
           type: string
         sourceAccountName:
-          description: Must match a valid source account name belonging to the payor
+          description: Must match a valid source account name belonging to the payor. Exactly one of sourceAccountName or transactionId is required.
           example: MyAccountName
           maxLength: 64
           minLength: 1
+          type: string
+        transactionId:
+          description: Must match a valid transaction id previously created by the payor. Exactly one of sourceAccountName or transactionId is required.
+          example: 859af785-223b-4d5b-a708-5fa57f006dbb
+          format: uuid
           type: string
         payorPaymentId:
           description: A reference identifier for the payor for the given payee payment
@@ -15120,13 +15153,9 @@ components:
           minLength: 0
           type: string
         transmissionType:
-          description: Optionally choose a specific transmission method for the payment
-          enum:
-            - SAME_DAY_ACH
-            - WIRE
-            - ACH
-            - LOCAL
-            - SWIFT
+          description: |
+            <p>Optionally choose a specific transmission method for the payment.</p>
+            <p>Valid values for transmissionType can be found attached to the Source Account</p>
           example: ACH
           type: string
         remoteSystemId:
@@ -15148,7 +15177,6 @@ components:
         - amount
         - currency
         - remoteId
-        - sourceAccountName
       type: object
     PayoutSummaryResponseV3:
       example:
@@ -15346,6 +15374,7 @@ components:
         content:
           - amount: 10000
             paymentMemo: INV00112
+            transactionId: 859af785-223b-4d5b-a708-5fa57f006dbb
             remoteId: remoteIdVal123
             payee:
               individual:
@@ -15368,6 +15397,7 @@ components:
             status: AWAITING_FUNDS
           - amount: 10000
             paymentMemo: INV00112
+            transactionId: 859af785-223b-4d5b-a708-5fa57f006dbb
             remoteId: remoteIdVal123
             payee:
               individual:
@@ -15817,29 +15847,6 @@ components:
       deprecated: true
       description: For internal use only (will be removed in a later version)
       type: string
-    TransmissionTypes:
-      example:
-        ACH: true
-        SAME_DAY_ACH: true
-        WIRE: true
-      properties:
-        ACH:
-          description: Whether the Payor is allowed to pay via ACH
-          example: true
-          type: boolean
-        SAME_DAY_ACH:
-          description: Whether the Payor is allowed to pay via same day ACH
-          example: true
-          type: boolean
-        WIRE:
-          description: Whether the Payor is allowed to pay via wire
-          example: true
-          type: boolean
-      required:
-        - ACH
-        - SAME_DAY_ACH
-        - WIRE
-      type: object
     PayeePayorRefV3:
       example:
         payorId: ba08877f-9d96-41e4-9c26-44a872d856ae
@@ -18140,6 +18147,7 @@ components:
       example:
         amount: 10000
         paymentMemo: INV00112
+        transactionId: 859af785-223b-4d5b-a708-5fa57f006dbb
         remoteId: remoteIdVal123
         payee:
           individual:
@@ -18209,7 +18217,9 @@ components:
           example: AWAITING_FUNDS
           type: string
         transmissionType:
-          description: 'The transmission method of the payment. One of the following values: ACH, SAME_DAY_ACH, WIRE, LOCAL, SWIFT'
+          description: |
+            <p>The transmission method of the payment.</p>
+            <p>Valid values for transmissionType can be found attached to the Source Account</p>
           example: LOCAL
           type: string
         remoteSystemId:
@@ -18234,6 +18244,11 @@ components:
         railsId:
           description: Indicates the 3rd party system involved in making this payment
           example: SVB
+          type: string
+        transactionId:
+          description: The id of the transaction associated with this payment if there was one
+          example: 859af785-223b-4d5b-a708-5fa57f006dbb
+          format: uuid
           type: string
       required:
         - paymentId
