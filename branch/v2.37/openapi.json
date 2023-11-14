@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.37.148",
+    "version": "2.37.149",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -20468,12 +20468,21 @@
       },
       "InstructPayoutRequestV3": {
         "example": {
+          "fxRateDegradationThresholdPercentage": 6.0274563,
           "fxRateDegredationThresholdPercentage": 0.8008282
         },
         "properties": {
           "fxRateDegredationThresholdPercentage": {
-            "description": "Halt instruction if the FX rates have become worse since the last quote",
+            "deprecated": true,
+            "description": "Halt instruction if the FX rates have become worse since the last quote. Property deprecated because of misspelled. Please use fxRateDegradationThresholdPercentage.",
             "format": "float",
+            "nullable": true,
+            "type": "number"
+          },
+          "fxRateDegradationThresholdPercentage": {
+            "description": "Halt instruction if the FX rates have become worse since the last quote. Previously called fxRateDegredationThresholdPercentage.",
+            "format": "float",
+            "nullable": true,
             "type": "number"
           }
         },
