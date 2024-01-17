@@ -96,7 +96,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.38.143
+  version: 2.38.144
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -10452,7 +10452,7 @@ components:
         individualNationalIdentification:
           example: AB123456C
           maxLength: 30
-          minLength: 6
+          minLength: 4
           type: string
         individualDateOfBirth:
           description: Must not be date in future. Example - 1970-05-20
@@ -11453,7 +11453,7 @@ components:
         individualNationalIdentification:
           example: AB123456C
           maxLength: 30
-          minLength: 6
+          minLength: 4
           type: string
         individualDateOfBirth:
           description: Must not be date in future. Example - 1970-05-20
@@ -15983,7 +15983,7 @@ components:
           description: 'If not authorized to view, value will be masked. Example: XXXXX1234'
           example: AB123456C
           maxLength: 30
-          minLength: 6
+          minLength: 4
           readOnly: true
           type: string
         dateOfBirth:
@@ -16011,7 +16011,7 @@ components:
           description: Company Tax Id must be between 6 and 30 characters long
           example: '123123123'
           maxLength: 30
-          minLength: 6
+          minLength: 4
           nullable: true
           type: string
         operatingName:
@@ -16608,7 +16608,7 @@ components:
           description: 'If not authorized to view, value will be masked. Example: XXXXX1234'
           example: AB123456C
           maxLength: 30
-          minLength: 6
+          minLength: 4
           readOnly: true
           type: string
         dateOfBirth:
@@ -16636,7 +16636,7 @@ components:
           description: Company Tax Id must be between 6 and 30 characters long
           example: '123123123'
           maxLength: 30
-          minLength: 6
+          minLength: 4
           nullable: true
           type: string
         operatingName:
@@ -18607,7 +18607,7 @@ components:
         nationalIdentification:
           example: SA211123K
           maxLength: 30
-          minLength: 6
+          minLength: 4
           type: string
         dateOfBirth:
           description: Must not be date in future. Example - 1970-05-20
@@ -18901,7 +18901,7 @@ components:
         nationalIdentification:
           example: SA211123K
           maxLength: 30
-          minLength: 6
+          minLength: 4
           type: string
         dateOfBirth:
           description: Must not be date in future. Example - 1970-05-20

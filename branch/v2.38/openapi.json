@@ -7,7 +7,7 @@
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
     "title": "Velo Payments APIs",
-    "version": "2.38.143",
+    "version": "2.38.144",
     "x-logo": {
       "url": "https://apidocs.velopayments.com/velo-logo-e9573185_new.svg"
     }
@@ -14283,7 +14283,7 @@
           "individualNationalIdentification": {
             "example": "AB123456C",
             "maxLength": 30,
-            "minLength": 6,
+            "minLength": 4,
             "type": "string"
           },
           "individualDateOfBirth": {
@@ -15605,7 +15605,7 @@
           "individualNationalIdentification": {
             "example": "AB123456C",
             "maxLength": 30,
-            "minLength": 6,
+            "minLength": 4,
             "type": "string"
           },
           "individualDateOfBirth": {
@@ -21373,7 +21373,7 @@
             "description": "If not authorized to view, value will be masked. Example: XXXXX1234",
             "example": "AB123456C",
             "maxLength": 30,
-            "minLength": 6,
+            "minLength": 4,
             "readOnly": true,
             "type": "string"
           },
@@ -21408,7 +21408,7 @@
             "description": "Company Tax Id must be between 6 and 30 characters long",
             "example": "123123123",
             "maxLength": 30,
-            "minLength": 6,
+            "minLength": 4,
             "nullable": true,
             "type": "string"
           },
@@ -22178,7 +22178,7 @@
             "description": "If not authorized to view, value will be masked. Example: XXXXX1234",
             "example": "AB123456C",
             "maxLength": 30,
-            "minLength": 6,
+            "minLength": 4,
             "readOnly": true,
             "type": "string"
           },
@@ -22213,7 +22213,7 @@
             "description": "Company Tax Id must be between 6 and 30 characters long",
             "example": "123123123",
             "maxLength": 30,
-            "minLength": 6,
+            "minLength": 4,
             "nullable": true,
             "type": "string"
           },
@@ -24703,7 +24703,7 @@
           "nationalIdentification": {
             "example": "SA211123K",
             "maxLength": 30,
-            "minLength": 6,
+            "minLength": 4,
             "type": "string"
           },
           "dateOfBirth": {
@@ -25079,7 +25079,7 @@
           "nationalIdentification": {
             "example": "SA211123K",
             "maxLength": 30,
-            "minLength": 6,
+            "minLength": 4,
             "type": "string"
           },
           "dateOfBirth": {
