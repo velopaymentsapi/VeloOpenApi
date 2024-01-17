@@ -96,7 +96,7 @@ info:
     name: Apache License 2.0
     url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
   title: Velo Payments APIs
-  version: 2.38.142
+  version: 2.38.143
   x-logo:
     url: 'https://apidocs.velopayments.com/velo-logo-e9573185_new.svg'
 servers:
@@ -10438,8 +10438,8 @@ components:
           type: string
         addressZipOrPostcode:
           example: '33945'
-          maxLength: 60
-          minLength: 1
+          maxLength: 20
+          minLength: 2
           type: string
         addressCountry:
           description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
@@ -10549,7 +10549,6 @@ components:
         - addressCity
         - addressCountry
         - addressLine1
-        - addressZipOrPostcode
         - email
         - remoteId
         - type
@@ -11440,8 +11439,8 @@ components:
           type: string
         addressZipOrPostcode:
           example: '33945'
-          maxLength: 60
-          minLength: 1
+          maxLength: 20
+          minLength: 2
           type: string
         addressCountry:
           description: 'Valid ISO 3166 2 character country code. See the <a href="https://www.iso.org/iso-3166-country-codes.html" target="_blank" a>ISO specification</a> for details.'
@@ -11551,7 +11550,6 @@ components:
         - addressCity
         - addressCountry
         - addressLine1
-        - addressZipOrPostcode
         - email
         - remoteId
         - type
@@ -15952,7 +15950,7 @@ components:
           type: string
         zipOrPostcode:
           example: '33945'
-          maxLength: 30
+          maxLength: 20
           minLength: 2
           nullable: true
           type: string
@@ -16579,7 +16577,7 @@ components:
           type: string
         zipOrPostcode:
           example: '33945'
-          maxLength: 30
+          maxLength: 20
           minLength: 2
           nullable: true
           type: string
@@ -17076,8 +17074,8 @@ components:
           type: string
         zipOrPostcode:
           example: '33945'
-          maxLength: 15
-          minLength: 3
+          maxLength: 20
+          minLength: 2
           nullable: true
           type: string
         country:
@@ -18521,7 +18519,7 @@ components:
           type: string
         zipOrPostcode:
           example: '33945'
-          maxLength: 60
+          maxLength: 20
           minLength: 2
           nullable: true
           type: string
@@ -18814,7 +18812,7 @@ components:
           type: string
         zipOrPostcode:
           example: '33945'
-          maxLength: 60
+          maxLength: 20
           minLength: 2
           nullable: true
           type: string
