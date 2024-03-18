@@ -1,195 +1,198 @@
-#### What's New
----
-
-##### `GET` /v4/payees/{payeeId}/paymentChannels/
-
-> Get All Payment Channels Details
-
-##### `POST` /v4/payees/{payeeId}/paymentChannels/
-
-> Create Payment Channel
-
-##### `GET` /v4/payees/{payeeId}/paymentChannels/{paymentChannelId}
-
-> Get Payment Channel Details
-
-##### `POST` /v4/payees/{payeeId}/paymentChannels/{paymentChannelId}
-
-> Update Payment Channel
-
-##### `DELETE` /v4/payees/{payeeId}/paymentChannels/{paymentChannelId}
-
-> Delete Payment Channel
-
-##### `POST` /v4/payees/{payeeId}/paymentChannels/{paymentChannelId}/enable
-
-> Enable Payment Channel
-
-##### `PUT` /v4/payees/{payeeId}/paymentChannels/order
-
-> Update Payees preferred Payment Channel order
-
 #### What's Changed
 ---
 
-##### `GET` /v2/payors/{payorId}
+##### `GET` /v3/payees/{payeeId}
 
 
 ###### Return Type:
 
 Changed response : **200 OK**
-> Get Payor Details
+> Success response, request completed okay
+
 
 * Changed content type : `application/json`
 
-    * Added property `createdAt` (string)
-        > The date of creation of the payor
+    * Changed property `address` (object)
 
-    * Changed property `payorId` (string)
-        > The Payor Id
+        * Changed property `zipOrPostcode` (string)
 
-    * Changed property `kycState` (string)
-        > The kyc state of the payor. One of the following values: FAILED_KYC, PASSED_KYC, REQUIRES_KYC
-
-    * Changed property `payeeGracePeriodProcessingEnabled` (boolean)
-        > Whether grace period processing is enabled.
-
-    * Changed property `payeeGracePeriodDays` (integer)
-        > The grace period for paying payees in days before the payee must be onboarded.
-
-    * Changed property `reminderEmailsOptOut` (boolean)
-        > Whether or not the payor has opted-out of reminder emails being sent.
-
-##### `POST` /v1/payors/{payorId}/applications/{applicationId}/keys
+##### `POST` /v3/payees/{payeeId}/payeeDetailsUpdate
 
 
 ###### Request:
 
 Changed content type : `application/json`
 
-* Changed property `roles` (array)
-    > <p>A role to assign to the key.</p>
-    > <p>If you want your API key to have write access then assign the role velo.payor.admin</p>
-    > <p>A later version will change this property from a list to string</p>
+* Changed property `address` (object)
 
-    Changed items (string):
-        > Name of role
+    * Changed property `zipOrPostcode` (string)
 
-    Added enum values:
-
-    * `payor.admin`
-    * `payor.support`
-    Removed enum values:
-
-    * `velo.payor.admin`
-    * `velo.payor.support`
-##### `GET` /v1/paymentaudit/fundings
+##### `GET` /v4/payees/{payeeId}
 
 
 ###### Return Type:
 
 Changed response : **200 OK**
-> Get Fundings normal response
+> Success response, request completed okay
+
 
 * Changed content type : `application/json`
 
-    * Changed property `content` (array)
+    * Changed property `address` (object)
+
+        * Changed property `zipOrPostcode` (string)
+
+##### `POST` /v4/payees/{payeeId}/payeeDetailsUpdate
+
+
+###### Request:
+
+Changed content type : `application/json`
+
+* Changed property `address` (object)
+
+    * Changed property `zipOrPostcode` (string)
+
+##### `GET` /v4/payees/{payeeId}/paymentChannels/
+
+
+###### Return Type:
+
+Changed response : **200 OK**
+> Success response, request completed okay
+
+
+* Changed content type : `application/json`
+
+    * Changed property `paymentChannels` (array)
 
         Changed items (object):
 
-        * Added property `payorId` (string)
-            > The id of the payor associated with the funding.
+        * Changed property `bankAddress` (object)
 
-        * Added property `transactionId` (string)
-            > The id of the transaction associated with the funding if there was one
+            * Changed property `zipOrPostcode` (string)
 
-        * Added property `transactionReference` (string)
-            > The payors reference for the transaction associated with the funding if there was one
-
-##### `GET` /v4/paymentaudit/payouts/{payoutId}
+##### `GET` /v4/payees/{payeeId}/paymentChannels/{paymentChannelId}
 
 
 ###### Return Type:
 
 Changed response : **200 OK**
-> 200 response, data found okay
+> Success response, request completed okay
+
 
 * Changed content type : `application/json`
 
-    * Changed property `content` (array)
+    * Changed property `bankAddress` (object)
+
+        * Changed property `zipOrPostcode` (string)
+
+##### `POST` /v3/payouts/{payoutId}
+
+
+###### Request:
+
+Changed content type : `application/json`
+
+* Deleted property `fxRateDegredationThresholdPercentage` (number)
+    > Halt instruction if the FX rates have become worse since the last quote. Property deprecated because of misspelled. Please use fxRateDegradationThresholdPercentage.
+
+
+##### `POST` /v3/payees
+
+
+###### Request:
+
+Changed content type : `multipart/form-data`
+
+* Changed property `file` (array)
+    > CSV File of payee data
+
+
+    Changed items (object):
+
+    New optional properties:
+    - `addressZipOrPostcode`
+
+    * Changed property `addressZipOrPostcode` (string)
+
+Changed content type : `application/json`
+
+* Changed property `payees` (array)
+
+    Changed items (object):
+
+    * Changed property `address` (object)
+
+        * Changed property `zipOrPostcode` (string)
+
+##### `POST` /v4/payees
+
+
+###### Request:
+
+Changed content type : `multipart/form-data`
+
+* Changed property `file` (array)
+    > CSV File of payee data
+
+
+    Changed items (object):
+
+    New optional properties:
+    - `addressZipOrPostcode`
+
+    * Changed property `addressZipOrPostcode` (string)
+
+Changed content type : `application/json`
+
+* Changed property `payees` (array)
+
+    Changed items (object):
+
+    * Changed property `address` (object)
+
+        * Changed property `zipOrPostcode` (string)
+
+##### `GET` /v3/payees/batch/{batchId}
+
+
+###### Return Type:
+
+Changed response : **200 OK**
+> Get Batch Status
+
+
+* Changed content type : `application/json`
+
+    * Changed property `failures` (array)
 
         Changed items (object):
 
-        * Added property `railsAccountId` (string)
+        * Changed property `failedSubmission` (object)
 
-        * Added property `transactionId` (string)
+            * Changed property `address` (object)
 
-        * Added property `transactionReference` (string)
+                * Changed property `zipOrPostcode` (string)
 
-##### `GET` /v4/paymentaudit/payments
+##### `GET` /v4/payees/batch/{batchId}
 
-
-###### Parameters:
-
-Added: `transactionReference` in `query`
-> Query for all payments associated with a specific transaction reference
-
-Added: `transactionId` in `query`
-> Query for all payments associated with a specific transaction id
 
 ###### Return Type:
 
 Changed response : **200 OK**
-> Paginated list of payments
+> Get Batch Status
+
 
 * Changed content type : `application/json`
 
-    * Changed property `content` (array)
+    * Changed property `failures` (array)
 
         Changed items (object):
 
-        * Added property `railsAccountId` (string)
+        * Changed property `failedSubmission` (object)
 
-        * Added property `transactionId` (string)
+            * Changed property `address` (object)
 
-        * Added property `transactionReference` (string)
-
-##### `GET` /v4/paymentaudit/payments/{paymentId}
-
-
-###### Return Type:
-
-Changed response : **200 OK**
-> 200 response, request completed okay
-
-* Changed content type : `application/json`
-
-    * Added property `railsAccountId` (string)
-
-    * Added property `transactionId` (string)
-
-    * Added property `transactionReference` (string)
-
-##### `GET` /v4/paymentaudit/fundings
-
-
-###### Return Type:
-
-Changed response : **200 OK**
-> Get Fundings normal response
-
-* Changed content type : `application/json`
-
-    * Changed property `content` (array)
-
-        Changed items (object):
-
-        * Added property `payorId` (string)
-            > The id of the payor associated with the funding.
-
-        * Added property `transactionId` (string)
-            > The id of the transaction associated with the funding if there was one
-
-        * Added property `transactionReference` (string)
-            > The payors reference for the transaction associated with the funding if there was one
+                * Changed property `zipOrPostcode` (string)
 
